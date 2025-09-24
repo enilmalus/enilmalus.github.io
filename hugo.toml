@@ -3,6 +3,8 @@ languageCode = 'en-us'
 title = "Welcome My Hack's Blog"
 theme = "hugo-theme-hello-friend-ng"
 
+# Updated to force rebuild
+
 [[menu.main]]
 identifier = "posts"
 name = "文章"
