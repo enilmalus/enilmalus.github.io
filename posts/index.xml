@@ -1,4 +1,51 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 15:08:39 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>My First Post</title><link>https://enilmalus.github.io/posts/my-first-post/</link><pubDate>Wed, 24 Sep 2025 15:08:39 +0800</pubDate><guid>https://enilmalus.github.io/posts/my-first-post/</guid><description>&lt;h1 id="test"&gt;Test&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 20:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>我的新文章</title><link>https://enilmalus.github.io/posts/new-article/</link><pubDate>Wed, 24 Sep 2025 20:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/new-article/</guid><description>&lt;h1 id="这是一篇测试文章"&gt;这是一篇测试文章&lt;/h1&gt;
+&lt;p&gt;这里是文章的介绍内容。&lt;/p&gt;
+&lt;h2 id="图片展示示例"&gt;图片展示示例&lt;/h2&gt;
+&lt;h3 id="方法一普通-markdown-语法"&gt;方法一：普通 Markdown 语法&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;![&lt;span style="color:#f92672"&gt;图片描述&lt;/span&gt;](&lt;span style="color:#a6e22e"&gt;/images/example.jpg&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="方法二html-标签更多控制"&gt;方法二：HTML 标签（更多控制）&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;img&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;src&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/images/example.jpg&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;alt&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;图片描述&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;width&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;500&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="方法三hugo-主题的-image-shortcode"&gt;方法三：Hugo 主题的 image shortcode&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;img src="https://enilmalus.github.io/images/example.jpg" alt="图片描述" class="center" style="border-radius: 8px;" /&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="子标题"&gt;子标题&lt;/h2&gt;
+&lt;p&gt;你可以使用 Markdown 语法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;列表项 1&lt;/li&gt;
+&lt;li&gt;列表项 2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;粗体文字&lt;/strong&gt; 和 &lt;em&gt;斜体文字&lt;/em&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 代码块示例&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;print(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello, World!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;这是引用内容&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href="https://example.com"&gt;链接示例&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://enilmalus.github.io/images/test-images/favicon-16x16.png" alt="测试图片"&gt;&lt;/p&gt;</description><content type="html"><![CDATA[<h1 id="这是一篇测试文章">这是一篇测试文章</h1>
+<p>这里是文章的介绍内容。</p>
+<h2 id="图片展示示例">图片展示示例</h2>
+<h3 id="方法一普通-markdown-语法">方法一：普通 Markdown 语法</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>![<span style="color:#f92672">图片描述</span>](<span style="color:#a6e22e">/images/example.jpg</span>)
+</span></span></code></pre></div><h3 id="方法二html-标签更多控制">方法二：HTML 标签（更多控制）</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/images/example.jpg&#34;</span> <span style="color:#a6e22e">alt</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;图片描述&#34;</span> <span style="color:#a6e22e">width</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;500&#34;</span>&gt;
+</span></span></code></pre></div><h3 id="方法三hugo-主题的-image-shortcode">方法三：Hugo 主题的 image shortcode</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>
+    <img src="/images/example.jpg"  alt="图片描述"  class="center"  style="border-radius: 8px;"  />
+
+
+</span></span></code></pre></div><h2 id="子标题">子标题</h2>
+<p>你可以使用 Markdown 语法：</p>
+<ul>
+<li>列表项 1</li>
+<li>列表项 2</li>
+</ul>
+<p><strong>粗体文字</strong> 和 <em>斜体文字</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 代码块示例</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Hello, World!&#34;</span>)
+</span></span></code></pre></div><blockquote>
+<p>这是引用内容</p></blockquote>
+<p><a href="https://example.com">链接示例</a></p>
+<p><img src="/images/test-images/favicon-16x16.png" alt="测试图片"></p>
+]]></content></item><item><title>My First Post</title><link>https://enilmalus.github.io/posts/my-first-post/</link><pubDate>Wed, 24 Sep 2025 15:08:39 +0800</pubDate><guid>https://enilmalus.github.io/posts/my-first-post/</guid><description>&lt;h1 id="test"&gt;Test&lt;/h1&gt;
 &lt;p&gt;This is a test page&lt;/p&gt;</description><content type="html">&lt;h1 id="test">Test&lt;/h1>
 &lt;p>This is a test page&lt;/p>
 </content></item></channel></rss>

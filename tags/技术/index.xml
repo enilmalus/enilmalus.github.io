@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Welcome My Hack's Blog</title><link>https://enilmalus.github.io/</link><description>Recent content on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 20:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>我的新文章</title><link>https://enilmalus.github.io/posts/new-article/</link><pubDate>Wed, 24 Sep 2025 20:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/new-article/</guid><description>&lt;h1 id="这是一篇测试文章"&gt;这是一篇测试文章&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 20:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>我的新文章</title><link>https://enilmalus.github.io/posts/new-article/</link><pubDate>Wed, 24 Sep 2025 20:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/new-article/</guid><description>&lt;h1 id="这是一篇测试文章"&gt;这是一篇测试文章&lt;/h1&gt;
 &lt;p&gt;这里是文章的介绍内容。&lt;/p&gt;
 &lt;h2 id="图片展示示例"&gt;图片展示示例&lt;/h2&gt;
 &lt;h3 id="方法一普通-markdown-语法"&gt;方法一：普通 Markdown 语法&lt;/h3&gt;
@@ -22,5 +22,4 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
 &lt;p&gt;这是引用内容&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;a href="https://example.com"&gt;链接示例&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://enilmalus.github.io/images/test-images/favicon-16x16.png" alt="测试图片"&gt;&lt;/p&gt;</description></item><item><title>My First Post</title><link>https://enilmalus.github.io/posts/my-first-post/</link><pubDate>Wed, 24 Sep 2025 15:08:39 +0800</pubDate><guid>https://enilmalus.github.io/posts/my-first-post/</guid><description>&lt;h1 id="test"&gt;Test&lt;/h1&gt;
-&lt;p&gt;This is a test page&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;img src="https://enilmalus.github.io/images/test-images/favicon-16x16.png" alt="测试图片"&gt;&lt;/p&gt;</description></item></channel></rss>
