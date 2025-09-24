@@ -58,6 +58,9 @@
 <link rel="alternate" type="application/rss+xml" href="http://localhost:1313/index.xml" title="Welcome My Hack's Blog" />
 
 
+<link href="http://localhost:1313/feed.json" rel="alternate"
+    type="application/json" title="Welcome My Hack&#39;s Blog" />
+
 
 
 
@@ -91,6 +94,17 @@
 
 
         <span class="header__right">
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/posts/">文章</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
         </span>
     </span>
 </header>
@@ -103,6 +117,11 @@
             
 
             <h1>Welcome My Hack&#39;s Blog</h1>
+
+            <input id="search-input" type="text" placeholder="Search ... ... ..." style="background:#9f9797; padding:8px; border-radius:4px; border:1px solid #000000;" />
+<ul id="search-result"></ul>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script src="/search.js"></script>
 
             
         </div>

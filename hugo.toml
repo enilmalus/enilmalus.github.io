@@ -2,3 +2,12 @@ baseURL = 'https://example.org/'
 languageCode = 'en-us'
 title = "Welcome My Hack's Blog"
 theme = "hugo-theme-hello-friend-ng"
+
+[[menu.main]]
+identifier = "posts"
+name = "文章"
+url = "/posts/"
+weight = 1
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
