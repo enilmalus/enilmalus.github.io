@@ -5,9 +5,6 @@
     <loc>http://localhost:1313/posts/my-first-post/</loc>
     <lastmod>2025-09-24T15:08:39+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2025-09-24T15:08:39+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/posts/</loc>
     <lastmod>2025-09-24T15:08:39+08:00</lastmod>
   </url><url>
@@ -15,6 +12,9 @@
     <lastmod>2025-09-24T15:08:39+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/untagged/</loc>
+    <lastmod>2025-09-24T15:08:39+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
     <lastmod>2025-09-24T15:08:39+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
