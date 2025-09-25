@@ -1,51 +1,64 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 20:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>我的新文章</title><link>https://enilmalus.github.io/posts/new-article/</link><pubDate>Wed, 24 Sep 2025 20:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/new-article/</guid><description>&lt;h1 id="这是一篇测试文章"&gt;这是一篇测试文章&lt;/h1&gt;
-&lt;p&gt;这里是文章的介绍内容。&lt;/p&gt;
-&lt;h2 id="图片展示示例"&gt;图片展示示例&lt;/h2&gt;
-&lt;h3 id="方法一普通-markdown-语法"&gt;方法一：普通 Markdown 语法&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;![&lt;span style="color:#f92672"&gt;图片描述&lt;/span&gt;](&lt;span style="color:#a6e22e"&gt;/images/example.jpg&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="方法二html-标签更多控制"&gt;方法二：HTML 标签（更多控制）&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;img&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;src&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/images/example.jpg&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;alt&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;图片描述&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;width&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;500&amp;#34;&lt;/span&gt;&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="方法三hugo-主题的-image-shortcode"&gt;方法三：Hugo 主题的 image shortcode&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;img src="https://enilmalus.github.io/images/example.jpg" alt="图片描述" class="center" style="border-radius: 8px;" /&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="子标题"&gt;子标题&lt;/h2&gt;
-&lt;p&gt;你可以使用 Markdown 语法：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;列表项 1&lt;/li&gt;
-&lt;li&gt;列表项 2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;粗体文字&lt;/strong&gt; 和 &lt;em&gt;斜体文字&lt;/em&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 代码块示例&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;print(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello, World!&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;这是引用内容&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;a href="https://example.com"&gt;链接示例&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://enilmalus.github.io/images/test-images/favicon-16x16.png" alt="测试图片"&gt;&lt;/p&gt;</description><content type="html"><![CDATA[<h1 id="这是一篇测试文章">这是一篇测试文章</h1>
-<p>这里是文章的介绍内容。</p>
-<h2 id="图片展示示例">图片展示示例</h2>
-<h3 id="方法一普通-markdown-语法">方法一：普通 Markdown 语法</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>![<span style="color:#f92672">图片描述</span>](<span style="color:#a6e22e">/images/example.jpg</span>)
-</span></span></code></pre></div><h3 id="方法二html-标签更多控制">方法二：HTML 标签（更多控制）</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/images/example.jpg&#34;</span> <span style="color:#a6e22e">alt</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;图片描述&#34;</span> <span style="color:#a6e22e">width</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;500&#34;</span>&gt;
-</span></span></code></pre></div><h3 id="方法三hugo-主题的-image-shortcode">方法三：Hugo 主题的 image shortcode</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>
-    <img src="/images/example.jpg"  alt="图片描述"  class="center"  style="border-radius: 8px;"  />
-
-
-</span></span></code></pre></div><h2 id="子标题">子标题</h2>
-<p>你可以使用 Markdown 语法：</p>
-<ul>
-<li>列表项 1</li>
-<li>列表项 2</li>
-</ul>
-<p><strong>粗体文字</strong> 和 <em>斜体文字</em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 代码块示例</span>
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Hello, World!&#34;</span>)
-</span></span></code></pre></div><blockquote>
-<p>这是引用内容</p></blockquote>
-<p><a href="https://example.com">链接示例</a></p>
-<p><img src="/images/test-images/favicon-16x16.png" alt="测试图片"></p>
-]]></content></item><item><title>My First Post</title><link>https://enilmalus.github.io/posts/my-first-post/</link><pubDate>Wed, 24 Sep 2025 15:08:39 +0800</pubDate><guid>https://enilmalus.github.io/posts/my-first-post/</guid><description>&lt;h1 id="test"&gt;Test&lt;/h1&gt;
-&lt;p&gt;This is a test page&lt;/p&gt;</description><content type="html">&lt;h1 id="test">Test&lt;/h1>
-&lt;p>This is a test page&lt;/p>
-</content></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 21:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>关于扫描工具 nmap 的使用心得</title><link>https://enilmalus.github.io/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
+&lt;p&gt;在打本地离线靶机的时候常常需要主机发现，此时可以使用以下命令。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;-sn 为 &amp;ndash;skip -port-scan 的缩写，意思为不要执行传统的端口扫描，扫描地址为 0/24，该命令为笔者打本地离线机器最常用的主机发现命令，执行结果如下。&lt;/p&gt;
+&lt;p&gt;&lt;img src="%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0.png" alt="主机发现"&gt;&lt;/p&gt;
+&lt;p&gt;其中 10.10.10.1 与 10.10.10.2 、10.10.10.254是系统默认地址，10.10.10.5 是 kali 地址，所以 10.10.10.45 就是靶机的地址。&lt;/p&gt;
+&lt;h2 id="tcp-端口扫描"&gt;TCP 端口扫描&lt;/h2&gt;
+&lt;p&gt;在主机发现后一般要对存活的机器进行端口扫描，可以使用以下命令。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.45 -oA nmap/scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;一般可以加上 -sT 指定对 TCP 端口进行扫描，但是实战中有时候指定 -sT 后反而扫描不全，所有去除 -sT；可以使用 -oA 命令将扫描结果全格式保存到 nmap/scan 目录下以便于随时回顾，命令执行结果如下。&lt;/p&gt;
+&lt;p&gt;&lt;img src="TCP-scan.png" alt="TCP 扫描"&gt;&lt;/p&gt;
+&lt;p&gt;可以发现靶机开放了 22 ssh 端口和 80 http 端口。&lt;/p&gt;
+&lt;h2 id="udp-端口扫描"&gt;UDP 端口扫描&lt;/h2&gt;
+&lt;p&gt;在执行完 TCP 扫描后应该进行 UDP 扫描以免有漏掉的 UDP 端口，可以使用以下命令。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sU --min-rate 10000 -p- 10.10.10.45 -oA nmap/udp-scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;命令结构与 TCP 扫描类似，多了个 -sU 指定对 UDP 端口进行扫描，执行结果如下。&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
+<p>以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例</p></blockquote>
+<h2 id="主机发现">主机发现</h2>
+<p>在打本地离线靶机的时候常常需要主机发现，此时可以使用以下命令。</p>
+<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
+</code></pre><p>-sn 为 &ndash;skip -port-scan 的缩写，意思为不要执行传统的端口扫描，扫描地址为 0/24，该命令为笔者打本地离线机器最常用的主机发现命令，执行结果如下。</p>
+<p><img src="%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0.png" alt="主机发现"></p>
+<p>其中 10.10.10.1 与 10.10.10.2 、10.10.10.254是系统默认地址，10.10.10.5 是 kali 地址，所以 10.10.10.45 就是靶机的地址。</p>
+<h2 id="tcp-端口扫描">TCP 端口扫描</h2>
+<p>在主机发现后一般要对存活的机器进行端口扫描，可以使用以下命令。</p>
+<pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.45 -oA nmap/scan
+</code></pre><p>一般可以加上 -sT 指定对 TCP 端口进行扫描，但是实战中有时候指定 -sT 后反而扫描不全，所有去除 -sT；可以使用 -oA 命令将扫描结果全格式保存到 nmap/scan 目录下以便于随时回顾，命令执行结果如下。</p>
+<p><img src="TCP-scan.png" alt="TCP 扫描"></p>
+<p>可以发现靶机开放了 22 ssh 端口和 80 http 端口。</p>
+<h2 id="udp-端口扫描">UDP 端口扫描</h2>
+<p>在执行完 TCP 扫描后应该进行 UDP 扫描以免有漏掉的 UDP 端口，可以使用以下命令。</p>
+<pre tabindex="0"><code>sudo nmap -sU --min-rate 10000 -p- 10.10.10.45 -oA nmap/udp-scan
+</code></pre><p>命令结构与 TCP 扫描类似，多了个 -sU 指定对 UDP 端口进行扫描，执行结果如下。</p>
+<p><img src="UDP-scan.png" alt="UDP-scan"></p>
+<p>可以看到 UDP 没有扫描到开放的端口。</p>
+<h2 id="tcp-详细情况扫描">TCP 详细情况扫描</h2>
+<p>在扫描完成后要对 TCP 端口的详细情况进行扫描，可以使用以下命令。</p>
+<pre tabindex="0"><code>sudo nmap -sT -sC -sV -O -p22,80 10.10.10.45 
+</code></pre><p>-sT 指定对 TCP 端口，-sC 使用默认脚本扫描，-sV 进行服务和版本的探测，-O 进行操作系统的探测，指定端口为 22,80，执行结果如下。</p>
+<p><img src="detail-scan.png" alt="detail-scan"></p>
+<p>可以看到 nmap 列出了端口详细情况。</p>
+<h2 id="默认脚本扫描">默认脚本扫描</h2>
+<p>在执行完端口详细扫描后一般还会执行 nmap 的 默认脚本扫描，可以执行以下命令。</p>
+<pre tabindex="0"><code>sudo nmap --script=vuln -p22,80 10.10.10.45
+</code></pre><p>&ndash;script=vuln 指定以 nmap 的默认脚本进行扫描，指定端口为 22、80，执行结果如下。</p>
+<p><img src="script-scan.png" alt="script-scan"></p>
+<p>可以看到 nmap 已经对端口进行了默认脚本扫描，并输出了结果。</p>
+<h2 id="数据包分片扫描">数据包分片扫描</h2>
+<p>有时候因为防火墙等原因，需要进行数据包分片扫描发现端口，可以使用以下命令。</p>
+<pre tabindex="0"><code>sudo nmap -f -p- --min-rate 10000 10.10.10.45
+</code></pre><p>-f 使用 IP 分片技术，一块一块发送数据包，减小被防火墙拦截的概率，执行结果如下。</p>
+<p><img src="bust-scan.png" alt="bust-scan"></p>
+<p>可以看到靶机开放了 22、80 端口。</p>
+<h2 id="源端口随机端口顺序慢速扫描">源端口、随机端口顺序、慢速扫描</h2>
+<p>以下是笔者在打靶过程中还用过的绕过防火墙扫描命令。</p>
+<h3 id="源端口扫描">源端口扫描</h3>
+<pre tabindex="0"><code>sudo nmap --source-port 53 -p- --min-rate 10000 10.10.10.45
+</code></pre><h3 id="随机端口扫描">随机端口扫描</h3>
+<pre tabindex="0"><code>sudo nmap -r -p- --min-rate 10000 10.10.10.45
+</code></pre><h3 id="慢速扫描">慢速扫描</h3>
+<pre tabindex="0"><code>sudo nmap -T2 -p- 10.10.10.45
+</code></pre>]]></content></item></channel></rss>
