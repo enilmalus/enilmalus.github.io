@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Welcome My Hack&#39;s Blog</title>
-    <link>http://localhost:1313/</link>
-    <description>Recent content on Welcome My Hack&#39;s Blog</description>
+    <title>Nmap on Welcome My Hack&#39;s Blog</title>
+    <link>http://localhost:1313/tags/nmap/</link>
+    <description>Recent content in Nmap on Welcome My Hack&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 24 Sep 2025 21:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/nmap/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>关于扫描工具 nmap 的使用心得</title>
       <link>http://localhost:1313/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link>
