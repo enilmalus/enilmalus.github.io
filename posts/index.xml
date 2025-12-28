@@ -1,38 +1,50 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 09 Oct 2025 17:29:33 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
-&lt;h1 id="可能使用到的-cewl-及-john-命令及解释"&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h1&gt;
-&lt;h2 id="cewl-语句及其解释"&gt;Cewl 语句及其解释&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl http://10.10.10.48 -w password.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令直接指定 &lt;em&gt;url&lt;/em&gt; 生成一个包含所有提取单词的字典文件，并保存为 &lt;em&gt;password.txt&lt;/em&gt; 文件。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -m 6 http://10.10.10.48 -w password.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-m 6&lt;/em&gt; 设置提取的单词长度最小为 &lt;em&gt;6&lt;/em&gt; 。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -d 2 http://10.10.10.48 -w password.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 -d 2 使 &lt;em&gt;Cewl&lt;/em&gt; 递归爬取网站内部链接，深度为 &lt;em&gt;2&lt;/em&gt; 。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -c http://10.10.10.48 -w password.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-c&lt;/em&gt; 去除重复单词，并显示单词出现的次数。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -e http://10.10.10.48 -w password.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 -&lt;em&gt;e&lt;/em&gt; 保留所有发现的电子邮件地址。&lt;/p&gt;
-&lt;h2 id="john-语法及其解释"&gt;john 语法及其解释&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo john --rules -wordlist=password.txt --stdout | sort | uniq &amp;gt; wordlist.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;使用 &lt;em&gt;&amp;ndash;rules&lt;/em&gt; 指定内置密码规则生成新密码组合，&lt;em&gt;&amp;ndash;wordlist=password.txt&lt;/em&gt; 指定原始字典为 &lt;em&gt;passowrd.txt&lt;/em&gt; ，使用 &lt;em&gt;&amp;ndash;stdout&lt;/em&gt; 将生成的密码标准输出，&lt;em&gt;sort&lt;/em&gt; 对单词进行排序，&lt;em&gt;uniq&lt;/em&gt; 去重。&lt;/p&gt;</description><content type="html"><![CDATA[<p>在遇到目标网站且使用 <em>kali</em> 默认的 <em>rockyou</em> 字典爆破时间过长时可以尝试通过 <em>cewl</em> 与 <em>john</em> 结合生成目标定制的字典缩短爆破时间。</p>
-<h1 id="可能使用到的-cewl-及-john-命令及解释">可能使用到的 Cewl 及 john 命令及解释</h1>
-<h2 id="cewl-语句及其解释">Cewl 语句及其解释</h2>
-<pre tabindex="0"><code>sudo cewl http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令直接指定 <em>url</em> 生成一个包含所有提取单词的字典文件，并保存为 <em>password.txt</em> 文件。</p>
-<pre tabindex="0"><code>sudo cewl -m 6 http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 <em>-m 6</em> 设置提取的单词长度最小为 <em>6</em> 。</p>
-<pre tabindex="0"><code>sudo cewl -d 2 http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 -d 2 使 <em>Cewl</em> 递归爬取网站内部链接，深度为 <em>2</em> 。</p>
-<pre tabindex="0"><code>sudo cewl -c http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 <em>-c</em> 去除重复单词，并显示单词出现的次数。</p>
-<pre tabindex="0"><code>sudo cewl -e http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 -<em>e</em> 保留所有发现的电子邮件地址。</p>
-<h2 id="john-语法及其解释">john 语法及其解释</h2>
-<pre tabindex="0"><code>sudo john --rules -wordlist=password.txt --stdout | sort | uniq &gt; wordlist.txt
-</code></pre><p>使用 <em>&ndash;rules</em> 指定内置密码规则生成新密码组合，<em>&ndash;wordlist=password.txt</em> 指定原始字典为 <em>passowrd.txt</em> ，使用 <em>&ndash;stdout</em> 将生成的密码标准输出，<em>sort</em> 对单词进行排序，<em>uniq</em> 去重。</p>
-<h1 id="使用-hydra-指定生成的字典进行爆破">使用 hydra 指定生成的字典进行爆破</h1>
-<pre tabindex="0"><code>sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
-</code></pre><p><img src="result.png" alt="结果"></p>
-]]></content></item><item><title>渗透测试方法论（2025.12.27总结）【建设中】</title><link>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/</guid><description>&lt;blockquote&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 28 Dec 2025 17:29:33 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Empire LupinOne writeup</title><link>https://enilmalus.github.io/posts/empire-lupinone-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/empire-lupinone-writeup/</guid><description>&lt;h1 id="test"&gt;Test&lt;/h1&gt;
+&lt;p&gt;aaa&lt;/p&gt;</description><content type="html">&lt;h1 id="test">Test&lt;/h1>
+&lt;p>aaa&lt;/p>
+</content></item><item><title>如何为靶机配置 DHCP</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="环境判断"&gt;环境判断&lt;/h1&gt;
+&lt;p&gt;确保靶机为 NAT 连接&lt;/p&gt;
+&lt;p&gt;&lt;img src="NTA.png" alt="NTA"&gt;&lt;/p&gt;
+&lt;p&gt;在 kali 中执行 nmap 扫描，未发现靶机的地址&lt;/p&gt;
+&lt;p&gt;&lt;img src="%E5%88%9D%E6%AC%A1%E6%89%AB%E6%8F%8F.png" alt="初次扫描"&gt;&lt;/p&gt;
+&lt;h1 id="获取-dhcp"&gt;获取 DHCP&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://www.volcengine.com/docs/6396/81140"&gt;如何进入单用户模式&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;以 Debian 为例，进入单用户模式后查看网卡信息，为 ens33&lt;/p&gt;
+&lt;p&gt;&lt;img src="ipa.png" alt="ipa"&gt;&lt;/p&gt;
+&lt;p&gt;为 interface 文件添加 ens33&lt;/p&gt;
+&lt;p&gt;&lt;img src="%E4%BF%AE%E6%94%B9%E5%89%8D.png" alt="修改前"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="%E4%BF%AE%E6%94%B9%E5%90%8E.png" alt="修改后"&gt;&lt;/p&gt;
+&lt;p&gt;保存后执行网络重启命令后获得 ip&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;service networking restart
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97.png" alt="获得"&gt;&lt;/p&gt;
+&lt;p&gt;回到 kali 中，重新获得 ip&lt;/p&gt;
+&lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97ip.png" alt="获得ip.png"&gt;&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
+<p>此文章以 kali 地址为 10.10.10.5 为示例</p>
+</blockquote>
+<h1 id="环境判断">环境判断</h1>
+<p>确保靶机为 NAT 连接</p>
+<p><img src="NTA.png" alt="NTA"></p>
+<p>在 kali 中执行 nmap 扫描，未发现靶机的地址</p>
+<p><img src="%E5%88%9D%E6%AC%A1%E6%89%AB%E6%8F%8F.png" alt="初次扫描"></p>
+<h1 id="获取-dhcp">获取 DHCP</h1>
+<blockquote>
+<p><a href="https://www.volcengine.com/docs/6396/81140">如何进入单用户模式</a></p>
+</blockquote>
+<p>以 Debian 为例，进入单用户模式后查看网卡信息，为 ens33</p>
+<p><img src="ipa.png" alt="ipa"></p>
+<p>为 interface 文件添加 ens33</p>
+<p><img src="%E4%BF%AE%E6%94%B9%E5%89%8D.png" alt="修改前"></p>
+<p><img src="%E4%BF%AE%E6%94%B9%E5%90%8E.png" alt="修改后"></p>
+<p>保存后执行网络重启命令后获得 ip</p>
+<pre tabindex="0"><code>service networking restart
+</code></pre><p><img src="%E8%8E%B7%E5%BE%97.png" alt="获得"></p>
+<p>回到 kali 中，重新获得 ip</p>
+<p><img src="%E8%8E%B7%E5%BE%97ip.png" alt="获得ip.png"></p>
+]]></content></item><item><title>渗透测试方法论（2025.12.27总结）【建设中】</title><link>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="靶机分类"&gt;靶机分类&lt;/h1&gt;
@@ -86,6 +98,40 @@
 </ul>
 <h3 id="medium-类型">Medium 类型</h3>
 <p>这类靶机相对 Easy 类型靶机攻击难度略微复杂</p>
+]]></content></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
+&lt;h1 id="可能使用到的-cewl-及-john-命令及解释"&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h1&gt;
+&lt;h2 id="cewl-语句及其解释"&gt;Cewl 语句及其解释&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl http://10.10.10.48 -w password.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令直接指定 &lt;em&gt;url&lt;/em&gt; 生成一个包含所有提取单词的字典文件，并保存为 &lt;em&gt;password.txt&lt;/em&gt; 文件。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -m 6 http://10.10.10.48 -w password.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-m 6&lt;/em&gt; 设置提取的单词长度最小为 &lt;em&gt;6&lt;/em&gt; 。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -d 2 http://10.10.10.48 -w password.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 -d 2 使 &lt;em&gt;Cewl&lt;/em&gt; 递归爬取网站内部链接，深度为 &lt;em&gt;2&lt;/em&gt; 。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -c http://10.10.10.48 -w password.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-c&lt;/em&gt; 去除重复单词，并显示单词出现的次数。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -e http://10.10.10.48 -w password.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 -&lt;em&gt;e&lt;/em&gt; 保留所有发现的电子邮件地址。&lt;/p&gt;
+&lt;h2 id="john-语法及其解释"&gt;john 语法及其解释&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo john --rules -wordlist=password.txt --stdout | sort | uniq &amp;gt; wordlist.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;使用 &lt;em&gt;&amp;ndash;rules&lt;/em&gt; 指定内置密码规则生成新密码组合，&lt;em&gt;&amp;ndash;wordlist=password.txt&lt;/em&gt; 指定原始字典为 &lt;em&gt;passowrd.txt&lt;/em&gt; ，使用 &lt;em&gt;&amp;ndash;stdout&lt;/em&gt; 将生成的密码标准输出，&lt;em&gt;sort&lt;/em&gt; 对单词进行排序，&lt;em&gt;uniq&lt;/em&gt; 去重。&lt;/p&gt;</description><content type="html"><![CDATA[<p>在遇到目标网站且使用 <em>kali</em> 默认的 <em>rockyou</em> 字典爆破时间过长时可以尝试通过 <em>cewl</em> 与 <em>john</em> 结合生成目标定制的字典缩短爆破时间。</p>
+<h1 id="可能使用到的-cewl-及-john-命令及解释">可能使用到的 Cewl 及 john 命令及解释</h1>
+<h2 id="cewl-语句及其解释">Cewl 语句及其解释</h2>
+<pre tabindex="0"><code>sudo cewl http://10.10.10.48 -w password.txt 
+</code></pre><p>这个命令直接指定 <em>url</em> 生成一个包含所有提取单词的字典文件，并保存为 <em>password.txt</em> 文件。</p>
+<pre tabindex="0"><code>sudo cewl -m 6 http://10.10.10.48 -w password.txt 
+</code></pre><p>这个命令使用 <em>-m 6</em> 设置提取的单词长度最小为 <em>6</em> 。</p>
+<pre tabindex="0"><code>sudo cewl -d 2 http://10.10.10.48 -w password.txt 
+</code></pre><p>这个命令使用 -d 2 使 <em>Cewl</em> 递归爬取网站内部链接，深度为 <em>2</em> 。</p>
+<pre tabindex="0"><code>sudo cewl -c http://10.10.10.48 -w password.txt 
+</code></pre><p>这个命令使用 <em>-c</em> 去除重复单词，并显示单词出现的次数。</p>
+<pre tabindex="0"><code>sudo cewl -e http://10.10.10.48 -w password.txt 
+</code></pre><p>这个命令使用 -<em>e</em> 保留所有发现的电子邮件地址。</p>
+<h2 id="john-语法及其解释">john 语法及其解释</h2>
+<pre tabindex="0"><code>sudo john --rules -wordlist=password.txt --stdout | sort | uniq &gt; wordlist.txt
+</code></pre><p>使用 <em>&ndash;rules</em> 指定内置密码规则生成新密码组合，<em>&ndash;wordlist=password.txt</em> 指定原始字典为 <em>passowrd.txt</em> ，使用 <em>&ndash;stdout</em> 将生成的密码标准输出，<em>sort</em> 对单词进行排序，<em>uniq</em> 去重。</p>
+<h1 id="使用-hydra-指定生成的字典进行爆破">使用 hydra 指定生成的字典进行爆破</h1>
+<pre tabindex="0"><code>sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
+</code></pre><p><img src="result.png" alt="结果"></p>
 ]]></content></item><item><title>关于扫描工具 nmap 的使用心得</title><link>https://enilmalus.github.io/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;
 &lt;/blockquote&gt;
