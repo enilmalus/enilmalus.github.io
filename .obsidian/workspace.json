@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/如何为靶机配置 DHCP/index.md",
+                "file": "content/posts/Bastard Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -33,10 +33,10 @@
             "state": {
               "type": "image",
               "state": {
-                "file": "content/posts/如何为靶机配置 DHCP/获得.png"
+                "file": "content/posts/Bastard Writeup/反弹shell.png"
               },
               "icon": "lucide-image",
-              "title": "获得"
+              "title": "反弹shell"
             }
           }
         ]
@@ -189,31 +189,32 @@
   },
   "active": "37a6410d4c1a9b9f",
   "lastOpenFiles": [
-    "public/posts/如何为靶机配置-dhcp/获得ip.png",
-    "public/posts/如何为靶机配置-dhcp/Pasted image 20251228205150.png",
-    "content/posts/如何为靶机配置 DHCP/获得ip.png",
-    "content/posts/如何为靶机配置 DHCP/获得.png",
+    "public/posts/bastard-writeup/root.png",
+    "content/posts/Bastard Writeup/反弹shell.png",
+    "public/posts/bastard-writeup/Pasted image 20251228235112.png",
+    "content/posts/Bastard Writeup/index.md",
+    "content/posts/Bastard Writeup/root.png",
+    "content/posts/Curl 使用详解/index.md",
+    "public/posts/bastard-writeup/反弹shell.png",
+    "public/posts/bastard-writeup/Pasted image 20251228232606.png",
+    "public/posts/curl-使用详解/index.html",
+    "public/posts/curl-使用详解/未命名/index.html",
+    "public/posts/curl-使用详解/未命名",
+    "public/posts/curl-使用详解",
+    "content/posts/Curl 使用详解",
+    "content/posts/Bastard Writeup/web.png",
+    "public/posts/bastard-writeup/web.png",
+    "public/posts/bastard-writeup/Pasted image 20251228214655.png",
     "content/posts/如何为靶机配置 DHCP/index.md",
-    "content/posts/如何为靶机配置 DHCP/NTA.png",
-    "public/posts/如何为靶机配置-dhcp/获得.png",
-    "public/posts/如何为靶机配置-dhcp/Pasted image 20251228205001.png",
-    "public/posts/如何为靶机配置-dhcp/NTA.png",
+    "content/posts/渗透测试方法论（2025.12.27总结）/index.md",
+    "content/posts/如何为靶机配置 DHCP/获得.png",
+    "public/posts/bastard-writeup/index.html",
+    "public/posts/bastard-writeup",
+    "content/posts/渗透测试方法论（2025.12.27总结）/漏洞搜索示意图.png",
     "content/posts/如何根据具体的目标定制字典/index.md",
-    "public/posts/如何为靶机配置-dhcp/Pasted image 20251228204809.png",
-    "public/posts/如何为靶机配置-dhcp/修改后.png",
-    "content/posts/如何为靶机配置 DHCP/修改后.png",
     "public/posts/如何为靶机配置-dhcp/index.html",
     "public/posts/如何为靶机配置-dhcp/未命名/index.html",
     "public/posts/如何为靶机配置-dhcp/未命名",
-    "public/posts/如何为靶机配置-dhcp",
-    "content/posts/Empire LupinOne writeup/index.md",
-    "content/posts/如何为靶机配置 DHCP",
-    "content/posts/渗透测试方法论（2025.12.27总结）/index.md",
-    "public/tags/writeup/index.xml",
-    "public/tags/writeup/index.html",
-    "public/tags/writeup",
-    "public/posts/empire-lupinone-writeup/index.html",
-    "public/posts/empire-lupinone-writeup",
     "content/posts/关于扫描工具 nmap 的使用心得/index.md",
     "content/posts/渗透测试方法论（2025.12.27总结）.md",
     "TCP.md",
