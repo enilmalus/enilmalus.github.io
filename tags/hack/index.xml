@@ -1,5 +1,90 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hack on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/hack/</link><description>Recent content in Hack on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 28 Dec 2025 17:29:33 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/hack/index.xml" rel="self" type="application/rss+xml"/><item><title>Empire LupinOne writeup</title><link>https://enilmalus.github.io/posts/empire-lupinone-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/empire-lupinone-writeup/</guid><description>&lt;h1 id="test"&gt;Test&lt;/h1&gt;
-&lt;p&gt;aaa&lt;/p&gt;</description></item><item><title>如何为靶机配置 DHCP</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid><description>&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hack on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/hack/</link><description>Recent content in Hack on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 28 Dec 2025 17:29:33 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/hack/index.xml" rel="self" type="application/rss+xml"/><item><title>Bastard Writeup</title><link>https://enilmalus.github.io/posts/bastard-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/bastard-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;本文章以 kali 地址为 10.10.16.46 做演示&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="初始侦察"&gt;初始侦察&lt;/h1&gt;
+&lt;h2 id="nmap-端口扫描"&gt;nmap 端口扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo nmap --min-rate 10000 -p- 10.129.6.171 -oA nmap/ports
+[sudo] password for kali: 
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:11 EST
+Nmap scan report for 10.129.6.171
+Host is up (0.39s latency).
+Not shown: 65532 filtered tcp ports (no-response)
+PORT STATE SERVICE
+80/tcp open http
+135/tcp open msrpc
+49154/tcp open unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 15.57 seconds
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="nmap-详细信息扫描"&gt;nmap 详细信息扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo nmap -sT -sC -sV -O -p80,135,49154 10.129.6.171 -oA nmap/detail 
+[sudo] password for kali: 
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:12 EST
+Nmap scan report for 10.129.6.171
+Host is up (0.22s latency).
+
+PORT STATE SERVICE VERSION
+80/tcp open http Microsoft IIS httpd 7.5
+|_http-server-header: Microsoft-IIS/7.5
+|_http-generator: Drupal 7 (http://drupal.org)
+| http-methods: 
+|_ Potentially risky methods: TRACE
+| http-robots.txt: 36 disallowed entries (15 shown)
+| /includes/ /misc/ /modules/ /profiles/ /scripts/ 
+| /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt 
+| /INSTALL.pgsql.txt /INSTALL.sqlite.txt /install.php /INSTALL.txt 
+|_/LICENSE.txt /MAINTAINERS.txt
+|_http-title: Welcome to Bastard | Bastard
+135/tcp open msrpc Microsoft Windows RPC
+49154/tcp open msrpc Microsoft Windows RPC
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose|phone|specialized
+Running (JUST GUESSING): Microsoft Windows 2008|7|Vista|2012|Phone|8.1 (97%)
+OS CPE: cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_7 cpe:/o:microsoft:windows_vista cpe:/o:microsoft:windows_server_2012:r2 cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows cpe:/o:microsoft:windows_8.1
+Aggressive OS guesses: Microsoft Windows 7 or Windows Server 2008 R2 (97%), Microsoft Windows Vista or Windows 7 (92%), Microsoft Windows Server 2012 R2 (91%), Microsoft Windows 8.1 Update 1 (90%), Microsoft Windows Phone 7.5 or 8.0 (90%), Microsoft Windows Embedded Standard 7 (89%), Microsoft Windows Server 2008 R2 SP1 or Windows 8 (89%), Microsoft Windows Vista SP0 or SP1, Windows Server 2008 SP1, or Windows 7 (89%), Microsoft Windows Server 2008 R2 or Windows 7 SP1 (89%), Microsoft Windows Vista SP2, Windows 7 SP1, or Windows Server 2008 (88%)
+No exact OS matches for host (test conditions non-ideal).
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>Curl 使用详解</title><link>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</guid><description>&lt;h1 id="curl-原理剖析"&gt;curl 原理剖析&lt;/h1&gt;
+&lt;h2 id="curl-核心机制"&gt;curl 核心机制&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt() 函数调用。&lt;/li&gt;
+&lt;li&gt;协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。&lt;/li&gt;
+&lt;li&gt;连接复用：再以此命令中请求多个 URL 时，curl 会尝试复用 TCP 连接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="curl-参数详解"&gt;curl 参数详解&lt;/h1&gt;
+&lt;h2 id="curl-帮助命令"&gt;curl 帮助命令&lt;/h2&gt;
+&lt;p&gt;下面为 curl 详细地帮助命令&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ curl -h 
+Usage: curl [options...] &amp;lt;url&amp;gt;
+ -d, --data &amp;lt;data&amp;gt; HTTP POST data
+ -f, --fail Fail fast with no output on HTTP errors
+ -h, --help &amp;lt;subject&amp;gt; Get help for commands
+ -o, --output &amp;lt;file&amp;gt; Write to file instead of stdout
+ -O, --remote-name Write output to file named as remote file
+ -i, --show-headers Show response headers in output
+ -s, --silent Silent mode
+ -T, --upload-file &amp;lt;file&amp;gt; Transfer local FILE to destination
+ -u, --user &amp;lt;user:password&amp;gt; Server user and password
+ -A, --user-agent &amp;lt;name&amp;gt; Send User-Agent &amp;lt;name&amp;gt; to server
+ -v, --verbose Make the operation more talkative
+ -V, --version Show version number and quit
+
+This is not the full help; this menu is split into categories.
+Use &amp;#34;--help category&amp;#34; to get an overview of all categories, which are:
+auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
+Use &amp;#34;--help all&amp;#34; to list all options
+Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="参数详解"&gt;参数详解&lt;/h2&gt;
+&lt;h3 id="-ddata-data-参数"&gt;-d/&amp;ndash;data &amp;lt;data&amp;gt; 参数&lt;/h3&gt;
+&lt;p&gt;使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt; 。&lt;/p&gt;</description></item><item><title>如何为靶机配置 DHCP</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="环境判断"&gt;环境判断&lt;/h1&gt;
