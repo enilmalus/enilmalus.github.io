@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工具 on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/%E5%B7%A5%E5%85%B7/</link><description>Recent content in 工具 on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 21:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>关于扫描工具 nmap 的使用心得</title><link>https://enilmalus.github.io/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
 &lt;p&gt;在打本地离线靶机的时候常常需要主机发现，此时可以使用以下命令。&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
