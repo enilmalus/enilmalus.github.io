@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/渗透测试方法论（2025.12.27总结）/index.md",
+                "file": "content/posts/如何为靶机配置 DHCP/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -31,14 +31,12 @@
             "id": "203603a4d43cfa47",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "content/posts/如何根据具体的目标定制字典/index.md",
-                "mode": "source",
-                "source": false
+                "file": "content/posts/如何为靶机配置 DHCP/获得.png"
               },
-              "icon": "lucide-file",
-              "title": "index"
+              "icon": "lucide-image",
+              "title": "获得"
             }
           }
         ]
@@ -191,34 +189,37 @@
   },
   "active": "37a6410d4c1a9b9f",
   "lastOpenFiles": [
+    "public/posts/如何为靶机配置-dhcp/获得ip.png",
+    "public/posts/如何为靶机配置-dhcp/Pasted image 20251228205150.png",
+    "content/posts/如何为靶机配置 DHCP/获得ip.png",
+    "content/posts/如何为靶机配置 DHCP/获得.png",
+    "content/posts/如何为靶机配置 DHCP/index.md",
+    "content/posts/如何为靶机配置 DHCP/NTA.png",
+    "public/posts/如何为靶机配置-dhcp/获得.png",
+    "public/posts/如何为靶机配置-dhcp/Pasted image 20251228205001.png",
+    "public/posts/如何为靶机配置-dhcp/NTA.png",
     "content/posts/如何根据具体的目标定制字典/index.md",
+    "public/posts/如何为靶机配置-dhcp/Pasted image 20251228204809.png",
+    "public/posts/如何为靶机配置-dhcp/修改后.png",
+    "content/posts/如何为靶机配置 DHCP/修改后.png",
+    "public/posts/如何为靶机配置-dhcp/index.html",
+    "public/posts/如何为靶机配置-dhcp/未命名/index.html",
+    "public/posts/如何为靶机配置-dhcp/未命名",
+    "public/posts/如何为靶机配置-dhcp",
+    "content/posts/Empire LupinOne writeup/index.md",
+    "content/posts/如何为靶机配置 DHCP",
     "content/posts/渗透测试方法论（2025.12.27总结）/index.md",
-    "public/posts/渗透测试方法论2025.12.27总结/index.html",
-    "public/posts/渗透测试方法论2025.12.27总结/漏洞搜索示意图.png",
-    "public/posts/渗透测试方法论2025.12.27总结/AI驱动搜索.png",
-    "public/posts/渗透测试方法论2025.12.27总结",
-    "content/posts/渗透测试方法论（2025.12.27总结）/AI驱动搜索.png",
-    "content/posts/渗透测试方法论（2025.12.27总结）/漏洞搜索示意图.png",
-    "Pasted image 20250925084914.png",
+    "public/tags/writeup/index.xml",
+    "public/tags/writeup/index.html",
+    "public/tags/writeup",
+    "public/posts/empire-lupinone-writeup/index.html",
+    "public/posts/empire-lupinone-writeup",
     "content/posts/关于扫描工具 nmap 的使用心得/index.md",
-    "content/posts/关于扫描工具 nmap 的使用心得/主机发现.png",
-    "content/posts/如何根据具体的目标定制字典/result.png",
-    "content/posts/渗透测试方法论（2025.12.27总结）",
     "content/posts/渗透测试方法论（2025.12.27总结）.md",
-    "public/posts/如何根据具体的目标定制字典/index.html",
-    "public/posts/如何根据具体的目标定制字典/result.png",
-    "public/posts/如何根据具体的目标定制字典",
-    "content/posts/关于扫描工具 nmap 的使用心得/TCP-scan.png",
-    "content/posts/如何根据具体的目标定制字典/image.png",
-    "content/posts/如何根据具体的目标定制字典",
     "TCP.md",
     "content/posts/关于扫描工具 nmap 的使用心得.md",
     "content/posts/关于扫描工具 nmap 的使用心得/关于扫描工具 nmap 的使用心得.md",
-    "content/posts/关于扫描工具 nmap 的使用心得",
-    "public/posts/test/index.html",
-    "public/posts/test",
     "content/posts/test/index.md",
-    "content/posts/test",
     "content/posts/my-first-post.md"
   ]
 }

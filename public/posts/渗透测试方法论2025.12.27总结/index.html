@@ -21,7 +21,7 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
 
     <title>
         
-            渗透测试方法论（2025.12.27总结） :: Welcome My Hack&#39;s Blog 
+            渗透测试方法论（2025.12.27总结）【建设中】 :: Welcome My Hack&#39;s Blog 
         
     </title>
 
@@ -45,20 +45,20 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
 
 
 
-  <meta itemprop="name" content="渗透测试方法论（2025.12.27总结）">
+  <meta itemprop="name" content="渗透测试方法论（2025.12.27总结）【建设中】">
   <meta itemprop="description" content="本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析
 靶机分类 攻击链复杂度分层 Easy 类型 这类靶机没有复杂的攻击链，一般进行 信息收集、单漏洞利用 就可以拿到一个初始的立足点，然后进行简单的提权操作即可获得 root 权限。
 Web 漏洞链路 信息收集 → 目录爆破 → Web漏洞（SQL注入/命令注入/文件上传 等）→ 获得初始立足点 → 本地提权（SUID/Sudo/Cron/内核漏洞 等） 例如：
 Hack The Box 靶机 Busqueda 访问 80 端口暴露出使用的为开源系统 Searchor 2.4.0，随后在网络上搜索相关的漏洞利用 在 kali 本地监听获得初始立足点后进行手工枚举（sudo -l ; whoami ;ip a 等），随后根据具体的情况进行进一步提权
 凭证泄露 服务枚举（SMB/FTP/NFS）→ 匿名访问/弱密码 → 凭证发现 → SSH/WinRM登录 → 提权 例如：
 VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件夹获取 mysql 和 phpmyadmin 的账号密码，通过暴力破解密码，ssh 获得初始立足点，随后提权。 已知 CVE 利用 版本识别 → CVE查询 → POC利用 → 过的初始立足点 → 基础 例如：">
-  <meta itemprop="datePublished" content="2025-10-09T17:29:33+08:00">
-  <meta itemprop="dateModified" content="2025-10-09T17:29:33+08:00">
+  <meta itemprop="datePublished" content="2025-12-27T17:29:33+08:00">
+  <meta itemprop="dateModified" content="2025-12-27T17:29:33+08:00">
   <meta itemprop="wordCount" content="93">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="渗透测试方法论（2025.12.27总结）">
+  <meta name="twitter:title" content="渗透测试方法论（2025.12.27总结）【建设中】">
   <meta name="twitter:description" content="本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析
 靶机分类 攻击链复杂度分层 Easy 类型 这类靶机没有复杂的攻击链，一般进行 信息收集、单漏洞利用 就可以拿到一个初始的立足点，然后进行简单的提权操作即可获得 root 权限。
 Web 漏洞链路 信息收集 → 目录爆破 → Web漏洞（SQL注入/命令注入/文件上传 等）→ 获得初始立足点 → 本地提权（SUID/Sudo/Cron/内核漏洞 等） 例如：
@@ -72,7 +72,7 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
 
 
 
-    <meta property="article:published_time" content="2025-10-09 17:29:33 &#43;0800 CST" />
+    <meta property="article:published_time" content="2025-12-27 17:29:33 &#43;0800 CST" />
 
 
 
@@ -145,7 +145,7 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
 
     <article>
       <h1 class="post-title">
-        <a href="http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/">渗透测试方法论（2025.12.27总结）</a>
+        <a href="http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/">渗透测试方法论（2025.12.27总结）【建设中】</a>
       </h1>
 
       
@@ -236,7 +236,7 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
           <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
         
-          2025-10-09 17:29
+          2025-12-27 17:29
         
 
          
@@ -252,17 +252,17 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
         <div class="pagination__buttons">
             
             <span class="button previous">
-                <a href="http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/">
+                <a href="http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/">
                     <span class="button__icon">←</span>
-                    <span class="button__text">如何根据具体的目标定制字典</span>
+                    <span class="button__text">如何为靶机配置 DHCP</span>
                 </a>
             </span>
             
 
             
             <span class="button next">
-                <a href="http://localhost:1313/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/">
-                    <span class="button__text">关于扫描工具 nmap 的使用心得</span>
+                <a href="http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/">
+                    <span class="button__text">如何根据具体的目标定制字典</span>
                     <span class="button__icon">→</span>
                 </a>
             </span>
