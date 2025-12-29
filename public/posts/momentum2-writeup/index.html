@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
 <meta name="description" content="服务扫描 使用 nmap 进行基础扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html Web 渗透 页面分析 这是 80端口 的页面
 dashborard 界面像是一个文件上次的界面，可能存在 文件上传 漏洞
 ajax.bak 是备份文件，curl 下载看看
@@ -47,7 +47,7 @@ curl http://10.10.10.31/ajax.php.bak 审计源码，文件上传的时候当 coo
 
   <meta itemprop="name" content="Momentum2 Writeup">
   <meta itemprop="description" content="服务扫描 使用 nmap 进行基础扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html Web 渗透 页面分析 这是 80端口 的页面
 dashborard 界面像是一个文件上次的界面，可能存在 文件上传 漏洞
 ajax.bak 是备份文件，curl 下载看看
@@ -60,7 +60,7 @@ curl http://10.10.10.31/ajax.php.bak 审计源码，文件上传的时候当 coo
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Momentum2 Writeup">
   <meta name="twitter:description" content="服务扫描 使用 nmap 进行基础扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html Web 渗透 页面分析 这是 80端口 的页面
 dashborard 界面像是一个文件上次的界面，可能存在 文件上传 漏洞
 ajax.bak 是备份文件，curl 下载看看

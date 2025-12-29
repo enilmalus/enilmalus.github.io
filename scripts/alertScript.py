@@ -6,31 +6,33 @@ def replace_specific_links():
     读取指定 Markdown 文件，将 ![[Pasted image ...]] 替换为 ![[Pn.png]]
     包含强力调试功能，检测文件是否已保存或包含特殊字符。
     """
-    target_file = os.path.join('content', 'posts', 'Momentum2 Writeup', 'index.md')
+    target_file = os.path.join('content', 'posts', 'Venom Writeup', 'index.md')
     
     # 替换映射表
     replacements = {
-        "Pasted image 20250516234737": "P1",
-        "Pasted image 20250516235041": "P2",
-        "Pasted image 20250516235205": "P3",
-        "Pasted image 20250516235722": "P4",
-        "Pasted image 20250516235818": "P5",
-        "Pasted image 20250516235257": "P6",
-        "Pasted image 20250516235324": "P7",
-        "Pasted image 20250517000559": "P8",
-        "Pasted image 20250517000820": "P9",
-        "Pasted image 20250517000841": "P10",
-        "Pasted image 20250517001148": "P11",
-        "Pasted image 20250517001307": "P12",
-        "Pasted image 20250517001519": "P13",
-        "Pasted image 20250517001542": "P14",
-        "Pasted image 20250517001623": "P15",
-        "Pasted image 20250517001717": "P16",
-        "Pasted image 20250517001843": "P17",
-        "Pasted image 20250517002350": "P18",
-        "Pasted image 20250517002433": "P19",
-        "Pasted image 20250517002618": "P20",
-        "Pasted image 20250517002922": "P21"
+        "Pasted image 20250524173935": "P1",
+        "Pasted image 20250524174155": "P2",
+        "Pasted image 20250524174246": "P3",
+        "Pasted image 20250524174321": "P4",
+        "Pasted image 20250524174409": "P5",
+        "Pasted image 20250524174415": "P6",
+        "Pasted image 20250524174423": "P7",
+        "Pasted image 20250524174443": "P8",
+        "Pasted image 20250524174820": "P9",
+        "Pasted image 20250524174921": "P10",
+        "Pasted image 20250524175222": "P11",
+        "Pasted image 20250524175401": "P12",
+        "Pasted image 20250524175455": "P13",
+        "Pasted image 20250524175511": "P14",
+        "Pasted image 20250524181324": "P15",
+        "Pasted image 20250524181345": "P16",
+        "Pasted image 20250524181506": "P17",
+        "Pasted image 20250524181547": "P18",
+        "Pasted image 20250524181711": "P19",
+        "Pasted image 20250524181752": "P20",
+        "Pasted image 20250524181839": "P21",
+        "Pasted image 20250524181912": "P22",
+        "Pasted image 20250524182056": "P23"
     }
 
     if not os.path.exists(target_file):

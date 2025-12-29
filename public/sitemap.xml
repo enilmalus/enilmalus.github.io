@@ -50,6 +50,9 @@
     <loc>http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</loc>
     <lastmod>2025-06-10T17:29:33+08:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/posts/venom-writeup/</loc>
+    <lastmod>2025-05-24T17:29:33+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/credit-card-scammers-writeup/</loc>
     <lastmod>2025-05-18T17:29:33+08:00</lastmod>
   </url><url>
@@ -61,6 +64,9 @@
   </url><url>
     <loc>http://localhost:1313/posts/darkhole-writeup/</loc>
     <lastmod>2025-05-10T17:29:33+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/nullbyte-writeup/</loc>
+    <lastmod>2025-05-08T17:29:33+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
   </url>

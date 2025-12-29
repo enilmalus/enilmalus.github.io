@@ -214,7 +214,7 @@ sudo ssh erso@10.10.10.20 -p 10110
 find / -perm /u=s,g=s -type f 2>/dev/null
 ```
 
-![[P24.png]]
+![[content/posts/DeathStart Writeup/P24.png]]
 
 发现可疑文件 /bin/dartVader
 
