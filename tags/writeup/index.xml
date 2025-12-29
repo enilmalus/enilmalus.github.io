@@ -106,7 +106,32 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 tshark -r flu.pcap
 
 tshark -r flu.pcap -V
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P8.png]]&lt;/p&gt;</description></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P8.png]]&lt;/p&gt;</description></item><item><title>Venom Writeup</title><link>https://enilmalus.github.io/posts/venom-writeup/</link><pubDate>Sat, 24 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/venom-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
+&lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
+&lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+
+sudo nmap --min-rate 10000 -p- 10.10.10.31 
+
+sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
+
+sudo nmap --script=vuln -p22,80 10.10.10.31 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
+靶机还开放了 smb 服务，可进行更详细的 smb 扫描，&lt;/p&gt;
+&lt;p&gt;查看 80 端口，是 Ubuntu 的默认界面&lt;/p&gt;
+&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;p&gt;查看源代码发现串 md5&lt;/p&gt;
+&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;使用 hashcat 破解&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P9.png" alt="P9"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="P10.png" alt="P10"&gt;&lt;/p&gt;
+&lt;p&gt;使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;ftp 10.10.10.6
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P11.png" alt="P11"&gt;&lt;/p&gt;
+&lt;p&gt;binary 进入 二进制 模式&lt;/p&gt;</description></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
 &lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
 &lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
@@ -192,4 +217,31 @@ upload 可能是文件上传的目录&lt;/p&gt;
 &lt;p&gt;打开 80 页面&lt;/p&gt;
 &lt;p&gt;&lt;img src="ggg.png" alt="ggg"&gt;&lt;/p&gt;
 &lt;p&gt;View Details 点击没反应，
-进入 Login 页面&lt;/p&gt;</description></item></channel></rss>
+进入 Login 页面&lt;/p&gt;</description></item><item><title>NullByte Writeup</title><link>https://enilmalus.github.io/posts/nullbyte-writeup/</link><pubDate>Thu, 08 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/nullbyte-writeup/</guid><description>&lt;h1 id="nullbyte-靶场"&gt;NullByte 靶场&lt;/h1&gt;
+&lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.10
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;靶机的主机为 10.10.10.7&lt;/p&gt;
+&lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
+&lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
+&lt;p&gt;扫描开放的端口&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.7
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;经过分析发现靶机运行的是 Apache 服务；
+777 端口运行的是 SSH 服务，&lt;/p&gt;
+&lt;p&gt;暂时没有新的发现，先访问 80 端口&lt;/p&gt;
+&lt;h2 id="web渗透"&gt;WEB渗透&lt;/h2&gt;
+&lt;h3 id="80-端口渗透"&gt;80 端口渗透&lt;/h3&gt;
+&lt;p&gt;打开 80 页面发现只有一张图片和一句话&lt;/p&gt;
+&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;查看源码发现这是一个 gif 文件，把他下载下来&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;wget http://10.10.10.7/main.git
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="目录爆破"&gt;目录爆破&lt;/h3&gt;
+&lt;p&gt;使用 gobuster 执行目录爆破，尝试发现新的目录&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;</description></item></channel></rss>

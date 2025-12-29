@@ -27,7 +27,7 @@ TCP Windows 扫描 sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10
 慢速扫描 sudo nmap -T2 -p- 10.10.10.20 太慢了，无结果，暂时先跳过
 流量分析 tshark -i eth0 -f "host 10.10.10.20" ![[P7.png]]
 捕捉流量
-tshark -i eth0 -f "host 10.10.10.20" -w flu.pcap tshark -r flu.pcap tshark -r flu.pcap -V ![[P8.png]]'><meta itemprop=datePublished content="2025-06-24T17:29:33+08:00"><meta itemprop=dateModified content="2025-06-24T17:29:33+08:00"><meta itemprop=wordCount content="255"><meta itemprop=keywords content="Hack,Writeup"><meta name=twitter:card content="summary"><meta name=twitter:title content="DeathStart Writeup"><meta name=twitter:description content='此文章以 kali 地址为 10.10.10.5 为示例
+tshark -i eth0 -f "host 10.10.10.20" -w flu.pcap tshark -r flu.pcap tshark -r flu.pcap -V ![[P8.png]]'><meta itemprop=datePublished content="2025-06-24T17:29:33+08:00"><meta itemprop=dateModified content="2025-06-24T17:29:33+08:00"><meta itemprop=wordCount content="256"><meta itemprop=keywords content="Hack,Writeup"><meta name=twitter:card content="summary"><meta name=twitter:title content="DeathStart Writeup"><meta name=twitter:description content='此文章以 kali 地址为 10.10.10.5 为示例
 Nmap 扫描 端口和服务识别 sudo nmap --min-rate 10000 -p- 10.10.10.20 ![[P1.png]]
 未发现任何开放的端口
 数据包分片扫描 sudo nmap -f --min-rate 10000 -p- 10.10.10.20 ![[P3.png]]
@@ -74,11 +74,11 @@ open x.jpg
 </code></pre><p>![[P21.png]]</p><p>发现 10110 是 ssh 服务</p><h1 id=ssh-服务渗透>ssh 服务渗透</h1><p>尝试连接</p><pre tabindex=0><code>sudo ssh root@10.10.10.20 -p 10110
 </code></pre><p>![[P22.png]]</p><p>发现一个用户名为 erso，密码为 lyra13</p><pre tabindex=0><code>sudo ssh erso@10.10.10.20 -p 10110
 </code></pre><p>进入系统</p><p>![[P23.png]]</p><h1 id=linux-提权>Linux 提权</h1><p>查看 suid 位可执行文件</p><pre tabindex=0><code>find / -perm /u=s,g=s -type f 2&gt;/dev/null
-</code></pre><p>![[P24.png]]</p><p>发现可疑文件 /bin/dartVader</p><h1 id=主函数与反汇编>主函数与反汇编</h1><p>将文件拿到 kali 当中</p><pre tabindex=0><code>scp -P 10110 -q erso@10.10.10.20:/bin/dartVader .
+</code></pre><p>![[content/posts/DeathStart Writeup/P24.png]]</p><p>发现可疑文件 /bin/dartVader</p><h1 id=主函数与反汇编>主函数与反汇编</h1><p>将文件拿到 kali 当中</p><pre tabindex=0><code>scp -P 10110 -q erso@10.10.10.20:/bin/dartVader .
 </code></pre></div></article><hr><div class=post-info><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg>
 <span class=tag><a href=https://enilmalus.github.io/tags/hack/>Hack</a></span>
 <span class=tag><a href=https://enilmalus.github.io/tags/writeup/>Writeup</a></span></p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-255 Words</p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+256 Words</p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
 2025-06-24 09:29</p></div><div class=pagination><div class=pagination__buttons><span class="button previous"><a href=https://enilmalus.github.io/posts/lampiao-writeup/><span class=button__icon>←</span>
 <span class=button__text>Lampiao Writeup</span>
 </a></span><span class="button next"><a href=https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/><span class=button__text>如何为靶机配置 DHCP</span>
