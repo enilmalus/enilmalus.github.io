@@ -141,7 +141,43 @@ Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
 &lt;h2 id="udp-端口扫描"&gt;UDP 端口扫描&lt;/h2&gt;
 &lt;p&gt;在执行完 TCP 扫描后应该进行 UDP 扫描以免有漏掉的 UDP 端口，可以使用以下命令。&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sU --min-rate 10000 -p- 10.10.10.45 -oA nmap/udp-scan
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;命令结构与 TCP 扫描类似，多了个 -sU 指定对 UDP 端口进行扫描，执行结果如下。&lt;/p&gt;</description></item><item><title>如何为靶机配置 DHCP</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</link><pubDate>Tue, 10 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid><description>&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;命令结构与 TCP 扫描类似，多了个 -sU 指定对 UDP 端口进行扫描，执行结果如下。&lt;/p&gt;</description></item><item><title>DeathStart Writeup</title><link>https://enilmalus.github.io/posts/deathstart-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstart-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="nmap-扫描"&gt;Nmap 扫描&lt;/h1&gt;
+&lt;h1 id="端口和服务识别"&gt;端口和服务识别&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;未发现任何开放的端口&lt;/p&gt;
+&lt;h2 id="数据包分片扫描"&gt;数据包分片扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -f --min-rate 10000 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
+&lt;h2 id="源端口伪装扫描"&gt;源端口伪装扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
+&lt;h2 id="随机端口顺序扫描"&gt;随机端口顺序扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -r --min-rate 10000 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
+&lt;h2 id="tcp-windows-扫描"&gt;TCP Windows 扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
+&lt;h2 id="慢速扫描"&gt;慢速扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -T2 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;太慢了，无结果，暂时先跳过&lt;/p&gt;
+&lt;h1 id="流量分析"&gt;流量分析&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
+&lt;p&gt;捕捉流量&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34; -w flu.pcap
+
+tshark -r flu.pcap
+
+tshark -r flu.pcap -V
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;</description></item><item><title>如何为靶机配置 DHCP</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</link><pubDate>Tue, 10 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="环境判断"&gt;环境判断&lt;/h1&gt;

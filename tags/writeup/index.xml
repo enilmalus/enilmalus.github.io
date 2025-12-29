@@ -48,7 +48,43 @@ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>DeathStart Writeup</title><link>https://enilmalus.github.io/posts/deathstart-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstart-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="nmap-扫描"&gt;Nmap 扫描&lt;/h1&gt;
+&lt;h1 id="端口和服务识别"&gt;端口和服务识别&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;未发现任何开放的端口&lt;/p&gt;
+&lt;h2 id="数据包分片扫描"&gt;数据包分片扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -f --min-rate 10000 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
+&lt;h2 id="源端口伪装扫描"&gt;源端口伪装扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
+&lt;h2 id="随机端口顺序扫描"&gt;随机端口顺序扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -r --min-rate 10000 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
+&lt;h2 id="tcp-windows-扫描"&gt;TCP Windows 扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
+&lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
+&lt;h2 id="慢速扫描"&gt;慢速扫描&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -T2 -p- 10.10.10.20
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;太慢了，无结果，暂时先跳过&lt;/p&gt;
+&lt;h1 id="流量分析"&gt;流量分析&lt;/h1&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
+&lt;p&gt;捕捉流量&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34; -w flu.pcap
+
+tshark -r flu.pcap
+
+tshark -r flu.pcap -V
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="darkhole-靶场"&gt;DarkHole 靶场&lt;/h1&gt;
