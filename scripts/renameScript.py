@@ -5,7 +5,7 @@ def rename_pasted_images():
     遍历指定目录，将名为 "Pasted image xxx" 的图片重命名为 P1, P2, P3...
     """
     # 定义目标目录 (使用 os.path.join 适配不同操作系统)
-    target_dir = os.path.join('content', 'posts', 'DeathStart Writeup')
+    target_dir = os.path.join('content', 'posts', 'EvilBox One Writeup')
 
     # 检查目录是否存在
     if not os.path.exists(target_dir):
