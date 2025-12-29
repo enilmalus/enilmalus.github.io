@@ -46,7 +46,7 @@ def convert_wiki_links_to_markdown(file_path):
 
 if __name__ == "__main__":
     # 使用 os.path.join 构建路径，以适应不同操作系统 (Windows/Mac/Linux)
-    target_file = os.path.join('content', 'posts', 'Credit Card Scammers Writeup', 'index.md')
+    target_file = os.path.join('content', 'posts', 'DarkHole Writeup', 'index.md')
     
     # 执行转换
     convert_wiki_links_to_markdown(target_file)

