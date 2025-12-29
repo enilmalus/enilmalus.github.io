@@ -5,7 +5,7 @@ def rename_pasted_images():
     遍历指定目录，将名为 "Pasted image xxx" 的图片重命名为 P1, P2, P3...
     """
     # 定义目标目录 (使用 os.path.join 适配不同操作系统)
-    target_dir = os.path.join('content', 'posts', 'DarkHole Writeup')
+    target_dir = os.path.join('content', 'posts', 'DeathStart Writeup')
 
     # 检查目录是否存在
     if not os.path.exists(target_dir):
@@ -37,11 +37,13 @@ def rename_pasted_images():
 
     # 遍历并重命名
     for index, old_name in enumerate(images_to_rename, start=1):
-        # 获取原始后缀名 (.png 或 .jpg)
-        _, ext = os.path.splitext(old_name)
+        # 获取原始文件名和后缀名
+        old_root, ext = os.path.splitext(old_name)
         
-        # 构建新名称: P1.png, P2.jpg ...
-        new_name = f"P{index}{ext}"
+        # 构建新文件名主体 P1, P2...
+        new_root = f"P{index}"
+        # 构建完整新名称: P1.png, P2.jpg ...
+        new_name = f"{new_root}{ext}"
         
         old_path = os.path.join(target_dir, old_name)
         new_path = os.path.join(target_dir, new_name)
@@ -54,7 +56,8 @@ def rename_pasted_images():
         try:
             # 执行重命名
             os.rename(old_path, new_path)
-            print(f"重命名: '{old_name}' -> '{new_name}'")
+            # 按照要求的格式输出：原名(无后缀)     新名(无后缀)
+            print(f"{old_root}     {new_root}")
         except OSError as e:
             print(f"重命名 '{old_name}' 失败: {e}")
 

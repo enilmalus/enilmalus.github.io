@@ -41,8 +41,17 @@
     <loc>http://localhost:1313/posts/%E5%85%B3%E4%BA%8E%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7-nmap-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</loc>
     <lastmod>2025-09-24T21:00:00+08:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/posts/deathstart-writeup/</loc>
+    <lastmod>2025-06-24T17:29:33+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</loc>
     <lastmod>2025-06-10T17:29:33+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/credit-card-scammers-writeup/</loc>
+    <lastmod>2025-05-18T17:29:33+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/darkhole-writeup/</loc>
+    <lastmod>2025-05-10T17:29:33+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
   </url>
