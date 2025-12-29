@@ -31,12 +31,14 @@
             "id": "203603a4d43cfa47",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "content/posts/Bastard Writeup/反弹shell.png"
+                "file": "content/posts/Curl 使用详解/index.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "反弹shell"
+              "icon": "lucide-file",
+              "title": "index"
             }
           }
         ]
@@ -189,12 +191,13 @@
   },
   "active": "37a6410d4c1a9b9f",
   "lastOpenFiles": [
+    "content/posts/Curl 使用详解/index.md",
+    "content/posts/Bastard Writeup/反弹shell.png",
+    "content/posts/如何为靶机配置 DHCP/index.md",
     "content/posts/Bastard Writeup/index.md",
     "public/posts/bastard-writeup/root.png",
-    "content/posts/Bastard Writeup/反弹shell.png",
     "public/posts/bastard-writeup/Pasted image 20251228235112.png",
     "content/posts/Bastard Writeup/root.png",
-    "content/posts/Curl 使用详解/index.md",
     "public/posts/bastard-writeup/反弹shell.png",
     "public/posts/bastard-writeup/Pasted image 20251228232606.png",
     "public/posts/curl-使用详解/index.html",
@@ -205,7 +208,6 @@
     "content/posts/Bastard Writeup/web.png",
     "public/posts/bastard-writeup/web.png",
     "public/posts/bastard-writeup/Pasted image 20251228214655.png",
-    "content/posts/如何为靶机配置 DHCP/index.md",
     "content/posts/渗透测试方法论（2025.12.27总结）/index.md",
     "content/posts/如何为靶机配置 DHCP/获得.png",
     "public/posts/bastard-writeup/index.html",
