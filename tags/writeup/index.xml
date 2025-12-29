@@ -48,7 +48,29 @@ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>DeathStart Writeup</title><link>https://enilmalus.github.io/posts/deathstart-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstart-writeup/</guid><description>&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>Lampiao Writeup</title><link>https://enilmalus.github.io/posts/lampiao-writeup/</link><pubDate>Sun, 13 Jul 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/lampiao-writeup/</guid><description>&lt;h1 id="lampiao-靶机"&gt;Lampiao 靶机&lt;/h1&gt;
+&lt;p&gt;环境：kali-linux-2025.1&lt;/p&gt;
+&lt;p&gt;网络：nat&lt;/p&gt;
+&lt;p&gt;攻击机ip：10.10.10.5&lt;/p&gt;
+&lt;p&gt;靶机ip：10.10.10.44&lt;/p&gt;
+&lt;h2 id="信息收集"&gt;信息收集&lt;/h2&gt;
+&lt;p&gt;使用 nmap 进行主机发现&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.44
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;p&gt;一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
+&lt;p&gt;可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p22,80,1898 10.10.10.44
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
+&lt;p&gt;没有扫描出来可以利用的漏洞信息&lt;/p&gt;
+&lt;h2 id="web-渗透"&gt;Web 渗透&lt;/h2&gt;
+&lt;p&gt;访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息&lt;/p&gt;
+&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;
+&lt;p&gt;访问 1898 端口发现有一个登入界面，尝试常见弱口令没有进去&lt;/p&gt;</description></item><item><title>DeathStart Writeup</title><link>https://enilmalus.github.io/posts/deathstart-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstart-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="nmap-扫描"&gt;Nmap 扫描&lt;/h1&gt;

