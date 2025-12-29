@@ -1,90 +1,108 @@
 import os
+import re
 
 def replace_specific_links():
     """
-    读取指定 Markdown 文件，根据预定义的映射表替换 ![[Pasted image ...]] 为 ![[Pn]]
-    增强了匹配逻辑，可以匹配带 .png/.jpg 后缀或不带后缀的链接。
+    读取指定 Markdown 文件，将 ![[Pasted image ...]] 替换为 ![[Pn.png]]
+    包含强力调试功能，检测文件是否已保存或包含特殊字符。
     """
-    # 定义目标文件路径
-    target_file = os.path.join('content', 'posts', 'Lampiao Writeup', 'index.md')
+    target_file = os.path.join('content', 'posts', 'Momentum2 Writeup', 'index.md')
     
-    # 定义替换映射表 (Key: 原文件名(不含后缀), Value: 新文件名(不含后缀))
+    # 替换映射表
     replacements = {
-        "Pasted image 20250713095335": "P1",
-        "Pasted image 20250713095526": "P2",
-        "Pasted image 20250713095813": "P3",
-        "Pasted image 20250713100157": "P4",
-        "Pasted image 20250713100202": "P5",
-        "Pasted image 20250713100210": "P6",
-        "Pasted image 20250713100317": "P7",
-        "Pasted image 20250713100529": "P8",
-        "Pasted image 20250713100724": "P9",
-        "Pasted image 20250713100930": "P10",
-        "Pasted image 20250713100947": "P11",
-        "Pasted image 20250713103523": "P12",
-        "Pasted image 20250713103557": "P13",
-        "Pasted image 20250713104448": "P14",
-        "Pasted image 20250713112730": "P15",
-        "Pasted image 20250713112919": "P16",
-        "Pasted image 20250713112926": "P17",
-        "Pasted image 20250713113118": "P18",
-        "Pasted image 20250713113401": "P19",
-        "Pasted image 20250713113422": "P20",
-        "Pasted image 20250713113537": "P21"
+        "Pasted image 20250516234737": "P1",
+        "Pasted image 20250516235041": "P2",
+        "Pasted image 20250516235205": "P3",
+        "Pasted image 20250516235722": "P4",
+        "Pasted image 20250516235818": "P5",
+        "Pasted image 20250516235257": "P6",
+        "Pasted image 20250516235324": "P7",
+        "Pasted image 20250517000559": "P8",
+        "Pasted image 20250517000820": "P9",
+        "Pasted image 20250517000841": "P10",
+        "Pasted image 20250517001148": "P11",
+        "Pasted image 20250517001307": "P12",
+        "Pasted image 20250517001519": "P13",
+        "Pasted image 20250517001542": "P14",
+        "Pasted image 20250517001623": "P15",
+        "Pasted image 20250517001717": "P16",
+        "Pasted image 20250517001843": "P17",
+        "Pasted image 20250517002350": "P18",
+        "Pasted image 20250517002433": "P19",
+        "Pasted image 20250517002618": "P20",
+        "Pasted image 20250517002922": "P21"
     }
 
-    # 检查文件是否存在
     if not os.path.exists(target_file):
-        print(f"错误: 找不到文件 -> {target_file}")
-        # 调试用：打印当前工作目录，方便排查路径问题
-        print(f"当前工作目录: {os.getcwd()}")
+        print(f"❌ 错误: 找不到文件 -> {target_file}")
         return
 
     try:
-        # 读取文件内容
         with open(target_file, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        original_content = content
-        count = 0
+        print("-" * 40)
+        print("【步骤1：检查文件原始内容】")
+        
+        # 预检：文件中是否包含 'Pasted image' 字符串？
+        if "Pasted image" not in content and "Pasted image" not in content: # 注意第二个包含特殊空格
+            print("⚠️ 警告：在读取的文件内容中，完全没有找到 'Pasted image' 这个字符串！")
+            print("可能的原因为：")
+            print("1. 你在编辑器中还原了内容，但**没有保存** (Ctrl+S)。")
+            print("2. 文件已经被上一次运行成功修改过了（变成了 P1, P2...）。")
+            
+            # 打印当前文件中的前5个链接看看是什么样子的
+            print("\n当前文件中的前 3 个图片链接长这样：")
+            preview_links = re.findall(r'!\[\[.*?\]\]', content)
+            for l in preview_links[:3]:
+                print(f"  {l}")
+            return
+
+        print("✅ 检测到 'Pasted image' 字符串，文件已读取，准备替换...")
+
+        # 定义更宽松的正则
+        # \s+ : 匹配任意空白字符（包括空格、Tab、换行符）
+        # .*? : 允许 .png 后缀之前有任意字符
+        pattern = re.compile(r'!\[\[\s*(Pasted\s+image\s+\d+).*?\]\]', re.IGNORECASE)
+
         replaced_items = []
-
-        # 遍历映射表进行替换
-        for old_key, new_val in replacements.items():
-            # 定义多种可能的源格式，防止因后缀缺失或不同导致匹配失败
-            # 注意：替换目标统一为 .png (即 ![[Pn.png]])
-            patterns = [
-                f"![[{old_key}.png]]",  # 匹配 .png
-                f"![[{old_key}.jpg]]",  # 匹配 .jpg
-                f"![[{old_key}]]"       # 匹配无后缀
-            ]
+        
+        def replacement_func(match):
+            full_match = match.group(0)
+            # 将匹配到的文件名中的所有空白字符替换为标准单空格，以便查表
+            # 例如 "Pasted   image 123" -> "Pasted image 123"
+            raw_name = match.group(1)
+            standard_name = re.sub(r'\s+', ' ', raw_name)
             
-            target_str = f"![[{new_val}.png]]"
+            if standard_name in replacements:
+                new_name = replacements[standard_name]
+                new_link = f"![[{new_name}.png]]"
+                replaced_items.append(f"{full_match} \n   --> {new_link}")
+                return new_link
+            else:
+                print(f"⚠️ 发现未在列表中定义的图片: {standard_name}")
+                return full_match
 
-            for search_str in patterns:
-                if search_str in content:
-                    # 统计出现的次数
-                    matches = content.count(search_str)
-                    content = content.replace(search_str, target_str)
-                    count += matches
-                    replaced_items.append(f"{search_str} -> {target_str}")
+        new_content, count = pattern.subn(replacement_func, content)
 
-        # 如果内容发生了变化，则写回文件
-        if content != original_content:
+        if count > 0:
             with open(target_file, 'w', encoding='utf-8') as f:
-                f.write(content)
+                f.write(new_content)
             
-            print(f"成功处理文件: {target_file}")
-            print("执行的替换操作如下：")
-            for item in replaced_items:
+            print("-" * 40)
+            print(f"🎉 成功！共替换了 {count} 处链接。")
+            print("\n部分替换详情：")
+            for item in replaced_items[:5]: # 只显示前5个
                 print(item)
-            print(f"总计替换了 {count} 处链接。")
+            if len(replaced_items) > 5:
+                print("...")
         else:
-            print(f"在文件 {target_file} 中未找到任何匹配列表的链接。")
-            print("请检查 Markdown 文件中的图片链接格式是否为 ![[Pasted image ...]] 或包含 .png/.jpg 后缀。")
+            print("-" * 40)
+            print("❌ 脚本运行结束，但替换数量为 0。")
+            print("这说明正则没有匹配上，请检查原文本格式是否非常特殊（如包含不可见字符）。")
 
     except Exception as e:
-        print(f"处理文件时发生错误: {e}")
+        print(f"发生错误: {e}")
 
 if __name__ == "__main__":
     replace_specific_links()
