@@ -6,25 +6,31 @@ def replace_specific_links():
     增强了匹配逻辑，可以匹配带 .png/.jpg 后缀或不带后缀的链接。
     """
     # 定义目标文件路径
-    target_file = os.path.join('content', 'posts', 'EvilBox One Writeup', 'index.md')
+    target_file = os.path.join('content', 'posts', 'Lampiao Writeup', 'index.md')
     
     # 定义替换映射表 (Key: 原文件名(不含后缀), Value: 新文件名(不含后缀))
     replacements = {
-        "Pasted image 20250511195359": "P1",
-        "Pasted image 20250511195453": "P2",
-        "Pasted image 20250511195530": "P3",
-        "Pasted image 20250511195622": "P4",
-        "Pasted image 20250511195743": "P5",
-        "Pasted image 20250511200428": "P6",
-        "Pasted image 20250511200758": "P7",
-        "Pasted image 20250511200858": "P8",
-        "Pasted image 20250511200928": "P9",
-        "Pasted image 20250511201602": "P10",
-        "Pasted image 20250511205626": "P11",
-        "Pasted image 20250511211114": "P12",
-        "Pasted image 20250511211410": "P13",
-        "Pasted image 20250511211857": "P14",
-        "Pasted image 20250511211927": "P15"
+        "Pasted image 20250713095335": "P1",
+        "Pasted image 20250713095526": "P2",
+        "Pasted image 20250713095813": "P3",
+        "Pasted image 20250713100157": "P4",
+        "Pasted image 20250713100202": "P5",
+        "Pasted image 20250713100210": "P6",
+        "Pasted image 20250713100317": "P7",
+        "Pasted image 20250713100529": "P8",
+        "Pasted image 20250713100724": "P9",
+        "Pasted image 20250713100930": "P10",
+        "Pasted image 20250713100947": "P11",
+        "Pasted image 20250713103523": "P12",
+        "Pasted image 20250713103557": "P13",
+        "Pasted image 20250713104448": "P14",
+        "Pasted image 20250713112730": "P15",
+        "Pasted image 20250713112919": "P16",
+        "Pasted image 20250713112926": "P17",
+        "Pasted image 20250713113118": "P18",
+        "Pasted image 20250713113401": "P19",
+        "Pasted image 20250713113422": "P20",
+        "Pasted image 20250713113537": "P21"
     }
 
     # 检查文件是否存在
