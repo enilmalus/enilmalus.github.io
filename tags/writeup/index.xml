@@ -48,4 +48,34 @@ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item></channel></rss>
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="darkhole-靶场"&gt;DarkHole 靶场&lt;/h1&gt;
+&lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa"&gt;&lt;/p&gt;
+&lt;p&gt;靶机的主机为 10.10.10.9&lt;/p&gt;
+&lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
+&lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
+&lt;p&gt;扫描开放的端口&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.9
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb"&gt;&lt;/p&gt;
+&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p22,80 10.10.10.9 -oA nmap/Scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ccc.png" alt="ccc"&gt;&lt;/p&gt;
+&lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ddd.png" alt="ddd"&gt;&lt;/p&gt;
+&lt;p&gt;发现暴露出了很多目录，执行一下完整的目录爆破&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="eeee.png" alt="eeee"&gt;&lt;/p&gt;
+&lt;p&gt;除了 index.php 其他都是文件目录，
+upload 可能是文件上传的目录&lt;/p&gt;
+&lt;p&gt;&lt;img src="fff.png" alt="fff"&gt;&lt;/p&gt;
+&lt;h2 id="web渗透"&gt;WEB渗透&lt;/h2&gt;
+&lt;h3 id="80-端口渗透"&gt;80 端口渗透&lt;/h3&gt;
+&lt;p&gt;打开 80 页面&lt;/p&gt;
+&lt;p&gt;&lt;img src="ggg.png" alt="ggg"&gt;&lt;/p&gt;
+&lt;p&gt;View Details 点击没反应，
+进入 Login 页面&lt;/p&gt;</description></item></channel></rss>
