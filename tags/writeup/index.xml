@@ -54,37 +54,68 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 &lt;h1 id="nmap-扫描"&gt;Nmap 扫描&lt;/h1&gt;
 &lt;h1 id="端口和服务识别"&gt;端口和服务识别&lt;/h1&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P1.png]]&lt;/p&gt;
 &lt;p&gt;未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id="数据包分片扫描"&gt;数据包分片扫描&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -f --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P3.png]]&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id="源端口伪装扫描"&gt;源端口伪装扫描&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P4.png]]&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
 &lt;h2 id="随机端口顺序扫描"&gt;随机端口顺序扫描&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -r --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P5.png]]&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
 &lt;h2 id="tcp-windows-扫描"&gt;TCP Windows 扫描&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P6.png]]&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id="慢速扫描"&gt;慢速扫描&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -T2 -p- 10.10.10.20
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;太慢了，无结果，暂时先跳过&lt;/p&gt;
 &lt;h1 id="流量分析"&gt;流量分析&lt;/h1&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P7.png]]&lt;/p&gt;
 &lt;p&gt;捕捉流量&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34; -w flu.pcap
 
 tshark -r flu.pcap
 
 tshark -r flu.pcap -V
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P8.png]]&lt;/p&gt;</description></item><item><title>EvilBox One Writeup</title><link>https://enilmalus.github.io/posts/evilbox-one-writeup/</link><pubDate>Sun, 11 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/evilbox-one-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="evilbox-one"&gt;EvilBox One&lt;/h1&gt;
+&lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+sudo nmap -sn 10.10.10.0/24
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;靶机的主机为 10.10.10.18&lt;/p&gt;
+&lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
+&lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
+&lt;p&gt;扫描开放的端口&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+sudo nmap --min-rate 10000 -p- 10.10.10.18
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;p&gt;发现暴露出了很多目录，执行一下完整的目录爆破&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;
+sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;h2 id="web-渗透"&gt;WEB 渗透&lt;/h2&gt;
+&lt;p&gt;80 界面是默认的 Apache2 界面&lt;/p&gt;
+&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;robots.txt 界面是一句话，没有价值&lt;/p&gt;
+&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;p&gt;secret 界面打不开，&lt;/p&gt;
+&lt;p&gt;gobuster 告诉我们 secret 下面可能还有目录，&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="darkhole-靶场"&gt;DarkHole 靶场&lt;/h1&gt;
