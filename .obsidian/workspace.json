@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/Bastard Writeup/index.md",
+                "file": "content/posts/如何为靶机配置 DHCP/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -189,10 +189,10 @@
   },
   "active": "37a6410d4c1a9b9f",
   "lastOpenFiles": [
+    "content/posts/Bastard Writeup/index.md",
     "public/posts/bastard-writeup/root.png",
     "content/posts/Bastard Writeup/反弹shell.png",
     "public/posts/bastard-writeup/Pasted image 20251228235112.png",
-    "content/posts/Bastard Writeup/index.md",
     "content/posts/Bastard Writeup/root.png",
     "content/posts/Curl 使用详解/index.md",
     "public/posts/bastard-writeup/反弹shell.png",
@@ -210,7 +210,6 @@
     "content/posts/如何为靶机配置 DHCP/获得.png",
     "public/posts/bastard-writeup/index.html",
     "public/posts/bastard-writeup",
-    "content/posts/渗透测试方法论（2025.12.27总结）/漏洞搜索示意图.png",
     "content/posts/如何根据具体的目标定制字典/index.md",
     "public/posts/如何为靶机配置-dhcp/index.html",
     "public/posts/如何为靶机配置-dhcp/未命名/index.html",

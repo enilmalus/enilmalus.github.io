@@ -1,6 +1,6 @@
 ---
 title: 如何为靶机配置 DHCP
-date: 2025-12-27T17:29:33+08:00
+date: 2025-6-10T17:29:33+08:00
 draft: false
 toc: true
 images:
