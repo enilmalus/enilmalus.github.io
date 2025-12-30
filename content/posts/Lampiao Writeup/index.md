@@ -26,7 +26,7 @@ tags:
 sudo nmap -sn 10.10.10.0/24
 ```
 
-![P1](P1.png)
+![P1](content/posts/Lampiao%20Writeup/P1.png)
 
 10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描
 

@@ -16,7 +16,7 @@ tags:
 sudo nmap -sn 10.10.10.10
 ```
 
-![P1](P1.png)
+![P1](content/posts/NullByte%20Writeup/P1.png)
 
 靶机的主机为 10.10.10.7
 

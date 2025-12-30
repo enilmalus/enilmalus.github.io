@@ -24,7 +24,7 @@ sudo nmap -sC -sT -sV -p22,80 10.10.10.31
 sudo nmap --script=vuln -p22,80 10.10.10.31 
 ```
 
-![P1](P1.png)
+![P1](content/posts/Venom%20Writeup/P1.png)
 
 21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，

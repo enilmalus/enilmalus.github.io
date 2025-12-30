@@ -58,7 +58,7 @@ sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
 
   
 
-![P1](P1.png)
+![P1](content/posts/EvilBox%20One%20Writeup/P1.png)
 
   
 

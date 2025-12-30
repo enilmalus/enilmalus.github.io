@@ -24,7 +24,7 @@ sudo nmap -sC -sT -sV -p22,80 10.10.10.31
 sudo nmap --script=vuln -p22,80 10.10.10.31 
 ```
 
-![P1](P1.png)
+![P1](content/posts/Momentum2%20Writeup/P1.png)
 
 ## gobuster 爆破目录
 

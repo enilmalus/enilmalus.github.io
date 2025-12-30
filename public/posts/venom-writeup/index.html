@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
 <meta name="description" content="服务扫描 使用 nmap 进行基础扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ， 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ， 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，
 查看 80 端口，是 Ubuntu 的默认界面
 查看源代码发现串 md5
 使用 hashcat 破解
@@ -48,7 +48,7 @@ ftp 10.10.10.6 binary 进入 二进制 模式
 
   <meta itemprop="name" content="Venom Writeup">
   <meta itemprop="description" content="服务扫描 使用 nmap 进行基础扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ， 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ， 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，
 查看 80 端口，是 Ubuntu 的默认界面
 查看源代码发现串 md5
 使用 hashcat 破解
@@ -62,7 +62,7 @@ ftp 10.10.10.6 binary 进入 二进制 模式">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Venom Writeup">
   <meta name="twitter:description" content="服务扫描 使用 nmap 进行基础扫描 扫描所执行的命令，执行结果如下
-sudo nmap -sn 10.10.10.0/24sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ， 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，
+sudo nmap -sn 10.10.10.0/24 sudo nmap --min-rate 10000 -p- 10.10.10.31 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 sudo nmap --script=vuln -p22,80 10.10.10.31 21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ， 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，
 查看 80 端口，是 Ubuntu 的默认界面
 查看源代码发现串 md5
 使用 hashcat 破解
@@ -178,7 +178,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-</code></pre><p><img src="P1.png" alt="P1"></p>
+</code></pre><p><img src="content/posts/Venom%20Writeup/P1.png" alt="P1"></p>
 <p>21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，</p>
 <p>查看 80 端口，是 Ubuntu 的默认界面</p>

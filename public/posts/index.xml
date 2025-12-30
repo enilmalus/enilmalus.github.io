@@ -5,8 +5,73 @@
         <description>Recent content in Posts on Welcome My Hack&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 28 Dec 2025 17:29:33 +0800</lastBuildDate>
+        <lastBuildDate>Tue, 30 Dec 2025 17:29:33 +0800</lastBuildDate>
         <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>流量包分析，以 tshark、tcpdump、wireshark 为例</title>
+            <link>http://localhost:1313/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</link>
+            <pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</guid>
+            <description>&lt;h1 id=&#34;架构基础&#34;&gt;架构基础&lt;/h1&gt;
+&lt;h2 id=&#34;libpcappacket-pactrue-library&#34;&gt;Libpcap（Packet Pactrue Library）&lt;/h2&gt;
+&lt;p&gt;Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。&lt;/p&gt;
+&lt;h2 id=&#34;bpf&#34;&gt;BPF&lt;/h2&gt;
+&lt;p&gt;执行流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;用户在命令行输入高级过滤语句。&lt;/li&gt;
+&lt;li&gt;libpcap 编码器转换为 BPF 字节码。&lt;/li&gt;
+&lt;li&gt;BPF 指令加载到内核，在虚拟机中运行。&lt;/li&gt;
+&lt;li&gt;过滤过的包加载到用户缓冲区。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;工具对比&#34;&gt;工具对比&lt;/h1&gt;
+&lt;h2 id=&#34;tcpdump&#34;&gt;tcpdump&lt;/h2&gt;
+&lt;p&gt;tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。&lt;/p&gt;
+&lt;h2 id=&#34;tshark&#34;&gt;tshark&lt;/h2&gt;
+&lt;p&gt;tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。&lt;/p&gt;
+&lt;h2 id=&#34;wireshark&#34;&gt;wireshark&lt;/h2&gt;
+&lt;p&gt;wireshark 拥有完整的 ui 界面。&lt;/p&gt;
+&lt;h2 id=&#34;用法分析&#34;&gt;用法分析&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;-f &#39;host 10.10.10.45&#39;&lt;/code&gt; 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tsahrk -i eth0 -f &amp;#39;host 10.10.10.45&amp;#39; -w Enilmalus.pcap
+
+tsahrk -r Enilmalus.pcap -V
+
+tshark -r Enilmalus.pcap -T fields -e data | tr -d &amp;#39; &amp;#39; | xxd -r -p
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解释一下最底下这个命令，这是一个完整的网络数据分析流程，从抓包文件 Enilmalus.pcap 中提取原始数据并将其转换为人类可读的文件。命令从 tshark 开始，它是 wireshark 的命令行版本，用于处理网络流量，前面捕捉流量，现在读取，-r 时 read 的缩写，指示 tshark 从 Enilmalus.pcap 中读取数据：-T 是 type 的缩写，指定输出类型为 fields（字段），表示以字段形式输出而不是完整的数据包详情；-e 是 extract 的缩写，后面接 data，告诉 tshark 提取每个数据包的原始负载，通常以十六进制字符串形式输出，例如 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt;。接着，管道符号 &lt;code&gt;|&lt;/code&gt; 将输出传递给 tr ，这是一个 translate 的工具；-d 是 delete 的缩写，后面跟 &lt;code&gt;&#39; &#39;&lt;/code&gt; ，表示一处所有空格，表示移除所有空格，把带空格的 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt; 变成 &lt;code&gt;48656c6c6f&lt;/code&gt;。最后，另一个管道  &lt;code&gt;|&lt;/code&gt; 将结果交给 xxd。一个处理十六进制字符串的工具，其名称为 &lt;code&gt;hexadecimal&lt;/code&gt; 和 &lt;code&gt;dump&lt;/code&gt; 的组合，用于创建或解析数据的十六进制转储；-r 是 reverse 的缩写，表示将十六进制字符串转换为二进制；-p 是 plaintext 的缩写，处理没有分隔符的连续十六进制字符串，最终 &lt;code&gt;48656c6c6f&lt;/code&gt; 解读为可读的 &lt;code&gt;Hello&lt;/code&gt;。&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<h1 id="架构基础">架构基础</h1>
+<h2 id="libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</h2>
+<p>Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。</p>
+<h2 id="bpf">BPF</h2>
+<p>执行流程：</p>
+<ol>
+<li>用户在命令行输入高级过滤语句。</li>
+<li>libpcap 编码器转换为 BPF 字节码。</li>
+<li>BPF 指令加载到内核，在虚拟机中运行。</li>
+<li>过滤过的包加载到用户缓冲区。</li>
+</ol>
+<h1 id="工具对比">工具对比</h1>
+<h2 id="tcpdump">tcpdump</h2>
+<p>tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。</p>
+<h2 id="tshark">tshark</h2>
+<p>tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。</p>
+<h2 id="wireshark">wireshark</h2>
+<p>wireshark 拥有完整的 ui 界面。</p>
+<h2 id="用法分析">用法分析</h2>
+<p><code>-f 'host 10.10.10.45'</code> 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。</p>
+<p><img src="P1.png" alt="P1"></p>
+<p>例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。</p>
+<pre tabindex="0"><code>tsahrk -i eth0 -f &#39;host 10.10.10.45&#39; -w Enilmalus.pcap
+
+tsahrk -r Enilmalus.pcap -V
+
+tshark -r Enilmalus.pcap -T fields -e data | tr -d &#39; &#39; | xxd -r -p
+</code></pre><p>解释一下最底下这个命令，这是一个完整的网络数据分析流程，从抓包文件 Enilmalus.pcap 中提取原始数据并将其转换为人类可读的文件。命令从 tshark 开始，它是 wireshark 的命令行版本，用于处理网络流量，前面捕捉流量，现在读取，-r 时 read 的缩写，指示 tshark 从 Enilmalus.pcap 中读取数据：-T 是 type 的缩写，指定输出类型为 fields（字段），表示以字段形式输出而不是完整的数据包详情；-e 是 extract 的缩写，后面接 data，告诉 tshark 提取每个数据包的原始负载，通常以十六进制字符串形式输出，例如 <code>48 65 6c 6c 6f</code>。接着，管道符号 <code>|</code> 将输出传递给 tr ，这是一个 translate 的工具；-d 是 delete 的缩写，后面跟 <code>' '</code> ，表示一处所有空格，表示移除所有空格，把带空格的 <code>48 65 6c 6c 6f</code> 变成 <code>48656c6c6f</code>。最后，另一个管道  <code>|</code> 将结果交给 xxd。一个处理十六进制字符串的工具，其名称为 <code>hexadecimal</code> 和 <code>dump</code> 的组合，用于创建或解析数据的十六进制转储；-r 是 reverse 的缩写，表示将十六进制字符串转换为二进制；-p 是 plaintext 的缩写，处理没有分隔符的连续十六进制字符串，最终 <code>48656c6c6f</code> 解读为可读的 <code>Hello</code>。</p>
+]]></content>
+        </item>
         
         <item>
             <title>Bastard Writeup</title>
@@ -913,20 +978,36 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 <p><img src="script-scan.png" alt="script-scan"></p>
 <p>可以看到 nmap 已经对端口进行了默认脚本扫描，并输出了结果。</p>
 <h2 id="数据包分片扫描">数据包分片扫描</h2>
-<p>有时候因为防火墙等原因，需要进行数据包分片扫描发现端口，可以使用以下命令。</p>
+<p>有些防火墙或 WAF 在处理完整数据包时会进行检测，但对分片数据包的处理可能不完善。使用 -f 参数将 TCP 数据包分片，可能绕过某些防护设备检测。通过分片发送探测包，降低被拦截的概率，尝试发现隐藏的开放端口。</p>
+<p>一个完整的 IP 包包含：</p>
+<p><code>IP头 + TCP/UDP头 + 可能的应用层链路</code></p>
+<p>-f 参数在 IP 层将这个包拆成多片发送</p>
+<p><code>第一个分片：IP头 + TCP/UDP头 + 一段数据</code>
+<code>后续分片： IP头 + 剩余数据</code></p>
+<p>传统防火墙、简单包过滤器只检查第一个分片，直接放行后续数据包</p>
 <pre tabindex="0"><code>sudo nmap -f -p- --min-rate 10000 10.10.10.45
-</code></pre><p>-f 使用 IP 分片技术，一块一块发送数据包，减小被防火墙拦截的概率，执行结果如下。</p>
-<p><img src="bust-scan.png" alt="bust-scan"></p>
+</code></pre><p><img src="bust-scan.png" alt="bust-scan"></p>
 <p>可以看到靶机开放了 22、80 端口。</p>
 <h2 id="源端口随机端口顺序慢速扫描">源端口、随机端口顺序、慢速扫描</h2>
-<p>以下是笔者在打靶过程中还用过的绕过防火墙扫描命令。</p>
 <h3 id="源端口扫描">源端口扫描</h3>
 <pre tabindex="0"><code>sudo nmap --source-port 53 -p- --min-rate 10000 10.10.10.45
-</code></pre><h3 id="随机端口扫描">随机端口扫描</h3>
+</code></pre><p>防火墙可能允许特定源端口流量通过（例如 53 是 DNS 常用端口）。通过伪装端口为常用服务端口，坑那个绕过端口过滤规则，模拟合法流量，探测目标是否对特定源端口的请求有所响应。</p>
+<h3 id="随机端口扫描">随机端口扫描</h3>
 <pre tabindex="0"><code>sudo nmap -r -p- --min-rate 10000 10.10.10.45
-</code></pre><h3 id="慢速扫描">慢速扫描</h3>
+</code></pre><p>有些 WAF 或 IDS 会检测连续的端口扫描模式，使用 -r（按顺序扫描，但结合 &ndash;randomize-hosts 可随机化目标）可以打乱扫描顺序，降低被识别为扫描行为的可能性。通过非典型的扫描模式，尝试绕过基于模式匹配的防护规则。</p>
+<h3 id="慢速扫描">慢速扫描</h3>
 <pre tabindex="0"><code>sudo nmap -T2 -p- 10.10.10.45
-</code></pre>]]></content>
+</code></pre><p>使用更低速率的 T2 进行扫描，避免触发防火墙的阈值检测。</p>
+<blockquote>
+<p>T1 最慢，T5 最快</p></blockquote>
+<h3 id="tcp-window-扫描">TCP Window 扫描</h3>
+<pre tabindex="0"><code>sudo nmap --scanflags URGPSHFIN -p- --min-rate 10000 10.10.10.45
+</code></pre><p>有些防火墙可能只过滤标准的 SYN 扫描，而对带有特定 TCP 标志（如 URG、PSH、FIN）的包处理不同。TCP 的 Window 扫描利用这些标志检测端口状态。通过发送非常规的 TCP 数据包，探测端口是否被影藏或误报为 filtered。</p>
+<blockquote>
+<p>URG：Uragent，紧急标志
+PSH：Push，推送标志
+FIN：finish，结束标志</p></blockquote>
+]]></content>
         </item>
         
         <item>
@@ -943,7 +1024,7 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 &lt;h2 id=&#34;信息收集&#34;&gt;信息收集&lt;/h2&gt;
 &lt;p&gt;使用 nmap 进行主机发现&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;content/posts/Lampiao%20Writeup/P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.44
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P2.png&#34; alt=&#34;P2&#34;&gt;&lt;/p&gt;
@@ -966,7 +1047,7 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 <h2 id="信息收集">信息收集</h2>
 <p>使用 nmap 进行主机发现</p>
 <pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
-</code></pre><p><img src="P1.png" alt="P1"></p>
+</code></pre><p><img src="content/posts/Lampiao%20Writeup/P1.png" alt="P1"></p>
 <p>10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描</p>
 <pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.44
 </code></pre><p><img src="P2.png" alt="P2"></p>
@@ -1026,118 +1107,118 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 &lt;h1 id=&#34;nmap-扫描&#34;&gt;Nmap 扫描&lt;/h1&gt;
 &lt;h1 id=&#34;端口和服务识别&#34;&gt;端口和服务识别&lt;/h1&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P1.png]]&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id=&#34;数据包分片扫描&#34;&gt;数据包分片扫描&lt;/h2&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap -f --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P3.png]]&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P3.png&#34; alt=&#34;P3&#34;&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id=&#34;源端口伪装扫描&#34;&gt;源端口伪装扫描&lt;/h2&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P4.png]]&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P4.png&#34; alt=&#34;P4&#34;&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
 &lt;h2 id=&#34;随机端口顺序扫描&#34;&gt;随机端口顺序扫描&lt;/h2&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap -r --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P5.png]]&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P5.png&#34; alt=&#34;P5&#34;&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
 &lt;h2 id=&#34;tcp-windows-扫描&#34;&gt;TCP Windows 扫描&lt;/h2&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P6.png]]&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P6.png&#34; alt=&#34;P6&#34;&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id=&#34;慢速扫描&#34;&gt;慢速扫描&lt;/h2&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap -T2 -p- 10.10.10.20
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;太慢了，无结果，暂时先跳过&lt;/p&gt;
 &lt;h1 id=&#34;流量分析&#34;&gt;流量分析&lt;/h1&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;![[P7.png]]&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P7.png&#34; alt=&#34;P7&#34;&gt;&lt;/p&gt;
 &lt;p&gt;捕捉流量&lt;/p&gt;</description>
             <content type="html"><![CDATA[<blockquote>
 <p>此文章以 kali 地址为 10.10.10.5 为示例</p></blockquote>
 <h1 id="nmap-扫描">Nmap 扫描</h1>
 <h1 id="端口和服务识别">端口和服务识别</h1>
 <pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.20
-</code></pre><p>![[P1.png]]</p>
+</code></pre><p><img src="P1.png" alt="P1"></p>
 <p>未发现任何开放的端口</p>
 <h2 id="数据包分片扫描">数据包分片扫描</h2>
 <pre tabindex="0"><code>sudo nmap -f --min-rate 10000 -p- 10.10.10.20
-</code></pre><p>![[P3.png]]</p>
+</code></pre><p><img src="P3.png" alt="P3"></p>
 <p>还是未发现任何开放的端口</p>
 <h2 id="源端口伪装扫描">源端口伪装扫描</h2>
 <pre tabindex="0"><code>sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
-</code></pre><p>![[P4.png]]</p>
+</code></pre><p><img src="P4.png" alt="P4"></p>
 <p>还是未发现任何开放端口</p>
 <h2 id="随机端口顺序扫描">随机端口顺序扫描</h2>
 <pre tabindex="0"><code>sudo nmap -r --min-rate 10000 -p- 10.10.10.20
-</code></pre><p>![[P5.png]]</p>
+</code></pre><p><img src="P5.png" alt="P5"></p>
 <p>还是未发现任何开放端口</p>
 <h2 id="tcp-windows-扫描">TCP Windows 扫描</h2>
 <pre tabindex="0"><code>sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
-</code></pre><p>![[P6.png]]</p>
+</code></pre><p><img src="P6.png" alt="P6"></p>
 <p>还是未发现任何开放的端口</p>
 <h2 id="慢速扫描">慢速扫描</h2>
 <pre tabindex="0"><code>sudo nmap -T2 -p- 10.10.10.20
 </code></pre><p>太慢了，无结果，暂时先跳过</p>
 <h1 id="流量分析">流量分析</h1>
 <pre tabindex="0"><code>tshark -i eth0 -f &#34;host 10.10.10.20&#34;
-</code></pre><p>![[P7.png]]</p>
+</code></pre><p><img src="P7.png" alt="P7"></p>
 <p>捕捉流量</p>
 <pre tabindex="0"><code>tshark -i eth0 -f &#34;host 10.10.10.20&#34; -w flu.pcap
 
 tshark -r flu.pcap
 
 tshark -r flu.pcap -V
-</code></pre><p>![[P8.png]]</p>
+</code></pre><p><img src="P8.png" alt="P8"></p>
 <p>转换为 ASCII 字符串</p>
 <pre tabindex="0"><code>tshark -r flu.pcap -T fields -e data | tr -d &#39;&#39; | xxd -r -p
-</code></pre><p>![[P9.png]]</p>
+</code></pre><p><img src="P9.png" alt="P9"></p>
 <p>扫描 1440 端口</p>
 <pre tabindex="0"><code>sudo nmap -sT -sU -p1440 10.10.10.20
-</code></pre><p>![[P10.png]]</p>
+</code></pre><p><img src="P10.png" alt="P10"></p>
 <p>尝试连接 1440</p>
 <pre tabindex="0"><code>nc -u 10.10.10.20 1440
-</code></pre><p>![[P11.png]]</p>
+</code></pre><p><img src="P11.png" alt="P11"></p>
 <p>此路不通通过管道符将发射密码给他试试</p>
 <pre tabindex="0"><code>echo &#34;DS-1@OBS&#34; | nc -u 10.10.10.20 1440 
 </code></pre><p>有一长串类似 base64 的回显，保存下来</p>
 <pre tabindex="0"><code>echo &#34;DS-1@OBS&#34; | nc -u 10.10.10.20 1440 | tee mass
-</code></pre><p>![[P12.png]]</p>
+</code></pre><p><img src="P12.png" alt="P12"></p>
 <p>解除 base64</p>
 <pre tabindex="0"><code>cat mass | base64 -d &gt; x
 
 file x
-</code></pre><p>![[P15.png]]</p>
+</code></pre><p><img src="P15.png" alt="P15"></p>
 <p>发现是 jgp</p>
 <pre tabindex="0"><code>mv x x.jpg
 
 open x.jpg
-</code></pre><p>![[P16.png]]</p>
+</code></pre><p><img src="P16.png" alt="P16"></p>
 <p>留意右下角的 code to unlock，可能是密码</p>
 <h1 id="图片分析">图片分析</h1>
 <p>查看隐写情况</p>
 <pre tabindex="0"><code>steghide extract -sf x.jpg
-</code></pre><p>![[P17.png]]</p>
+</code></pre><p><img src="P17.png" alt="P17"></p>
 <p>查看提取的内容</p>
-<p>![[P18.png]]</p>
+<p><img src="P18.png" alt="P18"></p>
 <h1 id="端口敲门">端口敲门</h1>
 <pre tabindex="0"><code>knock -v 10.10.10.20 197 719 801 983
-</code></pre><p>![[P19.png]]</p>
+</code></pre><p><img src="P19.png" alt="P19"></p>
 <pre tabindex="0"><code>sudo nmap -sT -p10110 10.10.10.20
-</code></pre><p>![[P20.png]]</p>
+</code></pre><p><img src="P20.png" alt="P20"></p>
 <pre tabindex="0"><code>sudo nmap -sT -sC -sV -p10110 10.10.10.20
-</code></pre><p>![[P21.png]]</p>
+</code></pre><p><img src="P21.png" alt="P21"></p>
 <p>发现 10110 是 ssh 服务</p>
 <h1 id="ssh-服务渗透">ssh 服务渗透</h1>
 <p>尝试连接</p>
 <pre tabindex="0"><code>sudo ssh root@10.10.10.20 -p 10110
-</code></pre><p>![[P22.png]]</p>
+</code></pre><p><img src="P22.png" alt="P22"></p>
 <p>发现一个用户名为 erso，密码为 lyra13</p>
 <pre tabindex="0"><code>sudo ssh erso@10.10.10.20 -p 10110
 </code></pre><p>进入系统</p>
-<p>![[P23.png]]</p>
+<p><img src="P23.png" alt="P23"></p>
 <h1 id="linux-提权">Linux 提权</h1>
 <p>查看 suid 位可执行文件</p>
 <pre tabindex="0"><code>find / -perm /u=s,g=s -type f 2&gt;/dev/null
-</code></pre><p>![[content/posts/DeathStart Writeup/P24.png]]</p>
+</code></pre><p>![content/posts/DeathStart Writeup/P24](content/posts/DeathStart Writeup/P24.png)</p>
 <p>发现可疑文件 /bin/dartVader</p>
 <h1 id="主函数与反汇编">主函数与反汇编</h1>
 <p>将文件拿到 kali 当中</p>
@@ -1210,7 +1291,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;content/posts/Venom%20Writeup/P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，&lt;/p&gt;
 &lt;p&gt;查看 80 端口，是 Ubuntu 的默认界面&lt;/p&gt;
@@ -1236,7 +1317,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-</code></pre><p><img src="P1.png" alt="P1"></p>
+</code></pre><p><img src="content/posts/Venom%20Writeup/P1.png" alt="P1"></p>
 <p>21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，</p>
 <p>查看 80 端口，是 Ubuntu 的默认界面</p>
@@ -1428,7 +1509,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;content/posts/Momentum2%20Writeup/P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;gobuster-爆破目录&#34;&gt;gobuster 爆破目录&lt;/h2&gt;
 &lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
@@ -1454,7 +1535,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-</code></pre><p><img src="P1.png" alt="P1"></p>
+</code></pre><p><img src="content/posts/Momentum2%20Writeup/P1.png" alt="P1"></p>
 <h2 id="gobuster-爆破目录">gobuster 爆破目录</h2>
 <p>在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破</p>
 <pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
@@ -1551,7 +1632,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.18
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;
 sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;content/posts/EvilBox%20One%20Writeup/P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
@@ -1582,7 +1663,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.18
 </code></pre><p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p>
 <pre tabindex="0"><code>
 sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
-</code></pre><p><img src="P1.png" alt="P1"></p>
+</code></pre><p><img src="content/posts/EvilBox%20One%20Writeup/P1.png" alt="P1"></p>
 <p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p>
 <pre tabindex="0"><code>
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
@@ -1838,7 +1919,7 @@ linux 提权的时候要了解 suid 环境变量提权</p>
             <description>&lt;h1 id=&#34;nullbyte-靶场&#34;&gt;NullByte 靶场&lt;/h1&gt;
 &lt;h2 id=&#34;主机发现&#34;&gt;主机发现&lt;/h2&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap -sn 10.10.10.10
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;content/posts/NullByte%20Writeup/P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;靶机的主机为 10.10.10.7&lt;/p&gt;
 &lt;h2 id=&#34;服务识别&#34;&gt;服务识别&lt;/h2&gt;
 &lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
@@ -1866,7 +1947,7 @@ linux 提权的时候要了解 suid 环境变量提权</p>
             <content type="html"><![CDATA[<h1 id="nullbyte-靶场">NullByte 靶场</h1>
 <h2 id="主机发现">主机发现</h2>
 <pre tabindex="0"><code>sudo nmap -sn 10.10.10.10
-</code></pre><p><img src="P1.png" alt="P1"></p>
+</code></pre><p><img src="content/posts/NullByte%20Writeup/P1.png" alt="P1"></p>
 <p>靶机的主机为 10.10.10.7</p>
 <h2 id="服务识别">服务识别</h2>
 <p>使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试</p>
