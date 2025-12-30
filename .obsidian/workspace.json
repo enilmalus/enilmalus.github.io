@@ -189,6 +189,7 @@
   },
   "active": "47af2e2a6a6e6bb5",
   "lastOpenFiles": [
+    "static/BingSiteAuth.xml",
     "BingSiteAuth.xml",
     "public/posts/venom-writeup/P1.png",
     "content/posts/Venom Writeup/P28.png",
@@ -213,7 +214,6 @@
     "public/posts/momentum2-writeup/index.html",
     "public/posts/momentum2-writeup",
     "content/posts/Momentum2 Writeup",
-    "content/posts/Momentum2",
     "content/posts/EvilBox One Writeup/index.md",
     "content/posts/DeathStart Writeup/index.md",
     "content/posts/DarkHole Writeup/index.md",
