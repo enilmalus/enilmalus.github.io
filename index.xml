@@ -130,11 +130,11 @@ Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
 &lt;p&gt;使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt; 。&lt;/p&gt;</description></item><item><title>渗透测试方法论</title><link>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h1 id="靶机分类"&gt;靶机分类&lt;/h1&gt;
-&lt;h2 id="攻击链复杂度分层"&gt;攻击链复杂度分层&lt;/h2&gt;
-&lt;h3 id="easy-类型"&gt;Easy 类型&lt;/h3&gt;
+&lt;h2 id="靶机分类"&gt;靶机分类&lt;/h2&gt;
+&lt;h3 id="攻击链复杂度分层"&gt;攻击链复杂度分层&lt;/h3&gt;
+&lt;h4 id="easy-类型"&gt;Easy 类型&lt;/h4&gt;
 &lt;p&gt;这类靶机没有复杂的攻击链，一般进行 信息收集、单漏洞利用 就可以拿到一个初始的立足点，然后进行简单的提权操作即可获得 root 权限。&lt;/p&gt;
-&lt;h4 id="web-漏洞链路"&gt;Web 漏洞链路&lt;/h4&gt;
+&lt;h5 id="web-漏洞链路"&gt;Web 漏洞链路&lt;/h5&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;信息收集 → 目录爆破 → Web漏洞（SQL注入/命令注入/文件上传 等）→ 获得初始立足点 → 本地提权（SUID/Sudo/Cron/内核漏洞 等）
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;
 &lt;ul&gt;
@@ -143,13 +143,13 @@ Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
 &lt;p&gt;&lt;img src="%E6%BC%8F%E6%B4%9E%E6%90%9C%E7%B4%A2%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="漏洞搜索示意图"&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src="AI%E9%A9%B1%E5%8A%A8%E6%90%9C%E7%B4%A2.png" alt="AI驱动搜索"&gt;&lt;/p&gt;
 &lt;p&gt;在 kali 本地监听获得初始立足点后进行手工枚举（sudo -l ; whoami ;ip a 等），随后根据具体的情况进行进一步提权&lt;/p&gt;
-&lt;h4 id="凭证泄露"&gt;凭证泄露&lt;/h4&gt;
+&lt;h5 id="凭证泄露"&gt;凭证泄露&lt;/h5&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;服务枚举（SMB/FTP/NFS）→ 匿名访问/弱密码 → 凭证发现 → SSH/WinRM登录 → 提权
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件夹获取 mysql 和 phpmyadmin 的账号密码，通过暴力破解密码，ssh 获得初始立足点，随后提权。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="已知-cve-利用"&gt;已知 CVE 利用&lt;/h4&gt;
+&lt;h5 id="已知-cve-利用"&gt;已知 CVE 利用&lt;/h5&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;版本识别 → CVE查询 → POC利用 → 过的初始立足点 → 基础
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;</description></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
 &lt;h2 id="可能使用到的-cewl-及-john-命令及解释"&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h2&gt;
