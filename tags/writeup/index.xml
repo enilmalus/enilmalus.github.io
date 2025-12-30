@@ -56,7 +56,7 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 &lt;h2 id="信息收集"&gt;信息收集&lt;/h2&gt;
 &lt;p&gt;使用 nmap 进行主机发现&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Lampiao%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.44
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
@@ -116,7 +116,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Venom%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，&lt;/p&gt;
 &lt;p&gt;查看 80 端口，是 Ubuntu 的默认界面&lt;/p&gt;
@@ -141,7 +141,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Momentum2%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
 &lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
@@ -172,7 +172,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.18
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;
 sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/EvilBox%20One%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
@@ -220,7 +220,7 @@ upload 可能是文件上传的目录&lt;/p&gt;
 进入 Login 页面&lt;/p&gt;</description></item><item><title>NullByte Writeup</title><link>https://enilmalus.github.io/posts/nullbyte-writeup/</link><pubDate>Thu, 08 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/nullbyte-writeup/</guid><description>&lt;h1 id="nullbyte-靶场"&gt;NullByte 靶场&lt;/h1&gt;
 &lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.10
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/NullByte%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;靶机的主机为 10.10.10.7&lt;/p&gt;
 &lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
 &lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;

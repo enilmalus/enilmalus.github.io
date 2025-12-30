@@ -27,7 +27,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.31
 sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
 
 sudo nmap --script=vuln -p22,80 10.10.10.31 
-</code></pre><p><img src=P1.png alt=P1></p><p>21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
+</code></pre><p><img src=content/posts/Venom%20Writeup/P1.png alt=P1></p><p>21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，</p><p>查看 80 端口，是 Ubuntu 的默认界面</p><p><img src=P2.png alt=P2></p><p>查看源代码发现串 md5</p><p><img src=P3.png alt=P3></p><p><img src=P4.png alt=P4></p><p>使用 hashcat 破解</p><pre tabindex=0><code>sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
 </code></pre><p><img src=P9.png alt=P9></p><p><img src=P10.png alt=P10></p><p>使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger</p><pre tabindex=0><code>ftp 10.10.10.6
 </code></pre><p><img src=P11.png alt=P11></p><p>binary 进入 二进制 模式</p><pre tabindex=0><code>binary

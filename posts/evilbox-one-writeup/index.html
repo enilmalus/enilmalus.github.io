@@ -38,7 +38,7 @@ sudo nmap -sn 10.10.10.0/24
 sudo nmap --min-rate 10000 -p- 10.10.10.18
 </code></pre><p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p><pre tabindex=0><code>
 sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
-</code></pre><p><img src=P1.png alt=P1></p><p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p><pre tabindex=0><code>
+</code></pre><p><img src=content/posts/EvilBox%20One%20Writeup/P1.png alt=P1></p><p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p><pre tabindex=0><code>
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
 </code></pre><p><img src=P2.png alt=P2></p><p>发现暴露出了很多目录，执行一下完整的目录爆破</p><pre tabindex=0><code>
 sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
