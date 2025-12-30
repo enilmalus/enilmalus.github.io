@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Writeup on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/writeup/</link><description>Recent content in Writeup on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 28 Dec 2025 17:29:33 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/writeup/index.xml" rel="self" type="application/rss+xml"/><item><title>Bastard Writeup</title><link>https://enilmalus.github.io/posts/bastard-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/bastard-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以 kali 地址为 10.10.16.46 做演示&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h1 id="初始侦察"&gt;初始侦察&lt;/h1&gt;
-&lt;h2 id="nmap-端口扫描"&gt;nmap 端口扫描&lt;/h2&gt;
+&lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;
+&lt;h3 id="nmap-端口扫描"&gt;nmap 端口扫描&lt;/h3&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap --min-rate 10000 -p- 10.129.6.171 -oA nmap/ports
 [sudo] password for kali: 
@@ -16,7 +16,7 @@ PORT STATE SERVICE
 49154/tcp open unknown
 
 Nmap done: 1 IP address (1 host up) scanned in 15.57 seconds
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="nmap-详细信息扫描"&gt;nmap 详细信息扫描&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="nmap-详细信息扫描"&gt;nmap 详细信息扫描&lt;/h3&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap -sT -sC -sV -O -p80,135,49154 10.129.6.171 -oA nmap/detail 
 [sudo] password for kali: 
