@@ -18,7 +18,7 @@ tags:
 sudo nmap --min-rate 10000 -p- 10.10.10.20
 ```
 
-![[P1.png]]
+![P1](P1.png)
 
 未发现任何开放的端口
 
@@ -28,7 +28,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.20
 sudo nmap -f --min-rate 10000 -p- 10.10.10.20
 ```
 
-![[P3.png]]
+![P3](P3.png)
 
 还是未发现任何开放的端口
 
@@ -38,7 +38,7 @@ sudo nmap -f --min-rate 10000 -p- 10.10.10.20
 sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
 ```
 
-![[P4.png]]
+![P4](P4.png)
 
 还是未发现任何开放端口
 
@@ -48,7 +48,7 @@ sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20
 sudo nmap -r --min-rate 10000 -p- 10.10.10.20
 ```
 
-![[P5.png]]
+![P5](P5.png)
 
 还是未发现任何开放端口
 
@@ -58,7 +58,7 @@ sudo nmap -r --min-rate 10000 -p- 10.10.10.20
 sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
 ```
 
-![[P6.png]]
+![P6](P6.png)
 
 还是未发现任何开放的端口
 
@@ -76,7 +76,7 @@ sudo nmap -T2 -p- 10.10.10.20
 tshark -i eth0 -f "host 10.10.10.20"
 ```
 
-![[P7.png]]
+![P7](P7.png)
 
 捕捉流量
 
@@ -88,7 +88,7 @@ tshark -r flu.pcap
 tshark -r flu.pcap -V
 ```
 
-![[P8.png]]
+![P8](P8.png)
 
 转换为 ASCII 字符串
 
@@ -96,7 +96,7 @@ tshark -r flu.pcap -V
 tshark -r flu.pcap -T fields -e data | tr -d '' | xxd -r -p
 ```
 
-![[P9.png]]
+![P9](P9.png)
 
 扫描 1440 端口
 
@@ -104,7 +104,7 @@ tshark -r flu.pcap -T fields -e data | tr -d '' | xxd -r -p
 sudo nmap -sT -sU -p1440 10.10.10.20
 ```
 
-![[P10.png]]
+![P10](P10.png)
 
 尝试连接 1440
 
@@ -112,7 +112,7 @@ sudo nmap -sT -sU -p1440 10.10.10.20
 nc -u 10.10.10.20 1440
 ```
 
-![[P11.png]]
+![P11](P11.png)
 
 此路不通通过管道符将发射密码给他试试
 
@@ -126,7 +126,7 @@ echo "DS-1@OBS" | nc -u 10.10.10.20 1440
 echo "DS-1@OBS" | nc -u 10.10.10.20 1440 | tee mass
 ```
 
-![[P12.png]]
+![P12](P12.png)
 
 解除 base64
 
@@ -136,7 +136,7 @@ cat mass | base64 -d > x
 file x
 ```
 
-![[P15.png]]
+![P15](P15.png)
 
 发现是 jgp
 
@@ -146,7 +146,7 @@ mv x x.jpg
 open x.jpg
 ```
 
-![[P16.png]]
+![P16](P16.png)
 
 留意右下角的 code to unlock，可能是密码
 
@@ -158,11 +158,11 @@ open x.jpg
 steghide extract -sf x.jpg
 ```
 
-![[P17.png]]
+![P17](P17.png)
 
 查看提取的内容
 
-![[P18.png]]
+![P18](P18.png)
 
 # 端口敲门
 
@@ -170,19 +170,19 @@ steghide extract -sf x.jpg
 knock -v 10.10.10.20 197 719 801 983
 ```
 
-![[P19.png]]
+![P19](P19.png)
 
 ```
 sudo nmap -sT -p10110 10.10.10.20
 ```
 
-![[P20.png]]
+![P20](P20.png)
 
 ```
 sudo nmap -sT -sC -sV -p10110 10.10.10.20
 ```
 
-![[P21.png]]
+![P21](P21.png)
 
 发现 10110 是 ssh 服务
 
@@ -194,7 +194,7 @@ sudo nmap -sT -sC -sV -p10110 10.10.10.20
 sudo ssh root@10.10.10.20 -p 10110
 ```
 
-![[P22.png]]
+![P22](P22.png)
 
 发现一个用户名为 erso，密码为 lyra13
 
@@ -204,7 +204,7 @@ sudo ssh erso@10.10.10.20 -p 10110
 
 进入系统
 
-![[P23.png]]
+![P23](P23.png)
 
 # Linux 提权
 
@@ -214,7 +214,7 @@ sudo ssh erso@10.10.10.20 -p 10110
 find / -perm /u=s,g=s -type f 2>/dev/null
 ```
 
-![[content/posts/DeathStart Writeup/P24.png]]
+![content/posts/DeathStart Writeup/P24](content/posts/DeathStart Writeup/P24.png)
 
 发现可疑文件 /bin/dartVader
 
