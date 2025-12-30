@@ -861,20 +861,38 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 <p><img src="script-scan.png" alt="script-scan"></p>
 <p>可以看到 nmap 已经对端口进行了默认脚本扫描，并输出了结果。</p>
 <h2 id="数据包分片扫描">数据包分片扫描</h2>
-<p>有时候因为防火墙等原因，需要进行数据包分片扫描发现端口，可以使用以下命令。</p>
+<p>有些防火墙或 WAF 在处理完整数据包时会进行检测，但对分片数据包的处理可能不完善。使用 -f 参数将 TCP 数据包分片，可能绕过某些防护设备检测。通过分片发送探测包，降低被拦截的概率，尝试发现隐藏的开放端口。</p>
+<p>一个完整的 IP 包包含：</p>
+<p><code>IP头 + TCP/UDP头 + 可能的应用层链路</code></p>
+<p>-f 参数在 IP 层将这个包拆成多片发送</p>
+<p><code>第一个分片：IP头 + TCP/UDP头 + 一段数据</code>
+<code>后续分片： IP头 + 剩余数据</code></p>
+<p>传统防火墙、简单包过滤器只检查第一个分片，直接放行后续数据包</p>
 <pre tabindex="0"><code>sudo nmap -f -p- --min-rate 10000 10.10.10.45
-</code></pre><p>-f 使用 IP 分片技术，一块一块发送数据包，减小被防火墙拦截的概率，执行结果如下。</p>
-<p><img src="bust-scan.png" alt="bust-scan"></p>
+</code></pre><p><img src="bust-scan.png" alt="bust-scan"></p>
 <p>可以看到靶机开放了 22、80 端口。</p>
 <h2 id="源端口随机端口顺序慢速扫描">源端口、随机端口顺序、慢速扫描</h2>
-<p>以下是笔者在打靶过程中还用过的绕过防火墙扫描命令。</p>
 <h3 id="源端口扫描">源端口扫描</h3>
 <pre tabindex="0"><code>sudo nmap --source-port 53 -p- --min-rate 10000 10.10.10.45
-</code></pre><h3 id="随机端口扫描">随机端口扫描</h3>
+</code></pre><p>防火墙可能允许特定源端口流量通过（例如 53 是 DNS 常用端口）。通过伪装端口为常用服务端口，坑那个绕过端口过滤规则，模拟合法流量，探测目标是否对特定源端口的请求有所响应。</p>
+<h3 id="随机端口扫描">随机端口扫描</h3>
 <pre tabindex="0"><code>sudo nmap -r -p- --min-rate 10000 10.10.10.45
-</code></pre><h3 id="慢速扫描">慢速扫描</h3>
+</code></pre><p>有些 WAF 或 IDS 会检测连续的端口扫描模式，使用 -r（按顺序扫描，但结合 &ndash;randomize-hosts 可随机化目标）可以打乱扫描顺序，降低被识别为扫描行为的可能性。通过非典型的扫描模式，尝试绕过基于模式匹配的防护规则。</p>
+<h3 id="慢速扫描">慢速扫描</h3>
 <pre tabindex="0"><code>sudo nmap -T2 -p- 10.10.10.45
-</code></pre>]]></content></item><item><title>Lampiao Writeup</title><link>https://enilmalus.github.io/posts/lampiao-writeup/</link><pubDate>Sun, 13 Jul 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/lampiao-writeup/</guid><description>&lt;h1 id="lampiao-靶机"&gt;Lampiao 靶机&lt;/h1&gt;
+</code></pre><p>使用更低速率的 T2 进行扫描，避免触发防火墙的阈值检测。</p>
+<blockquote>
+<p>T1 最慢，T5 最快</p>
+</blockquote>
+<h3 id="tcp-window-扫描">TCP Window 扫描</h3>
+<pre tabindex="0"><code>sudo nmap --scanflags URGPSHFIN -p- --min-rate 10000 10.10.10.45
+</code></pre><p>有些防火墙可能只过滤标准的 SYN 扫描，而对带有特定 TCP 标志（如 URG、PSH、FIN）的包处理不同。TCP 的 Window 扫描利用这些标志检测端口状态。通过发送非常规的 TCP 数据包，探测端口是否被影藏或误报为 filtered。</p>
+<blockquote>
+<p>URG：Uragent，紧急标志
+PSH：Push，推送标志
+FIN：finish，结束标志</p>
+</blockquote>
+]]></content></item><item><title>Lampiao Writeup</title><link>https://enilmalus.github.io/posts/lampiao-writeup/</link><pubDate>Sun, 13 Jul 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/lampiao-writeup/</guid><description>&lt;h1 id="lampiao-靶机"&gt;Lampiao 靶机&lt;/h1&gt;
 &lt;p&gt;环境：kali-linux-2025.1&lt;/p&gt;
 &lt;p&gt;网络：nat&lt;/p&gt;
 &lt;p&gt;攻击机ip：10.10.10.5&lt;/p&gt;
