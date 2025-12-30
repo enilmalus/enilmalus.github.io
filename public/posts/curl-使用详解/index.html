@@ -147,22 +147,15 @@ curl 参数详解 curl 帮助命令 下面为 curl 详细地帮助命令
           <div class="toc-title">Table of Contents</div>
           <nav id="TableOfContents">
   <ul>
-    <li><a href="#curl-核心机制">curl 核心机制</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#curl-帮助命令">curl 帮助命令</a></li>
-    <li><a href="#参数详解">参数详解</a>
+    <li><a href="#curl-原理剖析">curl 原理剖析</a>
       <ul>
-        <li><a href="#-ddata-data-参数">-d/&ndash;data &lt;data&gt; 参数</a></li>
-        <li><a href="#-tupload-file-file-参数">-T/&ndash;upload-file &lt;file&gt; 参数</a></li>
-        <li><a href="#-auser-agent-name-参数">-A/&ndash;user-agent &lt;name&gt; 参数</a></li>
-        <li><a href="#-uuser-userpassword-参数">-u/&ndash;user &lt;user:password&gt; 参数</a></li>
-        <li><a href="#-vverbose-参数">-v/&ndash;verbose 参数</a></li>
-        <li><a href="#-ishow-headers-参数">-i/&ndash;show-headers 参数</a></li>
-        <li><a href="#-ffail-参数">-f/&ndash;fail 参数</a></li>
-        <li><a href="#-o-filename-o">-o filename/-O</a></li>
-        <li><a href="#-s-参数">-s 参数</a></li>
+        <li><a href="#curl-核心机制">curl 核心机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#curl-参数详解">curl 参数详解</a>
+      <ul>
+        <li><a href="#curl-帮助命令">curl 帮助命令</a></li>
+        <li><a href="#参数详解">参数详解</a></li>
       </ul>
     </li>
   </ul>
@@ -173,8 +166,8 @@ curl 参数详解 curl 帮助命令 下面为 curl 详细地帮助命令
       
 
       <div class="post-content">
-        <h1 id="curl-原理剖析">curl 原理剖析</h1>
-<h2 id="curl-核心机制">curl 核心机制</h2>
+        <h2 id="curl-原理剖析">curl 原理剖析</h2>
+<h3 id="curl-核心机制">curl 核心机制</h3>
 <ul>
 <li>Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt()  函数调用。</li>
 <li>协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。</li>
@@ -182,8 +175,8 @@ curl 参数详解 curl 帮助命令 下面为 curl 详细地帮助命令
 </ul>
 <blockquote>
 <p>Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。</p></blockquote>
-<h1 id="curl-参数详解">curl 参数详解</h1>
-<h2 id="curl-帮助命令">curl 帮助命令</h2>
+<h2 id="curl-参数详解">curl 参数详解</h2>
+<h3 id="curl-帮助命令">curl 帮助命令</h3>
 <p>下面为 curl 详细地帮助命令</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -h                             
@@ -206,27 +199,27 @@ Use &#34;--help category&#34; to get an overview of all categories, which are:
 auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
 Use &#34;--help all&#34; to list all options
 Use &#34;--help [option]&#34; to view documentation for a given option
-</code></pre><h2 id="参数详解">参数详解</h2>
-<h3 id="-ddata-data-参数">-d/&ndash;data &lt;data&gt; 参数</h3>
+</code></pre><h3 id="参数详解">参数详解</h3>
+<h4 id="-ddata-data-参数">-d/&ndash;data &lt;data&gt; 参数</h4>
 <p>使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 <code>application/x-www-form-urlencoded</code> 。</p>
-<h3 id="-tupload-file-file-参数">-T/&ndash;upload-file &lt;file&gt; 参数</h3>
+<h4 id="-tupload-file-file-参数">-T/&ndash;upload-file &lt;file&gt; 参数</h4>
 <p>文件上传</p>
-<h3 id="-auser-agent-name-参数">-A/&ndash;user-agent &lt;name&gt; 参数</h3>
+<h4 id="-auser-agent-name-参数">-A/&ndash;user-agent &lt;name&gt; 参数</h4>
 <p>修改 HTTP 请求头中的 User-Agent 字段</p>
-<h3 id="-uuser-userpassword-参数">-u/&ndash;user &lt;user:password&gt; 参数</h3>
+<h4 id="-uuser-userpassword-参数">-u/&ndash;user &lt;user:password&gt; 参数</h4>
 <p>将 user:password 进行 Base64 编码，并添加到 <code>Header: Authorization: Basic &lt;base64_string&gt;。</code></p>
-<h3 id="-vverbose-参数">-v/&ndash;verbose 参数</h3>
+<h4 id="-vverbose-参数">-v/&ndash;verbose 参数</h4>
 <p>这个参数是笔者在实际渗透测试中最常用的参数之一，作用为开启详细模式，便于阅读返回的数据。</p>
-<h3 id="-ishow-headers-参数">-i/&ndash;show-headers 参数</h3>
+<h4 id="-ishow-headers-参数">-i/&ndash;show-headers 参数</h4>
 <p>查看响应头。</p>
-<h3 id="-ffail-参数">-f/&ndash;fail 参数</h3>
+<h4 id="-ffail-参数">-f/&ndash;fail 参数</h4>
 <p>即使服务器返回 404 或 500 也会输出页面内容。</p>
-<h3 id="-o-filename-o">-o filename/-O</h3>
+<h4 id="-o-filename-o">-o filename/-O</h4>
 <ul>
 <li>-o enil：重命名保存为名称为 enil 的文件。</li>
 <li>-O：原名保存。</li>
 </ul>
-<h3 id="-s-参数">-s 参数</h3>
+<h4 id="-s-参数">-s 参数</h4>
 <p>静默模式，不显示进度条。</p>
 
       </div>
@@ -290,8 +283,8 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 
             
             <span class="button next">
-                <a href="http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/">
-                    <span class="button__text">渗透测试方法论（2025.12.27总结）【建设中】</span>
+                <a href="http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/">
+                    <span class="button__text">渗透测试方法论</span>
                     <span class="button__icon">→</span>
                 </a>
             </span>

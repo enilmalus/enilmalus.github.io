@@ -165,7 +165,9 @@ python3 -m http.server 80 修改 cookie 登入
           <div class="toc-title">Table of Contents</div>
           <nav id="TableOfContents">
   <ul>
+    <li><a href="#服务扫描">服务扫描</a></li>
     <li><a href="#gobuster-爆破目录">gobuster 爆破目录</a></li>
+    <li><a href="#web-渗透">Web 渗透</a></li>
   </ul>
 </nav>
         </aside>
@@ -177,7 +179,7 @@ python3 -m http.server 80 修改 cookie 登入
         <blockquote>
 <p>此文章以 kali 地址为 10.10.10.5 为示例</p></blockquote>
 <h1 id="credit-card-scammers-靶场">Credit Card Scammers 靶场</h1>
-<h1 id="服务扫描">服务扫描</h1>
+<h2 id="服务扫描">服务扫描</h2>
 <p>扫描所执行的命令，执行结果如下</p>
 <pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
 
@@ -191,7 +193,7 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
 <p>在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破</p>
 <pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
 </code></pre><p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"></p>
-<h1 id="web-渗透">Web 渗透</h1>
+<h2 id="web-渗透">Web 渗透</h2>
 <p>审计爆破的目录发现在 admin 下有一个登入界面</p>
 <p><img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"></p>
 <p>默认界面能找到提交表单</p>

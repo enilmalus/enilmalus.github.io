@@ -8,13 +8,13 @@ tags:
   - Hack
   - 工具
 ---
-# 架构基础
+## 流量包分析
 
-## Libpcap（Packet Pactrue Library）
+### Libpcap（Packet Pactrue Library）
 
 Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
 
-## BPF
+### BPF
 
 执行流程：
 1. 用户在命令行输入高级过滤语句。
@@ -22,21 +22,21 @@ Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wires
 3. BPF 指令加载到内核，在虚拟机中运行。
 4. 过滤过的包加载到用户缓冲区。
 
-# 工具对比
+## 工具对比
 
-## tcpdump
+### tcpdump
 
 tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。
 
-## tshark
+### tshark
 
 tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。
 
-## wireshark
+### wireshark
 
 wireshark 拥有完整的 ui 界面。
 
-## 用法分析
+### 用法分析
 
 `-f 'host 10.10.10.45'` 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。
 

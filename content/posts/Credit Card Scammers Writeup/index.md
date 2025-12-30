@@ -12,7 +12,7 @@ tags:
 
 # Credit Card Scammers 靶场
 
-# 服务扫描
+## 服务扫描
 
 扫描所执行的命令，执行结果如下
 
@@ -38,7 +38,7 @@ sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
 
 ![bbb.png](content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png)
 
-# Web 渗透
+## Web 渗透
 
 审计爆破的目录发现在 admin 下有一个登入界面
 

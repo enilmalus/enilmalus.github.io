@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
-<meta name="description" content="架构基础 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
+<meta name="description" content="流量包分析 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
 BPF 执行流程：
 用户在命令行输入高级过滤语句。 libpcap 编码器转换为 BPF 字节码。 BPF 指令加载到内核，在虚拟机中运行。 过滤过的包加载到用户缓冲区。 工具对比 tcpdump tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。
 tshark tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。
@@ -48,7 +48,7 @@ tsahrk -i eth0 -f &#39;host 10.10.10.45&#39; -w Enilmalus.pcap tsahrk -r Enilmal
 
 
   <meta itemprop="name" content="流量包分析，以 tshark、tcpdump、wireshark 为例">
-  <meta itemprop="description" content="架构基础 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
+  <meta itemprop="description" content="流量包分析 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
 BPF 执行流程：
 用户在命令行输入高级过滤语句。 libpcap 编码器转换为 BPF 字节码。 BPF 指令加载到内核，在虚拟机中运行。 过滤过的包加载到用户缓冲区。 工具对比 tcpdump tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。
 tshark tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。
@@ -63,7 +63,7 @@ tsahrk -i eth0 -f &#39;host 10.10.10.45&#39; -w Enilmalus.pcap tsahrk -r Enilmal
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="流量包分析，以 tshark、tcpdump、wireshark 为例">
-  <meta name="twitter:description" content="架构基础 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
+  <meta name="twitter:description" content="流量包分析 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
 BPF 执行流程：
 用户在命令行输入高级过滤语句。 libpcap 编码器转换为 BPF 字节码。 BPF 指令加载到内核，在虚拟机中运行。 过滤过的包加载到用户缓冲区。 工具对比 tcpdump tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。
 tshark tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。
@@ -162,15 +162,20 @@ tsahrk -i eth0 -f &#39;host 10.10.10.45&#39; -w Enilmalus.pcap tsahrk -r Enilmal
           <div class="toc-title">Table of Contents</div>
           <nav id="TableOfContents">
   <ul>
-    <li><a href="#libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</a></li>
-    <li><a href="#bpf">BPF</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#tcpdump">tcpdump</a></li>
-    <li><a href="#tshark">tshark</a></li>
-    <li><a href="#wireshark">wireshark</a></li>
-    <li><a href="#用法分析">用法分析</a></li>
+    <li><a href="#流量包分析">流量包分析</a>
+      <ul>
+        <li><a href="#libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</a></li>
+        <li><a href="#bpf">BPF</a></li>
+      </ul>
+    </li>
+    <li><a href="#工具对比">工具对比</a>
+      <ul>
+        <li><a href="#tcpdump">tcpdump</a></li>
+        <li><a href="#tshark">tshark</a></li>
+        <li><a href="#wireshark">wireshark</a></li>
+        <li><a href="#用法分析">用法分析</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -179,10 +184,10 @@ tsahrk -i eth0 -f &#39;host 10.10.10.45&#39; -w Enilmalus.pcap tsahrk -r Enilmal
       
 
       <div class="post-content">
-        <h1 id="架构基础">架构基础</h1>
-<h2 id="libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</h2>
+        <h2 id="流量包分析">流量包分析</h2>
+<h3 id="libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</h3>
 <p>Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。</p>
-<h2 id="bpf">BPF</h2>
+<h3 id="bpf">BPF</h3>
 <p>执行流程：</p>
 <ol>
 <li>用户在命令行输入高级过滤语句。</li>
@@ -190,14 +195,14 @@ tsahrk -i eth0 -f &#39;host 10.10.10.45&#39; -w Enilmalus.pcap tsahrk -r Enilmal
 <li>BPF 指令加载到内核，在虚拟机中运行。</li>
 <li>过滤过的包加载到用户缓冲区。</li>
 </ol>
-<h1 id="工具对比">工具对比</h1>
-<h2 id="tcpdump">tcpdump</h2>
+<h2 id="工具对比">工具对比</h2>
+<h3 id="tcpdump">tcpdump</h3>
 <p>tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。</p>
-<h2 id="tshark">tshark</h2>
+<h3 id="tshark">tshark</h3>
 <p>tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。</p>
-<h2 id="wireshark">wireshark</h2>
+<h3 id="wireshark">wireshark</h3>
 <p>wireshark 拥有完整的 ui 界面。</p>
-<h2 id="用法分析">用法分析</h2>
+<h3 id="用法分析">用法分析</h3>
 <p><code>-f 'host 10.10.10.45'</code> 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。</p>
 <p><img src="P1.png" alt="P1"></p>
 <p>例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。</p>
@@ -262,8 +267,8 @@ tshark -r Enilmalus.pcap -T fields -e data | tr -d &#39; &#39; | xxd -r -p
 
             
             <span class="button next">
-                <a href="http://localhost:1313/posts/bastard-writeup/">
-                    <span class="button__text">Bastard Writeup</span>
+                <a href="http://localhost:1313/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/">
+                    <span class="button__text">端口敲门与单包授权与零开端口</span>
                     <span class="button__icon">→</span>
                 </a>
             </span>

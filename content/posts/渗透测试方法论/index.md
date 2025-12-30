@@ -1,5 +1,5 @@
 ---
-title: 渗透测试方法论（2025.12.27总结）【建设中】
+title: 渗透测试方法论
 date: 2025-12-27T17:29:33+08:00
 draft: false
 toc: true
@@ -53,4 +53,32 @@ tags:
 
 ### Medium 类型
 
-这类靶机相对 Easy 类型靶机攻击难度略微复杂 
+这类靶机相对 Easy 类型靶机攻击难度略微复杂 。
+
+### Hard 类型
+
+这类靶机通常需要多个攻击链利用，渗透难度较大。
+# 遇见的情况以及方法论
+
+## 开放的非常规端口
+
+遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。
+
+```
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ nc -u 10.10.10.45 1440
+?
+
+Wrong Code!!
+We'll notify Commander Tarkin of this offense
+```
+
+使用 echo 传输字符串并通过 nc 链接端口。
+
+```
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ echo "DS-1@OBS" | nc -u 10.10.10.45 1440
+......
+```
+
+> 本文章持续更新中
