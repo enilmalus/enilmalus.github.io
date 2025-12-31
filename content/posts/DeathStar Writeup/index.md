@@ -1,5 +1,5 @@
 ---
-title: DeathStart Writeup
+title: DeathStar Writeup
 date: 2025-06-24T17:29:33+08:00
 draft: false
 toc: true
