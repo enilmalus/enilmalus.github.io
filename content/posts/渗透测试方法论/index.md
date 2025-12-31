@@ -137,6 +137,13 @@ file 命令是识别文件类型和格式，通过分析文件头信息等数据
 └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader .
 ```
 
+### 使用 curl 将返回的内容输出为中文
 
+```
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ curl -s http://10.10.10.45/secret | trans -b :zh
+```
+
+trans（translate-shell）是很不错的命令行翻译工具。
 
 > 本文章持续更新中
