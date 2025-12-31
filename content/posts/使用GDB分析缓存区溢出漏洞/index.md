@@ -1,6 +1,6 @@
 ---
 title: 使用GDB分析缓存区溢出漏洞
-date: 2025-12-31T17:29:33+08:00
+date: 2025-12-31T08:29:33+08:00
 draft: false
 toc: true
 images:
@@ -448,4 +448,4 @@ buffer 由四段组成，offset 填充缓冲区后 system 执行命令 `system("
 
 成功利用。
 
-![P1](P1.png)
+![Pa1](Pa1.png)
