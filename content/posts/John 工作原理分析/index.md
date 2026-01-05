@@ -10,7 +10,7 @@ tags:
 ---
 ## ssh2john 提取私钥
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ ssh2john id_rsa | tee key_hash
 ```
@@ -21,7 +21,7 @@ John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换
 
 ## John 破解提取的私钥
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ john key_hash
 ```

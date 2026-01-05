@@ -33,7 +33,7 @@ Linux 通常是干净的 `RST + TTL 64`，Windows 多带 `RST、ACK、TTL 12`，
 
 在打本地离线靶机的时候常常需要主机发现，此时可以使用以下命令。
 
-```
+```bash
 sudo nmap -sn 10.10.10.0/24
 ```
 
@@ -47,7 +47,7 @@ sudo nmap -sn 10.10.10.0/24
 
 在主机发现后一般要对存活的机器进行端口扫描，可以使用以下命令。
 
-```
+```bash
 sudo nmap --min-rate 10000 -p- 10.10.10.45 -oA nmap/scan
 ```
 
@@ -61,7 +61,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.45 -oA nmap/scan
 
 在执行完 TCP 扫描后应该进行 UDP 扫描以免有漏掉的 UDP 端口，可以使用以下命令。
 
-```
+```bash
 sudo nmap -sU --min-rate 10000 -p- 10.10.10.45 -oA nmap/udp-scan
 ```
 
@@ -75,7 +75,7 @@ sudo nmap -sU --min-rate 10000 -p- 10.10.10.45 -oA nmap/udp-scan
 
 在扫描完成后要对 TCP 端口的详细情况进行扫描，可以使用以下命令。
 
-```
+```bash
 sudo nmap -sT -sC -sV -O -p22,80 10.10.10.45 
 ```
 
@@ -89,7 +89,7 @@ sudo nmap -sT -sC -sV -O -p22,80 10.10.10.45
 
 在执行完端口详细扫描后一般还会执行 nmap 的 默认脚本扫描，可以执行以下命令。
 
-```
+```bash
 sudo nmap --script=vuln -p22,80 10.10.10.45
 ```
 
@@ -114,7 +114,7 @@ sudo nmap --script=vuln -p22,80 10.10.10.45
 
 传统防火墙、简单包过滤器只检查第一个分片，直接放行后续数据包
 
-```
+```bash
 sudo nmap -f -p- --min-rate 10000 10.10.10.45
 ```
 
@@ -126,7 +126,7 @@ sudo nmap -f -p- --min-rate 10000 10.10.10.45
 
 #### 源端口扫描
 
-```
+```bash
 sudo nmap --source-port 53 -p- --min-rate 10000 10.10.10.45
 ```
 
@@ -134,14 +134,14 @@ sudo nmap --source-port 53 -p- --min-rate 10000 10.10.10.45
 
 #### 随机端口扫描
 
-```
+```bash
 sudo nmap -r -p- --min-rate 10000 10.10.10.45
 ```
 
 有些 WAF 或 IDS 会检测连续的端口扫描模式，使用 -r（按顺序扫描，但结合 --randomize-hosts 可随机化目标）可以打乱扫描顺序，降低被识别为扫描行为的可能性。通过非典型的扫描模式，尝试绕过基于模式匹配的防护规则。
 #### 慢速扫描
 
-```
+```bash
 sudo nmap -T2 -p- 10.10.10.45
 ```
 
@@ -150,7 +150,7 @@ sudo nmap -T2 -p- 10.10.10.45
 > T1 最慢，T5 最快
 #### TCP Window 扫描
 
-```
+```bash
 sudo nmap --scanflags URGPSHFIN -p- --min-rate 10000 10.10.10.45
 ```
 

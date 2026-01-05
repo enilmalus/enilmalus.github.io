@@ -178,28 +178,28 @@ curl 参数详解 curl 帮助命令 下面为 curl 详细地帮助命令
 <h2 id="curl-参数详解">curl 参数详解</h2>
 <h3 id="curl-帮助命令">curl 帮助命令</h3>
 <p>下面为 curl 详细地帮助命令</p>
-<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
-└─$ curl -h                             
-Usage: curl [options...] &lt;url&gt;
- -d, --data &lt;data&gt;           HTTP POST data
- -f, --fail                  Fail fast with no output on HTTP errors
- -h, --help &lt;subject&gt;        Get help for commands
- -o, --output &lt;file&gt;         Write to file instead of stdout
- -O, --remote-name           Write output to file named as remote file
- -i, --show-headers          Show response headers in output
- -s, --silent                Silent mode
- -T, --upload-file &lt;file&gt;    Transfer local FILE to destination
- -u, --user &lt;user:password&gt;  Server user and password
- -A, --user-agent &lt;name&gt;     Send User-Agent &lt;name&gt; to server
- -v, --verbose               Make the operation more talkative
- -V, --version               Show version number and quit
-
-This is not the full help; this menu is split into categories.
-Use &#34;--help category&#34; to get an overview of all categories, which are:
-auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
-Use &#34;--help all&#34; to list all options
-Use &#34;--help [option]&#34; to view documentation for a given option
-</code></pre><h3 id="参数详解">参数详解</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -h                             
+</span></span><span style="display:flex;"><span>Usage: curl <span style="color:#f92672">[</span>options...<span style="color:#f92672">]</span> &lt;url&gt;
+</span></span><span style="display:flex;"><span> -d, --data &lt;data&gt;           HTTP POST data
+</span></span><span style="display:flex;"><span> -f, --fail                  Fail fast with no output on HTTP errors
+</span></span><span style="display:flex;"><span> -h, --help &lt;subject&gt;        Get help <span style="color:#66d9ef">for</span> commands
+</span></span><span style="display:flex;"><span> -o, --output &lt;file&gt;         Write to file instead of stdout
+</span></span><span style="display:flex;"><span> -O, --remote-name           Write output to file named as remote file
+</span></span><span style="display:flex;"><span> -i, --show-headers          Show response headers in output
+</span></span><span style="display:flex;"><span> -s, --silent                Silent mode
+</span></span><span style="display:flex;"><span> -T, --upload-file &lt;file&gt;    Transfer local FILE to destination
+</span></span><span style="display:flex;"><span> -u, --user &lt;user:password&gt;  Server user and password
+</span></span><span style="display:flex;"><span> -A, --user-agent &lt;name&gt;     Send User-Agent &lt;name&gt; to server
+</span></span><span style="display:flex;"><span> -v, --verbose               Make the operation more talkative
+</span></span><span style="display:flex;"><span> -V, --version               Show version number and quit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>This is not the full help; this menu is split into categories.
+</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;--help category&#34;</span> to get an overview of all categories, which are:
+</span></span><span style="display:flex;"><span>auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
+</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;--help all&#34;</span> to list all options
+</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;--help [option]&#34;</span> to view documentation <span style="color:#66d9ef">for</span> a given option
+</span></span></code></pre></div><h3 id="参数详解">参数详解</h3>
 <h4 id="-ddata-data-参数">-d/&ndash;data &lt;data&gt; 参数</h4>
 <p>使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 <code>application/x-www-form-urlencoded</code> 。</p>
 <h4 id="-tupload-file-file-参数">-T/&ndash;upload-file &lt;file&gt; 参数</h4>

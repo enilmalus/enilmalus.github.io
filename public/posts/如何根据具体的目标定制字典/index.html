@@ -177,22 +177,22 @@ john 语法及其解释 sudo john --rules -wordlist=password.txt --stdout | sort
         <p>在遇到目标网站且使用 <em>kali</em> 默认的 <em>rockyou</em> 字典爆破时间过长时可以尝试通过 <em>cewl</em> 与 <em>john</em> 结合生成目标定制的字典缩短爆破时间。</p>
 <h2 id="可能使用到的-cewl-及-john-命令及解释">可能使用到的 Cewl 及 john 命令及解释</h2>
 <h3 id="cewl-语句及其解释">Cewl 语句及其解释</h3>
-<pre tabindex="0"><code>sudo cewl http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令直接指定 <em>url</em> 生成一个包含所有提取单词的字典文件，并保存为 <em>password.txt</em> 文件。</p>
-<pre tabindex="0"><code>sudo cewl -m 6 http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 <em>-m 6</em> 设置提取的单词长度最小为 <em>6</em> 。</p>
-<pre tabindex="0"><code>sudo cewl -d 2 http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 -d 2 使 <em>Cewl</em> 递归爬取网站内部链接，深度为 <em>2</em> 。</p>
-<pre tabindex="0"><code>sudo cewl -c http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 <em>-c</em> 去除重复单词，并显示单词出现的次数。</p>
-<pre tabindex="0"><code>sudo cewl -e http://10.10.10.48 -w password.txt 
-</code></pre><p>这个命令使用 -<em>e</em> 保留所有发现的电子邮件地址。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl http://10.10.10.48 -w password.txt 
+</span></span></code></pre></div><p>这个命令直接指定 <em>url</em> 生成一个包含所有提取单词的字典文件，并保存为 <em>password.txt</em> 文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -m <span style="color:#ae81ff">6</span> http://10.10.10.48 -w password.txt 
+</span></span></code></pre></div><p>这个命令使用 <em>-m 6</em> 设置提取的单词长度最小为 <em>6</em> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -d <span style="color:#ae81ff">2</span> http://10.10.10.48 -w password.txt 
+</span></span></code></pre></div><p>这个命令使用 -d 2 使 <em>Cewl</em> 递归爬取网站内部链接，深度为 <em>2</em> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -c http://10.10.10.48 -w password.txt 
+</span></span></code></pre></div><p>这个命令使用 <em>-c</em> 去除重复单词，并显示单词出现的次数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -e http://10.10.10.48 -w password.txt 
+</span></span></code></pre></div><p>这个命令使用 -<em>e</em> 保留所有发现的电子邮件地址。</p>
 <h3 id="john-语法及其解释">john 语法及其解释</h3>
-<pre tabindex="0"><code>sudo john --rules -wordlist=password.txt --stdout | sort | uniq &gt; wordlist.txt
-</code></pre><p>使用 <em>&ndash;rules</em> 指定内置密码规则生成新密码组合，<em>&ndash;wordlist=password.txt</em> 指定原始字典为 <em>passowrd.txt</em> ，使用 <em>&ndash;stdout</em> 将生成的密码标准输出，<em>sort</em> 对单词进行排序，<em>uniq</em> 去重。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo john --rules -wordlist<span style="color:#f92672">=</span>password.txt --stdout | sort | uniq &gt; wordlist.txt
+</span></span></code></pre></div><p>使用 <em>&ndash;rules</em> 指定内置密码规则生成新密码组合，<em>&ndash;wordlist=password.txt</em> 指定原始字典为 <em>passowrd.txt</em> ，使用 <em>&ndash;stdout</em> 将生成的密码标准输出，<em>sort</em> 对单词进行排序，<em>uniq</em> 去重。</p>
 <h2 id="使用-hydra-指定生成的字典进行爆破">使用 hydra 指定生成的字典进行爆破</h2>
-<pre tabindex="0"><code>sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
-</code></pre><p><img src="result.png" alt="结果"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
+</span></span></code></pre></div><p><img src="result.png" alt="结果"></p>
 
       </div>
     </article>

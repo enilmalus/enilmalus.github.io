@@ -22,7 +22,7 @@ tags:
 
 knock 敲门演示：
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ knock -v 10.10.10.45 197 719 801 983
 hitting tcp 10.10.10.45:197
@@ -33,7 +33,7 @@ hitting tcp 10.10.10.45:983
 
 nc 敲门演示：
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ for port in 197 719 801 983 ; do nc -zv 10.10.10.45 $port;sleep 1; done
 ```

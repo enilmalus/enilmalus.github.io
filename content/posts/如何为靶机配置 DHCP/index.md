@@ -36,7 +36,7 @@ tags:
 
 保存后执行网络重启命令后获得 ip
 
-```
+```bash
 service networking restart
 ```
 

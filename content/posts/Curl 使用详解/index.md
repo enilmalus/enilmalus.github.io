@@ -23,7 +23,7 @@ tags:
 
 下面为 curl 详细地帮助命令
 
-```
+```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -h                             
 Usage: curl [options...] <url>
