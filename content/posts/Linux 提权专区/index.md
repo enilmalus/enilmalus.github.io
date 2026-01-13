@@ -189,3 +189,219 @@ getcap -r / 2>/dev/null
 2. -i（inode 号）：显示每个文件和目录地 inode 编号。inode 是文件系统中用于标识文件地唯一数字标识符。
 3. -a（全部文件）：列出所有文件，包括以 . 开头的隐藏文件。
 4. -h（人性化格式）：以易读的格式显示文件大小，例如 KB、MB、GB 等。
+
+#### history
+
+使用 `history` 命令查看早期命令可以让我们了解目标系统，尽管很少，但可以储存诸如密码、用户名之类的信息。
+
+![](Pasted%20image%2020260113173925.png)
+
+#### /etc/passwd
+
+阅读 `/etc/passwd` 文件是发现系统上用户的简便方式。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]                    
+└─$ cat /etc/passwd                                                               
+root:x:0:0:root:/root:/usr/bin/zsh               
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin  
+bin:x:2:2:bin:/bin:/usr/sbin/nologin                                                                   
+sys:x:3:3:sys:/dev:/usr/sbin/nologin                                                                   
+sync:x:4:65534:sync:/bin:/bin/sync                                                                     
+games:x:5:60:games:/usr/games:/usr/sbin/nologin   
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin                                                           
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin                                                            
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin 
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+......
+```
+
+输出很长，可以通过剪切转换为对暴力破解有用的列表。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ cat /etc/passwd | cut -d ':' -f 1
+root 
+daemon
+bin     
+sys      
+sync   
+games
+man 
+lp   
+mail 
+news
+uucp                                              
+proxy
+......
+```
+
+`/etc/passwd` 中记载了所有用户（包括系统或服务器用户）。
+
+#### /etc/crontab
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ cat /etc/crontab                 
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.daily; }
+47 6    * * 7   root    test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.weekly; }
+52 6    1 * *   root    test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.monthly; }
+#
+```
+
+查看自动任务。
+
+#### echo $PATH
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ echo $PATH                                         
+/home/kali/.cargo/bin:/home/kali/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/kali/.dotnet/tools
+```
+
+查看环境变量，也可以使用 `env` 显示更全的环境变量。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ env                                                                                                
+COLORFGBG=15;0    
+COLORTERM=truecolor
+COMMAND_NOT_FOUND_INSTALL_PROMPT=1
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+DESKTOP_SESSION=lightdm-xsession
+DISPLAY=:0.0     
+DOTNET_CLI_TELEMETRY_OPTOUT=1
+GDMSESSION=lightdm-xsession       
+HOME=/home/kali
+LANG=en_US.UTF-8
+LANGUAGE= 
+LESS_TERMCAP_mb=                                   
+LESS_TERMCAP_md=                                   
+LESS_TERMCAP_me=        
+LESS_TERMCAP_se=                                   
+LESS_TERMCAP_so=        
+LESS_TERMCAP_ue=                                                                                       
+LESS_TERMCAP_us=                                   
+LOGNAME=kali
+......
+```
+
+#### ps -ef
+
+`ps` 用来查看进程，各个数据列的意义如下：
+
+- PID：进程 ID（进程唯一）
+- TTY：用户使用的终端类型
+- Time：进程使用的 CPU 时间（并非进程运行时间）
+- CMD：正在运行的命令或可执行文件
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]                                                                          
+└─$ ps -ef                                                                                             
+UID          PID    PPID  C STIME TTY          TIME CMD                                           
+root           1       0  0 04:28 ?        00:00:03 /sbin/init splash           
+root           2       0  0 04:28 ?        00:00:00 [kthreadd]                
+root           3       2  0 04:28 ?        00:00:00 [pool_workqueue_release]       
+root           4       2  0 04:28 ?        00:00:00 [kworker/R-kvfree_rcu_reclaim]
+root           5       2  0 04:28 ?        00:00:00 [kworker/R-rcu_gp]
+root           6       2  0 04:28 ?        00:00:00 [kworker/R-sync_wq]
+......
+```
+
+`ps -A` 或 `-e` 查看所有进程，`ps -xjf` 查看进程树：
+
+- a：显示所有进程，包括其他用户进程，如不使用则只显示当前终端会话的相关进程。
+- x：显示没有连接到终端的进程，如不适应则显示当前终端会话相关进程。
+- j：显示进程树，包含每个进程的父子进程，使用该参数会以树的方式呈现。
+- f：以完整格式输出结果。
+
+![](Pasted%20image%2020260113175817.png)
+
+`ps aux` 会查显示所有用户进程（a），显示启动进程的用户（u），并显示未连接到终端的进程（x）。
+
+![](Pasted%20image%2020260113180050.png)
+
+`top -n 1` 可以帮助用户监控系统性能，查看当前运行的进程及其资源使用情况，如 `CPU` 使用率、内存使用情况。`-n` 指定 `top` 命令应显示的迭代次数。在这里，`-n 1` 表示 `top` 只运行一次，然后退出。通常，`top` 命令会持续运行，定期刷新屏幕上的信息。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]                                                                          
+└─$ top -n 1                                                                                           
+top - 05:03:51 up 35 min,  1 user,  load average: 0.17, 0.06, 0.05                                     
+Tasks: 249 total,   1 running, 248 sleeping,   0 stopped,   0 zombie                                   
+%Cpu(s):  6.4 us,  1.1 sy,  0.0 ni, 92.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  29936.7 total,  28312.6 free,   1169.2 used,    879.6 buff/cache     
+MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.  28767.5 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND                         
+   1095 root      20   0  466292 149692  77600 S  18.2   0.5   0:30.93 Xorg                            
+      1 root      20   0   24756  14816  10776 S   0.0   0.0   0:03.35 systemd                         
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.01 kthreadd                        
+      3 root      20   0       0      0      0 S   0.0   0.0   0:00.00 pool_workqueue_release          
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-kvfree_rcu_reclaim    
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-rcu_gp                
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-sync_wq               
+      7 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-slub_flushwq          
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-netns                 
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/0:0H-events_highpri     
+     12 root      20   0       0      0      0 I   0.0   0.0   0:00.00 kworker/u128:0-ipv6_addrconf    
+     13 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-mm_percpu_wq          
+     14 root      20   0       0      0      0 I   0.0   0.0   0:00.00 rcu_tasks_kthread               
+     15 root      20   0       0      0      0 I   0.0   0.0   0:00.00 rcu_tasks_rude_kthread          
+     16 root      20   0       0      0      0 I   0.0   0.0   0:00.00 rcu_tasks_trace_kthread         
+     17 root      20   0       0      0      0 S   0.0   0.0   0:00.02 ksoftirqd/0                     
+     18 root      20   0       0      0      0 I   0.0   0.0   0:01.21 rcu_preempt                     
+     19 root      20   0       0      0      0 S   0.0   0.0   0:00.00 rcu_exp_par_gp_kthread_worker/1 
+     20 root      20   0       0      0      0 S   0.0   0.0   0:00.05 rcu_exp_gp_kthread_worker       
+     21 root      rt   0       0      0      0 S   0.0   0.0   0:00.06 migration/0                     
+     22 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/0                   
+     23 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/0                         
+     24 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/1                         
+     25 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/1                   
+     26 root      rt   0       0      0      0 S   0.0   0.0   0:00.35 migration/1                     
+     27 root      20   0       0      0      0 S   0.0   0.0   0:00.03 ksoftirqd/1                     
+     29 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/1:0H-events_highpri     
+     30 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/2                         
+     31 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/2                   
+     32 root      rt   0       0      0      0 S   0.0   0.0   0:00.35 migration/2                     
+     33 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/2                     
+     35 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/2:0H-events_highpri     
+     36 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/3                         
+     37 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/3                   
+     38 root      rt   0       0      0      0 S   0.0   0.0   0:00.35 migration/3                     
+     39 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/3                     
+     41 root       0 -20       0      0      0 I   0.0   0.0   0:00.02 kworker/3:0H-kblockd            
+     42 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/4                         
+     43 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/4                   
+     44 root      rt   0       0      0      0 S   0.0   0.0   0:00.35 migration/4
+     45 root      20   0       0      0      0 S   0.0   0.0   0:00.01 ksoftirqd/4                     
+     47 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/4:0H-events_highpri     
+     48 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/5                         
+     49 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 idle_inject/5                
+```
+
+#### netstat
+
+在对现有的接口和网络路由进行初始检查后，值得查看现有通信。`netstat` 命令可以与几个不同选项一起使用，以收集有关现有连接信息。
+
+- netstat -a：显示所有在监听的端口和已建立的连接。
+- 

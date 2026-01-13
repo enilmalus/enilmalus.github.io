@@ -46,7 +46,7 @@
 提权原理 常用权限体系 ugo 基本权限：文件权限和所有权，Linux 系统使用基于用户、组和其他用户的权限体系来控制对文件和目录的访问。此外，通过文件的所有者和所属设置，可以实现更细粒度的访问控制。 suid、sgid、sticky 权限：它们可以授予用户或组特定的权限，使得在特定的条件下可以执行一些非常有用的操作。前两者程序将以文件 所有者/所有组 的身份来执行，Sticky Bit 权限用于在共享文件夹中限制文件的删除权限。 Capabilities：Linux Capabilities 是一种将传统的全局权限分割为更小、独立的权限单元的机制，以便于应用程序和服务分配更细粒度的权限，限制潜在的安全风险。 AppArmor 和 SELinux：这两种安全模块通过强制访问控制（MAC）策略增强了系统的安全性。它们可以限制进程和文件的访问权限，从而降低潜在的安全风险。AppArmor 是 MAC 的实现，专为 Linux 系统设计。与 SELinux 不同，APPArmor 使用路径名来识别与保护系统资源，而不是安全上下文。AppArmor 通过定义所谓的 “配置文件”，为每个应用程序设定允许和禁止的操作，从而限制进程对系统资源的访问。AppArmor 相对于 SELinux 来说，更容易配置和管理，但在某些情况下可能不如 SELinux 强大。SELinux 是另一种 MAC 的实现。最初由美国国家安全局（NSA）开发，后来集成到许多 Linux 发行版本中。SELinux 通过为文件、进程等系统资源分配安全上下文（安全标签），并根据预先定义的安全策略规则来控制访问。SELinux 旨在防止恶意软件或由漏洞的应用程序造成的潜在损害，并限制了它们对系统资源的访问。 Access Control Lists（ACLs）：ACLs 提供了比传统文件权限更灵活的权限管理方式，允许为特定用户和组分配文件或目录的特定权限。 其他 20 个权限体系和安全机制 Grsecurity：是一套安全补丁和配置系统，用于 Linux 内核，旨在增强系统的安全性。它包括许多功能，如控制访问、内存保护以及提供系统的稳定性 Grsecurity 通过实现强制访问控制、内存保护以及其他特性，从而降低攻击者利用漏洞的机会。 PaX：是一种用于 Linux 内核的内存保护补丁。它旨在防止攻击者利用内存错误，如缓冲区溢出等漏洞。PaX 主要通过两种技术实现保护：地址空间布局随机化（ASLR）和非可执行内存页。这两种技术互相配合，能有效防止攻击者执行恶意代码。 polkit（PolicyKit）：是一个用于操作系统级别权限的控制框架，它允许非特权用户执行特权操作。它为应用程序提供了一种有限的授权，使其能够执行需要特权的操作，而无需提升整个应用程序的权限。 Execshield：是一种 Linux 内核安全特性，由 Red Hat 公司开发。他的目标是防止缓冲区溢出攻击和其他相关的漏洞利用。Exeshield 的主要功能包括使栈和堆不可执行、随机化内存布局和限制内核态代码的执行。 ASLR：ASLR（Address Space Layout Randomization）是一种内存保护技术，用于随机化程序在内存中的地址空间布局。使得攻击者更难预测恶意代码的地址，降低了攻击的可能性。ASLR 可以应用于操作系统内核和用户程序，增强整个系统的安全性。 TOMOYO Linux：TOMOYO Linux 是一种用于 Linux 内核的强制访问控制（MAC）安全模块，与 SELinux 和 AppArmor 类似。它通过轻量级的配置和易于理解的策略语法，帮助管理员管理程序和访问权限。 SMACK（Simplified Mandatory Access Control Kernel）：SMACK 是一种基于 Linux 的简化强制访问控制内核。它通过为程序分配安全标签来限制进程间通信和文件访问。SMACK 旨在实现简单易用的访问控制策略。 IMA（Integrity Measurement Architecture）：IMA 是一种 Linux 安全模块，用于确保文件的完整性。它通过对文件生成数字签名并将其与文件一起储存，以确保文件没有被篡改。IMA 可以与其他安全框架（如 SELinux 或 AppArmor）配合使用，提供更全面的系统安全保护。 Yama：Yama 是一种 Linux 安全模块，用于实施一些基本的系统安全策略，例如限制进程跟踪功能。Yama 的目的是提供一些额外的保护措施，以降低潜在漏洞的影响。 CGroups（Control Groups）：CGroups 是一种 Linux 内核功能，允许将进程分组分配资源（如 CPU、内存和磁盘空间）。虽然 CGroups 主要用于资源管理，但它也可以用于隔离进程，提高系统安全性。 Linux Namespaces：Namespaces 是一种 Linux 内核特性，用于隔离进程的运行环境。Namespaces 可以限制进程访问其他进程、文件系统和网络资源，从而提高系统安全性。 StackGuard：StackGuard 是一种编译器扩展，用于防止缓冲区溢出攻击。它在栈帧中插入一个 “canary” 值，以检测潜在的栈溢出。如果 “canary” 值被篡改，程序会在攻击者获得执行权限之前终止，从而阻止攻击。 ProPolice：Propolice（也称为 SSP，Stack Smashing Protector）是另一种编译器扩展，类似于 StackGuard。它也在栈帧中插入 “canary” 值，以防止缓冲区溢出攻击。ProPolice 同时还对局部变量进行重新排序，以减小攻击成功的可能性。 seccomp：seccomp（安全计算模式）是一种 Linux 内核功能，允许进程限制其系统调用的使用。通过使用 seccomp，程序可以限制其对系统资源的访问，从而提高安全性。seccomp 通常与沙箱技术和容器一起使用，为应用程序提供隔离的运行环境。 ptrace：ptrace 是一种允许一个进程观察和控制另一个进程的执行的 Linux 系统调用。虽然 ptrace 通常用于调试目的，但它也可用于实现沙箱和其他安全措施。然而，ptrace 本身可能会被攻击者利用，因此需要谨慎使用。 Capsicum：Capsicum 是一种为 Unix-like 系统（如 FreeBSD 和 Linux）提供沙箱和能力分离的安全框架。它允许程序将自己限制在受限的沙箱环境中运行，从而降低潜在漏洞的影响。 MPROTECT：MPROTECT 是一种用于标记内存页为只读或不可执行的内核功能。它可以防止攻击者将数据区域（如堆和栈）用于执行恶意代码。MPROTECT 通常与其他内存保护技术（如 ASLR 和 PaX ）一起使用，提高系统安全性。 Mandatory Access Control（MAC）：强制控制访问是一种安全策略，强制执行访问控制规则。与自主访问控制（Discretionary Access Control，DAC）相比，MAC 更严格地限制了对象（如文件和进程）之间的交互。AppArmor 和 SELinux 就是 MAC 地实现。 Chroot：Chroot 是一种将进程限制在文件系统地子目录中运行地技术，从而限制进程访问系统中的其他部分。尽管 Chroot 可以提供一定程度的隔离，但它并不是一个完全安全的沙箱解决方案。 Firejail：Firejail 是一种用于 Linux 和其他 Unix-like 系统的沙箱工具。它允许将程序限制在一个受限的运行环境中，以减少潜在的安全风险。Firejail 可以与 seccomp、namespaces、CGroups 等内核功能结合使用，以提供更强大的隔离和安全保护。 Kernel Address Space Layout Randomization（KASLR）：KASLR 是一种内核级别的地址空间布局随机化技术，用于随机化内核代码和数据在内存中的地址。KASLR 旨在防止攻击者利用内核漏洞，从而提高系统安全性。 Control Flow Integrity（CFI）：控制流完整性是一种用于检测和防止控制流劫持攻击（如返回导向编程和条约导向编程）的安全策略。CFI 可以在编译器和硬件层面实现，以保护程序免受此类攻击。 AddressSanitizer：AddressSanitzer 是一种用于检测内存错误（如缓冲区溢出和使用后释放）的编译器扩展。 AM（Pluggable Authentication Modules，可插入认证模块）是一种灵活的认证框架，用于在 Linux 和 UNIX 系统上实现各种认证策略。PAM 允许系统管理员在不修改已有程序的情况下，为各种应用程序和服务配置和管理认证方法。PAM 的核心概念是将认证过程分解为一系列可插入的模块，这些模块可以独立于应用程序进行更新和配置。这种分离使得管理员可以轻松地在系统中添加、删除或更改认证策略，而无需重新编译或修改应用程序。PAM 主要用于以下四个方面： 认证：验证用户身份，通常是通过检查用户输入的用户名和密码完成。PAM 模块可以支持各种不同地认证方法，如本地密码文件、LDAP、Kerberos 等。 账户管理：检查用户账户的访问权限，如密码过期、时间限制、IP 地址限制等。账户管理模块可以在用户通过认证后执行这些检查。 会话管理：管理用户登入会话。会话管理模块可以在用户登录和注销时执行特定的任务，如挂在家目录、设置环境变量等。 密码管理：处理用户密码更改和相关策略。密码管理模块可以强制实施密码复杂性规则、历史记录检查等。 提权原理 低权限可修改的执行文件或脚本，能以高权限身份允许。 从用户行为角度，用低权限用户的运维人员，也需要记忆、输入、备份凭据，以备使用高权限用户完成操作。 在权限的上层，捕捉、拦截、修改凭据信息或权限信息，如一些基于内存读取操作实现的内核利用。 Linux 提权枚举 终端升级与提高稳定性 在 Linux 目标获得立足点时，首先应该尝试的是将 shell 升级为完整的 TTY（交互式 shell）。">
   <meta itemprop="datePublished" content="2026-01-05T12:00:00+08:00">
   <meta itemprop="dateModified" content="2026-01-05T12:00:00+08:00">
-  <meta itemprop="wordCount" content="448">
+  <meta itemprop="wordCount" content="1442">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
@@ -125,7 +125,7 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        3 minutes
+        7 minutes
 
         
       </p>
@@ -301,6 +301,184 @@
 <li>-a（全部文件）：列出所有文件，包括以 . 开头的隐藏文件。</li>
 <li>-h（人性化格式）：以易读的格式显示文件大小，例如 KB、MB、GB 等。</li>
 </ol>
+<h4 id="history">history</h4>
+<p>使用 <code>history</code> 命令查看早期命令可以让我们了解目标系统，尽管很少，但可以储存诸如密码、用户名之类的信息。</p>
+<p><img src="Pasted%20image%2020260113173925.png" alt=""></p>
+<h4 id="etcpasswd">/etc/passwd</h4>
+<p>阅读 <code>/etc/passwd</code> 文件是发现系统上用户的简便方式。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                    
+</span></span><span style="display:flex;"><span>└─$ cat /etc/passwd                                                               
+</span></span><span style="display:flex;"><span>root:x:0:0:root:/root:/usr/bin/zsh               
+</span></span><span style="display:flex;"><span>daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin  
+</span></span><span style="display:flex;"><span>bin:x:2:2:bin:/bin:/usr/sbin/nologin                                                                   
+</span></span><span style="display:flex;"><span>sys:x:3:3:sys:/dev:/usr/sbin/nologin                                                                   
+</span></span><span style="display:flex;"><span>sync:x:4:65534:sync:/bin:/bin/sync                                                                     
+</span></span><span style="display:flex;"><span>games:x:5:60:games:/usr/games:/usr/sbin/nologin   
+</span></span><span style="display:flex;"><span>man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin                                                           
+</span></span><span style="display:flex;"><span>mail:x:8:8:mail:/var/mail:/usr/sbin/nologin                                                            
+</span></span><span style="display:flex;"><span>news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin 
+</span></span><span style="display:flex;"><span>proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p>输出很长，可以通过剪切转换为对暴力破解有用的列表。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/passwd | cut -d <span style="color:#e6db74">&#39;:&#39;</span> -f <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>root 
+</span></span><span style="display:flex;"><span>daemon
+</span></span><span style="display:flex;"><span>bin     
+</span></span><span style="display:flex;"><span>sys      
+</span></span><span style="display:flex;"><span>sync   
+</span></span><span style="display:flex;"><span>games
+</span></span><span style="display:flex;"><span>man 
+</span></span><span style="display:flex;"><span>lp   
+</span></span><span style="display:flex;"><span>mail 
+</span></span><span style="display:flex;"><span>news
+</span></span><span style="display:flex;"><span>uucp                                              
+</span></span><span style="display:flex;"><span>proxy
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p><code>/etc/passwd</code> 中记载了所有用户（包括系统或服务器用户）。</p>
+<h4 id="etccrontab">/etc/crontab</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/crontab                 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /etc/crontab: system-wide crontab</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># command to install the new version when you edit this file</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and files in /etc/cron.d. These files also have username fields,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># that none of the other crontabs do.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SHELL<span style="color:#f92672">=</span>/bin/sh
+</span></span><span style="display:flex;"><span>PATH<span style="color:#f92672">=</span>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example of job definition:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># .---------------- minute (0 - 59)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  .------------- hour (0 - 23)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  .---------- day of month (1 - 31)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  |  |  |</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># *  *  *  *  * user-name command to be executed</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">17</span> *    * * *   root    cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">25</span> <span style="color:#ae81ff">6</span>    * * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">{</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.daily; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">47</span> <span style="color:#ae81ff">6</span>    * * <span style="color:#ae81ff">7</span>   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">{</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.weekly; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">52</span> <span style="color:#ae81ff">6</span>    <span style="color:#ae81ff">1</span> * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">{</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.monthly; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span></code></pre></div><p>查看自动任务。</p>
+<h4 id="echo-path">echo $PATH</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo $PATH                                         
+</span></span><span style="display:flex;"><span>/home/kali/.cargo/bin:/home/kali/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/kali/.dotnet/tools
+</span></span></code></pre></div><p>查看环境变量，也可以使用 <code>env</code> 显示更全的环境变量。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ env                                                                                                
+</span></span><span style="display:flex;"><span>COLORFGBG<span style="color:#f92672">=</span>15;<span style="color:#ae81ff">0</span>    
+</span></span><span style="display:flex;"><span>COLORTERM<span style="color:#f92672">=</span>truecolor
+</span></span><span style="display:flex;"><span>COMMAND_NOT_FOUND_INSTALL_PROMPT<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>DBUS_SESSION_BUS_ADDRESS<span style="color:#f92672">=</span>unix:path<span style="color:#f92672">=</span>/run/user/1000/bus
+</span></span><span style="display:flex;"><span>DESKTOP_SESSION<span style="color:#f92672">=</span>lightdm-xsession
+</span></span><span style="display:flex;"><span>DISPLAY<span style="color:#f92672">=</span>:0.0     
+</span></span><span style="display:flex;"><span>DOTNET_CLI_TELEMETRY_OPTOUT<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>GDMSESSION<span style="color:#f92672">=</span>lightdm-xsession       
+</span></span><span style="display:flex;"><span>HOME<span style="color:#f92672">=</span>/home/kali
+</span></span><span style="display:flex;"><span>LANG<span style="color:#f92672">=</span>en_US.UTF-8
+</span></span><span style="display:flex;"><span>LANGUAGE<span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_mb<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_md<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_me<span style="color:#f92672">=</span>        
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_se<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_so<span style="color:#f92672">=</span>        
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_ue<span style="color:#f92672">=</span>                                                                                       
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_us<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LOGNAME<span style="color:#f92672">=</span>kali
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><h4 id="ps--ef">ps -ef</h4>
+<p><code>ps</code> 用来查看进程，各个数据列的意义如下：</p>
+<ul>
+<li>PID：进程 ID（进程唯一）</li>
+<li>TTY：用户使用的终端类型</li>
+<li>Time：进程使用的 CPU 时间（并非进程运行时间）</li>
+<li>CMD：正在运行的命令或可执行文件</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                          
+</span></span><span style="display:flex;"><span>└─$ ps -ef                                                                                             
+</span></span><span style="display:flex;"><span>UID          PID    PPID  C STIME TTY          TIME CMD                                           
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:03 /sbin/init splash           
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">2</span>       <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kthreadd<span style="color:#f92672">]</span>                
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">3</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>pool_workqueue_release<span style="color:#f92672">]</span>       
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">4</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kworker/R-kvfree_rcu_reclaim<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">5</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kworker/R-rcu_gp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">6</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kworker/R-sync_wq<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p><code>ps -A</code> 或 <code>-e</code> 查看所有进程，<code>ps -xjf</code> 查看进程树：</p>
+<ul>
+<li>a：显示所有进程，包括其他用户进程，如不使用则只显示当前终端会话的相关进程。</li>
+<li>x：显示没有连接到终端的进程，如不适应则显示当前终端会话相关进程。</li>
+<li>j：显示进程树，包含每个进程的父子进程，使用该参数会以树的方式呈现。</li>
+<li>f：以完整格式输出结果。</li>
+</ul>
+<p><img src="Pasted%20image%2020260113175817.png" alt=""></p>
+<p><code>ps aux</code> 会查显示所有用户进程（a），显示启动进程的用户（u），并显示未连接到终端的进程（x）。</p>
+<p><img src="Pasted%20image%2020260113180050.png" alt=""></p>
+<p><code>top -n 1</code> 可以帮助用户监控系统性能，查看当前运行的进程及其资源使用情况，如 <code>CPU</code> 使用率、内存使用情况。<code>-n</code> 指定 <code>top</code> 命令应显示的迭代次数。在这里，<code>-n 1</code> 表示 <code>top</code> 只运行一次，然后退出。通常，<code>top</code> 命令会持续运行，定期刷新屏幕上的信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                          
+</span></span><span style="display:flex;"><span>└─$ top -n <span style="color:#ae81ff">1</span>                                                                                           
+</span></span><span style="display:flex;"><span>top - 05:03:51 up <span style="color:#ae81ff">35</span> min,  <span style="color:#ae81ff">1</span> user,  load average: 0.17, 0.06, 0.05                                     
+</span></span><span style="display:flex;"><span>Tasks: <span style="color:#ae81ff">249</span> total,   <span style="color:#ae81ff">1</span> running, <span style="color:#ae81ff">248</span> sleeping,   <span style="color:#ae81ff">0</span> stopped,   <span style="color:#ae81ff">0</span> zombie                                   
+</span></span><span style="display:flex;"><span>%Cpu<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:  6.4 us,  1.1 sy,  0.0 ni, 92.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+</span></span><span style="display:flex;"><span>MiB Mem :  29936.7 total,  28312.6 free,   1169.2 used,    879.6 buff/cache     
+</span></span><span style="display:flex;"><span>MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.  28767.5 avail Mem 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND                         
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">1095</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">466292</span> <span style="color:#ae81ff">149692</span>  <span style="color:#ae81ff">77600</span> S  18.2   0.5   0:30.93 Xorg                            
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">1</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">24756</span>  <span style="color:#ae81ff">14816</span>  <span style="color:#ae81ff">10776</span> S   0.0   0.0   0:03.35 systemd                         
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">2</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 kthreadd                        
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">3</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 pool_workqueue_release          
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">4</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-kvfree_rcu_reclaim    
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">5</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-rcu_gp                
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">6</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-sync_wq               
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">7</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-slub_flushwq          
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">8</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-netns                 
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">10</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/0:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">12</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/u128:0-ipv6_addrconf    
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">13</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-mm_percpu_wq          
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">14</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 rcu_tasks_kthread               
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">15</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 rcu_tasks_rude_kthread          
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">16</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 rcu_tasks_trace_kthread         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">17</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.02 ksoftirqd/0                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">18</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:01.21 rcu_preempt                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">19</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 rcu_exp_par_gp_kthread_worker/1 
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">20</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.05 rcu_exp_gp_kthread_worker       
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">21</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.06 migration/0                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">22</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/0                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">23</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/0                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">24</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/1                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">25</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/1                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">26</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/1                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">27</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.03 ksoftirqd/1                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">29</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/1:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">30</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/2                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">31</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/2                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">32</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/2                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">33</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 ksoftirqd/2                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">35</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/2:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">36</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/3                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">37</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/3                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">38</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/3                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">39</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 ksoftirqd/3                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">41</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.02 kworker/3:0H-kblockd            
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">42</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/4                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">43</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/4                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">44</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/4
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">45</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 ksoftirqd/4                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">47</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/4:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">48</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/5                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">49</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/5                
+</span></span></code></pre></div><h4 id="netstat">netstat</h4>
+<p>在对现有的接口和网络路由进行初始检查后，值得查看现有通信。<code>netstat</code> 命令可以与几个不同选项一起使用，以收集有关现有连接信息。</p>
+<ul>
+<li>netstat -a：显示所有在监听的端口和已建立的连接。</li>
+<li></li>
+</ul>
 
       </div>
     </article>
@@ -327,7 +505,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        448 Words
+        1442 Words
       </p>
 
       <p>
@@ -356,7 +534,7 @@
             <span class="button previous">
                 <a href="http://localhost:1313/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/">
                     <span class="button__icon">←</span>
-                    <span class="button__text">如何根据具体的目标定制字典</span>
+                    <span class="button__text">WIFI 破解技术</span>
                 </a>
             </span>
             
