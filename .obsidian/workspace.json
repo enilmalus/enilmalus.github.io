@@ -160,17 +160,21 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:新建数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false,
-      "bases:创建新数据库": false
+      "command-palette:打开命令面板": false
     }
   },
   "active": "203603a4d43cfa47",
   "lastOpenFiles": [
+    "content/posts/Linux 提权专区/Pasted image 20260114191253.png",
+    "content/posts/Linux 提权专区/Pasted image 20260114190632.png",
+    "content/posts/Linux 提权专区/Pasted image 20260114190616.png",
+    "content/posts/Linux 提权专区/Pasted image 20260114185635.png",
     "public/posts/linux-提权专区/Pasted image 20260113180050.png",
     "content/posts/Linux 提权专区/Pasted image 20260113180050.png",
     "public/posts/linux-提权专区/Pasted image 20260113175817.png",
@@ -182,10 +186,6 @@
     "content/posts/WIFI破解技术/index.md",
     "public/posts/wifi破解技术/index.html",
     "public/posts/nullbyte-writeup/Credit Card Scammers Writeup/mmm.png",
-    "public/posts/nullbyte-writeup/Credit Card Scammers Writeup/lll.png",
-    "public/posts/nullbyte-writeup/Credit Card Scammers Writeup/kkk.png",
-    "public/posts/nullbyte-writeup/Credit Card Scammers Writeup/jjj.png",
-    "public/posts/nullbyte-writeup/Credit Card Scammers Writeup/iii.png",
     "public/posts/nullbyte-writeup/Credit Card Scammers Writeup",
     "public/posts/wifi破解技术",
     "content/posts/渗透测试通用方法论/index.md",

