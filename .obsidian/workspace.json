@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -171,6 +172,9 @@
   },
   "active": "203603a4d43cfa47",
   "lastOpenFiles": [
+    "content/posts/Linux 提权专区/Pasted image 20260119144813.png",
+    "content/posts/Linux 提权专区/Pasted image 20260119142451.png",
+    "content/posts/Linux 提权专区/Pasted image 20260118180538.png",
     "content/posts/Linux 提权专区/index.md",
     "content/posts/Linux 提权专区/Pasted image 20260115234547.png",
     "content/posts/Linux 提权专区/Pasted image 20260115234353.png",
@@ -181,8 +185,6 @@
     "content/posts/Linux 提权专区/Pasted image 20260114190616.png",
     "content/posts/Linux 提权专区/Pasted image 20260114185635.png",
     "public/posts/linux-提权专区/Pasted image 20260113180050.png",
-    "content/posts/Linux 提权专区/Pasted image 20260113180050.png",
-    "public/posts/linux-提权专区/Pasted image 20260113175817.png",
     "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
     "public/posts/wifi破解技术/index.html",
     "public/posts/nullbyte-writeup/Credit Card Scammers Writeup",

