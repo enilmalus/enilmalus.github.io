@@ -12,6 +12,12 @@ url = "/posts/"
 weight = 1
 
 [[menu.main]]
+identifier = "long-articles"
+name = "长文章"
+url = "/long-articles/"
+weight = 20 # 数字越大越靠右，根据需要调整顺序
+
+[[menu.main]]
 identifier = "tags"
 name = "标签"
 url = "/tags/"

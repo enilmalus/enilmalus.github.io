@@ -89,7 +89,7 @@
 
         <span class="header__right">
                 <nav class="menu">
-    <ul class="menu__inner"><li><a href="/posts/">文章</a></li><li><a href="/tags/">标签</a></li>
+    <ul class="menu__inner"><li><a href="/long-articles/">长文章</a></li><li><a href="/posts/">文章</a></li><li><a href="/tags/">标签</a></li>
     </ul>
 </nav>
 
@@ -107,46 +107,246 @@
             <div class="content">
                 
 
-<div class="hacker-terminal-container">
+
+<style>
+     
+    .hacker-page-wrapper {
+         
+        background-color: transparent; 
+         
+          
+        min-height: 80vh;  
+        padding: 20px;
+         
+        font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    }
+
+     
+    .hacker-terminal-container {
+        max-width: 900px;
+        margin: 40px auto;
+         
+        background: #111; 
+        color: #e0e0e0;  
+        border: 1px solid #333;
+        border-radius: 8px;
+         
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2), 0 20px 50px rgba(0,0,0,0.4);
+        font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+        overflow: hidden;
+        line-height: 1.5;
+        position: relative;
+        z-index: 1;
+        text-align: left;  
+    }
+
+     
+     
+    .hacker-terminal-container::before {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(18, 16, 16, 0) 50%,
+            rgba(0, 0, 0, 0.25) 50%
+        );
+        background-size: 100% 4px;  
+        z-index: 999;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+     
+    .terminal-header {
+        background: #1f1f1f;
+        border-bottom: 1px solid #2b2b2b;
+        display: flex; 
+        align-items: center;
+        padding: 10px 15px;
+        position: relative;
+        z-index: 2;
+        height: 40px; 
+        box-sizing: border-box;
+    }
+
+    .terminal-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-right: auto; 
+    }
+
+     
+    .terminal-buttons .btn {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: block;
+        flex-shrink: 0; 
+    }
+    .btn.red { background: #ff5f56; box-shadow: 0 0 5px #ff5f56; }
+    .btn.yellow { background: #ffbd2e; box-shadow: 0 0 5px #ffbd2e; }
+    .btn.green { background: #27c93f; box-shadow: 0 0 5px #27c93f; }
+
+     
+    .terminal-body {
+        background-color: #0c0c0c;
+        color: #ccc;
+        text-shadow: 0 0 1px rgba(255, 255, 255, 0.1); 
+        min-height: 500px;
+        padding: 30px;
+        position: relative;
+        overflow-x: auto;  
+    }
+
+     
+    .command-line {
+        margin-bottom: 20px;
+        font-size: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .prompt-user { color: #00d7ff; font-weight: bold; }
+    .prompt-at { color: #fff; }
+    .prompt-host { color: #00d7ff; font-weight: bold; }
+    .prompt-colon { color: #fff; }
+    .prompt-path { color: #af87ff; font-weight: bold; }
+    .prompt-char { color: #fff; font-weight: bold; margin-right: 8px; }
+    .cmd { color: #a6e22e; font-weight: bold; }
+
+     
+    .hacker-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .list-item {
+        display: grid;
+         
+        grid-template-columns: 100px 30px 80px 80px 80px 1fr; 
+        gap: 15px;
+        padding: 4px 10px;
+        align-items: center;
+        border-radius: 2px;
+        white-space: nowrap;  
+    }
+
+    .list-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+    }
+
+     
+    .col-perm { color: #e6db74; }
+    .col-link-count { color: #66d9ef; text-align: right; }
+    .col-user { color: #f92672; }
+    .col-group { color: #f92672; }
+    .col-size { color: #ae81ff; text-align: right; font-family: monospace;} 
     
+    .col-name {
+        white-space: nowrap;
+    }
     
-    <div class="terminal-header">
-        <div class="terminal-buttons">
-            <div class="btn red" title="Close"></div>
-            <div class="btn yellow" title="Minimize"></div>
-            <div class="btn green" title="Maximize"></div>
+    .name-link {
+        color: #66d9ef;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.2s;
+        text-shadow: 0 0 2px rgba(102, 217, 239, 0.4);
+    }
+
+    .name-link:hover {
+        color: #fff;
+        text-shadow: 0 0 8px rgba(102, 217, 239, 0.8);
+        text-decoration: underline;
+    }
+
+     
+    .total-line {
+        color: #888;
+        margin-bottom: 5px;
+        padding-left: 10px;  
+        font-family: inherit;
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 1.2em;
+        background-color: #ccc;
+        vertical-align: sub;
+        animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+     
+    .terminal-body::-webkit-scrollbar { height: 8px; width: 8px; }
+    .terminal-body::-webkit-scrollbar-track { background: #0c0c0c; }
+    .terminal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    
+     
+    @media (max-width: 768px) {
+        .hacker-terminal-container { margin: 10px; }
+        .terminal-body { padding: 15px; }
+        
+         
+        .list-item {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+
+<div class="hacker-page-wrapper"> 
+    <div class="hacker-terminal-container">
+        
+        
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="btn red" title="Close"></div>
+                <div class="btn yellow" title="Minimize"></div>
+                <div class="btn green" title="Maximize"></div>
+            </div>
+            <div class="terminal-title"></div>
         </div>
-        
-        <div class="terminal-title"></div>
-    </div>
-
-    
-    <div class="terminal-body">
-        
-        
-        <div class="command-line">
-            <span class="prompt-user">Enil</span><span class="prompt-at">@</span><span class="prompt-host">enilmalus</span>
-            <span class="prompt-colon">:</span>
-            <span class="prompt-path">/var/www/tags</span>
-            <span class="prompt-char">#</span>
-            <span class="cmd">ls -liah</span>
-        </div>
 
         
-        <div class="total-line">total 0 directories</div>
-
-        <ul class="hacker-list">
+        <div class="terminal-body">
             
             
-        </ul>
-        
-        
-        <div class="command-line footer-cmd" style="margin-top: 20px;">
-            <span class="prompt-user">Enil</span><span class="prompt-at">@</span><span class="prompt-host">enilmalus</span>
-            <span class="prompt-colon">:</span>
-            <span class="prompt-path">/var/www/tags</span>
-            <span class="prompt-char">#</span>
-            <span class="cursor">_</span>
+            <div class="command-line">
+                <span class="prompt-user">Enil</span><span class="prompt-at">@</span><span class="prompt-host">enilmalus</span>
+                <span class="prompt-colon">:</span>
+                <span class="prompt-path">/var/www/tags</span>
+                <span class="prompt-char">#</span>
+                <span class="cmd">ls -liah</span>
+            </div>
+
+            
+            <div class="total-line">total 0 directories</div>
+
+            <ul class="hacker-list">
+                
+                
+            </ul>
+            
+            
+            <div class="command-line footer-cmd" style="margin-top: 20px;">
+                <span class="prompt-user">Enil</span><span class="prompt-at">@</span><span class="prompt-host">enilmalus</span>
+                <span class="prompt-colon">:</span>
+                <span class="prompt-path">/var/www/tags</span>
+                <span class="prompt-char">#</span>
+                <span class="cursor">_</span>
+            </div>
         </div>
     </div>
 </div>

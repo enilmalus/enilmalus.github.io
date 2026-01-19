@@ -7,6 +7,7 @@ images:
 tags:
   - Hack
   - 技术
+is_long: true
 ---
 > 本文章持续更新中 
 ## 遇见的情况以及方法论

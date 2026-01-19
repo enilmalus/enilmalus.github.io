@@ -7,6 +7,7 @@ images:
 tags:
   - Hack
   - 技术
+is_long: true
 ---
 ## Linux 提权简介
 

@@ -1,0 +1,123 @@
+{{ define "main" }}
+
+<style>
+    /* --- 1. 基础设定 --- */
+    .hacker-page-wrapper {
+        padding: 20px;
+        font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+        min-height: 80vh;
+        background-color: transparent; 
+    }
+
+    /* --- 2. 极简列表容器 --- */
+    .simple-log-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px 0; 
+    }
+
+    /* --- 3. 列表项样式 --- */
+    .log-item {
+        display: flex;
+        align-items: center; /* 垂直居中对齐 */
+        padding: 10px 15px;
+        margin-bottom: 2px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+        text-decoration: none; 
+    }
+
+    .log-item:hover {
+        background-color: rgba(40, 167, 69, 0.1); 
+    }
+
+    /* --- 4. 日期样式 --- */
+    .log-date {
+        font-family: 'Fira Code', monospace;
+        color: #666; 
+        font-size: 0.9rem;
+        min-width: 140px; 
+        text-align: right; /* 文字右对齐 */
+        margin-left: 15px; /* 左侧留出间距 */
+        white-space: nowrap;
+    }
+    
+    .log-item:hover .log-date {
+        color: #28a745; 
+    }
+
+    /* --- 5. 标题样式 --- */
+    .log-message {
+        color: #ccc; 
+        font-size: 1.1rem;
+        font-weight: 500;
+        flex-grow: 1; /* 核心：占据剩余空间，将日期推到最右侧 */
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis; /* 防止标题过长换行 */
+        white-space: nowrap;
+    }
+
+    .log-arrow {
+        color: #444;
+        margin-right: 12px;
+        font-weight: bold;
+    }
+    .log-item:hover .log-arrow {
+        color: #28a745;
+    }
+
+    .log-item:hover .log-message {
+        color: #fff;
+        text-shadow: 0 0 8px rgba(40, 167, 69, 0.6); 
+    }
+
+    /* --- 6. 移动端适配 --- */
+    @media (max-width: 600px) {
+        .log-item {
+            flex-direction: column; 
+            align-items: flex-start;
+            padding: 12px;
+            border-bottom: 1px dashed #333;
+        }
+        .log-message {
+            white-space: normal; /* 手机上允许换行 */
+            margin-bottom: 5px;
+        }
+        .log-date {
+            font-size: 0.8rem;
+            margin-left: 0;
+            color: #555;
+            width: 100%;
+            text-align: left; /* 手机上左对齐更自然 */
+        }
+        .log-arrow { display: none; } 
+    }
+</style>
+
+<div class="hacker-page-wrapper">
+    <div class="simple-log-container">
+        
+        <!-- 核心修改：定义筛选逻辑 -->
+        <!-- 筛选全站所有 RegularPages (普通文章)，且 Params.is_long 等于 true 的文章 -->
+        {{ $longArticles := where .Site.RegularPages "Params.is_long" true }}
+
+        <!-- 循环输出筛选后的文章 -->
+        {{ range $longArticles }}
+        <a href="{{ .Permalink }}" class="log-item">
+            <span class="log-arrow">>></span>
+            <!-- 修改：标题在前 -->
+            <span class="log-message">{{ .Title }}</span>
+            <!-- 修改：日期在后 -->
+            <span class="log-date">[{{ .Date.Format "2006-01-02" }}]</span>
+        </a>
+        {{ end }}
+
+    </div>
+</div>
+
+<style>
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+</style>
+
+{{ end }}
