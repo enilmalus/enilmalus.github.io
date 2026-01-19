@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "zsh",
+                "query": "按标签",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,12 +74,12 @@
               "title": "书签"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -170,28 +170,34 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "203603a4d43cfa47",
+  "active": "ff261dd205cec28f",
   "lastOpenFiles": [
-    "content/posts/Linux 提权专区/Pasted image 20260119144813.png",
-    "content/posts/Linux 提权专区/Pasted image 20260119142451.png",
-    "content/posts/Linux 提权专区/Pasted image 20260118180538.png",
+    "public/tags/工具/page/1/index.html",
+    "public/tags/工具/page/1",
+    "public/tags/工具/page",
+    "public/tags/writeup/page/1/index.html",
+    "public/tags/writeup/page/1",
+    "public/tags/writeup/page",
+    "public/tags/nmap/page/1/index.html",
+    "public/tags/nmap/page/1",
+    "public/tags/nmap/page",
+    "public/tags/hack/page/2/index.html",
+    "public/tags/hack/page/2",
+    "public/posts/linux-提权专区/Pasted image 20260119144813.png",
+    "public/posts/linux-提权专区/Pasted image 20260119142451.png",
+    "public/posts/linux-提权专区/Pasted image 20260118180538.png",
+    "public/posts/linux-提权专区/Pasted image 20260115234547.png",
+    "public/posts/linux-提权专区/Pasted image 20260115234353.png",
+    "public/posts/linux-提权专区/Pasted image 20260115231901.png",
+    "public/posts/linux-提权专区/Pasted image 20260114191253.png",
+    "public/posts/linux-提权专区/Pasted image 20260114190632.png",
+    "public/posts/linux-提权专区/Pasted image 20260114190616.png",
+    "public/posts/linux-提权专区/Pasted image 20260114185635.png",
     "content/posts/Linux 提权专区/index.md",
-    "content/posts/Linux 提权专区/Pasted image 20260115234547.png",
-    "content/posts/Linux 提权专区/Pasted image 20260115234353.png",
-    "content/posts/Linux 提权专区/Pasted image 20260115231901.png",
     "content/posts/WIFI破解技术/index.md",
-    "content/posts/Linux 提权专区/Pasted image 20260114191253.png",
-    "content/posts/Linux 提权专区/Pasted image 20260114190632.png",
-    "content/posts/Linux 提权专区/Pasted image 20260114190616.png",
-    "content/posts/Linux 提权专区/Pasted image 20260114185635.png",
-    "public/posts/linux-提权专区/Pasted image 20260113180050.png",
     "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
-    "public/posts/wifi破解技术/index.html",
-    "public/posts/nullbyte-writeup/Credit Card Scammers Writeup",
-    "public/posts/wifi破解技术",
     "content/posts/渗透测试通用方法论/index.md",
     "content/posts/Venom Writeup/index.md",
-    "content/posts/WIFI破解技术",
     "content/posts/NullByte Writeup/index.md",
     "content/posts/nmap 扫描原理与使用心得/index.md",
     "content/posts/Momentum2 Writeup/index.md",
@@ -207,13 +213,7 @@
     "content/posts/如何根据具体的目标定制字典/index.md",
     "content/posts/流量包分析，以 tshark、tcpdump、wireshark 为例/index.md",
     "content/posts/端口敲门、单包授权与零开端口/index.md",
-    "public/posts/linux-提权专区/index.html",
-    "public/posts/nmap-扫描原理与使用心得/index.html",
-    "public/posts/nmap-扫描原理与使用心得",
-    "public/posts/linux-提权专区",
     "content/posts/未命名.md",
-    "content/posts/Linux 提权专区",
-    "public/posts/渗透测试通用方法论/index.html",
     "content/posts/aaa/index.md",
     "Pasted.md",
     "content/posts/渗透测试方法论（2025.12.27总结）.md",
