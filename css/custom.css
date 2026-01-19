@@ -1,0 +1,229 @@
+/* 1. 全局与背景 - 引入 CRT 扫描线纹理 */
+body {
+    background-color: #0d0d0d !important; /* 深灰黑，比纯黑更有质感 */
+    color: #e0e0e0;
+    /* 隐藏默认滚动条，使用自定义的 */
+    scrollbar-width: thin;
+    scrollbar-color: #333 #0d0d0d;
+}
+
+/* 2. 终端容器 - 增加发光边框 */
+.hacker-terminal-container {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #111; /* 终端背景 */
+    border: 1px solid #333;
+    border-radius: 8px;
+    /* 外部辉光，增加立体感 */
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.05), 0 20px 50px rgba(0,0,0,0.8);
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace; /* 推荐使用 Fira Code */
+    overflow: hidden;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- CRT 扫描线特效层 --- */
+.hacker-terminal-container::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px; /* 扫描线密度 */
+    z-index: 999;
+    pointer-events: none; /* 确保不影响点击 */
+    opacity: 0.6;
+}
+
+/* 3. 终端顶部栏 - 扁平化极简风 */
+.terminal-header {
+    background: #1f1f1f;
+    border-bottom: 1px solid #2b2b2b;
+    display: grid;
+    grid-template-columns: 70px 1fr; 
+    align-items: center;
+    padding: 10px 15px;
+    position: relative;
+    z-index: 2; /* 在扫描线之上 */
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* 拟物化按钮 */
+.terminal-buttons .btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: block;
+}
+.btn.red { background: #ff5f56; box-shadow: 0 0 5px #ff5f56; }
+.btn.yellow { background: #ffbd2e; box-shadow: 0 0 5px #ffbd2e; }
+.btn.green { background: #27c93f; box-shadow: 0 0 5px #27c93f; }
+
+.terminal-title {
+    text-align: center; /* 居中标题更像现代终端模拟器 */
+    color: #888;
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0.7;
+    margin-right: 70px; /* 视觉平衡左侧按钮 */
+}
+
+/* 4. 终端内容区 - 增加内阴影 */
+.terminal-body {
+    background-color: #0c0c0c; /* 比头部更黑 */
+    /* 荧光字效果 */
+    color: #ccc;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.1); 
+    min-height: 500px;
+    padding: 30px;
+    position: relative;
+    /* 新增：允许横向滚动，防止不换行导致内容被截断 */
+    overflow-x: auto;
+}
+
+/* 命令行提示符 - Kali/Zsh 风格 */
+.command-line {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Prompt 颜色方案 */
+.prompt-user { color: #00d7ff; font-weight: bold; } /* 蓝色用户 */
+.prompt-at { color: #fff; }
+.prompt-host { color: #00d7ff; font-weight: bold; }
+.prompt-colon { color: #fff; }
+.prompt-path { color: #af87ff; font-weight: bold; } /* 紫色路径 */
+.prompt-char { color: #fff; font-weight: bold; margin-right: 8px; }
+
+.cmd { color: #a6e22e; font-weight: bold; } /* Monokai 绿 */
+
+/* 5. 列表风格 - ls -l 完美复刻 */
+.hacker-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.list-item, .list-header {
+    display: grid;
+    /* 权限(100px) 连接数(30px) 用户(80px) 组(80px) 大小(80px) 时间(120px) 名称(自动) */
+    grid-template-columns: 100px 30px 80px 80px 80px 1fr; 
+    gap: 15px;
+    padding: 4px 10px;
+    align-items: center;
+    border-radius: 2px;
+    /* 新增：强制不换行，保持整行对其 */
+    white-space: nowrap;
+}
+
+/* 头部样式 - 稍微暗淡一点 */
+.list-header {
+    color: #555;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+}
+
+/* 鼠标悬停 - 整行高亮，模仿 tmux/vim 选择 */
+.list-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+/* 列样式 - 语法高亮 */
+.col-perm { color: #e6db74; } /* 黄色权限 */
+.col-link-count { color: #66d9ef; text-align: right; } /* 蓝色连接数 */
+.col-user { color: #f92672; } /* 粉色用户 (root) */
+.col-group { color: #f92672; } /* 粉色组 */
+.col-size { color: #ae81ff; text-align: right; font-family: monospace;} /* 紫色大小 */
+
+/* 核心：标签名样式 (模拟文件夹) */
+.col-name {
+    display: flex;
+    align-items: center;
+    /* 确保名字部分也不换行 */
+    white-space: nowrap;
+}
+
+.name-link {
+    color: #66d9ef; /* 文件夹通常是青色/蓝色 */
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.2s;
+    text-shadow: 0 0 2px rgba(102, 217, 239, 0.4); /* 蓝色荧光 */
+}
+
+.name-link:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(102, 217, 239, 0.8);
+    text-decoration: underline;
+}
+
+/* 统计行 (total) */
+.total-line {
+    color: #888;
+    margin-bottom: 5px;
+    padding-left: 10px; /* 保持与 .list-item 的 padding-left 一致 (4px 10px) */
+    /* 移除 italic，确保字体渲染宽度与下方一致，有助于视觉对齐 */
+    font-family: inherit; 
+}
+
+/* 光标动画 */
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.2em;
+    background-color: #ccc;
+    vertical-align: sub;
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* 自定义滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0c0c0c; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .hacker-terminal-container { margin: 20px 10px; }
+    .terminal-body { padding: 15px; }
+    
+    /* 手机端逻辑更新：
+       如果希望手机端也不分行，则需要保持上面的 white-space: nowrap 和 grid 结构
+       但 grid 宽度可能需要调整，或者允许横向滚动。
+       这里保持之前的简化显示逻辑，但加上不换行特性 */
+    
+    .list-item, .list-header {
+        /* 在手机上可能需要调整列宽比例，或者允许横向滚动查看完整信息 */
+        /* 如果希望手机上也显示 drwxr... 等信息，可以注释掉下面这行 grid-template-columns */
+        grid-template-columns: 50px 1fr; /* 仅保留大小 和 名称 */
+        font-size: 0.9rem;
+    }
+    
+    .col-perm, .col-link-count, .col-user, .col-group { display: none; }
+    
+    .col-size { text-align: left; color: #ae81ff; font-size: 0.85em; opacity: 0.8; }
+    .terminal-title { display: none; } /* 手机上隐藏标题，空间太小 */
+    .terminal-header { grid-template-columns: 1fr; justify-items: center; }
+    .terminal-buttons { margin-right: 0; }
+}
