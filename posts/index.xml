@@ -251,6 +251,7 @@
 </span></span></code></pre></div><p>这个应用程序可能是使用 <code>spring boot 2.6.6</code> 编写的，搜索一下 <code>spring boot 2.6.6</code> 有没有公开漏洞。</p>
 <p><img src="Pasted%20image%2020260120195656.png" alt=""></p>
 <p>可能存在 <code>CVE-2022-22965</code> 漏洞。</p>
+<h2 id="公开漏洞利用与权限提升">公开漏洞利用与权限提升</h2>
 <h3 id="spring4shellcve-2022-22965">Spring4Shell（CVE-2022-22965）</h3>
 <p>Spring Framework 是 Java 生态系统中最流行的企业级应用开发框架之一，被全球数百个应用程序使用。而 Spring4Shell 是 Spring Framework 核心模块中一个严重的远程代码执行漏洞，因其影响范围广、利用难度低而被视为 2022 年最重要的安全威胁之一。</p>
 <p>Spring4Shell 主要利用了 Java Bean 属性绑定机制和 Tomcat ClassLoader 的特性来实现远程代码执行。漏洞的核心在于 Spring 的数据绑定功能允许攻击者访问本不该暴露的 ClassLoader 属性。</p>
