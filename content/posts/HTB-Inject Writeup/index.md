@@ -235,6 +235,8 @@ The following guides illustrate how to use some features concretely:
 
 可能存在 `CVE-2022-22965` 漏洞。
 
+## 公开漏洞利用与权限提升
+
 ### Spring4Shell（CVE-2022-22965）
 
 Spring Framework 是 Java 生态系统中最流行的企业级应用开发框架之一，被全球数百个应用程序使用。而 Spring4Shell 是 Spring Framework 核心模块中一个严重的远程代码执行漏洞，因其影响范围广、利用难度低而被视为 2022 年最重要的安全威胁之一。
