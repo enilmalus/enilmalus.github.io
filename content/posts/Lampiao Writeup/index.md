@@ -7,6 +7,7 @@ images:
 tags:
   - Hack
   - Writeup
+  - Vulnhub
 ---
 # Lampiao 靶机
 

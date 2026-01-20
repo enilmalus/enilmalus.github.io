@@ -7,6 +7,7 @@ images:
 tags:
   - Hack
   - Writeup
+  - Vulnhub
 ---
 > 此文章以 kali 地址为 10.10.10.5 为示例
 

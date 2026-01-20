@@ -3,16 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/tags/hack/</loc>
-    <lastmod>2026-01-09T21:30:00+08:00</lastmod>
+    <lastmod>2026-01-20T19:40:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/htb/</loc>
+    <lastmod>2026-01-20T19:40:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/htb-inject-writeup/</loc>
+    <lastmod>2026-01-20T19:40:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2026-01-09T21:30:00+08:00</lastmod>
+    <lastmod>2026-01-20T19:40:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2026-01-09T21:30:00+08:00</lastmod>
+    <lastmod>2026-01-20T19:40:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2026-01-09T21:30:00+08:00</lastmod>
+    <lastmod>2026-01-20T19:40:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/writeup/</loc>
+    <lastmod>2026-01-20T19:40:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2026-01-09T21:30:00+08:00</lastmod>
@@ -44,9 +53,6 @@
     <loc>http://localhost:1313/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</loc>
     <lastmod>2025-12-28T17:29:33+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/writeup/</loc>
-    <lastmod>2025-12-28T17:29:33+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</loc>
     <lastmod>2025-12-27T17:29:33+08:00</lastmod>
   </url><url>
@@ -62,6 +68,9 @@
     <loc>http://localhost:1313/posts/lampiao-writeup/</loc>
     <lastmod>2025-07-13T17:29:33+08:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/tags/vulnhub/</loc>
+    <lastmod>2025-07-13T17:29:33+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/deathstar-writeup/</loc>
     <lastmod>2025-06-24T17:29:33+08:00</lastmod>
   </url><url>
@@ -70,6 +79,9 @@
   </url><url>
     <loc>http://localhost:1313/posts/venom-writeup/</loc>
     <lastmod>2025-05-24T17:29:33+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/credit-card-scammers-writeup/</loc>
+    <lastmod>2025-05-18T17:29:33+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/momentum2-writeup/</loc>
     <lastmod>2025-05-16T17:29:33+08:00</lastmod>
