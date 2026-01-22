@@ -128,3 +128,9 @@ IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是�
 ### 关于文件上传
 
 有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。
+
+### 添加 hosts 记录
+
+```bash
+sudo bash -c 'echo "10.129.187.74 conversor.htb" >> /etc/hosts'
+```
