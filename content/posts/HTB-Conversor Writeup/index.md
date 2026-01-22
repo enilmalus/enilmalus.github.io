@@ -1,6 +1,6 @@
 ---
 title: HTB-Inject Writeup
-date: 2026-01-20T19:40:00+08:00
+date: 2026-01-22T20.00:00+08:00
 draft: false
 toc: true
 images:
