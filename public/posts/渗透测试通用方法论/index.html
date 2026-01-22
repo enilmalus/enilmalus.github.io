@@ -56,7 +56,7 @@ Bash 逃逸 在获得初始立足点后常常 bash 的交互性并不完善，�
 python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。">
   <meta itemprop="datePublished" content="2025-12-27T17:29:33+08:00">
   <meta itemprop="dateModified" content="2025-12-27T17:29:33+08:00">
-  <meta itemprop="wordCount" content="281">
+  <meta itemprop="wordCount" content="292">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
@@ -170,6 +170,7 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
         <li><a href="#使用-curl-将返回的内容输出为中文">使用 curl 将返回的内容输出为中文</a></li>
         <li><a href="#idor-不安全直接对象引用">IDOR 不安全直接对象引用</a></li>
         <li><a href="#关于文件上传">关于文件上传</a></li>
+        <li><a href="#添加-hosts-记录">添加 hosts 记录</a></li>
       </ul>
     </li>
   </ul>
@@ -240,7 +241,9 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
 <p>IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是一种常见的访问控制漏洞，主要出现在 Web 应用请求的资源未进行有效的权限验证和限制的情况下。具体来说，应用程序通过用户提交的参数（如用户ID、文件名、订单号等）直接引用内部对象，却未验证当前用户是否拥有访问这些对象的权限。这种情况下，攻击者可以通过修改请求的参数值（例如 ID 号）直接访问或操作本不该被访问到的敏感信息或资源，从而实现越权访问。例如，在一个用户个人信息页面中，如果 URL 参数形如 user?id=1，攻击者只需要修改 id 值即可查看其他用户的数据。当开发者未对资源引用和权限做严格验证时，IDOR 漏洞便会产生，攻击者通过简单篡改请求参数即可实现攻击。</p>
 <h3 id="关于文件上传">关于文件上传</h3>
 <p>有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。</p>
-
+<h3 id="添加-hosts-记录">添加 hosts 记录</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.187.74 conversor.htb&#34; &gt;&gt; /etc/hosts&#39;</span>
+</span></span></code></pre></div>
       </div>
     </article>
 
@@ -266,7 +269,7 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        281 Words
+        292 Words
       </p>
 
       <p>

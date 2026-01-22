@@ -15,7 +15,7 @@ knock 敲门演示：
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ knock -v 10.10.10.45 197 719 801 983 hitting tcp 10.10.10.45:197 hitting tcp 10.10.10.45:719 hitting tcp 10.10.10.45:801 hitting tcp 10.10.10.45:983 nc 敲门演示：
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ for port in 197 719 801 983 ; do nc -zv 10.10.10.45 $port;sleep 1; done 解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。
 " />
-<meta name="keywords" content=", Hack, 技术" />
+<meta name="keywords" content=", Hack, 技术, knock" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/" />
@@ -59,7 +59,7 @@ knock 敲门演示：
   <meta itemprop="datePublished" content="2025-12-30T17:29:33+08:00">
   <meta itemprop="dateModified" content="2025-12-30T17:29:33+08:00">
   <meta itemprop="wordCount" content="110">
-  <meta itemprop="keywords" content="Hack,技术">
+  <meta itemprop="keywords" content="Hack,技术,Knock">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="端口敲门与单包授权与零开端口">
@@ -208,6 +208,7 @@ knock 敲门演示：
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/knock/">knock</a></span>
         
     </p>
 
