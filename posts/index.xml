@@ -1,4 +1,432 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 22 Jan 2026 22:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/posts/htb-conversor-writeup/</link><pubDate>Thu, 22 Jan 2026 22:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-conversor-writeup/</guid><description>&lt;blockquote&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 23 Jan 2026 00:10:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>英语学习笔记</title><link>https://enilmalus.github.io/posts/%E8%8B%B1%E8%AF%AD%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link><pubDate>Fri, 23 Jan 2026 00:10:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E8%8B%B1%E8%AF%AD%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid><description>&lt;h2 id="单词解释模板"&gt;单词解释模板&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-moudle" data-lang="moudle"&gt; 复数：
+第三人称单数：
+现在分词：
+过去式：
+过去分词：
+词根词缀：
+-
+短语：
+-
+例句：
+-
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="句子相关"&gt;句子相关&lt;/h2&gt;
+&lt;h3 id="第一人称单数动词变形规则"&gt;第一人称单数动词变形规则&lt;/h3&gt;
+&lt;h4 id="规则动词"&gt;规则动词&lt;/h4&gt;
+&lt;p&gt;第一、二人称单数使用动词原形，不加 &lt;code&gt;-s&lt;/code&gt; 或 &lt;code&gt;-es&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I work&lt;/li&gt;
+&lt;li&gt;You work&lt;/li&gt;
+&lt;li&gt;I play&lt;/li&gt;
+&lt;li&gt;You play&lt;/li&gt;
+&lt;li&gt;I study&lt;/li&gt;
+&lt;li&gt;You study&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Be 动词的特殊变形&lt;/p&gt;
+&lt;p&gt;现在时：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I am&lt;/li&gt;
+&lt;li&gt;You are&lt;/li&gt;
+&lt;li&gt;He/She/It was&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;过去时：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I was&lt;/li&gt;
+&lt;li&gt;You were&lt;/li&gt;
+&lt;li&gt;He/She/It was&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;助动词和情态动词在所有人称保持一致，不变化&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I worked / You worked / He worked&lt;/li&gt;
+&lt;li&gt;I played / You played / They played&lt;/li&gt;
+&lt;li&gt;I studied / You studied / They studied&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在古英语和圣经英语中，第二人称单数使用 &lt;code&gt;thou&lt;/code&gt;（你），动词需要添加 &lt;code&gt;-st&lt;/code&gt; 或 &lt;code&gt;-est&lt;/code&gt;&lt;/p&gt;</description><content type="html"><![CDATA[<h2 id="单词解释模板">单词解释模板</h2>
+<pre tabindex="0"><code class="language-moudle" data-lang="moudle">	复数：
+	
+	第三人称单数：
+	
+	现在分词：
+	
+	过去式：
+	
+	过去分词：
+	
+	词根词缀：
+	
+	- 
+	
+	短语：
+	- 
+	
+	例句：
+	- 
+</code></pre><h2 id="句子相关">句子相关</h2>
+<h3 id="第一人称单数动词变形规则">第一人称单数动词变形规则</h3>
+<h4 id="规则动词">规则动词</h4>
+<p>第一、二人称单数使用动词原形，不加 <code>-s</code> 或 <code>-es</code></p>
+<ul>
+<li>I work</li>
+<li>You work</li>
+<li>I play</li>
+<li>You play</li>
+<li>I study</li>
+<li>You study</li>
+</ul>
+<p>Be 动词的特殊变形</p>
+<p>现在时：</p>
+<ul>
+<li>I am</li>
+<li>You are</li>
+<li>He/She/It was</li>
+</ul>
+<p>过去时：</p>
+<ul>
+<li>I was</li>
+<li>You were</li>
+<li>He/She/It was</li>
+</ul>
+<p>助动词和情态动词在所有人称保持一致，不变化</p>
+<ul>
+<li>I worked / You worked / He worked</li>
+<li>I played / You played / They played</li>
+<li>I studied / You studied / They studied</li>
+</ul>
+<p>在古英语和圣经英语中，第二人称单数使用 <code>thou</code>（你），动词需要添加 <code>-st</code> 或 <code>-est</code></p>
+<ul>
+<li>Thou writest</li>
+<li>Thou takest</li>
+<li>Thou lovest</li>
+</ul>
+<h3 id="第三人称单数动词变形规则">第三人称单数动词变形规则</h3>
+<p>一般现在时中，当主语是第三人称（he，she，it 或单数名词）时，动词需要添加词尾变化。</p>
+<h4 id="规则一">规则一</h4>
+<p>大多数动词直接加 <code>-s</code>。</p>
+<ul>
+<li>see -&gt; sees</li>
+<li>play -&gt; plays</li>
+<li>work -&gt; works</li>
+<li>make -makes</li>
+</ul>
+<h4 id="规则二">规则二</h4>
+<p>以 <code>-s</code>、<code>-ss</code>、<code>-x</code>、<code>-ch</code>、<code>-sh</code>、<code>-z</code>、<code>-o</code> 结尾的动词加 <code>-es</code></p>
+<ul>
+<li>kiss -&gt; kisses</li>
+<li>wash -&gt; washes</li>
+<li>go -&gt; goes</li>
+<li>do -&gt; does</li>
+</ul>
+<h4 id="规则三">规则三</h4>
+<p>辅音字幕 + <code>y</code> 结尾，变 <code>y</code> 为 <code>i</code> 再加 <code>-es</code></p>
+<ul>
+<li>study -&gt; studies</li>
+<li>cry -&gt; cries</li>
+<li>fly -&gt; flies</li>
+</ul>
+<h4 id="规则四">规则四</h4>
+<p>元音字母 + <code>y</code> 结尾，直接加 <code>-s</code></p>
+<ul>
+<li>play -&gt; plays</li>
+<li>enjoy -&gt; enjoys</li>
+</ul>
+<h3 id="过去时态变形规律">过去时态变形规律</h3>
+<h4 id="规则动词-1">规则动词</h4>
+<h5 id="规则一-1">规则一</h5>
+<p>大多数动词直接加 <code>-ed</code></p>
+<ul>
+<li>walk -&gt; walked</li>
+<li>play -&gt; played</li>
+<li>listen -&gt; listened</li>
+<li>open -&gt; opened</li>
+</ul>
+<h5 id="规则二-1">规则二</h5>
+<p>以不发音的 <code>-e</code> 结尾，只加 <code>-d</code></p>
+<ul>
+<li>like -&gt; liked</li>
+<li>love -&gt; loved</li>
+<li>change -&gt; changed</li>
+<li>close -&gt; closed</li>
+</ul>
+<h5 id="规则三-1">规则三</h5>
+<p>辅音字字母 + <code>y</code> 结尾，变 <code>y</code> 为 <code>i</code> 再加 <code>-ed</code></p>
+<ul>
+<li>study -&gt; studied</li>
+<li>cry -&gt; cried</li>
+<li>try -&gt; tried</li>
+<li>carrt -&gt; carried</li>
+</ul>
+<h5 id="规则四-1">规则四</h5>
+<p>元音字母 + <code>y</code> 结尾，直接加 <code>-ed</code></p>
+<ul>
+<li>play -&gt; played</li>
+<li>enjoy -&gt; enjoyed</li>
+<li>stay -&gt; stayed</li>
+</ul>
+<h3 id="would">Would</h3>
+<p>情态动词。用于表达各种语法和语义功能，包括假设、礼貌请求、过去习惯和条件句等。</p>
+<ol>
+<li>只有一种形式，没有 <code>-ing</code> 或 <code>-ed</code> 形式</li>
+<li>第三人称单数不加 <code>-s</code></li>
+<li>后接不带 <code>to</code> 的动词不定式</li>
+<li>否定形式为 <code>would not</code> 或缩写 <code>wouldn't</code></li>
+</ol>
+<p>Would 常用于第二条件句（假设现在或将来不太可能发生的情况）和第三条件句（与过去事实相反的假设）。</p>
+<ul>
+<li>If I won the lottery,Iwould buy a new car：如果我中彩票，我会买一辆新车</li>
+<li>If I had seem the advertisement,I would have applied：如果我看到了广告，我就会申请</li>
+</ul>
+<p>Would 用于使表达更加礼貌和正式。</p>
+<ul>
+<li>Would you like some tea：您想喝点茶吗</li>
+<li>Would you mind closing the door：您介意关门吗</li>
+<li>I would like to help：我想帮忙</li>
+</ul>
+<p>Would 可以表示过去经常发生的动作，类似于 “used to” 的用法。</p>
+<ul>
+<li>When I was young,I would visit my grandparents every summer：我小时候每个夏天都会区看望祖父母</li>
+</ul>
+<p>在叙述过去事件时，would 表示从过去某个时间点来看将来。</p>
+<ul>
+<li>I knew she would arrive late：我知道她会迟到</li>
+</ul>
+<h3 id="will">Will</h3>
+<p>情态动词，表达将来时态、预测、意愿和各种交际功能。</p>
+<ol>
+<li>只有一种形式，没有 <code>-ing</code> 或 <code>-ed</code> 形式</li>
+<li>第三人称单数不加 <code>-s</code></li>
+<li>后接不带 <code>to</code> 的动词不定式</li>
+<li>否定形式为 <code>will not</code> 或缩写 <code>won't</code></li>
+<li>疑问句时将 <code>will</code> 提到主语前</li>
+</ol>
+<p>Will 时构成一般将来时的核心助动词，用于描述将要发生的动作或状态。</p>
+<ul>
+<li>I will clean the garage tomorrow：我明天会清理车库</li>
+<li>You&rsquo;ll be in time if you hurry：如果你快点就能赶上</li>
+<li>They will arrive at 8 PM：他们将在晚上 8 点到达</li>
+</ul>
+<p>Will 用于表达说话时刻做出的决定或自愿行动。</p>
+<ul>
+<li>I&rsquo;ll answer the phone：我来接电话</li>
+<li>Don&rsquo;t worry,I&rsquo;ll help you with your homework：别担心，我会帮你做作业</li>
+</ul>
+<p>Will 用于对未来或现在情况的预测和推测。</p>
+<ul>
+<li>I think it will rain tomorrow：我觉得明天会下雨</li>
+<li>He will probably be late for the meeting：他可能会开会迟到</li>
+<li>You wont get promoted unless you stick to the rules：除非你遵循规则，否则不会升职</li>
+</ul>
+<p>礼貌地提出请求。</p>
+<ul>
+<li>Will you help me on this project,please：请你帮我做这个项好吗</li>
+<li>Will you close the door：请关门好吗</li>
+</ul>
+<p>承诺或发出威胁。</p>
+<ul>
+<li>I will call you when I arrive：我到了会给你打电话</li>
+<li>If you don&rsquo;t leave,I will call the police：如果你不离开，我就报警</li>
+</ul>
+<p>习惯性动作。</p>
+<ul>
+<li>She will start to cough if she has to eat cabbage：如果她必须吃卷心菜就会开始咳嗽</li>
+<li>My mum will say,&lsquo;Just try it&rsquo;：我妈妈会说“试试看”</li>
+</ul>
+<p>第一条件句（真实条件句）表达可能地结果。</p>
+<ul>
+<li>If it rain tomorrow,I&rsquo;ll cancel the trip：如果明天下雨，我会取消行程</li>
+<li>We&rsquo;ll never finish the project if Enil donesn&rsquo;t help：如果 Enil 不帮忙，我们永远完成不了这个项目</li>
+</ul>
+<p>与其他时态构成复合时态。</p>
+<p>将来进行时（will be + 现在分词）：</p>
+<ul>
+<li>I will be working at 3 PM：下午 3 点我会在工作</li>
+</ul>
+<p>将来完成时（will have + 过去分词）：</p>
+<ul>
+<li>She will have finished by then：到那时她会完成</li>
+</ul>
+<blockquote>
+<p>Will：表达确定的未来、真实情况、承诺和预测（确定性）
+Would：表达假设情况、条件、礼貌或偏好（不确定性/礼貌性）</p>
+</blockquote>
+<h2 id="单词相关">单词相关</h2>
+<h3 id="词根词缀">词根词缀</h3>
+<h4 id="前缀prefixes">前缀（Prefixes）</h4>
+<ul>
+<li>un：表示 ”不是“ ，例如 <code>unhappy</code>（不快乐）</li>
+<li>re：表示 ”重新“，例如 <code>redo</code>（重做）</li>
+<li>pre：表示 ”在 &hellip; 之前“，例如 <code>prehistoric</code>（史前的）</li>
+<li>pro：表示 “向前”，例如 <code>proceed</code>（前进）</li>
+<li>mis：表示 ”错误的“，例如 <code>misjudge</code>（误判）</li>
+<li>dis：表示 ”否定“ 或 ”相反“，例如 <code>disconnect</code>（断开）</li>
+<li>anti：表示 ”反对“ 或 ”相对“，例如 <code>antifreeze</code>（防冻剂）</li>
+<li>inter：表示 ”之间“，例如 <code>international</code>（国际的）</li>
+<li>sub：表示 ”下面“。例如 <code>submarine</code>（潜艇）</li>
+<li>super：表示 ”超过“，例如 <code>superman</code>（超人）</li>
+<li>multi：表示 ”多个“，例如 <code>multicolored</code>（多色的）</li>
+<li>ab：表示 “远离” 或 “离开”，例如 <code>abnormal</code>（不正常的）</li>
+</ul>
+<h4 id="后缀suffixes">后缀（Suffixes）</h4>
+<ul>
+<li>ful：表示 ”充满 &hellip; 的“，例如 <code>joyful</code>（充满快乐的）</li>
+<li>less：表示 ”没有 &hellip; 的“，例如 <code>hopeless</code>（没有希望的）</li>
+<li>ly：表示 ” &hellip; 地“，例如 <code>quickly</code>（快速的）</li>
+<li>ness：表示 ” &hellip; 性质“，例如 <code>happiness</code>（幸福的）</li>
+<li>ment：表示 ”动作或过程“，例如 <code>agreement</code>（协议）</li>
+<li>er / -or：表示 ” &hellip; 者“，例如 <code>teacher</code>（教师），<code>actor</code>（演员）</li>
+<li>tion / -sion：表示 ”动作或过程“，例如 <code>action</code>（行动），<code>mission</code>（任务）</li>
+<li>al：表示 ” &hellip; 的“，例如 <code>national</code>（国家）</li>
+<li>able / -ible：表示 ”可以 &hellip; 的“，例如 <code>readable</code>（可读的），<code>edible</code>（可食用的）</li>
+<li>ous：表示 ”充满 &hellip; 的“，例如 <code>poisonous</code>（有毒的）</li>
+</ul>
+<h3 id="词性解释">词性解释</h3>
+<ul>
+<li>vt：“transitive verb”（及物动词）的缩写；及物动词是需要接受一个或多个宾语的动词，例如 <code>She gives a gift</code>（她给了一份礼物）中，动词 “gives” 是及物动词，“a gift” 是直接宾语，因为它接收了动作</li>
+<li>vi：“intransitive verb”（不及物动词）的缩写；不及物动词不需要宾语就能表达完整意思，例如 <code>He sleeps</code>（他睡觉），<code>They arrived</code>（他们到达）</li>
+<li>v：“verb”（动词的缩写）</li>
+<li>n：“noun”（名词）的缩写</li>
+<li>a：“adjective”（形容词）的缩写</li>
+</ul>
+<h3 id="单词及其例句">单词及其例句</h3>
+<h4 id="以-a-开头的单词">以 a 开头的单词</h4>
+<ol>
+<li>
+<p>abandon（vt）：丢弃；放弃、抛弃</p>
+<p>词根词缀：</p>
+<ul>
+<li>a（处于）+ bandon（管辖权） ——&gt; 置身于 &hellip; 管辖之下 ——&gt; 放弃；</li>
+<li>bandon（宣告） ——&gt; ban（禁止令）</li>
+</ul>
+<p>短语：</p>
+<ul>
+<li>abandon oneself to：沉溺于</li>
+<li>abandon rate：挂断率</li>
+<li>abandon a claim：减少</li>
+</ul>
+<p>例句：</p>
+<ul>
+<li>Abandon hope all ye who enter here：汝等进入此地，须弃绝希望</li>
+<li>The captain gave the order to abandon ship：船长下令弃船</li>
+<li>Snow forced many drivers to abandon their vehicles：大雪迫使许多驾驶者弃车步行</li>
+</ul>
+</li>
+<li>
+<p>abase（v）：卑躬屈膝，贬抑，使卑下</p>
+<p>第三人称单数：abases</p>
+<p>现在分词：abasing</p>
+<p>过去式：abased</p>
+<p>过去分词：abased</p>
+<p>词根词缀：</p>
+<ul>
+<li>a（去，往） + base（低下，卑微） ——&gt; 卑躬屈膝</li>
+</ul>
+<p>短语：</p>
+<ul>
+<li>abase oneself：谦卑</li>
+<li>abase e：贬低降低地位</li>
+</ul>
+<p>例句：</p>
+<ul>
+<li>He would not abase himself by showing fear：他不愿露出惧色而有失身份</li>
+<li>You can never abase a person for a little mistake：你永远不可以因为一个小小的错误而去贬低一个人的人格</li>
+<li>Refused to abase herself by asking for an invitation：因请求得到他人的邀请被拒绝而使自己的威望降低</li>
+</ul>
+</li>
+<li>
+<p>abbreviate（v）：缩短，缩写</p>
+<p>第三人称单数：abbreviates</p>
+<p>现在分词：abbreviating</p>
+<p>过去式：abbreviated</p>
+<p>过去分词：abbreviated</p>
+<p>词根词缀：</p>
+<ul>
+<li>ab（去） + brevi（短） + ate（动词后缀）-&gt; 缩短</li>
+</ul>
+<p>短语：</p>
+<ul>
+<li>auto abbreviate：自动缩写</li>
+<li>abbreviate e：缩写</li>
+<li>abbreviate table：减缩表</li>
+</ul>
+<p>例句：</p>
+<ul>
+<li>We shall abbreviate the &ldquo;directed graph&rdquo; to digraph：我们将把 “有方向的图” 简称为方向图</li>
+<li>N You can even abbreviate and put Y or n：甚至可以缩写成 y 或 n</li>
+<li>And,furthermore,he started to abbreviate：此外，他开始使用缩写词</li>
+</ul>
+</li>
+<li>
+<p>ability（n）：能力，才能</p>
+<p>复数：abilities</p>
+<p>短语：</p>
+<ul>
+<li>Ability Test：能力测试</li>
+<li>cognitive ability：认知能力</li>
+<li>Ability goals：能力目标</li>
+</ul>
+<p>例句：</p>
+<ul>
+<li>No one doubted his ability：没有人怀疑他的能力</li>
+<li>Her drama teacher spotted her ability：她的戏剧老师发现了她的才能</li>
+<li>Almost everyone has some musical ability：几乎人人都有一些音乐才能</li>
+</ul>
+</li>
+<li>
+<p>abnormal（a）：不正常的；变态的</p>
+<p>词根词缀：</p>
+<ul>
+<li>ab（离开） + normal（正常）</li>
+</ul>
+<p>短语：</p>
+<ul>
+<li>abnormal glow：不规则辉光放电</li>
+<li>abnormal handling：异常处理</li>
+<li>abnormal spoilage：异常损耗</li>
+</ul>
+<p>例句：</p>
+<ul>
+<li>They thought his behaviour was abnormal：他们认为他行为反常</li>
+<li>He concluded that Amo was somewhat abnormal：他断定 Amo 有点不正常</li>
+<li>The abnormal bleeding is your body&rsquo;s own red flag of danger：这反常的流血是你身体本身的危险信号</li>
+</ul>
+</li>
+<li>
+<p>abort（n）：中止计划（任务），夭折</p>
+<p>复数：aborts</p>
+<p>第三人称单数：aborts</p>
+<p>现在分词：aborting</p>
+<p>过去式：aborted</p>
+<p>过去分词：aborted</p>
+<p>词根词缀：</p>
+<ul>
+<li>ab（离开） + ori（升起）</li>
+</ul>
+<p>短语：</p>
+<ul>
+<li>abort light：故障信号灯</li>
+<li>Data Abort：数据访问中止</li>
+<li>abort sequence：中断序列</li>
+</ul>
+<p>例句：</p>
+<ul>
+<li>The virus can cause pregnant animals to abort：这种病毒可能导致怀孕动物流产</li>
+<li>For reasons that aren&rsquo;t yet well understood,cloned animals often abort spontaneously or are born with defects：由于无法搞懂的原因，克隆动物通常会自行流产或具有天生缺陷</li>
+<li>We had no option but to abort the mission：我们别无选择，只有取消这个任务</li>
+</ul>
+</li>
+<li>
+<p>abrasive（a）：磨损的；生硬粗暴的</p>
+</li>
+<li>
+<p>abridged（adj）：删减的</p>
+</li>
+<li>
+<p>abroad（ad）：到（在）国外</p>
+</li>
+<li>
+<p>abscond（v）：潜逃，逃亡</p>
+</li>
+</ol>
+]]></content></item><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/posts/htb-conversor-writeup/</link><pubDate>Thu, 22 Jan 2026 22:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-conversor-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以 kali 地址为 10.10.16.35 做演示&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;
