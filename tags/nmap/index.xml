@@ -1,61 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nmap on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/nmap/</link><description>Recent content in Nmap on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 24 Sep 2025 21:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/nmap/index.xml" rel="self" type="application/rss+xml"/><item><title>nmap 扫描原理与使用心得</title><link>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id="nmap-扫描原理解析"&gt;nmap 扫描原理解析&lt;/h2&gt;
-&lt;p&gt;nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。&lt;/p&gt;
-&lt;h3 id="不同操作系统的响应差异"&gt;不同操作系统的响应差异&lt;/h3&gt;
-&lt;table&gt;
- &lt;thead&gt;
- &lt;tr&gt;
- &lt;th&gt;操作系统/内核&lt;/th&gt;
- &lt;th&gt;TCP 关闭端口响应&lt;/th&gt;
- &lt;th&gt;ICMP 关闭端口响应&lt;/th&gt;
- &lt;th&gt;特征差异点&lt;/th&gt;
- &lt;/tr&gt;
- &lt;/thead&gt;
- &lt;tbody&gt;
- &lt;tr&gt;
- &lt;td&gt;Linux 2.6 / 3.x / 4.x / 5.x&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 常见 64&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;窗口大小为 0，ICMP 报文长度与 Padding 一致&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Windows XP / 2003&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 128&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;常常带有 ACK 标志，ICMP 报文长度较短&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Windows 7 / 10 / Server&lt;/td&gt;
- &lt;td&gt;返回 RST，ATK，TTL 128&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;窗口大小与 XP 不同，ICMP 检验与算法不同&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;FreeBSD / OpenBSD&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 常见 64&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;ICMP 报文填充方式与 Linux 不同&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Solaris&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 常见 255&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;高 TTL，RST 包含独特的窗口值&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Cisco ISO / 路由器类设备&lt;/td&gt;
- &lt;td&gt;有时直接丢弃，无 RST&lt;/td&gt;
- &lt;td&gt;UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited）&lt;/td&gt;
- &lt;td&gt;偏向过滤回应，不遵循主机栈常见模式&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;MikroTik RouterOPS&lt;/td&gt;
- &lt;td&gt;RST 响应 TTL -64&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;TCP 选项顺序与 Linux 内核不同，较易区分&lt;/td&gt;
- &lt;/tr&gt;
- &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;Linux 通常是干净的 &lt;code&gt;RST + TTL 64&lt;/code&gt;，Windows 多带 &lt;code&gt;RST、ACK、TTL 12&lt;/code&gt;，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nmap on Welcome My Hack&#39;s Blog</title>
+    <link>http://localhost:1313/tags/nmap/</link>
+    <description>Recent content in Nmap on Welcome My Hack&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 24 Sep 2025 21:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/nmap/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>nmap 扫描原理与使用心得</title>
+      <link>http://localhost:1313/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link>
+      <pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;nmap-扫描原理解析&#34;&gt;nmap 扫描原理解析&lt;/h2&gt;&#xA;&lt;p&gt;nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。&lt;/p&gt;&#xA;&lt;h3 id=&#34;不同操作系统的响应差异&#34;&gt;不同操作系统的响应差异&lt;/h3&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;操作系统/内核&lt;/th&gt;&#xA;          &lt;th&gt;TCP 关闭端口响应&lt;/th&gt;&#xA;          &lt;th&gt;ICMP 关闭端口响应&lt;/th&gt;&#xA;          &lt;th&gt;特征差异点&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Linux 2.6 / 3.x / 4.x / 5.x&lt;/td&gt;&#xA;          &lt;td&gt;返回 RST，TTL 常见 64&lt;/td&gt;&#xA;          &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;&#xA;          &lt;td&gt;窗口大小为 0，ICMP 报文长度与 Padding 一致&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Windows XP / 2003&lt;/td&gt;&#xA;          &lt;td&gt;返回 RST，TTL 128&lt;/td&gt;&#xA;          &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;&#xA;          &lt;td&gt;常常带有 ACK 标志，ICMP 报文长度较短&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Windows 7 / 10 / Server&lt;/td&gt;&#xA;          &lt;td&gt;返回 RST，ATK，TTL 128&lt;/td&gt;&#xA;          &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;&#xA;          &lt;td&gt;窗口大小与 XP 不同，ICMP 检验与算法不同&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;FreeBSD / OpenBSD&lt;/td&gt;&#xA;          &lt;td&gt;返回 RST，TTL 常见 64&lt;/td&gt;&#xA;          &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;&#xA;          &lt;td&gt;ICMP 报文填充方式与 Linux 不同&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Solaris&lt;/td&gt;&#xA;          &lt;td&gt;返回 RST，TTL 常见 255&lt;/td&gt;&#xA;          &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;&#xA;          &lt;td&gt;高 TTL，RST 包含独特的窗口值&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Cisco ISO / 路由器类设备&lt;/td&gt;&#xA;          &lt;td&gt;有时直接丢弃，无 RST&lt;/td&gt;&#xA;          &lt;td&gt;UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited）&lt;/td&gt;&#xA;          &lt;td&gt;偏向过滤回应，不遵循主机栈常见模式&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;MikroTik RouterOPS&lt;/td&gt;&#xA;          &lt;td&gt;RST 响应 TTL -64&lt;/td&gt;&#xA;          &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;&#xA;          &lt;td&gt;TCP 选项顺序与 Linux 内核不同，较易区分&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;Linux 通常是干净的 &lt;code&gt;RST + TTL 64&lt;/code&gt;，Windows 多带 &lt;code&gt;RST、ACK、TTL 12&lt;/code&gt;，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
