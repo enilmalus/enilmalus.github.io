@@ -1,5 +1,5 @@
 ---
-title: HTB-Inject Writeup
+title: HTB-Conversor Writeup
 date: 2026-01-22T20.00:00+08:00
 draft: false
 toc: true
