@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 20 Jan 2026 19:40:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Inject Writeup</title><link>https://enilmalus.github.io/posts/htb-conversor-writeup/</link><pubDate>Tue, 20 Jan 2026 19:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-conversor-writeup/</guid><description>&lt;blockquote&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 22 Jan 2026 22:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/posts/htb-conversor-writeup/</link><pubDate>Thu, 22 Jan 2026 22:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-conversor-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以 kali 地址为 10.10.16.35 做演示&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;
@@ -285,7 +285,8 @@
 </span></span><span style="display:flex;"><span>        username TEXT UNIQUE,
 </span></span><span style="display:flex;"><span>        password TEXT
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">))=</span>indexsqlite_autoindex_users_1users
-</span></span></code></pre></div><p>查看靶机中具有 <code>bash</code> 环境的用户。</p>
+</span></span></code></pre></div><h2 id="linux-提权">Linux 提权</h2>
+<p>查看靶机中具有 <code>bash</code> 环境的用户。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@conversor:~$ cat /etc/passwd | grep <span style="color:#e6db74">&#39;bash&#39;</span>
 </span></span><span style="display:flex;"><span>cat /etc/passwd | grep <span style="color:#e6db74">&#39;bash&#39;</span>
 </span></span><span style="display:flex;"><span>root:x:0:0:root:/root:/bin/bash
