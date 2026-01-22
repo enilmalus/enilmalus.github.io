@@ -318,6 +318,8 @@ users.db
     ))=indexsqlite_autoindex_users_1users
 ```
 
+## Linux 提权
+
 查看靶机中具有 `bash` 环境的用户。
 
 ```bash
