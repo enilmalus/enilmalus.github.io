@@ -1,5 +1,5 @@
 ---
-title: nmap 扫描原理与使用心得
+title: Nmap 扫描原理与使用心得
 date: 2025-09-24T21:00:00+08:00
 draft: false
 toc: true
@@ -7,7 +7,6 @@ images:
 tags:
   - Hack
   - 工具
-  - nmap
 ---
 > 以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例
 ## nmap 扫描原理解析

@@ -7,6 +7,7 @@ images:
 tags:
   - Hack
   - 技术
+  - WIFI
 ---
 ## 所需环境
 
