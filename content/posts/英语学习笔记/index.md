@@ -11,16 +11,6 @@ is_long: true
 ## 单词解释模板
 
 ```moudle
-	复数：
-	
-	第三人称单数：
-	
-	现在分词：
-	
-	过去式：
-	
-	过去分词：
-	
 	词根词缀：
 	
 	- 
@@ -402,6 +392,315 @@ Will 用于对未来或现在情况的预测和推测。
 	- We had no option but to abort the mission：我们别无选择，只有取消这个任务
 
 7. abrasive（a）：磨损的；生硬粗暴的
+
+	复数：abrasives
+	
+	比较级：more abrasive
+	
+	最高级：most abrasive
+	
+	词根词缀：
+	
+	- abrase + ive
+	
+	短语：
+	- abrasive paper：砂纸
+	- abrasive grain：研磨砂
+	- Abrasive cloth：砂布
+	
+	例句：
+	- Women sometimes damage their skin by going overboard with abrasive cleansers：女性有时因为过度使用研磨型的洁面乳而损害了皮肤
+	- In the late Middle Ages,it was customary to scrape away the surface of the parchment with an abrasive,which completely wiped out any writing that was there：在中世纪后期，人们习惯用磨料刮去羊皮纸的表面，把纸上所有文字都擦得干干净净。
+	- His abrasive manner has won him an unenviable notorety：他祖鲁的态度已经为他招来了一个无可羡慕的恶名
+
 8. abridged（adj）：删减的
+
+	短语：
+	- abridged notation：简化符号
+	- abridged division：：简略除法
+	
+	例句：
+	- Indeed,in abridged editions of Moby-Dick,it is often one of the chapters omitted：事实上，在《白鲸记》的删减情节中，这常常时被省略的章节之一
+	- This is an abridged version of her new novel "The Queen and I"：这是她的新小说《女王与我》的缩写版
+	- The abridged translation received less attention from scholars：这篇节译很少得到学者的关注
+
 9. abroad（ad）：到（在）国外
+
+	词根词缀：
+	
+	- ab（外） + road（路）
+	
+	短语：
+	- Study Abroad：出国留学
+	- go abroad：出国
+	
+	例句：
+	- He had benn abroad many times：他曾多次出国
+	- She worked abroad for a year：她在国外工作了一年
+	- I have never contemplated living abroad：我从未考虑去国外居住
+
 10. abscond（v）：潜逃，逃亡
+
+	
+	第三人称单数：absconds
+	
+	现在分词：absconding
+	
+	过去式：absconded
+	
+	过去分词：absconded
+	
+	词根词缀：
+	
+	- abs（离开） + con（表加强） +d（放置）
+	
+	短语：
+	- abscond with the money：携款潜逃
+	- migrate and abscond：迁移逃避
+	
+	例句：
+	- He feared they would abscond：他担心他们会潜逃
+	- He did not abscond abroad：他并没有潜逃国外
+	- Or without buying his freedom to abscond thither：或者不赎回自由而潜逃到那里
+
+11. absence（n）：缺席，不在场；缺乏
+
+	复数：absences
+	
+	词根词缀：
+	
+	- ab（分离） + senc（存在） + -e
+	
+	短语：
+	- absence from：缺席
+	
+	例句：
+	- His absence went unremarked：没人注意到他的不在场
+	- She did not mention her mother's absence：她没提到她母亲的缺席
+	- I can't think of any possible explanation for his absence：我想不出他缺席的理由
+
+12. absent（a）不在场的；缺乏的 
+
+	词根词缀：
+	
+	- ab（分离） + sent（存在）
+	
+	短语：
+	- be absent：缺席
+	
+	例句：
+	- "Nothing," Enil said in an absent way：没什么，Enil 心不在焉地说
+	- She was absent for nine consecutive days：他一连缺席了九天
+	- The pictures,too,were absent from the walls：那些照片也不在那些墙上了
+
+13. absolute（a）：绝对的；纯粹的.
+
+	词根词缀：
+	
+	- ab（分离） + solut（解开，放松） + -e
+	
+	短语：
+	- absolute value：绝对值
+	- absolute magnitude：绝对大小
+	- Absolute Zero：绝对零度
+	
+	例句：
+	- Their new CD is absolute pants：他们的新光盘绝对是次货
+	- There are no absolute rules：没有绝对的准则
+	- The laws of nature are absolute：自然规律是绝对确凿的
+
+14. absolutely（ad）：完全地；绝对的
+
+	短语：
+	- absolutely vested interest：绝对既得权益
+	- File Delete Absolutely：彻底删除文件
+	
+	例句：
+	- Enil is absolutely right：Enil 绝对正确
+	- That's absolutely right：那是完全正确的
+
+15. absorb（ab）：吸收；使专心
+
+	词根词缀：
+	
+	- ab（分离） + sorb（吸收）
+	
+	短语：
+	- absorb knowledge：吸收知识
+	
+	例句：
+	- Plants absorb oxygen：植物吸收氧气
+	- Steel barriers can bend and absorb teh shock：铁栅栏会弯曲并吸收冲击力
+	- Black walls absorb a lot of heat during the day：黑色墙壁在白天吸收大量地热
+
+16. abstain（vi）：自制，弃权，避免
+
+	第三人称单数：abstains
+	
+	现在分词：abstaining
+	
+	过去式：abstained
+	
+	过去分词：abstained
+	
+	词根词缀：
+	
+	- abs（分离） + tain（持有）
+	
+	短语：
+	- Abstain from voting：弃权
+	
+	例句：
+	- Enil was also the only Opposition front bencher to abstain from the apology：Enil 也是唯一一位放弃道歉的反对党前座议员
+	- Many may abstain through fear：很多人可能由于害怕而弃权
+	- He swore to abstain from smoking：他发誓要戒烟
+
+17. abstract（a，n）：抽象的，摘要
+
+	词根词缀：
+	
+	- abs（分离） + tract（拉）
+	
+	短语：
+	- abstract algebra：抽象代数
+	- abstract data type：抽象数据类别
+	- abstract expressionism：抽象表现主义
+	
+	例句：
+	- Abstract art is an acquired taste：要慢慢培养才会欣赏抽象艺术
+	- It's not a question of some abstract concept of justice：这不是一个有关正义地某一抽象概念问题
+	- A modern abstract painting takes over one complete wall：一幅现代抽象画占了整整一墙面
+
+18. abstraction（n）：抽象；提取
+
+	短语：
+	- geometric abstraction：几何抽象主义
+	- data abstraction：抽象数据
+	
+	例句：
+	- Across society,the abstraction of the idea of cash makes me uneasy：纵观整个社会，对现金概念地抽象化让我感到不安
+
+19. abundance（n）：丰富，充裕，大量
+
+	短语：
+	- species abundan：物种丰富
+	
+	例句：
+	- Fruit and vegetables grew in abundance on the island：该岛盛产水果和蔬菜
+	- This area of Mexico has an abundance of safe beaches and a pleasing climate：墨西哥有大量安全沙滩和宜人的气候
+
+20. abuse（vt）：滥用
+
+	词根词缀：
+	
+	- ab（不好） + use（使用）
+	
+	短语：
+	- drug abuse：吸毒
+	
+	例句：
+	- The system is open to abuse：这项制度容易被滥用
+	- She let loose a stream of abuse：她破口大骂起来
+
+21. academic（a）：学院的；学术的
+
+	短语：
+	- academic degree：学术型学位
+	- academic conference：学术会议
+	- academic journal：学术期刊
+	
+	例句：
+	- He is unsuited to academic work：他不适合做学术工作
+	- It is a purely academic question：这是一个纯理论问题
+	- Their academic standards are high：他们的学术水平很高
+
+22. academy（n）：私立中学；专科院校
+
+	短语：
+	- Academy Award：奥斯卡奖
+	
+	例句：
+	- The Academy Awards appear to validate his career：这些奥斯卡奖看来证实了他的职业生涯价值
+	- The academy is far more inclusive now than it used to be：该学院如今比过去更为兼收并蓄
+
+23. accelerate（vt）：使加快；促进
+
+	词根词缀：
+	
+	- ac（加强意义） + celer（快） + ate
+	
+	短语：
+	- to accelerate：加速
+	
+	例句：
+	- Inflation continues to accelerate：通货膨胀不断加速
+	- Growth will accelerate to 2.9 percent next year：增长明年将加快到 2.9 %
+	- Exposure to the sun can accelerate the ageing process：暴露在日光下会加快老化过程
+
+24. acceptable（a）：可接受的
+
+	短语：
+	- acceptable daily intake：每日可接受摄入量
+	- acceptable rate：适当利率
+	- Acceptable Use Policy：可接受使用策略
+	
+	例句：
+	- Ten beaches were graded as accpetable：有十个沙滩属于可接受的那一类
+	- It is becoming more acceptable for women to drink：女性饮酒越来越为人接受
+	- The food was acceptable,but no more：食物还可以，但说不上很好
+
+25. acceptance（n）：接受，验收；承认
+
+	短语：
+	- acceptance test：验收测试
+	- bank acceptance：银行承兑
+	
+	例句：
+	- The new law have gained widespread acceptance：新法律获得广泛赞同
+	- Social acceptance is important for most young peaple：社会接受度对大多数青年来说很重要
+
+26. access（n）：接近；通道，入口
+
+	短语：
+	- random access：随机存取
+	
+	例句：
+	- Does the hotel have wheelchair access：这家旅馆有轮椅通道吗
+	- She had unhindered access to the file：她可任意使用档案
+
+27. accessibility（n）：可达性
+
+	短语：
+	- Web Accessibility：网络无障碍
+	- Accessibility Options：辅助选项
+	
+	例句：
+	- Pay attention to accessibility：注意可访问性
+
+28. accessible（a）：易接近的
+
+	短语：
+	- accessible point：接触点
+	
+	例句：
+	- The centre is easily accessible to the general public：该中心对广大公众来说很便利
+
+29. accident（n）：事故，意外
+
+	短语：
+	- by accident：偶然
+	- Traffic Accident：交通事故
+	
+	例句：
+	- It was an unfortunate accident：那是一次不幸的交通事故
+	- He was killed in an accident：他死于一次车祸
+	- An accident can happen anywhere：哪里都可能发生事故
+
+30. accidental（a）：偶然的；非本质的
+
+	短语：
+	- accidental error：偶然误差
+	
+	例句：
+	- The coroner recorded verdict of accidental death：验尸官判定这是一次意外死亡
+	- We insure against all damage,accidental or otherwise：我们的保险包括一切意外或其他损失
