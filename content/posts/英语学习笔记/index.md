@@ -704,3 +704,208 @@ Will 用于对未来或现在情况的预测和推测。
 	例句：
 	- The coroner recorded verdict of accidental death：验尸官判定这是一次意外死亡
 	- We insure against all damage,accidental or otherwise：我们的保险包括一切意外或其他损失
+
+31. accidentally（adv）：意外得
+
+	短语：
+	- Accidentally in Love：意外之爱
+	- accidentally injure：无意中伤人
+	- accidentally drop：失手
+	
+	例句：
+	- He accidentally sawed through a cable：他不小心锯断了缆线
+	- He accidentally sliced through his finger：她不小心把指头割破了
+	- His hand accidentally brushed against hers：他的手无意间碰到了她的手
+
+32. accommodate（vt）：容纳；供应，供给
+
+	短语：
+	- Accommodate froup：容国团
+	- Re-accommodate：重新安排
+	- accommodate with：向某人提供
+	
+	例句：
+	- I needed to accommodate to the new schedule：我需要适应新的时间表
+	- There is usually room to accommodate up to 80 visitors：通常可以多容纳 80 名来宾
+	- The school was not big enough to accommodate all the children：学校没有足够的地方容纳所有学生
+
+33. accommodation（n）：招待设备；预定铺位
+
+	短语：
+	- accommodation bill：空头支票
+	- Accommodation paper：欠单
+	- accommodation cost：住宿
+	
+	例句：
+	- The accommodation is simple but spacious：住处简朴但宽敞
+	- They were unhappy with their accommodation：他们对住处不满意
+
+34. accompany（vt）：陪伴，陪同；伴随
+
+	短语：
+	- accompant with me：陪陪我
+	
+	例句：
+	- Enil agreed to accompany me on a trip to Africa：Enil 同一陪我去非洲旅行
+
+35. accomplish（vt）：达到（目的）；完成
+
+	短语：
+	- Accomplish nothing：一事无成
+	
+	例句：
+	- If we'd all work together,I think we could accomplish our goal：如果我们齐心协力一定能完成我们的目标
+	- Never in my wildest dreams did I think I'd ever accomplish this：即使我异想天开的时候也没想到过我能实现它
+
+36. accord（vt）：使一致；给予
+
+	短语：
+	- Plaze Accord：广场协议
+	
+	例句：
+	- There result accord closely with our predictions：这些结果和我们的预测相当一致
+	- This action would not be in accord with our policy：这一行动不会符合我们的方针
+	- He did not quit as France's prime minister of his own accord：他不是自愿辞去法国总理一职
+
+37. accordance（n）：一致；和谐；授予
+
+	短语：
+	- in accordance with：根据
+	
+	例句：
+	- Those products have rightly been stopped in accordance with our safety routine：根据我们的安全惯例，停止使用那些产品是正确的
+
+38. accordingly（ad）：因此，所以；照着
+
+	短语：
+	- accordingly ad：因此
+	
+	例句：
+	- It is a difficult job and they should be paid accordingly：它是一项艰巨的工作，他们应该相应地获得报酬
+	- The cost of materials rose sharply lasy year.Accordingly,we were fored to increase our prices：去年材料成本大幅度提高，因此我们被迫加价
+	- We have a different background,a different history.Accordingly,we have the right to different futures：我们拥有不同的背景、不同的历史。因此，我们有权获得不一样的前途
+
+39. account（n）：记述；解释；账目
+
+	短语：
+	- account for：说明
+	- account sales：销货帐
+	- current account：现金账户
+	
+	例句：
+	- I don't have a bank account：我没有银行账户
+	- What's your account number please：请问你的账户号码
+	- Does your current account pay interest：你的活期存款账户计息吗
+
+40. accountability（n）：负责人
+
+	短语：
+	- accountability unti：审计
+	- Accountability Matrix：会计责任矩阵
+	
+	例句：
+	- Good management in the police cannot be divorced from accountability：警政的良好管理离不开问责制
+
+41. accountable（adj）：负责人的
+
+	短语：
+	- accountable person：会计人员
+	
+	例句：
+	- Someone must be held accountable for the killings：必须有人对这些凶杀事件负责
+	- Politicians are ultimately accountable to the voters：从政者最终是向选民负责
+	- Public officials can finally be held accountable for their actions：政府官员最终是要对他们行为负责人的
+
+42. accounting（n）：会计
+
+	短语：
+	- Management Accounting：管理会计
+	- Financial Accounting：财务会计
+	- Accounting Manager：会计主管
+	
+	例句：
+	- The debate revolves around specific accounting techniques：这场讨论围绕具体的会计技巧
+	- But full cost accounting wiil be introduced without delay：但是，全面成本核算马上将被采用
+	- Most large companies now use computers for accounting and housekeeping operations：多数大公司现在计算机进行会计运算和内务操作
+
+43. accreditation（n）：认证；授权
+
+	短语：
+	- accreditation body：认可机构
+	- accreditation system：认可体系
+	
+	例句：
+	- The university's law school failed to win full accreditation from the American Bar Association：这所大学的法学院没能获得美国律师协会的完整认可
+	- Check to see if accreditation is in its future：检查一下该校将来是否会被官方认可
+
+44. accrue（v）：（利息等）增大；增多
+
+	短语：
+	- accrue in：累积的
+	
+	例句：
+	- Interest will accrue if you keep your money in a savings account：如果把钱存入储蓄账户，就会自然生息
+	- What public policy ramifications accrue：又会得到怎样的公共政策结果
+
+45. accumulator（n）：累加器；蓄电池
+
+	短语：
+	- accoumulator register：累加寄存器
+	
+	例句：
+	- And we also have what is called an accoumulator：我们也有称为蓄电池的东西
+
+46. accumulate（vt）：积累；堆积
+
+	短语：
+	- Multiply-accumulate：乘积累加
+	
+	例句：
+	- Lead can accumulate in the body until toxic levels are reached：铅可以在体内积聚直至达到有毒地程度
+	- They accumulate essentialy no body fat：它们基本上不积累身体脂肪
+
+47. accuracy（n）：准确性；准确度
+
+	短语：
+	- Speed Accuracy：速度精度
+	- accuracy class：精确度等级
+	- Accuracy International：精准公司
+	
+	例句：
+	- A high degree of accuracy is needed：需要高度的准确性
+	- She hits the ball with great accuracy：她击球十分准确
+	- He cannot vouch for accuracy of the story：他不能证明报道的准确性
+
+48. accurate（a）：准确的
+
+	短语：
+	- accurate measurement：精确测量
+	
+	例句：
+	- Accurate records must be kept：必须保存准确的记录
+	- Accurate records must be kept at all times：任何时候都必须保存准确的记录
+	- The figure is accurate to two decimal places：这个数精确到小数点后两位
+
+49. accurately（adv）：准确地
+
+	短语：
+	- enquire accurately：广泛地研究
+	- position accurately：准确定位
+	- Hear accurately：确实地听
+	
+	例句：
+	- You need to hit the ball accurately：你必须准确击球
+	- He hit the golf ball powerfully and accurately：他有利而准确地击中了那个高尔夫球
+
+50. accused（n）：被告；被指控的
+
+	例句：
+	- She accused him of insincerity：她职责他缺乏诚意
+	- How do you find the accused：你如何裁定被告
+	- She accused him of lying：她指责他说谎
+
+51. accustomed（a）：习惯的
+52. ace（n）：顶好的
+53. ache（vi）：痛；想念；疼痛
+54. achieve（vt）：完成，实现
+55. achievement（n）：完成
