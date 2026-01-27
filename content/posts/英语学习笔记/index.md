@@ -11,15 +11,15 @@ is_long: true
 ## 单词解释模板
 
 ```moudle
-	词根词缀：
-	
-	- 
-	
-	短语：
-	- 
-	
-	例句：
-	- 
+		词根词缀：
+		
+		- 
+		
+		短语：
+		- 
+		
+		例句：
+		- 
 ```
 
 ## 句子相关
@@ -1117,4 +1117,234 @@ Will 用于对未来或现在情况的预测和推测。
 		例句：
 		- She ducked into the adjoining room as we came in：我们进来时她转身躲进了隔壁房间
 
-102. 
+102. adjust（vt）：调整，调节；校正
+
+		短语：
+		- adjust to：适应；调整
+		- Date Adjust：调整日期
+		
+		例句：
+		- How did you adjust to college life：你是怎么适应大学生活的
+		- You can adjust the height of the chair：你可以调节椅子的高度
+		- He has been forced to adjust his schedule：他被迫调整了日程安排
+
+103. adjustment（n）：调整；调节
+104. administer（n）：管理；执行
+105. administration（n）：管理；管理部门
+106. administrator（n）：管理员；行政官
+107. administative（adj）：管理的；行政的
+108. admirably（adv）：值得赞赏的
+
+		短语：
+		- answer admirably：答案值得赞赏
+		- speak admirably：说的很好
+		
+		例句：
+		- Enil coped admirably with a diffricult situation：Enil 面对困境应对的很好
+
+109. admissibility（n）：可接受的；可采纳的
+
+		短语：
+		- admissibility limit：容许界限
+		
+		例句：
+		- The court will decide on the admissibility of the evidence：法院将对证据的可采用性进行裁决
+
+110. admissible（adj）：可接受的；可采纳的
+111. admission（n）：允许进入；承认
+112. admit（vt）：承认；准许...进入
+
+		短语：
+		- admit to：承认
+		
+		例句：
+		- I must admit I am impressed：我承认我很佩服
+
+113. admittedly（adv）：诚然；无可否认的
+
+		短语：
+		- equal admittedly：公认比得上
+		
+		例句：
+		- Admittedly,those mighty forces are spiritual ones：诚然，这些强大的力量是来自精神上的
+
+114. adobe（n）：泥砖，土坯
+115. adopt（vt）：收养；采用；采取
+
+		短语：
+		- adopt to：采纳
+		
+		例句：
+		- Maybe we should adopt the policy of "don't ask,don't tell"：或许我们应该采用 “不问不提” 的政策
+
+116. adopted（adj）：被收养的；采纳的
+117. adoption（n）：采纳；收养
+118. adrenaline（n）：肾上腺素
+
+		短语：
+		- Adrenaline Rush：肾上腺素
+		
+		例句：
+		- How can the hormore adrenaline that does not act directly on the brain have a regulatory effect on brain fuction：肾上腺素不直接作用于大脑，怎么会对大脑功能产生调节作用
+
+119. adult（n）：成年人；成年的
+120. advance（vi）：前进；提高；进展
+121. advanced（a）：先进的；高级的
+122. advancing（v）：前进；提高
+123. advantage（n）：优点；好处
+124. advantageous（adj）：有利的
+125. adventure（n）：冒险；惊险活动
+
+		短语：
+		- Adventure Time：冒险时间
+		
+		例句：
+		- He set off in quest of adventure：他出行探险去了
+		- Few can resist the lure of adventure：少有人能抵御历险的诱惑力
+
+126. adversaria（n）：注释；随笔
+
+		例句：
+		- The message board improves the input of parameter rapidly and easy to operate or adversaria：留言板功能大幅度的提高参数输入的快速性、方便操作及记事
+
+127. adversary（n）：对手；敌人
+
+		例句：
+		- Both of the wrestlers tried to tumble the adversary with all their strength：双方摔跤运动员都使出了全身力气想把对方摔倒
+
+128. adversely（adv）：不利的
+129. advert（v）：注意
+
+		短语：
+		- advert to：注意
+		
+		例句：
+		- Many of my client felt that way about their site：我的很多客户对他们的网站都有这种感觉
+
+130. adverse（adj）：不利的
+131. advertise（v）：广告；宣传
+132. advertisement（n）：广告
+133. advertiser（n）：广告商
+134. advice（n）：忠告，劝告，建议
+135. advertising（n）：广告
+136. advise（vt）：劝告；建议；通知
+137. advisory（adj）：咨询的；警告的
+138. advocate（n/v）：提倡者；主张
+139. advised（adj）：经过考虑的
+140. aesthetic（a）：美学的，审美的，有美感的
+
+		短语：
+		- aesthetic feeling：美感
+		- aesthetic design：美学设计
+		
+		例句：
+		- The students debated the aesthetic of the poems：学生就这这些诗歌的美感展开了辩论
+
+141. affect（vt）：影响；感动
+142. affected（a）：不自然的；假装的
+143. affecting（v）：影响；感人的
+144. afford（v）：负担得起；提供
+145. affordable（a）：能够支付的
+146. afraid（a）：害怕的；担心
+147. after（prep）：在...之后
+148. aftermath（n）：事件的后果，余波
+149. afternoon（n）：下午
+150. afterthought（n）：事后的想法
+151. afterward（ad）：后来
+152. afterwards（adv）：之后
+153. again（ad）：再一次
+154. against（prep）：对着，反对，依靠
+155. aged（a）：年老的
+156. agency（n）：代理
+157. agent（n）：代理人
+158. aggregate（n）：总数，合计
+
+		短语：
+		- aggregate amount：总价
+		
+		例句：
+		- They won 4-2 on aggregate：他们以总分 4:2 获胜
+
+159. aggregation（n）：聚集；合计
+160. aggressive（a）：侵略的；好斗的
+161. aggressively（adv）：侵略的；有进取心的
+162. agile（a）：敏捷的，灵活的，轻快的
+163. aging（n）：老化，变老
+164. agree（v）：同意
+165. agreed（adj）：同意的
+166. agreement（n）：协定，协议；同意
+167. agility（n）：敏捷，灵活，轻快
+168. agriculture（n）：农业，农艺；农学
+169. ahead（ad）：在前；向前；提前
+170. aid（n）：帮助，救护；助手
+171. aircraft（n）：飞机
+172. airplane（n）：（美）飞机
+173. airport（n）：飞机场，航空站
+174. aka（adv）：又称
+175. akin（adj）：相似；有共同之处的
+
+		短语：
+		- akin to：同类
+		
+		例句：
+		- What  he felt was more akin to pity than love：他感受到的更像怜悯，而不是爱
+		- This process is akin to piecing together a jigsaw puzzle：这个过程类似于拼七巧板
+		- Listening to his life story akin to reading aa good adventure novel：听他的生活故事就像读一部好的探险小说
+
+176. alarm（n）：惊恐，忧虑；警报
+
+		短语：
+		- Alarm Clock：闹钟
+		- Alarm bell：警钟
+		- false alarm：误报
+		
+		例句：
+		- An alarm bell went off：警钟响了
+		- The alarm went off at 7 o'clock：闹钟在 7 点响了
+
+177. albeit（conj）：虽然，尽管
+
+		短语：
+		- albeit that：虽然
+		
+		例句：
+		- He finally agreed,albeit reluctantly,to help us：尽管勉强，他最后还是同意帮助我们
+
+178. album（n）：相册薄，邮票册
+179. alcohol（n）：酒精，乙醇
+180. alert（n）：警觉的；警报；提醒
+181. algorithm（n）：算法
+
+		短语：
+		- Genetic Algorithm：遗传算法
+		- Search Algorithm：搜索算法
+		
+		例句：
+		- Don't diddle code to make it faster-find a better algorithm：不要为了使代码更快而胡乱编写代码，要找到更好的算法
+
+182. alias（n）：别名，化名
+183. align（v）：排列在一条直线上；与某人结盟
+184. alignment（n）：对齐；结盟
+185. alike（ad）：很相似地，同样地
+186. alive（a）：活着的，存在的
+187. allay（vt）：减轻，减少
+
+		短语：
+		- allay reduce：减少
+		
+		例句：
+		- But it will not allay the sense of unease：但却无法减轻人们的不安情绪
+
+188. alleviate（v）：缓和，减轻（痛苦等）
+189. allocatable（adj）：可分配的
+190. allocate（v）：分配，配给
+191. allocation（n）：配给
+192. allocator（n）：分配器
+193. allotment（n）：分配；分得物
+194. allow（vt）：允许，准许
+195. allowable（adj）：可允许的
+196. ally（n/v）：盟友；结盟
+197. almost（ad）：几乎，差不多
+198. alone（a）：单独的，孤独的
+199. along（adv）：沿着；一起
+200. alongside（prep）：旁边；并排
