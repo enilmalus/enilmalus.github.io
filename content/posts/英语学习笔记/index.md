@@ -905,7 +905,216 @@ Will 用于对未来或现在情况的预测和推测。
 	- She accused him of lying：她指责他说谎
 
 51. accustomed（a）：习惯的
+
+	短语：
+	- be accustomed to：习惯于
+	- accustomed to：习惯于
+	
+	例句：
+	- Some are so accustomed to pigging out,they can't cut back：有些人习惯了暴饮暴食，他们不可能缩减食量。
+	- Enil is still accustomed to tracelling everywhere in style：Enil 习惯于很有气派地到处旅行
+	- She was a person accustomed to having eight hours sleep a night：她是那种习惯每晚睡八个小时的人
+
 52. ace（n）：顶好的
 53. ache（vi）：痛；想念；疼痛
+
+	短语：
+	- ear-ache：耳痛
+	- stomach-ache：胃痛
+	
+	例句：
+	- Mum,I've got a tummy ache：妈妈，我肚子疼
+	- My head had begun to ache and my stomach felt funny：我的头开始痛了，我的胃也感到不舒服
+	- The pain,usually a dull ache,gets worse with exercise：这种疼痛通常是隐隐作痛，运动有时会加剧
+
 54. achieve（vt）：完成，实现
 55. achievement（n）：完成
+56. acid（n）：酸；酸的，酸性的
+
+	短语：
+	- citric acid：柠檬酸
+	- Benzoic Acid：苯甲酸
+	
+	例句：
+	- Acid corrodes metal：酸腐蚀金属
+	- Carbolic acid is usually used for cleaning：石炭酸常用于清洁
+
+57. acknowledge（v）：承认；确认
+
+	短语：
+	- acknowledge receipt：回执
+	
+	例句：
+	- She refuses to acknowledge the need for reform：她拒不承认改革的必要性
+	- I did not acknowledge that he had done anything wrong：我没有承认他犯了什么错
+	- You have to acknowledge that we live in a racist society：你不得不承认我们生活在一个有种族歧视的社会
+
+58. acknowledged（adj）：公认的；承认
+59. acme（n）：顶点，极点
+
+	短语：
+	- Acme Made：滤色镜
+	
+	例句：
+	- His work is considered the acme of cinematic art：他的作品被认为是电影艺术的巅峰
+
+60. acoustic（a）：听觉的
+
+	词根词缀：
+	
+	- a（无意义） + cous（听） + tic（形容词后缀）
+	
+	短语：
+	- acoustic guitar：木吉他
+	- Acoustic Neuroma：听神经瘤
+	- Acoustic Model：声音模型
+	
+	例句：
+	- Do you remember when ereryone went unplugged and acoustic：你还记得那时候乐队都不使用电声而是用原声演奏吗
+
+61. acquaintance（n）：认识；了解；熟人
+
+	短语：
+	- old acquaintance：旧知
+	- nodding acquaintance：泛泛之交
+	
+	例句：
+	- I am delighted to make your acquaintance：我很高兴与你相识
+	- I made the acquaintance of several musicians around that time：大约在那段时间，我结识了几位音乐家
+
+62. acquainted（a）：熟悉的；认识的
+63. acquire（vt）：获得；取得；学到
+
+	短语：
+	- acquire knowledge and skills：学习知识和技能
+	
+	例句：
+	- People must acquire this skill somewhere：人们必须从某个地方获得这种技能
+
+64. acquired（a）：后天习得的
+65. acquisition（n）：获得；收购
+
+	短语：
+	- data acquisition：数据收集
+	- knowledge acquisition：获取知识
+	- language acquisition：学习语言
+	
+	例句：
+	- Indeed,ease of acquisition is the problem：事实上，容易获取是个问题
+	- He devotes his time to the acquisition of knowledge：他把时间用在获取知识上
+
+66. acrobat（n）：特技演员，杂技演员
+
+	短语：
+	- Acrobat School：杂技学校
+	
+	例句：
+	- Don't worry,he's an acrobat：别担心，他是个杂技演员
+
+67. acronym（n）：首字母缩略词
+
+	例句：
+	- The name is not an acronym：此称呼不只是只取首字母的缩略词
+	- It's not an acronym：他不是缩写
+
+68. across（adv）：横过；从一边到另一边
+
+	短语：
+	- cut across：抄近路
+	- get across：解释清楚
+	
+	例句：
+	- Clouds drifted across the sky：朵朵浮云在空中飘过
+	- They fled across the border：他们越过边界逃走了
+
+69. acrylic（adj）：丙烯的
+70. acting（adj）：代理的；表演的
+71. action（n）：行为
+72. actionable（n）：可行动的
+73. activate（a）：积极的，主动的
+74. activation（n）：激活；启动
+75. active（a）：积极的；主动的
+76. actively（adv）：积极地；活跃地
+77. activism（n）：行动主义
+78. activist（n）：行动主义者
+79. activity（n）：活动
+80. actor（n）：男演员
+81. actual（a）：实际的；现行的
+82. actually（ad）：实际上；竟然
+83. actuator（n）：执行器；驱动器
+
+	短语：
+	- Actuator track：滑轨
+	
+	例句：
+	- The input to the actuator is an event object：执行者的输入是某个事件对象
+
+84. acute（a）：尖锐的；明锐的
+
+	短语：
+	- acute accent：尖音符
+	- acute care：紧急护理
+	
+	例句：
+	- There is an acute shortage of water：水严重短缺
+	- Her judgement is acute：她的判断敏锐
+
+85. adapt（vt）：使适应；改编
+
+	短语：
+	- adapt to：改编
+	- adapt for：调剂
+	
+	例句：
+	- It's amazing how soon you adapt：你这么快就适应了，真实令人惊奇
+	- We have had to adapt quickly to the new system：我们不得不迅速适应新制度
+
+86. adaptable（a）：能适应的；可修改的
+87. adapter（n）：适应器；转接器
+88. adaptive（adj）：适应的
+89. added（adj）：附加的；添加
+90. addition（n）：加，加法；附加物
+91. additional（a）：附加的，追加的
+92. additionally（adv）：另外；附加地
+93. additive（a）：添加的；加法的；添加剂
+94. address（n）：地址；演说；谈吐
+95. adept（a）：熟练的，老练的；专家
+
+	短语：
+	- adept in：擅长于
+	
+	例句：
+	- She is an adept rock-climber and a past master of the obstacle course：她擅长攀岩，也是障碍超越训练场上的老手
+
+96. adequate（a）：足够的；可以胜任的
+
+	短语：
+	- be adequate for：足够
+	
+	例句：
+	- She didn't give an adequate explanation for being late：她没有给出充足的理由说明迟到的原因
+	- We cannot guarantee adequate supplies of raw materials：我们不能保证提供充足的原料
+
+97. adequately（adv）：足够地
+98. adhere（v）：粘附，粘着；坚持，遵循
+99. adjacent（adj）：邻近的
+
+	短语：
+	- adjacent channel：相邻信道
+	- Adjacent color：相似色
+	
+	例句：
+	- He sat in an adjacent room and waited：他坐在一间相邻的房间里等
+
+100. adherence（n）：坚守；黏附
+101. adjoining（a）：相邻的，隔壁的
+
+		短语：
+		- Adjoining Room：相邻房
+		- adjoining building：毗邻地区
+		- adjoining area：毗邻地
+		
+		例句：
+		- She ducked into the adjoining room as we came in：我们进来时她转身躲进了隔壁房间
+
+102. 
