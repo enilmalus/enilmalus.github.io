@@ -12,6 +12,12 @@ url = "/posts/"
 weight = 1
 
 [[menu.main]]
+identifier = "english-articles"
+name = "English Articles"
+url = "/english-articles/"
+weight = 3
+
+[[menu.main]]
 identifier = "long-articles"
 name = "长文章"
 url = "/long-articles/"

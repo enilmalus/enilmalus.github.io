@@ -6,8 +6,22 @@
     <description>Recent content on Welcome My Hack&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 23 Jan 2026 00:10:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 28 Jan 2026 16:20:00 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网络安全最新资讯获取合集</title>
+      <link>http://localhost:1313/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF%E8%8E%B7%E5%8F%96%E5%90%88%E9%9B%86/</link>
+      <pubDate>Wed, 28 Jan 2026 16:20:00 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF%E8%8E%B7%E5%8F%96%E5%90%88%E9%9B%86/</guid>
+      <description>&lt;h2 id=&#34;平台&#34;&gt;平台&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://thehackernews.com/&#34;&gt;The Hacker News&lt;/a&gt;：全球排名第一的网络安全新闻平台&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://www.securityweek.com/&#34;&gt;SecurityWeek&lt;/a&gt;：企业安全新闻&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://www.darkreading.com/&#34;&gt;Dark reading&lt;/a&gt;：博客&lt;/p&gt;&#xA;&lt;h2 id=&#34;论坛&#34;&gt;论坛&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://www.bleepingcomputer.com/&#34;&gt;bleepingcomputer&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Test</title>
+      <link>http://localhost:1313/english-articles/test/</link>
+      <pubDate>Wed, 28 Jan 2026 10:29:33 +0800</pubDate>
+      <guid>http://localhost:1313/english-articles/test/</guid>
+      <description>&lt;p&gt;Test&lt;/p&gt;</description>
+    </item>
     <item>
       <title>英语学习笔记</title>
       <link>http://localhost:1313/posts/%E8%8B%B1%E8%AF%AD%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
