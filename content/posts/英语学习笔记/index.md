@@ -1336,6 +1336,14 @@ Will 用于对未来或现在情况的预测和推测。
 		- But it will not allay the sense of unease：但却无法减轻人们的不安情绪
 
 188. alleviate（v）：缓和，减轻（痛苦等）
+
+		短语：
+		- alleviate verb：易于受苦
+		- alleviate burdens：减负
+		
+		例句：
+		- Feeling close to objects can alleviate loneliness：感觉接近物品可以减轻孤独感
+
 189. allocatable（adj）：可分配的
 190. allocate（v）：分配，配给
 191. allocation（n）：配给
@@ -1348,3 +1356,80 @@ Will 用于对未来或现在情况的预测和推测。
 198. alone（a）：单独的，孤独的
 199. along（adv）：沿着；一起
 200. alongside（prep）：旁边；并排
+201. alpha（n）：阿尔法；首位
+202. alphabet（n）：字母表，字母系统
+203. alphabetically（adv）：按字母顺序
+204. alpine（adj）：高山；阿尔卑斯山
+205. already（ad）：已经
+206. also（ad）：也
+207. alright（adj）：还好；不错
+208. alter（vt）：改变，变更；改做
+209. alteration（n）：改变；修改
+210. alternate（adj）：交替的；轮流
+211. alternating（adj）：交替的
+212. alternative（n）：替换物；取舍，抉择
+213. alternatively（adv）：或者；另外
+214. altho：非正式 althogh 缩写
+215. although（conj）：虽然，尽管
+
+		例句：
+		- Although it is tasty,crab is very filling：螃蟹虽然很好吃，但很容易让人饱
+		- Although small,the kitchen is well designed：厨房虽小，但设计巧妙
+		- Although the sun was shining it wasn't very warm：尽管阳光高照，但不太暖和
+
+216. alto（n）：女中音
+217. altogether（ad）：完全；总而言之
+218. aluminum（n）：铝
+219. alumnus（n）：男校友
+220. always（ad）：总是
+221. amateur（n）：业余的
+222. ambient（adj）：周围的；背景的
+223. ambiguity（n）：歧义；模糊
+224. ambiguous（adj）：模棱两可的
+225. amendment（n）：修正
+226. amenity（n）：礼仪
+227. among（prep）：在 ... 中间
+228. amongst（prep）：在 ... 之中
+229. amount（n）：总数；数量；和
+230. ampersand（n）：符号
+231. ample（a）：充分的，富裕的；宽敞的，宽大的
+232. amplify（vt）：放大，增强；扩大
+233. amusement（n）：娱乐，消遣
+234. analogous（a）：相似的，类似的
+235. analogy（n）：相似，类似；类推，比拟
+236. analyse（vt）：分析，分解，解析
+237. analysis（n）：分析，分解，解析
+238. analyst（n）：分析师
+239. analytic（adj）：分析的
+240. analytics（n）：分析学
+241. analyzable（adj）：可分析的
+242. analyze（vt）：分析，研究
+243. analyzer（n）：分析器
+244. anatomy（n）：解剖
+245. ancestor（n）：祖宗，祖先
+246. anchor（n）：抛锚
+247. ancient（a）：古老的，古代的
+248. ancillary（a）：辅助的，助手
+249. anew（adv）：重新
+250. angle（b）：角，角度
+251. angled（adj）：倾斜的
+252. animal（n）：动物
+253. anniversary（n）：周年，周年纪念日
+254. annotation（n）：注释
+255. announce（vt）：宣布，宣告，发表
+256. announcement（n）：公告；声明
+257. annoy（vt）：使 ... 恼怒
+258. annonyance（n）：烦恼；麻烦事
+259. annoying（adj）：烦人的
+260. annual（a）：每年的
+261. annually（ad）：每年
+262. anode（n）：阳极
+263. anomalous（a）：反常的
+264. anomaly（n）：异常的人或物
+265. anonymous（adj）：匿名的
+266. anonymity（n）：无名，匿名
+267. anonymously（adv）：匿名地
+268. another（a）：另一个
+269. answer（n）：回答
+270. antagonistic（adj）：敌对的
+271. antena（n）：天线
