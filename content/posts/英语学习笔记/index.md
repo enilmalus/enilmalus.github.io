@@ -11,15 +11,15 @@ is_long: true
 ## 单词解释模板
 
 ```moudle
-		词根词缀：
-		
-		- 
-		
-		短语：
-		- 
-		
-		例句：
-		- 
+	词根词缀：
+	
+	- 
+	
+	短语：
+	- 
+	
+	例句：
+	- 
 ```
 
 ## 句子相关
@@ -1433,3 +1433,152 @@ Will 用于对未来或现在情况的预测和推测。
 269. answer（n）：回答
 270. antagonistic（adj）：敌对的
 271. antena（n）：天线
+272. assigh（v）：分派，布置；分配
+273. attacks（n）：攻击，袭击
+274. attacker（n）：攻击者
+275. august（n）：八月
+276. aurora（n）：极光
+277. authentic（adj）：真实的；真正的
+278. authenticate（v）：验证
+279. authentication（n）：认证
+280. authenticator（n）：验证器
+281. authenticity（n）：真实性
+
+#### 以 b 开头的单词
+
+1. breach（n）：违背；突破
+
+	短语：
+	- data breach：数据泄露
+
+2. bypass（n/v）：绕过
+
+#### 以 c 开头的单词
+
+1. content（n）：内容，目录；容量
+2. contention（n）：争论，论战；论点，主张
+3. contents（n）：内容，目录
+4. cyber（adj）：网络地
+
+
+	短语：
+	- cyber attact：网络攻击
+
+5. critical（a）：决定性的；批评的
+6. criticality（n）：临界状态；关键性
+7. critically（adv）：批判性地；关键地
+
+#### 以 d 开头的单词
+
+1. default（n/v）：默认
+2. describe（vt）：描写，叙述
+3. detect（vt）：察觉，发觉；侦察
+4. detectable（adj）：可检测的；可察觉的
+5. detection（n）：察觉，发觉；侦察
+6. detective（n）：侦探
+7. detector（n）：检测器；探测器
+8. device（n）：装置；设计
+
+#### 以 e 开头的单词
+
+1. enable（vt）：使能够
+2. enablement（n）：赋能
+3. expert（n）：专家，能手
+
+	短语：
+	- expert insight：专家见解
+
+
+4. expertly（adv）：熟练地；巧妙地
+
+#### 以 f 开头的单词
+
+1. factory（n）：工厂
+2. feature（n）：特征，特色；面貌
+3. featured（adj）：有特色的；特写的
+4. flaw（n）：缺点，缺陷。瑕疵
+5. flawed（adj）：有瑕疵的
+
+#### 以 g 开头的单词
+
+#### 以 h 开头的单词
+
+#### 以 i 开头的单词
+
+1. identical（a）：完全相同的；同一的
+2. identically（adv）：完全相同的
+3. identifiable（adv）：可识别的
+4. identification（n）：识别；身份证明
+5. identifier（n）：识别符
+6. identify（vt）：认出，识别，鉴定
+7. identity（n）：身份；特性
+8. impact（n）：影响，作用；冲击
+9. impacted（adj）：嵌入的；受到影响
+
+#### 以 j 开头的单词
+
+#### 以 k 开头的单词
+
+#### 以 l 开头的单词
+
+1. insight（n）：深入了解，洞察力
+
+	短语：
+	- expert insight：专家见解
+
+
+2. insignificant（adj）：无意义的；不重要的
+
+#### 以 m 开头的单词
+
+#### 以 n 开头的单词
+
+#### 以 o 开头的单词
+
+#### 以 p 开头的单词
+
+1. patch（n）：补丁
+
+#### 以 q 开头的单词
+
+#### 以 r 开头的单词
+
+1. relate（vt）：叙述；使联系
+2. related（adj）：相关的；有联系的
+3. release（vt）：释放；放松；发表
+
+#### 以 s 开头的单词
+
+1. scenario（n）：剧情说明书
+
+#### 以 t 开头的单词
+
+#### 以 u 开头的单词
+
+#### 以 v 开头的单词
+
+#### 以 w 开头的单词
+
+1. webinars（n）：在线研讨会
+2. wild（a）：野生的；野蛮的
+3. wildly（adv）：野生的；狂热的
+4. worth（a）：有 ... 的价值
+
+	短语：
+	- worth noting：值得注意的事
+
+
+5. worthless（a）：无价值的
+6. worthy（a）：有价值的
+7. would（v）：将会
+
+#### 以 x 开头的单词
+
+#### 以 y 开头的单词
+
+1. vuln：vulnerability 的简称，漏洞
+2. vulnerability（n）：脆弱性；易受伤性
+3. vulnerable（adj）：易受伤害的
+4. vulnerabilities（n）：缺陷
+
+#### 以 z 开头的单词
