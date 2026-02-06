@@ -1433,16 +1433,17 @@ Will 用于对未来或现在情况的预测和推测。
 269. answer（n）：回答
 270. antagonistic（adj）：敌对的
 271. antena（n）：天线
-272. assigh（v）：分派，布置；分配
-273. attacks（n）：攻击，袭击
-274. attacker（n）：攻击者
-275. august（n）：八月
-276. aurora（n）：极光
-277. authentic（adj）：真实的；真正的
-278. authenticate（v）：验证
-279. authentication（n）：认证
-280. authenticator（n）：验证器
-281. authenticity（n）：真实性
+272. asian（n）：亚洲人，亚裔
+273. assigh（v）：分派，布置；分配
+274. attacks（n）：攻击，袭击
+275. attacker（n）：攻击者
+276. august（n）：八月
+277. aurora（n）：极光
+278. authentic（adj）：真实的；真正的
+279. authenticate（v）：验证
+280. authentication（n）：认证
+281. authenticator（n）：验证器
+282. authenticity（n）：真实性
 
 #### 以 b 开头的单词
 
@@ -1458,15 +1459,16 @@ Will 用于对未来或现在情况的预测和推测。
 1. content（n）：内容，目录；容量
 2. contention（n）：争论，论战；论点，主张
 3. contents（n）：内容，目录
-4. cyber（adj）：网络地
+4. critical（adj）：批判的
+5. cyber（adj）：网络地
 
 
 	短语：
 	- cyber attact：网络攻击
 
-5. critical（a）：决定性的；批评的
-6. criticality（n）：临界状态；关键性
-7. critically（adv）：批判性地；关键地
+6. critical（a）：决定性的；批评的
+7. criticality（n）：临界状态；关键性
+8. critically（adv）：批判性地；关键地
 
 #### 以 d 开头的单词
 
@@ -1478,18 +1480,24 @@ Will 用于对未来或现在情况的预测和推测。
 6. detective（n）：侦探
 7. detector（n）：检测器；探测器
 8. device（n）：装置；设计
+9. display（v）：展示
 
 #### 以 e 开头的单词
 
-1. enable（vt）：使能够
-2. enablement（n）：赋能
-3. expert（n）：专家，能手
+1. efficient（adj）：效率的
+2. enable（vt）：使能够
+3. enablement（n）：赋能
+4. enhance（v）：提高，增强
+5. enterprise（n）：企业，事业单位
+6. entities（n）：实体
+7. espionage（n）：间谍行为
+8. expert（n）：专家，能手
 
 	短语：
 	- expert insight：专家见解
 
 
-4. expertly（adv）：熟练地；巧妙地
+9. expertly（adv）：熟练地；巧妙地
 
 #### 以 f 开头的单词
 
@@ -1500,6 +1508,8 @@ Will 用于对未来或现在情况的预测和推测。
 5. flawed（adj）：有瑕疵的
 
 #### 以 g 开头的单词
+
+1. government（n）：政府
 
 #### 以 h 开头的单词
 
@@ -1514,6 +1524,8 @@ Will 用于对未来或现在情况的预测和推测。
 7. identity（n）：身份；特性
 8. impact（n）：影响，作用；冲击
 9. impacted（adj）：嵌入的；受到影响
+10. infrastructure（n）：基础设施
+11. intuitive（adj）：直观的
 
 #### 以 j 开头的单词
 
@@ -1521,13 +1533,14 @@ Will 用于对未来或现在情况的预测和推测。
 
 #### 以 l 开头的单词
 
-1. insight（n）：深入了解，洞察力
+1. least（adv）：最少的
+2. insight（n）：深入了解，洞察力
 
 	短语：
 	- expert insight：专家见解
 
 
-2. insignificant（adj）：无意义的；不重要的
+3. insignificant（adj）：无意义的；不重要的
 
 #### 以 m 开头的单词
 
@@ -1535,25 +1548,39 @@ Will 用于对未来或现在情况的预测和推测。
 
 #### 以 o 开头的单词
 
+1. observe（v）：注意到
+2. organizations（n）：组织
+
 #### 以 p 开头的单词
 
 1. patch（n）：补丁
+2. practical（adj）：真实的
+3. previously（adv）：以前的
 
 #### 以 q 开头的单词
 
 #### 以 r 开头的单词
 
-1. relate（vt）：叙述；使联系
-2. related（adj）：相关的；有联系的
-3. release（vt）：释放；放松；发表
+1. reflect（v）：反射
+2. relate（vt）：叙述；使联系
+3. related（adj）：相关的；有联系的
+4. release（vt）：释放；放松；发表
+5. reveal（v）：提示
 
 #### 以 s 开头的单词
 
 1. scenario（n）：剧情说明书
+2. since（prep）：自 ... 之后
+3. significant（adj）：显著的
+4. such（dct）：如此的
 
 #### 以 t 开头的单词
 
 #### 以 u 开头的单词
+
+1. undergo（v）：经历，经受
+2. undocumented（adj）：无事实证明的
+3. utilities（n）：实用工具
 
 #### 以 v 开头的单词
 
