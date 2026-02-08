@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "76aa735705c5813e",
+        "id": "840836fa17831904",
         "type": "tabs",
         "children": [
           {
-            "id": "203603a4d43cfa47",
+            "id": "a0335165e0d149fe",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/english-articles/Analyzing Buffer Overflow/index.md",
+                "file": "content/english-articles/HTB-Cap Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -22,53 +22,6 @@
             }
           }
         ]
-      },
-      {
-        "id": "2c46eef1c2dbc225",
-        "type": "split",
-        "children": [
-          {
-            "id": "d2fe3037172a17a2",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "a4b5a7f703595f83",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "index"
-                }
-              }
-            ]
-          },
-          {
-            "id": "96f5fbd126f5baae",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "1543ff54a26e9ddb",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/posts/英语学习笔记/index.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "index"
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "horizontal"
       }
     ],
     "direction": "vertical"
@@ -125,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -164,6 +118,39 @@
               "icon": "lucide-list",
               "title": "关于扫描工具 nmap 的使用心得 的大纲"
             }
+          },
+          {
+            "id": "3409850aa07e7947",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "content/english-articles/HTB-Cap Writeup/index.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "index 的反向链接列表"
+            }
+          },
+          {
+            "id": "792c67ec6cf7a63a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "content/english-articles/HTB-Cap Writeup/index.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "index 的出链列表"
+            }
           }
         ]
       }
@@ -183,38 +170,40 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "203603a4d43cfa47",
+  "active": "a0335165e0d149fe",
   "lastOpenFiles": [
+    "content/posts/HTB-Cap Writeup/index.md",
+    "content/english-articles/HTB-Cap Writeup/index.md",
+    "public/tags/writeup/page/2/index.html",
+    "public/tags/writeup/page/2",
+    "public/english-articles/htb-cap-writeup/index.html",
+    "public/posts/htb-cap-writeup/index.html",
+    "public/english-articles/htb-cap-writeup/Pasted image 20260208201409.png",
+    "public/english-articles/htb-cap-writeup/Pasted image 20260208201108.png",
+    "public/english-articles/htb-cap-writeup",
+    "public/posts/htb-cap-writeup/Pasted image 20260208201409.png",
+    "public/posts/htb-cap-writeup/Pasted image 20260208201108.png",
+    "public/posts/htb-cap-writeup",
+    "content/english-articles/HTB-Cap Writeup/Pasted image 20260208201409.png",
+    "content/english-articles/HTB-Cap Writeup/Pasted image 20260208201108.png",
+    "content/english-articles/HTB-Cap Writeup",
+    "content/posts/HTB-Cap Writeup/Pasted image 20260208201409.png",
+    "content/posts/HTB-Cap Writeup/Pasted image 20260208201108.png",
+    "content/posts/HTB-Conversor Writeup/index.md",
+    "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
     "content/posts/英语学习笔记/index.md",
     "content/english-articles/Analyzing Buffer Overflow/index.md",
-    "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
+    "content/posts/HTB-Cap Writeup",
     "public/tags/english/index.xml",
     "public/tags/english/page/1/index.html",
-    "public/tags/english/page/1",
-    "public/tags/english/page",
-    "public/tags/english/index.html",
-    "public/tags/english",
     "public/english-articles/analyzing-buffer-overflow/Pa1.png",
-    "public/english-articles/analyzing-buffer-overflow/index.html",
-    "public/english-articles/analyzing-buffer-overflow",
-    "public/english-articles/使用gdb分析缓存区溢出漏洞/index.html",
     "public/english-articles/使用gdb分析缓存区溢出漏洞/Pa1.png",
-    "public/english-articles/使用gdb分析缓存区溢出漏洞",
-    "content/english-articles/Analyzing Buffer Overflow/Pa1.png",
     "content/posts/渗透测试通用方法论/index.md",
     "content/long-articles/_index.md",
     "content/english-articles/Test/index.md",
     "content/posts/网络安全最新资讯获取合集/index.md",
     "content/posts/Test/index.md",
     "layouts/english-articles/_index.md",
-    "public/posts/英语学习笔记/Pasted image 20260127182649.png",
-    "public/posts/英语学习笔记/Pasted image 20260127182645.png",
-    "public/posts/英语学习笔记/Pasted image 20260127182548.png",
-    "content/posts/英语学习笔记/Pasted image 20260127182649.png",
-    "content/posts/英语学习笔记/Pasted image 20260127182645.png",
-    "content/posts/英语学习笔记/Pasted image 20260127182548.png",
-    "content/posts/HTB-Conversor Writeup/index.md",
-    "public/posts/htb-conversor-writeup/Pasted image 20260122215858.png",
     "content/posts/HTB-Inject Writeup/index.md",
     "content/posts/Linux 提权专区/index.md",
     "content/posts/nmap 扫描原理与使用心得/index.md",
@@ -227,8 +216,6 @@
     "content/posts/如何根据具体的目标定制字典/index.md",
     "content/posts/流量包分析，以 tshark、tcpdump、wireshark 为例/index.md",
     "content/posts/端口敲门、单包授权与零开端口/index.md",
-    "content/posts/Venom Writeup/index.md",
-    "content/posts/NullByte Writeup/index.md",
-    "content/posts/Momentum2 Writeup/index.md"
+    "content/posts/Venom Writeup/index.md"
   ]
 }
