@@ -1,4 +1,42 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hack on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/hack/</link><description>Recent content in Hack on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 22 Jan 2026 22:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/hack/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/posts/htb-conversor-writeup/</link><pubDate>Thu, 22 Jan 2026 22:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-conversor-writeup/</guid><description>&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hack on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/hack/</link><description>Recent content in Hack on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 08 Feb 2026 20:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/hack/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/english-articles/htb-cap-writeup/</link><pubDate>Sun, 08 Feb 2026 20:00:00 +0800</pubDate><guid>https://enilmalus.github.io/english-articles/htb-cap-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;This demostration user the Kali IP address: 10.10.17.128&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="initial-reconnaissance"&gt;Initial Reconnaissance&lt;/h2&gt;
+&lt;h3 id="nmap-port-scan"&gt;Nmap Port Scan&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.129.11.242 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;sudo&lt;span style="color:#f92672"&gt;]&lt;/span&gt; password &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; kali: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Starting Nmap 7.95 &lt;span style="color:#f92672"&gt;(&lt;/span&gt; https://nmap.org &lt;span style="color:#f92672"&gt;)&lt;/span&gt; at 2026-02-08 06:16 EST
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Warning: 10.129.11.242 giving up on port because retransmission cap hit &lt;span style="color:#f92672"&gt;(&lt;/span&gt;10&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap scan report &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; 10.129.11.242
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Host is up &lt;span style="color:#f92672"&gt;(&lt;/span&gt;0.15s latency&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Not shown: &lt;span style="color:#ae81ff"&gt;65532&lt;/span&gt; closed tcp ports &lt;span style="color:#f92672"&gt;(&lt;/span&gt;reset&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PORT STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;21/tcp open ftp
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;22/tcp open ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;80/tcp open http
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap &lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; IP address &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; host up&lt;span style="color:#f92672"&gt;)&lt;/span&gt; scanned in 16.74 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Three TCP ports are open：21、22、80.&lt;/p&gt;</description></item><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/posts/htb-cap-writeup/</link><pubDate>Sun, 08 Feb 2026 20:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-cap-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;本文章以 kali 地址为 10.10.17.128 做演示&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;
+&lt;h3 id="nmap-端口扫描"&gt;nmap 端口扫描&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.129.11.242 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;sudo&lt;span style="color:#f92672"&gt;]&lt;/span&gt; password &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; kali: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Starting Nmap 7.95 &lt;span style="color:#f92672"&gt;(&lt;/span&gt; https://nmap.org &lt;span style="color:#f92672"&gt;)&lt;/span&gt; at 2026-02-08 06:16 EST
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Warning: 10.129.11.242 giving up on port because retransmission cap hit &lt;span style="color:#f92672"&gt;(&lt;/span&gt;10&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap scan report &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; 10.129.11.242
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Host is up &lt;span style="color:#f92672"&gt;(&lt;/span&gt;0.15s latency&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Not shown: &lt;span style="color:#ae81ff"&gt;65532&lt;/span&gt; closed tcp ports &lt;span style="color:#f92672"&gt;(&lt;/span&gt;reset&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PORT STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;21/tcp open ftp
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;22/tcp open ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;80/tcp open http
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap &lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; IP address &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; host up&lt;span style="color:#f92672"&gt;)&lt;/span&gt; scanned in 16.74 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;开放了三个 TCP 端口 21、22 和 80。&lt;/p&gt;</description></item><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/posts/htb-conversor-writeup/</link><pubDate>Thu, 22 Jan 2026 22:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-conversor-writeup/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;本文章以 kali 地址为 10.10.16.35 做演示&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;

