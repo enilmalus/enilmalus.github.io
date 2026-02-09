@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/english-articles/HTB-Cap Writeup/index.md",
+                "file": "content/posts/HTB-Cap Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -172,6 +171,7 @@
   },
   "active": "a0335165e0d149fe",
   "lastOpenFiles": [
+    "content/posts/HTB-Conversor Writeup/index.md",
     "content/posts/HTB-Cap Writeup/index.md",
     "content/english-articles/HTB-Cap Writeup/index.md",
     "public/tags/writeup/page/2/index.html",
@@ -189,7 +189,6 @@
     "content/english-articles/HTB-Cap Writeup",
     "content/posts/HTB-Cap Writeup/Pasted image 20260208201409.png",
     "content/posts/HTB-Cap Writeup/Pasted image 20260208201108.png",
-    "content/posts/HTB-Conversor Writeup/index.md",
     "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
     "content/posts/英语学习笔记/index.md",
     "content/english-articles/Analyzing Buffer Overflow/index.md",
