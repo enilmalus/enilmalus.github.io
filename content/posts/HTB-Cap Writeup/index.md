@@ -11,10 +11,10 @@ tags:
   - XSLT
 ---
 > 本文章以 kali 地址为 10.10.17.128 做演示
-> 
+
 ## 初始侦察
 
-### nmap 端口扫描
+### Nmap 端口扫描
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -35,7 +35,7 @@ Nmap done: 1 IP address (1 host up) scanned in 16.74 seconds
 
 开放了三个 TCP 端口 21、22 和 80。
 
-### nmap 详细信息扫描
+### Nmap 详细信息扫描
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]

