@@ -2,7 +2,7 @@
 &lt;p&gt;本文章以 kali 地址为 10.10.17.128 做演示&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id="初始侦察"&gt;初始侦察&lt;/h2&gt;
-&lt;h3 id="nmap-端口扫描"&gt;nmap 端口扫描&lt;/h3&gt;
+&lt;h3 id="nmap-端口扫描"&gt;Nmap 端口扫描&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt; -p- 10.129.11.242 
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;sudo&lt;span style="color:#f92672"&gt;]&lt;/span&gt; password &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; kali: 
