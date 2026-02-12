@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Facts Writeup/index.md",
+                "file": "content/posts/Linux 提权专区/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -189,10 +189,11 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "877e2f36152d7d66",
+  "active": "a0335165e0d149fe",
   "lastOpenFiles": [
-    "content/posts/HTB-Facts Writeup/index.md",
     "content/posts/HTB-Expressway/index.md",
+    "content/posts/Linux 提权专区/index.md",
+    "content/posts/HTB-Facts Writeup/index.md",
     "content/english-articles/HTB-Facts Writeup/index.md",
     "content/posts/HTB-Expressway",
     "content/posts/HTB-",
@@ -200,7 +201,6 @@
     "public/english-articles/htb-facts-writeup/index.html",
     "public/english-articles/htb-facts-writeup",
     "content/english-articles/HTB-Cap Writeup/index.md",
-    "content/posts/Linux 提权专区/index.md",
     "content/english-articles/HTB-Facts Writeup/Pasted image 20260209180459.png",
     "content/english-articles/HTB-Facts Writeup/Pasted image 20260209180359.png",
     "content/english-articles/HTB-Facts Writeup/Pasted image 20260209175919.png",
