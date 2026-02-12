@@ -33,7 +33,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/english-articles/HTB-Facts Writeup/index.md",
+                "file": "content/posts/HTB-Expressway/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -98,8 +98,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -193,8 +192,11 @@
   "active": "877e2f36152d7d66",
   "lastOpenFiles": [
     "content/posts/HTB-Facts Writeup/index.md",
-    "content/posts/HTB-Cap Writeup/index.md",
+    "content/posts/HTB-Expressway/index.md",
     "content/english-articles/HTB-Facts Writeup/index.md",
+    "content/posts/HTB-Expressway",
+    "content/posts/HTB-",
+    "content/posts/HTB-Cap Writeup/index.md",
     "public/english-articles/htb-facts-writeup/index.html",
     "public/english-articles/htb-facts-writeup",
     "content/english-articles/HTB-Cap Writeup/index.md",
@@ -218,8 +220,6 @@
     "content/posts/HTB-Facts Writeup.md",
     "public/tags/writeup/page/2/index.html",
     "public/tags/writeup/page/2",
-    "public/english-articles/htb-cap-writeup/index.html",
-    "public/posts/htb-cap-writeup/index.html",
     "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
     "content/posts/英语学习笔记/index.md",
     "content/english-articles/Analyzing Buffer Overflow/index.md",
