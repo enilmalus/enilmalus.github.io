@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/Linux 提权专区/index.md",
+                "file": "content/posts/渗透测试通用方法论/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -191,6 +191,7 @@
   },
   "active": "a0335165e0d149fe",
   "lastOpenFiles": [
+    "content/long-articles/_index.md",
     "content/posts/HTB-Expressway/index.md",
     "content/posts/Linux 提权专区/index.md",
     "content/posts/HTB-Facts Writeup/index.md",
@@ -223,7 +224,6 @@
     "content/posts/使用GDB分析缓存区溢出漏洞/index.md",
     "content/posts/英语学习笔记/index.md",
     "content/english-articles/Analyzing Buffer Overflow/index.md",
-    "content/long-articles/_index.md",
     "content/english-articles/Test/index.md",
     "content/posts/网络安全最新资讯获取合集/index.md",
     "content/posts/Test/index.md",

