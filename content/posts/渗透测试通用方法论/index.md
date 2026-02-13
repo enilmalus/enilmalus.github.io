@@ -323,27 +323,27 @@ john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa
 
 破解 7z
 
-```
+```bash
 /usr/share/john/7z2john.py backup.7z > 7z_hash.txt
 ```
 
-```
+```bash
 john 7z_hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
 ```
 
 破解 zip
 
-```
+```bash
 sudo /usr/sbin/zip2john flag.zip > flag.txt
 ```
 
-```
+```bash
 john flag.txt --wordlist=/usr/share/wordlists/rockyou.txt
 ```
 
 生成更好的字典
 
-```
+```bash
 john -rules -wordlist=password.txt - stdout | sort | uniq > wordlist.txt
 ```
 
@@ -367,13 +367,13 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact
 
 列出 SMB 共享
 
-```
+```bash
 sudo smbclient -N -L \\\\10.10.10.10
 ```
 
 连接到 SMB 共享
 
-```
+```bash
 sudo smbclient \\\\10.10.10.10\\enil
 ```
 
@@ -383,23 +383,23 @@ sudo smbclient \\\\10.10.10.10\\enil
 
 创建 600 字节缓冲区
 
-```
+```bash
 msf-pattern_crate -l 600
 ```
 
 确定字节
 
-```
+```bash
 msf-pattern_offset -l 600 -q 35724134
 ```
 
 jum esp
 
-```
+```bash
 msf-nasm_shell
 ```
 
-```
+```bash
 jmp esp
 ```
 
