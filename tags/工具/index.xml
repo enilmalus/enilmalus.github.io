@@ -1,151 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工具 on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/%E5%B7%A5%E5%85%B7/</link><description>Recent content in 工具 on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 01 Jan 2026 00:40:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="ssh2john-提取私钥"&gt;ssh2john 提取私钥&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ssh2john id_rsa | tee key_hash
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。&lt;/p&gt;
-&lt;p&gt;John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。&lt;/p&gt;
-&lt;h2 id="john-破解提取的私钥"&gt;John 破解提取的私钥&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ john key_hash
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。&lt;/p&gt;
-&lt;h3 id="fasttrack-字典"&gt;fasttrack 字典&lt;/h3&gt;
-&lt;p&gt;fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。&lt;/p&gt;</description></item><item><title>使用GDB分析缓存区溢出漏洞</title><link>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</link><pubDate>Wed, 31 Dec 2025 08:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</guid><description>&lt;h2 id="gdb-peda-分析"&gt;gdb-peda 分析&lt;/h2&gt;
-&lt;p&gt;peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。由于利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。&lt;/p&gt;
-&lt;h3 id="gdb-peda-下载"&gt;gdb-peda 下载&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ sudo apt install gdb-peda
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;gdb-peda is already the newest version &lt;span style="color:#f92672"&gt;(&lt;/span&gt;1.2-0kali2&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;The following packages were automatically installed and are no longer required:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; gcc-14-base:i386 libblkid-dev libgio-2.0-dev-bin libicu-dev libpython3.12-minimal libsepol-dev native-architecture python3-poetry-dynamic-versioning python3.12-tk
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; gir1.2-girepository-2.0 libflac12t64 libgirepository-1.0-1 liblbfgsb0 libpython3.12-stdlib libsysprof-capture-4-dev python3-aioconsole python3-pywerview ruby-zeitwerk
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; girepository-tools libfuse3-3 libglapi-mesa libplacebo349 libpython3.12t64 libutempter0 python3-dunamai python3-setproctitle strongswan
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; icu-devtools libgeos3.13.0 libglib2.0-dev-bin libpoppler145 librav1e0.7 libx264-164 python3-nfsclient python3-tomlkit
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#39;sudo apt autoremove&amp;#39;&lt;/span&gt; to remove them.
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Summary:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: &lt;span style="color:#ae81ff"&gt;1420&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="启动分析"&gt;启动分析&lt;/h3&gt;
-&lt;p&gt;寻找 peda 存放位置&lt;/p&gt;</description></item><item><title>流量包分析，以 tshark、tcpdump、wireshark 为例</title><link>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</link><pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</guid><description>&lt;h2 id="流量包分析"&gt;流量包分析&lt;/h2&gt;
-&lt;h3 id="libpcappacket-pactrue-library"&gt;Libpcap（Packet Pactrue Library）&lt;/h3&gt;
-&lt;p&gt;Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。&lt;/p&gt;
-&lt;h3 id="bpf"&gt;BPF&lt;/h3&gt;
-&lt;p&gt;执行流程：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;用户在命令行输入高级过滤语句。&lt;/li&gt;
-&lt;li&gt;libpcap 编码器转换为 BPF 字节码。&lt;/li&gt;
-&lt;li&gt;BPF 指令加载到内核，在虚拟机中运行。&lt;/li&gt;
-&lt;li&gt;过滤过的包加载到用户缓冲区。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id="工具对比"&gt;工具对比&lt;/h2&gt;
-&lt;h3 id="tcpdump"&gt;tcpdump&lt;/h3&gt;
-&lt;p&gt;tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。&lt;/p&gt;
-&lt;h3 id="tshark"&gt;tshark&lt;/h3&gt;
-&lt;p&gt;tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。&lt;/p&gt;
-&lt;h3 id="wireshark"&gt;wireshark&lt;/h3&gt;
-&lt;p&gt;wireshark 拥有完整的 ui 界面。&lt;/p&gt;
-&lt;h3 id="用法分析"&gt;用法分析&lt;/h3&gt;
-&lt;p&gt;当一个 IP 没有检测到开放的服务时应想到对这个 IP 进行抓包分析。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;-f 'host 10.10.10.45'&lt;/code&gt; 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。&lt;/p&gt;
-&lt;p&gt;&lt;img src="P1.png" alt="P1"&gt;&lt;/p&gt;
-&lt;p&gt;例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tsahrk -i eth0 -f &lt;span style="color:#e6db74"&gt;&amp;#39;host 10.10.10.45&amp;#39;&lt;/span&gt; -w Enilmalus.pcap
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tsahrk -r Enilmalus.pcap -V
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tshark -r Enilmalus.pcap -T fields -e data | tr -d &lt;span style="color:#e6db74"&gt;&amp;#39; &amp;#39;&lt;/span&gt; | xxd -r -p
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;解释一下最底下这个命令，这是一个完整的网络数据分析流程，从抓包文件 Enilmalus.pcap 中提取原始数据并将其转换为人类可读的文件。命令从 tshark 开始，它是 wireshark 的命令行版本，用于处理网络流量，前面捕捉流量，现在读取，-r 时 read 的缩写，指示 tshark 从 Enilmalus.pcap 中读取数据：-T 是 type 的缩写，指定输出类型为 fields（字段），表示以字段形式输出而不是完整的数据包详情；-e 是 extract 的缩写，后面接 data，告诉 tshark 提取每个数据包的原始负载，通常以十六进制字符串形式输出，例如 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt;。接着，管道符号 &lt;code&gt;|&lt;/code&gt; 将输出传递给 tr ，这是一个 translate 的工具；-d 是 delete 的缩写，后面跟 &lt;code&gt;' '&lt;/code&gt; ，表示一处所有空格，表示移除所有空格，把带空格的 &lt;code&gt;48 65 6c 6c 6f&lt;/code&gt; 变成 &lt;code&gt;48656c6c6f&lt;/code&gt;。最后，另一个管道 &lt;code&gt;|&lt;/code&gt; 将结果交给 xxd。一个处理十六进制字符串的工具，其名称为 &lt;code&gt;hexadecimal&lt;/code&gt; 和 &lt;code&gt;dump&lt;/code&gt; 的组合，用于创建或解析数据的十六进制转储；-r 是 reverse 的缩写，表示将十六进制字符串转换为二进制；-p 是 plaintext 的缩写，处理没有分隔符的连续十六进制字符串，最终 &lt;code&gt;48656c6c6f&lt;/code&gt; 解读为可读的 &lt;code&gt;Hello&lt;/code&gt;。&lt;/p&gt;</description></item><item><title>Curl 使用详解</title><link>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</guid><description>&lt;h2 id="curl-原理剖析"&gt;curl 原理剖析&lt;/h2&gt;
-&lt;h3 id="curl-核心机制"&gt;curl 核心机制&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt() 函数调用。&lt;/li&gt;
-&lt;li&gt;协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。&lt;/li&gt;
-&lt;li&gt;连接复用：再以此命令中请求多个 URL 时，curl 会尝试复用 TCP 连接&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id="curl-参数详解"&gt;curl 参数详解&lt;/h2&gt;
-&lt;h3 id="curl-帮助命令"&gt;curl 帮助命令&lt;/h3&gt;
-&lt;p&gt;下面为 curl 详细地帮助命令&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ curl -h 
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Usage: curl &lt;span style="color:#f92672"&gt;[&lt;/span&gt;options...&lt;span style="color:#f92672"&gt;]&lt;/span&gt; &amp;lt;url&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -d, --data &amp;lt;data&amp;gt; HTTP POST data
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -f, --fail Fail fast with no output on HTTP errors
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -h, --help &amp;lt;subject&amp;gt; Get help &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; commands
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -o, --output &amp;lt;file&amp;gt; Write to file instead of stdout
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -O, --remote-name Write output to file named as remote file
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -i, --show-headers Show response headers in output
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -s, --silent Silent mode
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -T, --upload-file &amp;lt;file&amp;gt; Transfer local FILE to destination
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -u, --user &amp;lt;user:password&amp;gt; Server user and password
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -A, --user-agent &amp;lt;name&amp;gt; Send User-Agent &amp;lt;name&amp;gt; to server
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -v, --verbose Make the operation more talkative
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -V, --version Show version number and quit
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;This is not the full help; this menu is split into categories.
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#34;--help category&amp;#34;&lt;/span&gt; to get an overview of all categories, which are:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#34;--help all&amp;#34;&lt;/span&gt; to list all options
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Use &lt;span style="color:#e6db74"&gt;&amp;#34;--help [option]&amp;#34;&lt;/span&gt; to view documentation &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; a given option
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="参数详解"&gt;参数详解&lt;/h3&gt;
-&lt;h4 id="-ddata-data-参数"&gt;-d/&amp;ndash;data &amp;lt;data&amp;gt; 参数&lt;/h4&gt;
-&lt;p&gt;使用 -d 参数，curl 默认将 HTTP 方法切换为 POST，默认 Content-Type 被设置为 &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt; 。&lt;/p&gt;</description></item><item><title>Nmap 扫描原理与使用心得</title><link>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>&lt;blockquote&gt;
-&lt;p&gt;以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id="nmap-扫描原理解析"&gt;nmap 扫描原理解析&lt;/h2&gt;
-&lt;p&gt;nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。&lt;/p&gt;
-&lt;h3 id="不同操作系统的响应差异"&gt;不同操作系统的响应差异&lt;/h3&gt;
-&lt;table&gt;
- &lt;thead&gt;
- &lt;tr&gt;
- &lt;th&gt;操作系统/内核&lt;/th&gt;
- &lt;th&gt;TCP 关闭端口响应&lt;/th&gt;
- &lt;th&gt;ICMP 关闭端口响应&lt;/th&gt;
- &lt;th&gt;特征差异点&lt;/th&gt;
- &lt;/tr&gt;
- &lt;/thead&gt;
- &lt;tbody&gt;
- &lt;tr&gt;
- &lt;td&gt;Linux 2.6 / 3.x / 4.x / 5.x&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 常见 64&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;窗口大小为 0，ICMP 报文长度与 Padding 一致&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Windows XP / 2003&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 128&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;常常带有 ACK 标志，ICMP 报文长度较短&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Windows 7 / 10 / Server&lt;/td&gt;
- &lt;td&gt;返回 RST，ATK，TTL 128&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;窗口大小与 XP 不同，ICMP 检验与算法不同&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;FreeBSD / OpenBSD&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 常见 64&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;ICMP 报文填充方式与 Linux 不同&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Solaris&lt;/td&gt;
- &lt;td&gt;返回 RST，TTL 常见 255&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;高 TTL，RST 包含独特的窗口值&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;Cisco ISO / 路由器类设备&lt;/td&gt;
- &lt;td&gt;有时直接丢弃，无 RST&lt;/td&gt;
- &lt;td&gt;UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited）&lt;/td&gt;
- &lt;td&gt;偏向过滤回应，不遵循主机栈常见模式&lt;/td&gt;
- &lt;/tr&gt;
- &lt;tr&gt;
- &lt;td&gt;MikroTik RouterOPS&lt;/td&gt;
- &lt;td&gt;RST 响应 TTL -64&lt;/td&gt;
- &lt;td&gt;UDP 端口不可达：Type 3，Code 3&lt;/td&gt;
- &lt;td&gt;TCP 选项顺序与 Linux 内核不同，较易区分&lt;/td&gt;
- &lt;/tr&gt;
- &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;Linux 通常是干净的 &lt;code&gt;RST + TTL 64&lt;/code&gt;，Windows 多带 &lt;code&gt;RST、ACK、TTL 12&lt;/code&gt;，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工具 on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/%E5%B7%A5%E5%85%B7/</link><description>Recent content in 工具 on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 01 Jan 2026 00:40:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>John 工作原理分析</title><link>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</link><pubDate>Thu, 01 Jan 2026 00:40:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/john-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</guid><description>ssh2john 提取私钥 ┌──(kali㉿kali)-[~/Work/Kali] └─$ ssh2john id_rsa | tee key_hash SSH 私钥文件本身采用专门的格式储存，其中包含了加密的参数消息、加密算法以及密文数据，而不是直接的密码哈希字符串，私钥加密时会采用密钥派生函数（如 PBKDF2 或 bcrypt ）来对口令生成对称密钥，然后用该密钥对私钥数据进行加密，使得文件内容看起来像是一段难以辨别的编码数据。John 是一个专门用于破解密码哈希的工具，他需要知道加密算法的具体参数（例如加密方式、迭代次数、盐值等），才能通过暴力破解或者字典攻击验证猜测的口令是否正确。ssh2john 就是用来解析 SSH 私钥文件，提取出其中的加密参数和密文数据，构造出一个标准化的哈希格式，这种格式正式 John 能够识别并处理的。只有经过这种转换，John 才能根据已知的加密参数对猜测的口令进行验证，否则直接对原始密钥文件进行暴力破解是不现实的，因为文件格式本身并不直接暴露口令的哈希。
+John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。
+John 破解提取的私钥 ┌──(kali㉿kali)-[~/Work/Kali] └─$ john key_hash John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。
+fasttrack 字典 fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。</description></item><item><title>使用GDB分析缓存区溢出漏洞</title><link>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</link><pubDate>Wed, 31 Dec 2025 08:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E4%BD%BF%E7%94%A8gdb%E5%88%86%E6%9E%90%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA%E6%BC%8F%E6%B4%9E/</guid><description>gdb-peda 分析 peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。由于利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。
+gdb-peda 下载 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo apt install gdb-peda gdb-peda is already the newest version (1.2-0kali2). The following packages were automatically installed and are no longer required: gcc-14-base:i386 libblkid-dev libgio-2.0-dev-bin libicu-dev libpython3.12-minimal libsepol-dev native-architecture python3-poetry-dynamic-versioning python3.12-tk gir1.2-girepository-2.0 libflac12t64 libgirepository-1.0-1 liblbfgsb0 libpython3.12-stdlib libsysprof-capture-4-dev python3-aioconsole python3-pywerview ruby-zeitwerk girepository-tools libfuse3-3 libglapi-mesa libplacebo349 libpython3.12t64 libutempter0 python3-dunamai python3-setproctitle strongswan icu-devtools libgeos3.</description></item><item><title>流量包分析，以 tshark、tcpdump、wireshark 为例</title><link>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</link><pubDate>Tue, 30 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E6%B5%81%E9%87%8F%E5%8C%85%E5%88%86%E6%9E%90%E4%BB%A5-tsharktcpdumpwireshark-%E4%B8%BA%E4%BE%8B/</guid><description>流量包分析 Libpcap（Packet Pactrue Library） Libpcap 是 Unix/Linux 下的标准数据包捕获库，tshark、tcpdump、wireshark 都是通过获取这个接口实现抓包功能。
+BPF 执行流程：
+用户在命令行输入高级过滤语句。 libpcap 编码器转换为 BPF 字节码。 BPF 指令加载到内核，在虚拟机中运行。 过滤过的包加载到用户缓冲区。 工具对比 tcpdump tcpdump 是最轻量、最基础的捕获工具，快速、可靠，可以在 ssh 中使用。
+tshark tshark 是 wireshark 的完整命令行模式，调用 dumpcap 进行实际捕获。
+wireshark wireshark 拥有完整的 ui 界面。
+用法分析 当一个 IP 没有检测到开放的服务时应想到对这个 IP 进行抓包分析。
+-f 'host 10.10.10.45' 的语法在 tshark、tcpdump、wireshark 等流量分析工具中是通用的，即 BPF 语法。它是一种在内核层面进行的数据包过滤机制，它允许网络抓包工具在数据包传输到用户空间之前就进行筛选，从而大大提高了捕获效率，BPF 提供了一套虚拟指令集，用户可以编写规则，内核在接收到每个数据包时按照这些规则进行判断，只有符合条件的数据包才会被传输到用户空间进行进一步处理，由于在内核中进行过滤能够避免将大量不必要的数据包拷贝到用户空间，这种设计不仅优化了性能，还降低了系统资源的消耗，使得 BPF 成为了许多网络分析、监控和安全审计工具的核心组件。
+例如上面这个执行结果，10.10.10.145 这台主机以 UDP 协议向广播地址 255.255.255.255 发送数据包，流量呈现出明显的周期性和两种不同特征，数据包大概每隔 60 秒成对出现，一类数据包显示 UDP，字段为 139，负载较小，一类数据包显示 UDP，字段为 514，负载较大。周期内数据包发送顺序可能互换，表明了主机很可能在进行某种广播式的服务或心跳检测，利用 UDP 的无连接特性通过广播方式向网络中其他设备通告状态信息或探测服务。整个流量特征体现了主动广播、定时发送以及数据包大小与内容明显区分的规律性，这在网络设备中并不罕见，有必要进一步看具体的数据意义。
+tsahrk -i eth0 -f &amp;#39;host 10.</description></item><item><title>Curl 使用详解</title><link>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</link><pubDate>Sun, 28 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/posts/curl-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</guid><description>curl 原理剖析 curl 核心机制 Libcurl 驱动：curl 是 libcurl 库的命令行前端，实际上 curl 的每一个参数都在映射 libcurl 的 curl_easy_setopt() 函数调用。 协议自动协商：curl 不仅发送 HTTP，它会根据 URL scheme（ftp://、dict://、gopher://）自动切换底层协议栈。 连接复用：再以此命令中请求多个 URL 时，curl 会尝试复用 TCP 连接 Libcurl 是 curl 项目提供的跨平台 C 库，用于处理 URL 数据传输，支持 HTTP、FTP、SMTP 等多种协议。
+curl 参数详解 curl 帮助命令 下面为 curl 详细地帮助命令
+┌──(kali㉿kali)-[~/Work/Kali] └─$ curl -h Usage: curl [options...] &amp;lt;url&amp;gt; -d, --data &amp;lt;data&amp;gt; HTTP POST data -f, --fail Fail fast with no output on HTTP errors -h, --help &amp;lt;subject&amp;gt; Get help for commands -o, --output &amp;lt;file&amp;gt; Write to file instead of stdout -O, --remote-name Write output to file named as remote file -i, --show-headers Show response headers in output -s, --silent Silent mode -T, --upload-file &amp;lt;file&amp;gt; Transfer local FILE to destination -u, --user &amp;lt;user:password&amp;gt; Server user and password -A, --user-agent &amp;lt;name&amp;gt; Send User-Agent &amp;lt;name&amp;gt; to server -v, --verbose Make the operation more talkative -V, --version Show version number and quit This is not the full help; this menu is split into categories.</description></item><item><title>Nmap 扫描原理与使用心得</title><link>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</link><pubDate>Wed, 24 Sep 2025 21:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</guid><description>以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例
+nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
+不同操作系统的响应差异 操作系统/内核 TCP 关闭端口响应 ICMP 关闭端口响应 特征差异点 Linux 2.6 / 3.x / 4.x / 5.x 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 窗口大小为 0，ICMP 报文长度与 Padding 一致 Windows XP / 2003 返回 RST，TTL 128 UDP 端口不可达：Type 3，Code 3 常常带有 ACK 标志，ICMP 报文长度较短 Windows 7 / 10 / Server 返回 RST，ATK，TTL 128 UDP 端口不可达：Type 3，Code 3 窗口大小与 XP 不同，ICMP 检验与算法不同 FreeBSD / OpenBSD 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 ICMP 报文填充方式与 Linux 不同 Solaris 返回 RST，TTL 常见 255 UDP 端口不可达：Type 3，Code 3 高 TTL，RST 包含独特的窗口值 Cisco ISO / 路由器类设备 有时直接丢弃，无 RST UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited） 偏向过滤回应，不遵循主机栈常见模式 MikroTik RouterOPS RST 响应 TTL -64 UDP 端口不可达：Type 3，Code 3 TCP 选项顺序与 Linux 内核不同，较易区分 Linux 通常是干净的 RST + TTL 64，Windows 多带 RST、ACK、TTL 12，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。</description></item></channel></rss>
