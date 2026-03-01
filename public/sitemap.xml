@@ -26,6 +26,12 @@
     <loc>http://localhost:1313/tags/writeup/</loc>
     <lastmod>2026-02-28T21:00:00+08:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/posts/%E5%A6%82%E4%BD%95%E4%B8%BA%E9%9D%B6%E6%9C%BA%E9%85%8D%E7%BD%AE-dhcp-copy/</loc>
+    <lastmod>2026-02-25T17:29:33+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2026-02-25T17:29:33+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/tags/challenge/</loc>
     <lastmod>2026-02-14T16:00:00+08:00</lastmod>
   </url><url>
@@ -84,9 +90,6 @@
     <lastmod>2026-01-09T21:30:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</loc>
-    <lastmod>2026-01-09T21:30:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2026-01-09T21:30:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/linux-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</loc>
