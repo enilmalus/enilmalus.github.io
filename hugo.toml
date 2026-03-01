@@ -5,6 +5,9 @@ theme = "hugo-theme-hello-friend-ng"
 
 # Updated to force rebuild
 
+[params]
+  author = "Enil"
+
 [[menu.main]]
 identifier = "posts"
 name = "文章"
@@ -15,13 +18,13 @@ weight = 1
 identifier = "english-articles"
 name = "English Articles"
 url = "/english-articles/"
-weight = 3
+weight = 4
 
 [[menu.main]]
 identifier = "long-articles"
 name = "长文章"
 url = "/long-articles/"
-weight = 20 # 数字越大越靠右，根据需要调整顺序
+weight = 3 # 数字越大越靠右，根据需要调整顺序
 
 [[menu.main]]
 identifier = "tags"
