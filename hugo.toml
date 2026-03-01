@@ -18,6 +18,12 @@ weight = 1
 identifier = "english-articles"
 name = "English Articles"
 url = "/english-articles/"
+weight = 10
+
+[[menu.main]]
+identifier = "Tools"
+name = "工具专区"
+url = "/Tools/"
 weight = 4
 
 [[menu.main]]
@@ -30,7 +36,7 @@ weight = 3 # 数字越大越靠右，根据需要调整顺序
 identifier = "tags"
 name = "标签"
 url = "/tags/"
-weight = 2
+weight = 10000
 
 [outputs]
 home = ["HTML", "RSS", "JSON"]
