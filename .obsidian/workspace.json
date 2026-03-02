@@ -4,30 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "840836fa17831904",
+        "id": "89dee57840f5df8c",
         "type": "tabs",
         "children": [
           {
-            "id": "a0335165e0d149fe",
+            "id": "98bbf95b77de8ae5",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Driver Writeup/index.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "index"
-            }
-          },
-          {
-            "id": "2cbd17de897fb796",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/posts/Windows 提权专区/index.md",
+                "file": "content/english-articles/HTB-Json Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -35,8 +21,7 @@
               "title": "index"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -184,8 +170,23 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "2cbd17de897fb796",
+  "active": "98bbf95b77de8ae5",
   "lastOpenFiles": [
+    "content/posts/HTB-Driver Writeup/index.md",
+    "content/posts/HTB-Json Writeup/index.md",
+    "content/english-articles/HTB-Json Writeup/index.md",
+    "content/Tools/Bash 逃逸及反弹 Shell 合集/index.md",
+    "content/posts/Windows 提权专区/index.md",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302145914.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302143248.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302113001.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302112321.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302112209.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302110712.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302110511.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302110414.png",
+    "content/english-articles/HTB-Json Writeup/Pasted image 20260302110209.png",
+    "content/english-articles/HTB-Json Writeup",
     "public/tags/hack/page/5/index.html",
     "public/tags/hack/page/5",
     "public/tools/反序列化/index.html",
@@ -193,23 +194,11 @@
     "public/posts/windows-提权专区/index.html",
     "public/posts/windows-提权专区",
     "public/posts/htb-json-writeup/Pasted image 20260302145914.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302143248.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302113001.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302112321.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302112209.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302110712.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302110511.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302110414.png",
-    "public/posts/htb-json-writeup/Pasted image 20260302110209.png",
-    "content/posts/HTB-Json Writeup/index.md",
-    "content/posts/Windows 提权专区/index.md",
     "content/Tools/传输文件/index.md",
     "content/posts/Windows 提权专区",
     "content/posts/articles/index.md",
     "content/posts/articles",
-    "content/Tools/Bash 逃逸及反弹 Shell 合集/index.md",
     "content/Tools/反序列化/index.md",
-    "content/posts/HTB-Json Writeup/Pasted image 20260302145914.png",
     "scripts/Moudles/articles/index.md",
     "content/Tools/反序列化",
     "content/Tools/共享目录相关/index.md",
@@ -218,19 +207,15 @@
     "content/Tools/渗透测试通用方法论/index.md",
     "content/Tools/爆破相关/index.md",
     "content/Tools/135-RCP/index.md",
-    "public/tools/爆破相关/index.html",
-    "public/tools/爆破相关",
     "content/Tools/加密识别与命令行解密/index.md",
     "content/Tools/图片分析、文件分析、文件上传、Nc/index.md",
     "content/Tools/嗅探/index.md",
-    "content/posts/HTB-Driver Writeup/index.md",
     "content/Tools/缓存区溢出漏洞/index.md",
     "content/Tools/公私钥/index.md",
     "content/Tools/John 工作原理分析/index.md",
     "content/Tools/越权/index.md",
     "content/Tools/如何根据具体的目标定制字典/index.md",
     "content/Tools/端口敲门、单包授权与零开端口/index.md",
-    "content/Tools/流量包分析，以 tshark、tcpdump、wireshark 为例/index.md",
-    "content/Tools/Curl 使用详解/index.md"
+    "content/Tools/流量包分析，以 tshark、tcpdump、wireshark 为例/index.md"
   ]
 }
