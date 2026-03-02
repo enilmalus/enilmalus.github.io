@@ -573,7 +573,7 @@ Network Card(s):           1 NIC(s) Installed.
 Hyper-V Requirements:      A hypervisor has been detected. Features required for Hyper-V will not be displayed.
 ```
 
-## ## Privilege Escalation Enumeration
+## Privilege Escalation Enumeration
 
 Checking the current user's privileges.
 
