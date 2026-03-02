@@ -1,13 +1,29 @@
 ---
-title: John 工作原理分析
-date: 2026-01-01T00:40:00+08:00
+title: 公私钥
+date: 2026-01-01T17:00:00+08:00
 draft: false
 toc: true
 images:
 tags:
   - Hack
-  - 工具
 ---
+## 关于 id_rsa
+
+访问 `http://facts.htb/admin/media/download_private_file?file=../../../../../../home/trivia/id_ed25519` 尝试下载他们的 `id_rsa` 文件
+
+```id_rsa
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABDPFoJGv5
+iCd2KL8Mk98VRJAAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIIJhikYx00CYMUNJ
+bkfs15NSAgTKVW07Aw2N4nxQ/RZ6AAAAoAj0NoVnW97AXPxNpphTUEKgehTfW3KWvX/9ps
+AvdkbwNKeW1F/CkRpsFkmcc1/cvTrzBueLfuJI/2Cm8RB55xHgkJNtkk9Fc3HLRF8Z/kZC
+Mn8NP3Z2qOuHzSO5yoqU2mFiFBouc56nWkR50JElA2z0L65KU81xDPB3YVujEf/yxbvoxJ
+ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
+-----END OPENSSH PRIVATE KEY-----
+```
+
+值得注意的是，下载 `id_rsa` 是失败的，需要下载 `id_ed25519`；`id_ed25519` 是现代 SSH 推荐的 `Ed25519` 算法私钥文件。
+
 ## ssh2john 提取私钥
 
 ```bash
@@ -27,7 +43,3 @@ John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换
 ```
 
 John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。
-
-### fasttrack 字典
-
-fasttrack.txt 时 Kali 中的一个轻量级 “常用弱口令字典” ，其优势在于体量小、命中率较高，开箱即用，但不会随着 Kali 的更新而更新。作为测试时的第一步爆破字典，它可以帮助安全人员快速验证目标是否使用了过于单一或过时的弱密码。对于需要兼顾速度与小笼包的渗透测试场景而言，先从 fasttrack.txt 入手，再逐步过渡到规模更大的字典列表是一种较为常见且易于实施的做法。

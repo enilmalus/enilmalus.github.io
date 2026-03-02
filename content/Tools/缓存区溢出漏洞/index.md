@@ -1,5 +1,5 @@
 ---
-title: 使用GDB分析缓存区溢出漏洞
+title: 缓存区溢出漏洞
 date: 2025-12-31T08:29:33+08:00
 draft: false
 toc: true
@@ -9,6 +9,32 @@ tags:
   - 工具
   - 缓冲区溢出
 ---
+## 相关命令速查
+
+### Msf
+
+- 创建 600 字节缓冲区
+
+```bash
+msf-pattern_crate -l 600
+```
+
+- 确定字节
+
+```bash
+msf-pattern_offset -l 600 -q 35724134
+```
+
+- jum esp
+
+```bash
+msf-nasm_shell
+```
+
+```bash
+jmp esp
+```
+
 ## gdb-peda 分析
 
 peda 是 Python Exploit Development Assistance 的缩写，这个工具是建立在 GDB 之上的，用 Python 编写的，旨在位利用开发提供版主。其设计初衷是为了让漏洞分析和利用开发过程更加直观高效，通过增强 GDB 的功能，如改进的堆栈、寄存器和内存显示，以及针对二进制分析和漏洞挖掘的实用工具，帮助安全研究人员更快地理解和利用程序中的漏洞。由于利用开发往往需要细致地分析程序执行状态、内存布局反编译代码，gdb-peda 的这些增强功能就显得尤为重要，能大大提升调试和漏洞利用的效率。

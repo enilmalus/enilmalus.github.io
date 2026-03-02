@@ -27,7 +27,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Json Writeup/index.md",
+                "file": "content/posts/Windows 提权专区/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -37,26 +37,6 @@
           }
         ],
         "currentTab": 1
-      },
-      {
-        "id": "8a3499b5fee8af8e",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "67b3ea2b75551b61",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/posts/HTB-Json Writeup/index.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "index"
-            }
-          }
-        ]
       }
     ],
     "direction": "vertical"
@@ -204,53 +184,53 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "47af2e2a6a6e6bb5",
+  "active": "2cbd17de897fb796",
   "lastOpenFiles": [
-    "public/tools/如何根据具体的目标定制字典/index.html",
-    "public/tools/如何根据具体的目标定制字典/result.png",
-    "public/tools/如何根据具体的目标定制字典",
-    "content/Tools/如何根据具体的目标定制字典/result.png",
-    "content/Tools/如何根据具体的目标定制字典/index.md",
-    "content/Tools/如何根据具体的目标定制字典",
-    "public/tools/使用gdb分析缓存区溢出漏洞/index.html",
-    "public/tools/使用gdb分析缓存区溢出漏洞/Pa1.png",
-    "public/tools/使用gdb分析缓存区溢出漏洞",
-    "content/Tools/使用GDB分析缓存区溢出漏洞/Pa1.png",
-    "content/Tools/使用GDB分析缓存区溢出漏洞/index.md",
-    "content/Tools/使用GDB分析缓存区溢出漏洞",
-    "public/tools/渗透测试通用方法论/index.html",
-    "public/tools/渗透测试通用方法论/漏洞搜索示意图.png",
-    "public/tools/渗透测试通用方法论/P2.png",
-    "public/tools/渗透测试通用方法论/P1.png",
-    "public/tools/渗透测试通用方法论/AI驱动搜索.png",
-    "public/tools/渗透测试通用方法论",
-    "content/Tools/渗透测试通用方法论/漏洞搜索示意图.png",
-    "content/Tools/渗透测试通用方法论/P2.png",
+    "content/posts/HTB-Json Writeup/index.md",
+    "content/posts/Windows 提权专区/index.md",
+    "content/Tools/传输文件/index.md",
+    "content/posts/Windows 提权专区",
+    "content/posts/articles/index.md",
+    "content/posts/articles",
+    "content/Tools/Bash 逃逸及反弹 Shell 合集/index.md",
+    "content/Tools/反序列化/index.md",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302145914.png",
+    "scripts/Moudles/articles/index.md",
+    "content/Tools/反序列化",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302143248.png",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302113001.png",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302112321.png",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302112209.png",
+    "content/Tools/共享目录相关/index.md",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302110712.png",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302110511.png",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302110414.png",
+    "content/posts/HTB-Json Writeup/Pasted image 20260302110209.png",
+    "content/Tools/nmap 扫描原理与使用心得/index.md",
+    "content/Tools/添加 Hosts 记录的几种方法/index.md",
     "content/Tools/渗透测试通用方法论/index.md",
-    "content/Tools/渗透测试通用方法论",
-    "public/tools/端口敲门单包授权与零开端口/index.html",
-    "public/tools/端口敲门单包授权与零开端口",
+    "content/Tools/爆破相关/index.md",
+    "content/Tools/135-RCP/index.md",
+    "public/tools/爆破相关/index.html",
+    "public/tools/爆破相关",
+    "public/tools/嗅探/index.html",
+    "public/tools/嗅探",
+    "public/tools/传输文件/index.html",
+    "public/tools/传输文件",
+    "content/Tools/加密识别与命令行解密/index.md",
+    "content/Tools/传输文件",
+    "content/Tools/图片分析、文件分析、文件上传、Nc/index.md",
+    "content/Tools/嗅探/index.md",
+    "content/posts/HTB-Driver Writeup/index.md",
+    "content/Tools/缓存区溢出漏洞/index.md",
+    "content/Tools/公私钥/index.md",
+    "content/Tools/John 工作原理分析/index.md",
+    "content/Tools/越权/index.md",
+    "content/Tools/图片分析、文件分析、文件上传、Nc/P1.png",
+    "content/Tools/如何根据具体的目标定制字典/index.md",
     "content/Tools/端口敲门、单包授权与零开端口/index.md",
     "content/Tools/流量包分析，以 tshark、tcpdump、wireshark 为例/index.md",
     "content/Tools/Curl 使用详解/index.md",
-    "content/Tools/nmap 扫描原理与使用心得/index.md",
-    "content/Tools/John 工作原理分析/index.md",
-    "content/posts/渗透测试通用方法论/index.md",
-    "content/posts/HTB-Json Writeup/index.md",
-    "content/posts/HTB-Driver Writeup/index.md",
-    "content/posts/articles/index.md",
-    "content/posts/如何为靶机配置 DHCP copy/index.md",
-    "content/posts/HTB-Expressway/index.md",
-    "content/posts/HTB-Challenge-OnlyHacks/index.md",
-    "scripts/Moudles/articles/index.md",
-    "content/long-articles/_index.md",
-    "content/posts/Linux 提权专区/index.md",
-    "content/posts/HTB-Facts Writeup/index.md",
-    "content/english-articles/HTB-Facts Writeup/index.md",
-    "content/posts/HTB-Cap Writeup/index.md",
-    "content/english-articles/HTB-Cap Writeup/index.md",
-    "content/posts/HTB-Conversor Writeup/index.md",
-    "content/posts/HTB-Facts Writeup.md",
-    "content/posts/使用GDB分析缓存区溢出漏洞/index.md"
+    "content/posts/渗透测试通用方法论/index.md"
   ]
 }

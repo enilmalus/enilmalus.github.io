@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
 <meta name="description" content=" 以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例
-nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
+Nmap 扫描原理解析 Nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
 不同操作系统的响应差异 操作系统/内核 TCP 关闭端口响应 ICMP 关闭端口响应 特征差异点 Linux 2.6 / 3.x / 4.x / 5.x 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 窗口大小为 0，ICMP 报文长度与 Padding 一致 Windows XP / 2003 返回 RST，TTL 128 UDP 端口不可达：Type 3，Code 3 常常带有 ACK 标志，ICMP 报文长度较短 Windows 7 / 10 / Server 返回 RST，ATK，TTL 128 UDP 端口不可达：Type 3，Code 3 窗口大小与 XP 不同，ICMP 检验与算法不同 FreeBSD / OpenBSD 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 ICMP 报文填充方式与 Linux 不同 Solaris 返回 RST，TTL 常见 255 UDP 端口不可达：Type 3，Code 3 高 TTL，RST 包含独特的窗口值 Cisco ISO / 路由器类设备 有时直接丢弃，无 RST UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited） 偏向过滤回应，不遵循主机栈常见模式 MikroTik RouterOPS RST 响应 TTL -64 UDP 端口不可达：Type 3，Code 3 TCP 选项顺序与 Linux 内核不同，较易区分 Linux 通常是干净的 RST &#43; TTL 64，Windows 多带 RST、ACK、TTL 12，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。
 " />
 <meta name="keywords" content=", Hack, 工具" />
@@ -44,17 +44,17 @@ nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与
 
   <meta itemprop="name" content="Nmap 扫描原理与使用心得">
   <meta itemprop="description" content="以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例
-nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
+Nmap 扫描原理解析 Nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
 不同操作系统的响应差异 操作系统/内核 TCP 关闭端口响应 ICMP 关闭端口响应 特征差异点 Linux 2.6 / 3.x / 4.x / 5.x 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 窗口大小为 0，ICMP 报文长度与 Padding 一致 Windows XP / 2003 返回 RST，TTL 128 UDP 端口不可达：Type 3，Code 3 常常带有 ACK 标志，ICMP 报文长度较短 Windows 7 / 10 / Server 返回 RST，ATK，TTL 128 UDP 端口不可达：Type 3，Code 3 窗口大小与 XP 不同，ICMP 检验与算法不同 FreeBSD / OpenBSD 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 ICMP 报文填充方式与 Linux 不同 Solaris 返回 RST，TTL 常见 255 UDP 端口不可达：Type 3，Code 3 高 TTL，RST 包含独特的窗口值 Cisco ISO / 路由器类设备 有时直接丢弃，无 RST UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited） 偏向过滤回应，不遵循主机栈常见模式 MikroTik RouterOPS RST 响应 TTL -64 UDP 端口不可达：Type 3，Code 3 TCP 选项顺序与 Linux 内核不同，较易区分 Linux 通常是干净的 RST &#43; TTL 64，Windows 多带 RST、ACK、TTL 12，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。">
   <meta itemprop="datePublished" content="2025-09-24T21:00:00+08:00">
   <meta itemprop="dateModified" content="2025-09-24T21:00:00+08:00">
-  <meta itemprop="wordCount" content="396">
+  <meta itemprop="wordCount" content="414">
   <meta itemprop="keywords" content="Hack,工具">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Nmap 扫描原理与使用心得">
   <meta name="twitter:description" content="以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例
-nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
+Nmap 扫描原理解析 Nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
 不同操作系统的响应差异 操作系统/内核 TCP 关闭端口响应 ICMP 关闭端口响应 特征差异点 Linux 2.6 / 3.x / 4.x / 5.x 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 窗口大小为 0，ICMP 报文长度与 Padding 一致 Windows XP / 2003 返回 RST，TTL 128 UDP 端口不可达：Type 3，Code 3 常常带有 ACK 标志，ICMP 报文长度较短 Windows 7 / 10 / Server 返回 RST，ATK，TTL 128 UDP 端口不可达：Type 3，Code 3 窗口大小与 XP 不同，ICMP 检验与算法不同 FreeBSD / OpenBSD 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 ICMP 报文填充方式与 Linux 不同 Solaris 返回 RST，TTL 常见 255 UDP 端口不可达：Type 3，Code 3 高 TTL，RST 包含独特的窗口值 Cisco ISO / 路由器类设备 有时直接丢弃，无 RST UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited） 偏向过滤回应，不遵循主机栈常见模式 MikroTik RouterOPS RST 响应 TTL -64 UDP 端口不可达：Type 3，Code 3 TCP 选项顺序与 Linux 内核不同，较易区分 Linux 通常是干净的 RST &#43; TTL 64，Windows 多带 RST、ACK、TTL 12，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。">
 
 
@@ -138,7 +138,7 @@ nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与
                 <div class="toc-title">Table of Contents</div>
                     <nav id="TableOfContents">
   <ul>
-    <li><a href="#nmap-扫描原理解析">nmap 扫描原理解析</a>
+    <li><a href="#nmap-扫描原理解析">Nmap 扫描原理解析</a>
       <ul>
         <li><a href="#不同操作系统的响应差异">不同操作系统的响应差异</a></li>
       </ul>
@@ -163,8 +163,8 @@ nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与
             <div class="post-content">
                 <blockquote>
 <p>以下命令均以 kali本地地址为 10.10.10.5，靶机地址为 10.10.10.45 为案例</p></blockquote>
-<h2 id="nmap-扫描原理解析">nmap 扫描原理解析</h2>
-<p>nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。</p>
+<h2 id="nmap-扫描原理解析">Nmap 扫描原理解析</h2>
+<p>Nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。</p>
 <h3 id="不同操作系统的响应差异">不同操作系统的响应差异</h3>
 <table>
   <thead>
@@ -282,7 +282,11 @@ nmap 扫描原理解析 nmap 的操作系统识别依赖于比较目标主机与
 <p>URG：Uragent，紧急标志
 PSH：Push，推送标志
 FIN：finish，结束标志</p></blockquote>
-
+<h4 id="nmap-端口提取">Nmap 端口提取</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep open port.nmap | awk -F <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span> | paste -sd <span style="color:#e6db74">&#39;,&#39;</span>
+</span></span><span style="display:flex;"><span>21,80,135,139,445,5985,47001,49152,49153,49154,49155,49156,49157,49158
+</span></span></code></pre></div>
             </div>
         </article>
 
