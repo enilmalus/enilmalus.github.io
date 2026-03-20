@@ -4,26 +4,6 @@
     "type": "split",
     "children": [
       {
-        "id": "57807c30b90cb583",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "599e9785798fe97d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/posts/HTB-Timelapse Writeup/index.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "index"
-            }
-          }
-        ]
-      },
-      {
         "id": "c3309aea56330006",
         "type": "tabs",
         "children": [
@@ -33,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/Tools/传输文件/index.md",
+                "file": "content/posts/HTB-StreamIO Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -189,53 +169,52 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "599e9785798fe97d",
+  "active": "cef12ef745e26d95",
   "lastOpenFiles": [
     "content/posts/HTB-Acute Writeup/index.md",
+    "public/posts/htb-streamio-writeup/Pasted image 20260319154053.png",
+    "public/posts/htb-streamio-writeup/Pasted image 20260319154051.png",
+    "public/posts/htb-streamio-writeup/Pasted image 20260319153446.png",
+    "public/posts/htb-streamio-writeup/Pasted image 20260319152602.png",
+    "public/posts/htb-streamio-writeup/Pasted image 20260319153008.png",
+    "public/posts/htb-streamio-writeup/index.html",
+    "public/posts/htb-streamio-writeup",
+    "content/posts/HTB-StreamIO Writeup/index.md",
+    "content/posts/HTB-StreamIO Writeup/Pasted image 20260319154053.png",
+    "content/posts/HTB-StreamIO Writeup/Pasted image 20260319154051.png",
+    "content/posts/HTB-StreamIO Writeup/Pasted image 20260319153446.png",
+    "content/posts/HTB-StreamIO Writeup/Pasted image 20260319153008.png",
+    "content/posts/HTB-StreamIO Writeup/Pasted image 20260319152602.png",
+    "content/Tools/共享目录相关/index.md",
+    "content/Tools/135-RCP/index.md",
+    "content/Tools/爆破相关/index.md",
+    "content/Tools/传输文件/index.md",
     "content/posts/HTB-Timelapse Writeup/index.md",
-    "content/posts/HTB-Timelapse Writeup",
+    "content/posts/HTB-StreamIO Writeup",
     "content/posts/articles/index.md",
     "content/posts/articles",
-    "content/Tools/传输文件/index.md",
+    "public/tags/writeup/page/3/index.html",
+    "public/tags/writeup/page/3",
+    "public/posts/htb-timelapse-writeup/index.html",
+    "public/posts/htb-timelapse-writeup",
+    "public/posts/htb-acute-writeup/index.html",
+    "public/posts/htb-acute-writeup",
     "content/Tools/Bash 逃逸及反弹 Shell 合集/index.md",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260316213312.png",
     "content/posts/Windows 提权专区/index.md",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260316212638.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260316212605.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260315154741.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260315154646.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260315154559.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260315154429.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260315153636.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260315153559.png",
-    "content/posts/HTB-Acute Writeup/Pasted image 20260315153552.png",
     "scripts/Moudles/articles/index.md",
-    "未命名 1.base",
-    "未命名.base",
     "content/posts/HTB-Pov Writeup/index.md",
-    "content/posts/HTB-Acute Writeup",
     "content/posts/WIFI破解技术/index.md",
     "content/posts/HTB-ServMon Writeup/index.md",
     "content/posts/HTB-Json Writeup/index.md",
-    "public/english-articles/htb-json-writeup/index.html",
-    "public/posts/htb-pov-writeup/index.html",
-    "public/posts/htb-servmon-writeup/index.html",
-    "public/posts/htb-servmon-writeup",
-    "public/posts/htb-pov-writeup",
     "content/Tools/反序列化/index.md",
-    "content/Tools/爆破相关/index.md",
     "content/posts/英语学习笔记/index.md",
     "content/english-articles/HTB-Json Writeup/index.md",
     "content/posts/HTB-Driver Writeup/index.md",
-    "content/Tools/共享目录相关/index.md",
     "content/Tools/nmap 扫描原理与使用心得/index.md",
     "content/Tools/添加 Hosts 记录的几种方法/index.md",
     "content/Tools/渗透测试通用方法论/index.md",
-    "content/Tools/135-RCP/index.md",
     "content/Tools/加密识别与命令行解密/index.md",
     "content/Tools/图片分析、文件分析、文件上传、Nc/index.md",
-    "content/Tools/嗅探/index.md",
-    "content/Tools/缓存区溢出漏洞/index.md",
-    "content/Tools/公私钥/index.md"
+    "content/Tools/嗅探/index.md"
   ]
 }

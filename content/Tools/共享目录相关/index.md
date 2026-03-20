@@ -23,19 +23,25 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact
 
 ## Smbclient
 
-列出 SMB 共享
+Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资源。
+
+- 列出 SMB 共享
 
 ```bash
 sudo smbclient -N -L \\\\10.10.10.10
 ```
 
-连接到 SMB 共享
+- 连接到 SMB 共享
 
 ```bash
 sudo smbclient \\\\10.10.10.10\\enil
 ```
 
 ## Smbmap
+
+SMBMap 允许用户在整个域中枚举 Samba 共享驱动器、驱动器权限、共享内容、上传/下载功能、文件名自动下载模式匹配，甚至执行远程命令。
+
+- 枚举网站
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -67,6 +73,16 @@ SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com
 └─$ nxc smb driver.htb --shares -u enil -p ''
 SMB         10.129.5.91     445    DRIVER           [*] Windows 10 Build 10240 x64 (name:DRIVER) (domain:DRIVER) (signing:False) (SMBv1:True) 
 SMB         10.129.5.91     445    DRIVER           [-] DRIVER\enil: STATUS_LOGON_FAILURE
+```
+
+## Crackmapexec
+
+CME 是一种后渗透测试工具，自动化评估大型 AD 网络的安全性。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
+└─$ crackmapexec smb 10.129.6.162
+SMB         10.129.6.162    445    DC               [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC) (domain:streamIO.htb) (signing:True) (SMBv1:False)
 ```
 
 ## Enum4linux

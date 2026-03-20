@@ -66,6 +66,12 @@ sudo ffuf -H "Host: FUZZ.soulmate.htb" -u http://soulmate.htb -w /usr/share/secl
 - FUZZ：`ffuf` 的关键占位符
 - -ac：自动校准模式
 
+### Wfuzz
+
+```bash
+sudo wfuzz -u http://streamio.htb/ -H "Host: FUZZ.streamIO.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt --hh 703
+```
+
 ## 登入认证破解
 
 ### Nmap

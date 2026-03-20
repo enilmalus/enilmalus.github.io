@@ -1,7 +1,7 @@
 ---
 title: HTB-Acute Writeup
 date: 2026-03-15T15:00:00+08:00
-draft: false
+draft: true
 toc: true
 images:
 tags:
