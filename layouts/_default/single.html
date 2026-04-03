@@ -1,0 +1,20 @@
+<div id="content-container" style="display:none;">
+  {{ .Content }}
+</div>
+
+<script>
+window.onload = function() {
+  var container = document.getElementById("content-container");
+  if ("{{ .Params.password }}" !== "") {
+    var password = prompt("请输入密码：");
+    if (password === "{{ .Params.password }}") {
+      container.style.display = "block";
+    } else {
+      alert("密码错误");
+      window.history.back();
+    }
+  } else {
+    container.style.display = "block";
+  }
+};
+</script>
