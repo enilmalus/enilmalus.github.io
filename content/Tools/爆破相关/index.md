@@ -214,3 +214,11 @@ john flag.txt --wordlist=/usr/share/wordlists/rockyou.txt
 ```bash
 john -rules -wordlist=password.txt - stdout | sort | uniq > wordlist.txt
 ```
+
+## 爆破参数名称
+
+### Wfuzz
+
+```bash
+wfuzz -u https://streamio.htb/admin/?FUZZ= -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt -H "Cookie:PHPSESSID=gglbps4hbr1vt31saqjev4q6ho" --hh 1678
+```

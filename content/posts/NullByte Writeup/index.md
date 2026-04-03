@@ -130,7 +130,7 @@ sudo hydra -l "key" -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-pos
 得到密码是 elite ，
 登入后发现是一个 sql 查询
 
-## sql 注入
+## msql 注入
 
 输入 admin 发现提示寻找成功
 

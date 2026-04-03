@@ -20,7 +20,7 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient Smbclient 是类似 FT
 
     <title>
         
-            共享目录相关 :: Welcome My Hack&#39;s Blog 
+            SMB、共享目录相关 :: Welcome My Hack&#39;s Blog 
         
     </title>
 
@@ -44,7 +44,7 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient Smbclient 是类似 FT
 
 
 
-  <meta itemprop="name" content="共享目录相关">
+  <meta itemprop="name" content="SMB、共享目录相关">
   <meta itemprop="description" content="Mount 检查共享目录
 showmount -e 10.10.10.13 连接共享目录
 sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资源。
@@ -52,11 +52,11 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient Smbclient 是类似 FT
 枚举网站 ┌──(kali㉿kali)-[~/Work/Kali] └─$ smbmap -H json.htb ________ ___ ___ _______ ___ ___ __ _______ /&#34; )|&#34; \ /&#34; || _ &#34;\ |&#34; \ /&#34; | /&#34;&#34;\ | __ &#34;\ (: \___/ \ \ // |(. |_) :) \ \ // | / \ (. |__) :) \___ \ /\ \/. ||: \/ /\ \/. | /&#39; /\ \ |: ____/ __/ \ |: \. |(| _ \ |: \. | // __&#39; \ (| / /&#34; \ :) |. \ /: ||: |_) :)|. \ /: | / / \ \ /|__/ \ (_______/ |___|\__/|___|(_______/ |___|\__/|___|(___/ \___)(_______) ----------------------------------------------------------------------------- SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com https://github.com/ShawnDEvans/smbmap [*] Detected 1 hosts serving SMB [*] Established 1 SMB connections(s) and 0 authenticated session(s) [!] Something weird happened on (10.129.227.191) Error occurs while reading from remote(104) on line 1015 [*] Closed 1 connections NXC 使用 nxc 进行 SMB 共享枚举，尝试使用空密码进行匿名登入。">
   <meta itemprop="datePublished" content="2026-02-23T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-23T17:00:00+08:00">
-  <meta itemprop="wordCount" content="673">
+  <meta itemprop="wordCount" content="786">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="共享目录相关">
+  <meta name="twitter:title" content="SMB、共享目录相关">
   <meta name="twitter:description" content="Mount 检查共享目录
 showmount -e 10.10.10.13 连接共享目录
 sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资源。
@@ -134,7 +134,7 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient Smbclient 是类似 FT
         </div>
 
         <article>
-            <h2 class="post-title"><a href="http://localhost:1313/tools/%E5%85%B1%E4%BA%AB%E7%9B%AE%E5%BD%95%E7%9B%B8%E5%85%B3/">共享目录相关</a></h2>
+            <h2 class="post-title"><a href="http://localhost:1313/tools/%E5%85%B1%E4%BA%AB%E7%9B%AE%E5%BD%95%E7%9B%B8%E5%85%B3/">SMB、共享目录相关</a></h2>
 
             
             
@@ -209,6 +209,22 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient Smbclient 是类似 FT
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ crackmapexec smb 10.129.6.162
 </span></span><span style="display:flex;"><span>SMB         10.129.6.162    <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:streamIO.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>批量登入尝试。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ crackmapexec smb streamio.htb -u user -p pass --no-bruteforce --continue-on-success
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:streamIO.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:highschoolmusical STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:physics69i STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:paddpadd STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:66boysandgirls.. STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:%$clara STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:$monique$1991$ STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:$hadoW STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:$3xybitch STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:##123a8j8w5123## STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!5psycho8! STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!?Love?!123 STATUS_LOGON_FAILURE 
+</span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!!sabrina$ STATUS_LOGON_FAILURE 
 </span></span></code></pre></div><h2 id="enum4linux">Enum4linux</h2>
 <p>使用 <code>enum4linux</code> 进行进一步的枚举。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>

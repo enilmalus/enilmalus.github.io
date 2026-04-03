@@ -97,6 +97,12 @@ SeImpersonatePrivilege        Impersonate a client after authentication Enabled
 SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
 ```
 
+### Net user
+
+```bash
+net user enil
+```
+
 ### 寻找 `Users` `flag`
 
 ```bash

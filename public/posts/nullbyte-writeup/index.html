@@ -180,7 +180,7 @@ sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt">
         <li><a href="#hydra-破解-hash">Hydra 破解 hash</a></li>
       </ul>
     </li>
-    <li><a href="#sql-注入">sql 注入</a></li>
+    <li><a href="#msql-注入">msql 注入</a></li>
     <li><a href="#linux-提权">Linux 提权</a></li>
     <li><a href="#总结">总结</a></li>
   </ul>
@@ -253,7 +253,7 @@ sudo gobuster dir -u http://10.10.10.7 -w /usr/share/dirb/wordlists/common.txt">
 <p>![Pasted image 20250508214915](Pasted image 20250508214915.png)</p>
 <p>得到密码是 elite ，
 登入后发现是一个 sql 查询</p>
-<h2 id="sql-注入">sql 注入</h2>
+<h2 id="msql-注入">msql 注入</h2>
 <p>输入 admin 发现提示寻找成功</p>
 <p><img src="P11.png" alt="P11"></p>
 <p>尝试过后发现注入点为 &quot; ，
