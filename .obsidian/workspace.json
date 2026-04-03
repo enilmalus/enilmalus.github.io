@@ -189,12 +189,13 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "1964d8e16037d920",
+  "active": "cef12ef745e26d95",
   "lastOpenFiles": [
-    "public/tools/smb共享目录相关/index.html",
-    "public/tools/smb共享目录相关",
+    "content/posts/HTB-Facts Writeup/index.md",
     "content/posts/HTB-StreamIO Writeup/index.md",
     "content/Tools/SMB、共享目录相关/index.md",
+    "public/tools/smb共享目录相关/index.html",
+    "public/tools/smb共享目录相关",
     "public/tools/bloodhound/index.html",
     "public/tools/bloodhound/Pasted image 20260401154417.png",
     "public/tools/bloodhound/Pasted image 20260401154408.png",
@@ -214,7 +215,6 @@
     "public/posts/htb-streamio-writeup/Pasted image 20260401154337.png",
     "public/posts/htb-streamio-writeup/Pasted image 20260401153947.png",
     "content/Tools/BloodHound/index.md",
-    "content/Tools/BloodHound",
     "content/Tools/articles/index.md",
     "content/posts/HTB-Driver Writeup/index.md",
     "content/Tools/传输文件/index.md",
