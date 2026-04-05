@@ -138,6 +138,9 @@ SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!?L
 SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!!sabrina$ STATUS_LOGON_FAILURE 
 ```
 
+- --no-bruteforce：账号密码一一对应，如果不加则排列组合
+- --continue-on-success：找到有效凭据后不停止，继续测试剩余账号
+
 ## Enum4linux
 
 使用 `enum4linux` 进行进一步的枚举。

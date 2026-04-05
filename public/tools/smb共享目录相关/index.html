@@ -56,7 +56,7 @@ SMBMap 的核心功能如下：
 枚举共享目录，列出目标机器上所有的 SMB 共享，以及当前用户的读写权限 匿名/凭据访问 递归目录 文件上传/下载 执行命令（需要 sudo 权限） 匿名枚举 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ smbmap -H 10.129.9.78 ________ ___ ___ _______ ___ ___ __ _______ /&#34; )|&#34; \ /&#34; || _ &#34;\ |&#34; \ /&#34; | /&#34;&#34;\ | __ &#34;\ (: \___/ \ \ // |(. |_) :) \ \ // | / \ (. |__) :) \___ \ /\ \/. ||: \/ /\ \/. | /&#39; /\ \ |: ____/ __/ \ |: \. |(| _ \ |: \. | // __&#39; \ (| / /&#34; \ :) |. \ /: ||: |_) :)|. \ /: | / / \ \ /|__/ \ (_______/ |___|\__/|___|(_______/ |___|\__/|___|(___/ \___)(_______) ----------------------------------------------------------------------------- SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com https://github.com/ShawnDEvans/smbmap [*] Detected 1 hosts serving SMB [*] Established 1 SMB connections(s) and 0 authenticated session(s) [!] Something weird happened on (10.129.9.78) Error occurs while reading from remote(104) on line 1015 [*] Closed 1 connections Detected 1 hosts serving SMB：目标的 445 端口开放，确认运行 SMB 服务 Established 1 SMB connections(s) and 0 authenticated session(s)：1个 TCP 建立成功，0 个认证会话，匿名/空凭据登入被拒绝 Something weird happened on (10.129.9.78) Error occurs while reading from remote(104) on line 1015：错误码 104 NXC 使用 nxc 进行 SMB 共享枚举，尝试使用空密码进行匿名登入。">
   <meta itemprop="datePublished" content="2026-02-23T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-23T17:00:00+08:00">
-  <meta itemprop="wordCount" content="866">
+  <meta itemprop="wordCount" content="868">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -268,7 +268,11 @@ SMBMap 的核心功能如下：
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!5psycho8! STATUS_LOGON_FAILURE 
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!?Love?!123 STATUS_LOGON_FAILURE 
 </span></span><span style="display:flex;"><span>SMB         watch.streamIO.htb <span style="color:#ae81ff">445</span>    DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> streamIO.htb<span style="color:#ae81ff">\u</span>ser:!!sabrina$ STATUS_LOGON_FAILURE 
-</span></span></code></pre></div><h2 id="enum4linux">Enum4linux</h2>
+</span></span></code></pre></div><ul>
+<li>&ndash;no-bruteforce：账号密码一一对应，如果不加则排列组合</li>
+<li>&ndash;continue-on-success：找到有效凭据后不停止，继续测试剩余账号</li>
+</ul>
+<h2 id="enum4linux">Enum4linux</h2>
 <p>使用 <code>enum4linux</code> 进行进一步的枚举。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ enum4linux-ng -A json.htb

