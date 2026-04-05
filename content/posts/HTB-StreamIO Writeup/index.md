@@ -1879,6 +1879,8 @@ result: 0 Success
 # numReferences: 3
 ```
 
+## 获得 administrator
+
 得到 `administrator` 的密码是 `6d0aX1[6d/x;30`。
 
 ```bash
