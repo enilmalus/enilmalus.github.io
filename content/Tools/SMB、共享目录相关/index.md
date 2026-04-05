@@ -23,6 +23,8 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact
 
 ## Smbclient
 
+交互式访问、文件操作，适合深入浏览、下载具体文件。
+
 Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资源。
 
 - 列出 SMB 共享
@@ -37,7 +39,19 @@ sudo smbclient -N -L \\\\10.10.10.10
 sudo smbclient \\\\10.10.10.10\\enil
 ```
 
+### 列出目标所有共享（匿名）
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
+└─$ smbclient -L //10.129.6.162 -N
+session setup failed: NT_STATUS_ACCESS_DENIED
+```
+
+- session setup failed: NT_STATUS_ACCESS_DENIED：匿名访问被拒绝
+
 ## Smbmap
+
+用于批量枚举、权限扫描，快速摸清权限全貌。
 
 SMBMap 的核心功能如下：
 
@@ -47,11 +61,11 @@ SMBMap 的核心功能如下：
 4. 文件上传/下载
 5. 执行命令（需要 sudo 权限）
 
-- 枚举网站
+### 匿名枚举
 
 ```bash
-┌──(kali㉿kali)-[~/Work/Kali]
-└─$ smbmap -H json.htb         
+┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
+└─$ smbmap -H 10.129.9.78
 
     ________  ___      ___  _______   ___      ___       __         _______
    /"       )|"  \    /"  ||   _  "\ |"  \    /"  |     /""\       |   __ "\
@@ -66,9 +80,13 @@ SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com
 
 [*] Detected 1 hosts serving SMB                                                                                                  
 [*] Established 1 SMB connections(s) and 0 authenticated session(s)                                                      
-[!] Something weird happened on (10.129.227.191) Error occurs while reading from remote(104) on line 1015                    
-[*] Closed 1 connections
+[!] Something weird happened on (10.129.9.78) Error occurs while reading from remote(104) on line 1015                       
+[*] Closed 1 connections 
 ```
+
+- Detected 1 hosts serving SMB：目标的 445 端口开放，确认运行 SMB 服务
+- Established 1 SMB connections(s) and 0 authenticated session(s)：1个 TCP 建立成功，0 个认证会话，匿名/空凭据登入被拒绝
+- Something weird happened on (10.129.9.78) Error occurs while reading from remote(104) on line 1015：错误码 104
 
 ####  NXC
 
@@ -85,13 +103,22 @@ SMB         10.129.5.91     445    DRIVER           [-] DRIVER\enil: STATUS_LOGO
 
 CME 是一种后渗透测试工具，自动化评估大型 AD 网络的安全性。
 
+### 枚举 SMB
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ crackmapexec smb 10.129.6.162
 SMB         10.129.6.162    445    DC               [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC) (domain:streamIO.htb) (signing:True) (SMBv1:False)
 ```
 
-批量登入尝试。
+- 445 端口开放，SMB 服务正常运行
+- 机器名为 DC，即 Domain Controller（域控制器）
+- 域名为 streamIO.htb
+- 靶机运行的系统版本为 Windows 10 / Server 2019
+- SMB 签名已启用，防止中间人攻击
+- SMBv1 已关闭
+
+### 批量登入尝试
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]

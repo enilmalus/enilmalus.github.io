@@ -3,10 +3,9 @@ languageCode = 'en-us'
 title = "Welcome My Hack's Blog"
 theme = "hugo-theme-hello-friend-ng"
 
-# Updated to force rebuild
-
 [params]
-  author = "Enil"
+  [params.author]
+    name = "Enil"
 
 [[menu.main]]
 identifier = "posts"

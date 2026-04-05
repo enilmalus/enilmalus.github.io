@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WIFI on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/wifi/</link><description>Recent content in WIFI on Welcome My Hack's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 09 Jan 2026 21:30:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/wifi/index.xml" rel="self" type="application/rss+xml"/><item><title>WIFI 破解技术</title><link>https://enilmalus.github.io/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</link><pubDate>Fri, 09 Jan 2026 21:30:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</guid><description>&lt;h2 id="所需环境"&gt;所需环境&lt;/h2&gt;
-&lt;p&gt;需要安装 Kali Linux 同时配备一张无线网卡。&lt;/p&gt;
-&lt;h2 id="操作过程"&gt;操作过程&lt;/h2&gt;
-&lt;h3 id="启动监控状态"&gt;启动监控状态&lt;/h3&gt;
-&lt;p&gt;先确认 kali 连接上了网卡，wlan0 是网卡信息。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;┌──&lt;span style="color:#f92672"&gt;(&lt;/span&gt;kali㉿kali&lt;span style="color:#f92672"&gt;)&lt;/span&gt;-&lt;span style="color:#f92672"&gt;[&lt;/span&gt;~/Work/Kali&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└─$ ip a
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;65536&lt;/span&gt; qdisc noqueue state UNKNOWN group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet 127.0.0.1/8 scope host lo
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet6 ::1/128 scope host noprefixroute 
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;2: eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;1500&lt;/span&gt; qdisc fq_codel state UP group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/ether 00:0c:29:88:e4:07 brd ff:ff:ff:ff:ff:ff
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet6 fe80::2167:25b3:e756:16ad/64 scope link noprefixroute 
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;10: wlan0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;1500&lt;/span&gt; qdisc noop state DOWN group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/ether 7c:dd:90:30:23:19 brd ff:ff:ff:ff:ff:ff
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;将网卡设置为监控状态。&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>WIFI on Welcome My Hack&#39;s Blog</title>
+    <link>http://localhost:1313/tags/wifi/</link>
+    <description>Recent content in WIFI on Welcome My Hack&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 09 Jan 2026 21:30:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/wifi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>WIFI 破解技术</title>
+      <link>http://localhost:1313/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</link>
+      <pubDate>Fri, 09 Jan 2026 21:30:00 +0800</pubDate>
+      <guid>http://localhost:1313/posts/wifi%E7%A0%B4%E8%A7%A3%E6%8A%80%E6%9C%AF/</guid>
+      <description>&lt;h2 id=&#34;所需环境&#34;&gt;所需环境&lt;/h2&gt;&#xA;&lt;p&gt;需要安装 Kali Linux 同时配备一张无线网卡。&lt;/p&gt;&#xA;&lt;h2 id=&#34;操作过程&#34;&gt;操作过程&lt;/h2&gt;&#xA;&lt;h3 id=&#34;启动监控状态&#34;&gt;启动监控状态&lt;/h3&gt;&#xA;&lt;p&gt;先确认 kali 连接上了网卡，wlan0 是网卡信息。&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ ip a&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu &lt;span style=&#34;color:#ae81ff&#34;&gt;65536&lt;/span&gt; qdisc noqueue state UNKNOWN group default qlen &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    inet 127.0.0.1/8 scope host lo&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       valid_lft forever preferred_lft forever&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    inet6 ::1/128 scope host noprefixroute &#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       valid_lft forever preferred_lft forever&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2: eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu &lt;span style=&#34;color:#ae81ff&#34;&gt;1500&lt;/span&gt; qdisc fq_codel state UP group default qlen &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    link/ether 00:0c:29:88:e4:07 brd ff:ff:ff:ff:ff:ff&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    inet6 fe80::2167:25b3:e756:16ad/64 scope link noprefixroute &#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       valid_lft forever preferred_lft forever&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;10: wlan0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu &lt;span style=&#34;color:#ae81ff&#34;&gt;1500&lt;/span&gt; qdisc noop state DOWN group default qlen &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    link/ether 7c:dd:90:30:23:19 brd ff:ff:ff:ff:ff:ff&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;将网卡设置为监控状态。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

