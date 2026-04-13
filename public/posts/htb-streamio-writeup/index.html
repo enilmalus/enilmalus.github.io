@@ -44,7 +44,7 @@
   <meta itemprop="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ sudo nmap --min-rate 10000 -p- 10.129.6.162 -oA ports Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-19 02:35 EDT Nmap scan report for 10.129.6.162 Host is up (0.17s latency). Not shown: 65515 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 443/tcp open https 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 9389/tcp open adws 49667/tcp open unknown 49677/tcp open unknown 49678/tcp open unknown 49704/tcp open unknown 49731/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 13.75 seconds 将端口格式化备用。">
   <meta itemprop="datePublished" content="2026-04-05T12:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-05T12:00:00+08:00">
-  <meta itemprop="wordCount" content="6053">
+  <meta itemprop="wordCount" content="6055">
   <meta itemprop="keywords" content="Hack,HTB,Writeup">
 
   <meta name="twitter:card" content="summary">
@@ -162,6 +162,7 @@
         <li><a href="#bloodhound-渗透">bloodhound 渗透</a></li>
       </ul>
     </li>
+    <li><a href="#获得-administrator">获得 administrator</a></li>
   </ul>
 </nav>
         </aside>
@@ -1737,7 +1738,8 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># numResponses: 6</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># numEntries: 2</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># numReferences: 3</span>
-</span></span></code></pre></div><p>得到 <code>administrator</code> 的密码是 <code>6d0aX1[6d/x;30</code>。</p>
+</span></span></code></pre></div><h2 id="获得-administrator">获得 administrator</h2>
+<p>得到 <code>administrator</code> 的密码是 <code>6d0aX1[6d/x;30</code>。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.15.25 -u administrator -p <span style="color:#e6db74">&#39;6d0aX1[6d/x;30&#39;</span>
 </span></span><span style="display:flex;"><span>                                        
@@ -1797,7 +1799,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        6053 Words
+        6055 Words
       </p>
 
       <p>
@@ -1822,6 +1824,13 @@
         
 
         <div class="pagination__buttons">
+            
+            <span class="button previous">
+                <a href="http://localhost:1313/posts/htb-pivotapi-writeup/">
+                    <span class="button__icon">←</span>
+                    <span class="button__text">HTB-PivotAPI Writeup</span>
+                </a>
+            </span>
             
 
             

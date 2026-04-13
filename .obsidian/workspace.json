@@ -4,36 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "996e1aba49358802",
+        "id": "e1ca5a1b77fdf584",
         "type": "tabs",
         "children": [
           {
-            "id": "1964d8e16037d920",
+            "id": "6d17405c1fd7b272",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-StreamIO Writeup/index.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "index"
-            }
-          }
-        ]
-      },
-      {
-        "id": "61ff4728262b2ba9",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "3bf4f664ccec5c66",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/Tools/BloodHound/index.md",
+                "file": "content/posts/HTB-PivotAPI Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -189,33 +169,42 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "1964d8e16037d920",
+  "active": "6d17405c1fd7b272",
   "lastOpenFiles": [
-    "content/Tools/BloodHound/index.md",
-    "content/posts/HTB-StreamIO Writeup/index.md",
-    "content/Tools/爆破相关/index.md",
-    "public/posts/htb-streamio-writeup/Pasted image 20260405195733.png",
-    "content/posts/HTB-StreamIO Writeup/Pasted image 20260405195733.png",
-    "未命名 2.base",
-    "content/Tools/SMB、共享目录相关/index.md",
-    "public/posts/htb-streamio-writeup/index.html",
-    "public/posts/htb-acute-writeup/Pasted image 20260316213312.png",
-    "public/posts/htb-acute-writeup/Pasted image 20260316212638.png",
-    "public/posts/htb-acute-writeup/Pasted image 20260316212605.png",
-    "public/posts/htb-acute-writeup/Pasted image 20260315153636.png",
-    "public/posts/htb-acute-writeup/Pasted image 20260315154646.png",
-    "public/posts/htb-acute-writeup/Pasted image 20260315154741.png",
-    "public/posts/htb-acute-writeup/Pasted image 20260315154559.png",
-    "public/posts/htb-acute-writeup/Pasted image 20260315154429.png",
-    "public/posts/htb-acute-writeup/index.html",
-    "public/posts/htb-acute-writeup",
-    "public/posts/htb-streamio-writeup",
-    "public/tags/英语/page/1/index.html",
-    "public/tags/缓冲区溢出/page/1/index.html",
-    "public/tags/技术/page/1/index.html",
-    "public/tags/流量包分析/page/1/index.html",
-    "public/tags/新闻/page/1/index.html",
+    "public/posts/htb-pivotapi-writeup/Pasted image 20260409145434.png",
+    "public/tags/hack/page/6/index.html",
+    "public/tags/hack/page/6",
+    "content/Tools/Getnp/index.md",
+    "content/posts/HTB-PivotAPI Writeup/index.md",
+    "public/tools/getnp/index.html",
+    "public/tools/getnp",
+    "content/Tools/Getnp",
+    "content/Tools/articles/index.md",
+    "content/Tools/articles",
+    "public/tools/kerberos-认证机制/index.html",
+    "public/tools/kerberos-认证机制",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260411211402.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260411211347.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260411202626.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260411202546.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260410165136.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260410164931.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260410164600.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260410163559.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260410163104.png",
+    "content/posts/HTB-PivotAPI Writeup/Pasted image 20260409205030.png",
+    "content/Tools/Kerberos 认证机制/index.md",
+    "content/Tools/Kerberos 认证机制",
+    "content/Tools/RPC/index.md",
+    "public/tools/rpc/index.html",
+    "content/Tools/SQL 注入精要/index.md",
+    "content/posts/articles/index.md",
     "public/README.md",
+    "content/Tools/添加 Hosts 记录的几种方法/index.md",
+    "content/posts/HTB-StreamIO Writeup/index.md",
+    "content/Tools/BloodHound/index.md",
+    "content/Tools/爆破相关/index.md",
+    "content/Tools/SMB、共享目录相关/index.md",
     "content/english-articles/HTB-Facts Writeup-Lock-EN/index.md",
     "content/english-articles/HTB-Facts Writeup-Lock/index.md",
     "content/posts/HTB-Facts Writeup-Lock/index.md",
@@ -224,17 +213,9 @@
     "content/posts/HTB-Facts Writeup(draft)/index.md",
     "content/english-articles/HTB-Facts Writeup(draft)/index.md",
     "content/posts/HTB-Facts Writeup/index.md",
-    "content/Tools/articles/index.md",
     "content/posts/HTB-Driver Writeup/index.md",
     "content/Tools/传输文件/index.md",
     "content/posts/Windows 提权专区/index.md",
-    "content/Tools/文件包含/index.md",
-    "content/posts/NullByte Writeup/index.md",
-    "content/Tools/SQL 注入精要/index.md",
-    "content/posts/Linux 提权专区/index.md",
-    "content/posts/SQL 注入精要/index.md",
-    "content/posts/articles/index.md",
-    "content/posts/HTB-Acute Writeup/index.md",
-    "content/Tools/135-RCP/index.md"
+    "content/Tools/文件包含/index.md"
   ]
 }

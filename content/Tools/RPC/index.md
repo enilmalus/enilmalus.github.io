@@ -1,5 +1,5 @@
 ---
-title: 135-RCP
+title: RPC
 date: 2026-02-15T17:00:00+08:00
 draft: false
 toc: true
@@ -7,7 +7,7 @@ images:
 tags:
   - Hack
 ---
-## 135-RCP
+## Rpcclient
 
 连接 135 rcp 端口。
 
