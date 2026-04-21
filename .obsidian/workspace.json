@@ -4,26 +4,6 @@
     "type": "split",
     "children": [
       {
-        "id": "e1ca5a1b77fdf584",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "6d17405c1fd7b272",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/english-articles/HTB-Return Writeup/index.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "index"
-            }
-          }
-        ]
-      },
-      {
         "id": "dc6c0f006f9d3e7a",
         "type": "tabs",
         "children": [
@@ -33,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Return Writeup/index.md",
+                "file": "content/Tools/Getnp/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -191,31 +171,33 @@
   },
   "active": "d824f8279c1db287",
   "lastOpenFiles": [
-    "content/english-articles/HTB-Active Writeup/index.md",
+    "public/posts/htb-sauna-writeup/Pasted image 20260421212840.png",
+    "public/posts/htb-sauna-writeup/Pasted image 20260421212631.png",
+    "public/posts/htb-sauna-writeup/Pasted image 20260421174938.png",
+    "public/posts/htb-sauna-writeup/index.html",
+    "public/posts/htb-sauna-writeup",
+    "content/posts/HTB-Sauna Writeup/index.md",
+    "content/posts/HTB-Sauna Writeup/Pasted image 20260421212840.png",
+    "content/posts/HTB-Sauna Writeup/Pasted image 20260421212631.png",
+    "content/posts/HTB-Sauna Writeup/Pasted image 20260421174938.png",
     "content/english-articles/HTB-Return Writeup/index.md",
+    "content/posts/HTB-Return Writeup/index.md",
+    "content/english-articles/HTB-Active Writeup/index.md",
     "public/english-articles/htb-return-writeup/index.html",
     "public/english-articles/htb-return-writeup",
-    "content/posts/HTB-Return Writeup/index.md",
     "content/english-articles/HTB-Return Writeup/Pasted image 20260420153904.png",
     "content/english-articles/HTB-Return Writeup/Pasted image 20260420151754.png",
     "content/english-articles/HTB-Return Writeup/Pasted image 20260420151703.png",
     "content/english-articles/HTB-Return Writeup",
     "public/posts/htb-return-writeup/Pasted image 20260420153904.png",
     "content/posts/HTB-Return Writeup/Pasted image 20260420153904.png",
-    "public/posts/htb-return-writeup/Pasted image 20260420151754.png",
-    "content/posts/HTB-Return Writeup/Pasted image 20260420151754.png",
-    "public/posts/htb-return-writeup/Pasted image 20260420151703.png",
-    "content/posts/HTB-Return Writeup/Pasted image 20260420151703.png",
     "public/posts/page/4/index.html",
     "public/posts/page/4",
     "public/posts/htb-return-writeup/index.html",
     "public/posts/htb-return-writeup",
     "content/posts/HTB-Forest Writeup/index.md",
     "content/Tools/LDAP/index.md",
-    "public/posts/htb-forest-writeup/Pasted image 20260416162844.png",
     "public/tools/ldap/index.html",
-    "public/tools/ldap",
-    "public/tags/writeup/page/3/index.html",
     "content/Tools/articles/index.md",
     "content/posts/HTB-Active Writeup/index.md",
     "content/Tools/Getnp/index.md",
@@ -234,7 +216,6 @@
     "content/english-articles/HTB-Facts Writeup-Lock-EN/index.md",
     "content/english-articles/HTB-Facts Writeup-Lock/index.md",
     "content/posts/HTB-Facts Writeup-Lock/index.md",
-    "content/english-articles/HTB-Facts Writeup-draft/index.md",
-    "content/posts/HTB-Facts Writeup-draft/index.md"
+    "content/english-articles/HTB-Facts Writeup-draft/index.md"
   ]
 }

