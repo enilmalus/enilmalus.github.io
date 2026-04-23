@@ -444,7 +444,6 @@ angular.module("json", ["ngCookies"])
 
 Tow controllers,`loginController` and `PrincipalController` are defined to handle login and authentication functionalities.
 
-在登录界面随便输入账号密码，使用 burpsuite 抓包观察。
 Entered random credentials on the login page and intercepted the traffic using Burp Suite for observation.
 
 ![](Pasted%20image%2020260302112209.png)
@@ -453,7 +452,6 @@ Sent the request to Repeater and replayed it to examine the response.
 
 ![](Pasted%20image%2020260302112321.png)
 
-根据前面解混淆的 js 源码，将方法改为 GET，传输至  `/api/Account`，随便给个 `Bearer`。
 Based on the previouslu deobfuscated JS code,changed the method to GET,targeted the `/api/Account` endpoint,and suppied an arbitrary `Bearer` token.
 
 ![](Pasted%20image%2020260302113001.png)

@@ -44,7 +44,7 @@
   <meta itemprop="description" content="Initial Reconnaissance Nmap Prot Scan ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.227.191 -oA port [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-01 01:13 EST Nmap scan report for 10.129.227.191 Host is up (0.10s latency). Not shown: 65521 closed tcp ports (reset) PORT STATE SERVICE 21/tcp open ftp 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 445/tcp open microsoft-ds 5985/tcp open wsman 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49156/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 11.14 seconds Extracting the ports for later use.">
   <meta itemprop="datePublished" content="2026-03-01T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-01T14:00:00+08:00">
-  <meta itemprop="wordCount" content="2741">
+  <meta itemprop="wordCount" content="2732">
   <meta itemprop="keywords" content="Hack,Windows,Writeup,HTB">
 
   <meta name="twitter:card" content="summary">
@@ -528,13 +528,11 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">])</span>;
 </span></span></code></pre></div><p>Tow controllers,<code>loginController</code> and <code>PrincipalController</code> are defined to handle login and authentication functionalities.</p>
-<p>在登录界面随便输入账号密码，使用 burpsuite 抓包观察。
-Entered random credentials on the login page and intercepted the traffic using Burp Suite for observation.</p>
+<p>Entered random credentials on the login page and intercepted the traffic using Burp Suite for observation.</p>
 <p><img src="Pasted%20image%2020260302112209.png" alt=""></p>
 <p>Sent the request to Repeater and replayed it to examine the response.</p>
 <p><img src="Pasted%20image%2020260302112321.png" alt=""></p>
-<p>根据前面解混淆的 js 源码，将方法改为 GET，传输至  <code>/api/Account</code>，随便给个 <code>Bearer</code>。
-Based on the previouslu deobfuscated JS code,changed the method to GET,targeted the <code>/api/Account</code> endpoint,and suppied an arbitrary <code>Bearer</code> token.</p>
+<p>Based on the previouslu deobfuscated JS code,changed the method to GET,targeted the <code>/api/Account</code> endpoint,and suppied an arbitrary <code>Bearer</code> token.</p>
 <p><img src="Pasted%20image%2020260302113001.png" alt="">
 Shortening the length of the Bearer token triggers a <code>Cannot deserialize Json.Net Object</code> error,indicating that <code>Json.Net</code> object deserialization is being used here. Since the provided Bearer value is plain text <code>enil</code>, it cannot be deserialized. The Bearer field needs to be properly formatted as a serialized object.</p>
 <p><img src="Pasted%20image%2020260302143248.png" alt=""></p>

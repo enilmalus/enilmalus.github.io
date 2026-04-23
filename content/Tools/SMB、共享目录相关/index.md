@@ -49,6 +49,37 @@ session setup failed: NT_STATUS_ACCESS_DENIED
 
 - session setup failed: NT_STATUS_ACCESS_DENIED：匿名访问被拒绝
 
+### 批量下载
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Support]
+└─$ smbclient //10.129.230.181/support-tools -N
+Try "help" to get a list of possible commands.
+smb: \> ls
+  .                                   D        0  Wed Jul 20 13:01:06 2022
+  ..                                  D        0  Sat May 28 07:18:25 2022
+  7-ZipPortable_21.07.paf.exe         A  2880728  Sat May 28 07:19:19 2022
+  npp.8.4.1.portable.x64.zip          A  5439245  Sat May 28 07:19:55 2022
+  putty.exe                           A  1273576  Sat May 28 07:20:06 2022
+  SysinternalsSuite.zip               A 48102161  Sat May 28 07:19:31 2022
+  UserInfo.exe.zip                    A   277499  Wed Jul 20 13:01:07 2022
+  windirstat1_1_2_setup.exe           A    79171  Sat May 28 07:20:17 2022
+  WiresharkPortable64_3.6.5.paf.exe      A 44398000  Sat May 28 07:19:43 2022
+
+                4026367 blocks of size 4096. 970776 blocks available
+smb: \> prompt
+smb: \> mget *
+getting file \7-ZipPortable_21.07.paf.exe of size 2880728 as 7-ZipPortable_21.07.paf.exe (1004.4 KiloBytes/sec) (average 1004.4 KiloBytes/sec)
+getting file \npp.8.4.1.portable.x64.zip of size 5439245 as npp.8.4.1.portable.x64.zip (468.0 KiloBytes/sec) (average 574.2 KiloBytes/sec)
+getting file \putty.exe of size 1273576 as putty.exe (509.5 KiloBytes/sec) (average 564.7 KiloBytes/sec)
+parallel_read returned NT_STATUS_IO_TIMEOUT
+NT_STATUS_CONNECTION_DISCONNECTED opening remote file \UserInfo.exe.zip
+NT_STATUS_CONNECTION_DISCONNECTED opening remote file \windirstat1_1_2_setup.exe
+NT_STATUS_CONNECTION_DISCONNECTED opening remote file \WiresharkPortable64_3.6.5.paf.exe
+NT_STATUS_CONNECTION_DISCONNECTED listing \*
+smb: \> getting file \SysinternalsSuite.zip of size 48102161 as SysinternalsSuite.zip The connection is disconnected now: NT_STATUS_CONNECTION_DISCONNECTED
+```
+
 ## Smbmap
 
 用于批量枚举、权限扫描，快速摸清权限全貌。
