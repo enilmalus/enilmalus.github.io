@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="Enil ">
 <meta name="description" content="Rpcclient 连接 135 rcp 端口。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证 " />
+┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证 标准枚举。
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290 " />
 <meta name="keywords" content=", Hack" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
@@ -42,16 +43,18 @@
 
   <meta itemprop="name" content="RPC">
   <meta itemprop="description" content="Rpcclient 连接 135 rcp 端口。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证">
+┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证 标准枚举。
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290">
   <meta itemprop="datePublished" content="2026-02-15T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-15T17:00:00+08:00">
-  <meta itemprop="wordCount" content="23">
+  <meta itemprop="wordCount" content="69">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="RPC">
   <meta name="twitter:description" content="Rpcclient 连接 135 rcp 端口。
-┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证">
+┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证 标准枚举。
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290">
 
 
 
@@ -151,7 +154,21 @@
 <li>-U 指定用户名参数，使用空字符串表示匿名用户</li>
 <li>-N 表示不使用密码进行认证</li>
 </ul>
-
+<p>标准枚举。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ rpcclient -U <span style="color:#e6db74">&#39;&#39;</span> -N 10.129.229.17 
+</span></span><span style="display:flex;"><span>rpcclient $&gt; srvinfo
+</span></span><span style="display:flex;"><span>do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; enumdomusers
+</span></span><span style="display:flex;"><span>result was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; querydispinfo
+</span></span><span style="display:flex;"><span>result was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; getdompwinfo
+</span></span><span style="display:flex;"><span>result was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; lsaquery
+</span></span><span style="display:flex;"><span>Domain Name: BLACKFIELD
+</span></span><span style="display:flex;"><span>Domain Sid: S-1-5-21-4194615774-2175524697-3563712290
+</span></span></code></pre></div>
             </div>
         </article>
 

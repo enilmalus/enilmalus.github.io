@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "09654965d043733a",
+        "id": "b4b6fd8440dab788",
         "type": "tabs",
         "children": [
           {
-            "id": "6473d5074f8f3f38",
+            "id": "6a4b368a2c4d26b8",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Support Writeup/index.md",
+                "file": "content/posts/Windows 提权专区/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "winpeas",
+                "query": "kerbr",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -169,8 +169,25 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "6473d5074f8f3f38",
+  "active": "6a4b368a2c4d26b8",
   "lastOpenFiles": [
+    "public/tags/htb/page/3/index.html",
+    "public/tags/htb/page/3",
+    "public/tags/hack/page/7/index.html",
+    "public/tags/hack/page/7",
+    "public/posts/htb-apt-writeup/index.html",
+    "public/posts/htb-apt-writeup",
+    "public/posts/htb-blackfield-writeup/Pasted image 20260427165948.png",
+    "public/posts/htb-blackfield-writeup",
+    "content/posts/Linux 提权专区/index.md",
+    "content/posts/HTB-Blackfield Writeup/index.md",
+    "content/Tools/Getnp/index.md",
+    "content/posts/HTB-Blackfield Writeup/Pasted image 20260427165948.png",
+    "content/Tools/RPC/index.md",
+    "content/posts/HTB-APT Writeup/index.md",
+    "content/posts/HTB-PivotAPI Writeup/index.md",
+    "content/posts/HTB-Support Writeup/index.md",
+    "content/posts/HTB-APT Writeup",
     "public/posts/htb-support-writeup/Pasted image 20260423195533.png",
     "public/posts/htb-support-writeup/index.html",
     "public/posts/htb-support-writeup/Pasted image 20260422223829.png",
@@ -178,44 +195,27 @@
     "content/posts/HTB-Support Writeup/Pasted image 20260423195533.png",
     "content/posts/HTB-Support Writeup/Pasted image 20260422223829.png",
     "content/Tools/SMB、共享目录相关/index.md",
-    "content/posts/HTB-Support Writeup/index.md",
     "content/posts/HTB-Sauna Writeup/index.md",
     "content/english-articles/HTB-Json Writeup/index.md",
-    "content/Tools/Getnp/index.md",
     "public/posts/htb-sauna-writeup/Pasted image 20260421212840.png",
     "public/posts/htb-sauna-writeup/Pasted image 20260421212631.png",
     "public/posts/htb-sauna-writeup/Pasted image 20260421174938.png",
     "public/posts/htb-sauna-writeup/index.html",
-    "public/posts/htb-sauna-writeup",
     "content/posts/HTB-Sauna Writeup/Pasted image 20260421212840.png",
-    "content/posts/HTB-Sauna Writeup/Pasted image 20260421212631.png",
-    "content/posts/HTB-Sauna Writeup/Pasted image 20260421174938.png",
     "content/english-articles/HTB-Return Writeup/index.md",
     "content/posts/HTB-Return Writeup/index.md",
     "content/english-articles/HTB-Active Writeup/index.md",
-    "public/english-articles/htb-return-writeup/index.html",
-    "public/english-articles/htb-return-writeup",
-    "content/english-articles/HTB-Return Writeup/Pasted image 20260420153904.png",
-    "content/english-articles/HTB-Return Writeup",
-    "public/posts/page/4/index.html",
-    "public/posts/page/4",
-    "public/posts/htb-return-writeup/index.html",
     "content/posts/HTB-Forest Writeup/index.md",
     "content/Tools/LDAP/index.md",
     "content/Tools/articles/index.md",
     "content/posts/HTB-Active Writeup/index.md",
     "content/english-articles/HTB-Cap Writeup/index.md",
     "content/posts/HTB-Acute Writeup/index.md",
-    "content/posts/HTB-PivotAPI Writeup/index.md",
     "content/Tools/Kerberos 认证机制/index.md",
-    "content/Tools/RPC/index.md",
     "content/Tools/SQL 注入精要/index.md",
     "public/README.md",
     "content/Tools/添加 Hosts 记录的几种方法/index.md",
     "content/posts/HTB-StreamIO Writeup/index.md",
-    "content/Tools/BloodHound/index.md",
-    "content/Tools/爆破相关/index.md",
-    "content/english-articles/HTB-Facts Writeup-Lock-EN/index.md",
-    "content/english-articles/HTB-Facts Writeup-Lock/index.md"
+    "content/Tools/BloodHound/index.md"
   ]
 }

