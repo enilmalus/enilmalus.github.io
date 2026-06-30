@@ -53,9 +53,6 @@
     <loc>http://localhost:1313/posts/htb-blackfield-writeup/</loc>
     <lastmod>2026-04-27T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/htb-apt-writeup/</loc>
-    <lastmod>2026-04-24T14:00:00+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/posts/htb-support-writeup/</loc>
     <lastmod>2026-04-23T20:00:00+08:00</lastmod>
   </url><url>
@@ -109,9 +106,6 @@
   </url><url>
     <loc>http://localhost:1313/posts/htb-timelapse-writeup/</loc>
     <lastmod>2026-03-18T17:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/htb-acute-writeup/</loc>
-    <lastmod>2026-03-15T15:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/htb-servmon-writeup/</loc>
     <lastmod>2026-03-12T10:00:00+08:00</lastmod>
