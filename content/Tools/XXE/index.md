@@ -1,5 +1,5 @@
 ---
-title: Writeup
+title: XXE
 date: 2026-06-23T16:00:00+08:00
 draft: false
 toc: true

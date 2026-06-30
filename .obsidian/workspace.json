@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/Tools/公私钥/index.md",
+                "file": "content/Tools/XXE/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -169,8 +169,11 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "47af2e2a6a6e6bb5",
+  "active": "020f8144a598e6ad",
   "lastOpenFiles": [
+    "public/tools/xxe/index.html",
+    "public/tools/xxe",
+    "content/Tools/公私钥/index.md",
     "public/tools/代码命令执行/index.html",
     "public/tools/代码命令执行",
     "public/tools/page/4/index.html",
@@ -188,9 +191,7 @@
     "content/Tools/XXE/index.md",
     "content/Tools/SSRF",
     "content/Tools/XSS/index.md",
-    "content/Tools/XXE",
     "scripts/Moudles/articles/index.md",
-    "public/tools/xss/index.html",
     "content/Tools/CSRF/index.md",
     "content/Tools/SQL 注入精要/index.md",
     "content/Tools/Kerberos 认证机制/index.md",
@@ -215,7 +216,6 @@
     "content/posts/HTB-Object Writeup/index.md",
     "content/posts/HTB-Mantis Writeup/index.md",
     "content/Tools/SMB、共享目录相关/index.md",
-    "content/posts/Windows 提权专区/index.md",
-    "content/posts/Linux 提权专区/index.md"
+    "content/posts/Windows 提权专区/index.md"
   ]
 }
