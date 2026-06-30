@@ -1,5 +1,5 @@
 ---
-title: 文件包含
+title: 文件、远程包含
 date: 2026-03-30T14:00:00+08:00
 draft: false
 toc: true
@@ -7,6 +7,39 @@ images:
 tags:
   - Hack
 ---
+## 原理
+
+程序用一个可被用户控制的变量去做 “包含/引入文件” 的操作。比如 PHP 的 `include($_GET['page'])`，开发者本意是向根据参数动态加载页面模块，但没意识到 `include` 这个动作不只是读取文件内容，而是把目标文件当作代码来解析执行。这就是文件包含比普通任意文件读取危险的地方。任意文件读取指示泄露内容，而文件包含则会把被包含的文件当作 PHP 代码跑。
+
+- LFI（本地文件包含）：包含的是服务器本地已有的文件，攻击者控制路径去读敏感文件或想办法执行已落地的代码。
+- RFI（远程文件包含）：能包含远程 URL 上的文件，攻击者直接让服务器去加载自己服务器上的恶意脚本，等于直接 RCE。
+
+RFI 的危害更大，但触发条件苛刻，PHP 需要 `allow_url_include` 开启（默认是关闭的）。
+
+## 如何从 LFI 升级到 RCE
+
+### 读取敏感文件
+
+配合路径穿越 `../../../etc/passwd` 读取系统文件、读取源代码、配置文件。
+
+### PHP 伪协议
+
+- `php://filter`：读源码。因为直接 include 一个 `php` 文件会被执行而看不见源码，用 `php://filter/convertbase-encode/resource=config.php` 把源码 base64 编码后返回，就能审计源码、找数据库密码。
+- `php://input`：把 POST body 当作代码执行（需要 `allow_url_include`），可以直接 RCE
+- `data://`：`data://text/plain,<?php phpinfo();?>` 直接传入代码（需要 `allow_url_include`）
+
+### 日志投毒
+
+想办法把 PHP 代码写进一个能控制、且服务器会记录的文件，再用 LFI 去包含它执行。最常见的是污染 access.log，把恶意 PHP 代码塞进 User-Agent 头，服务器把这个 UA 原样记录进日志，然后 `?page=../../../var/log/apache2/access.log`，日志里的 `<?php ?>` 就被当代码执行了。SSH 的 authlog（把代码塞进用户名同理）。
+
+### Session 文件包含
+
+如果能控制写入 session 的值（比如某个参数会存进 `$_SESSION`），就包含 `/var/lib/php/sessions/sess_<PHP SESSID>` 来执行。
+
+### /proc/self/environ、phpinfo 配合临时文件
+
+老一些的环境里可以包含 `/proc/self/environ`（同样靠 UA 投毒），或配合 phpinfo 的 LFI to RCE 竞争上传临时文件。
+
 ## 存在漏洞的函数
 
 ### Include

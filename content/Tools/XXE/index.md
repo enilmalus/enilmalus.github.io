@@ -1,0 +1,47 @@
+---
+title: Writeup
+date: 2026-06-23T16:00:00+08:00
+draft: false
+toc: true
+images:
+tags:
+  - Hack
+---
+## 原理
+
+XXE 全称为 XML External Entity（XML 外部实体注入）。XML 里可以用 DTD（文档类型定义）来声明 “实体” ，实体相当于一个变量/宏。普通实体就是文本替换，比如声明 `<!ENTITY name "Enil">`，后面写 `&name;` 就会被替换为 `Enil`。问题出在外部实体，它允许实体的内容不是写死的文本，而是一个外部来源加载。
+
+```xml
+<!DOCTYPE foo [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<foo>&xxe;</foo>
+```
+
+这里 `SYSTEM "file:///etc/passwd"` 告诉解析器：“`&xxe;` 这个实体的内容，去读 `/etc/passwd` 这个文件”。如果应用拿用户提交的 XML 直接丢给解析器、且解析器允许加载外部实体，那么 `&xxe;` 就会被替换成服务器上那个文件的内容，再回显出来，攻击者就读到了本不该读的文件。
+
+## 攻击面
+
+任何接收并解析 XML 的入口都可能成为攻击面。
+
+1. 上传 XML 文件
+2. SOAP/WebService 接口
+3. 解析 SVG（SVG 本质是 XML）
+4. 解析 DOCX/XLSX（Office 文档是打包的 XML）
+5. REST 接口允许把 Content-Type 改成 application/xml 提交
+
+## 类型与利用方式
+
+### 回显型（基础 XXE）
+
+文件直接回显再响应里。
+
+### 报错型
+
+内容不直接回显，但能想办法让它进入报错信息里带出来。
+
+### 盲打/带外（OOB XXE）
+
+当没有任何回显时，让服务器主动外连到攻击者服务器把数据带出去。实体里先 `file://` 读到本地文件，把读到的内容拼进一个指向攻击者服务器的 URL 发出去，攻击者在自己服务器日志里收数据。
+
+## 防御
+
+禁用 XML 解析器对外部实体的 DTD 的处理。
