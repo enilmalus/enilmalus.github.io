@@ -213,9 +213,9 @@ Nmap 的扫描结果表明这是一个域控制器，开放 8080 Web 服务和 S
 
 ![](Pasted%20image%2020260429144918.png)
 
-## 1377 端口渗透
+## 1337 端口渗透
 
-机器开放 1377 端口，做一下目录爆破，发现一个目录 `secure_notes`。
+机器开放的 1337 端口是一个 http 端口，做一下目录爆破，发现一个目录 `secure_notes`。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/Mantis]

