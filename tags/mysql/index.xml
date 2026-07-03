@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MYSQL on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tags/mysql/</link><description>Recent content in MYSQL on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 21 Mar 2026 15:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>SQL 注入精要</title><link>https://enilmalus.github.io/tools/sql-%E6%B3%A8%E5%85%A5%E7%B2%BE%E8%A6%81/</link><pubDate>Sat, 21 Mar 2026 15:00:00 +0800</pubDate><guid>https://enilmalus.github.io/tools/sql-%E6%B3%A8%E5%85%A5%E7%B2%BE%E8%A6%81/</guid><description>SQL 注入原理 SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。
+例如：
+SELECT * FROM users WHERE name = &amp;#39;$input&amp;#39; 正常情况下 $input 是一个用户名。如果传入 OR 1=1，拼出来就变成 WHERE name = '' OR 1=1 恒为真，整张表都被返回。这里的用户输入的单引号逃逸了数据的范围，闭合掉前面的引号，后面的内容就被当成了 SQL 逻辑。
+按是否回显能分为回显注入（union 联合查询、报错注入）和盲注（页面不回显数据，靠布尔真假或时间延迟一位一位地猜，还有带外/DNS注入）；按注入点位置可以分为 GET/POST/Cookie/Header 等参数。
+防御上可以使用预编译/参数化查询。参数化把 SQL 语句地结构先编译固定下来，用户数据是之后再作为纯数据绑定进去的。这样无论用户传什么，永远只能是数据，不可能改变查询结构。结构先编译，数据后绑定。
+白名单校验，限定只能是预先允许的几个值，而不是去过滤特殊字符。
+最小限原则，只给业务必须的权限，不给 DROP、不给跨库读、关闭文件的读写权限
+手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
+&amp;#39; or 1=1 -- - 探测 Columns 确认有 sql 注入漏洞后可使用 order by 或 group by 探测 Columns。 `
+&amp;#39; order by 3 -- - 联合查询 使用 union 进一步探测信息。</description></item></channel></rss>

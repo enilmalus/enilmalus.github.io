@@ -1144,7 +1144,13 @@ AutoType Fastjson 最大的特色也是其最大的安全隐患 &amp;ndash; Auto
 </span></span><span style="display:flex;"><span>        Feb <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">2014</span> 20:04:26 
 </span></span><span style="display:flex;"><span>        Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation
 </span></span><span style="display:flex;"><span>        Express Edition <span style="color:#f92672">(</span>64-bit<span style="color:#f92672">)</span> on Windows NT 6.1 &lt;X64&gt; <span style="color:#f92672">(</span>Build 7601: Service Pack 1<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Hypervisor<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>爆破 tables。</p>
+</span></span></code></pre></div><ul>
+<li>SYSTEM_USER：当前连接 SQL Server 时使用的服务器级登录名（Login）</li>
+<li>SUSER_NAME：当前服务器安全上下文对应的登录名，用于确认当前实际生效的 Login</li>
+<li>CURRENT_USER：当前数据库中的数据用户（User）身份</li>
+<li>sysadmin 是 MSSQL 最强的服务器级角色，1 代表属于，0代表不属于</li>
+</ul>
+<p>爆破 tables。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>admin  admin@orcharddb<span style="color:#f92672">)</span>&gt; SELECT table_schema,table_name FROM information_schema.tables ORDER BY table_name;                                                                                                  
 </span></span><span style="display:flex;"><span>table_schema   table_name                                             
 </span></span><span style="display:flex;"><span>------------   ----------------------------------------------------   
