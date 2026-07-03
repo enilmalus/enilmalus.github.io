@@ -8,6 +8,9 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - AppLocker
+  - SMTP
+  - FTP
 ---
 ## 初始侦察
 

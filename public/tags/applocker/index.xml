@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>SMTP on Welcome My Hack&#39;s Blog</title>
-    <link>http://localhost:1313/tags/smtp/</link>
-    <description>Recent content in SMTP on Welcome My Hack&#39;s Blog</description>
+    <title>AppLocker on Welcome My Hack&#39;s Blog</title>
+    <link>http://localhost:1313/tags/applocker/</link>
+    <description>Recent content in AppLocker on Welcome My Hack&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Jul 2026 09:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/smtp/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>SMTP</title>
-      <link>http://localhost:1313/tools/smtp/</link>
-      <pubDate>Thu, 02 Jul 2026 09:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tools/smtp/</guid>
-      <description>&lt;h2 id=&#34;简介&#34;&gt;简介&lt;/h2&gt;&#xA;&lt;p&gt;SMTP（Simple Mail Transfer Protocol）简单邮件传输协议，是互联网中用于发送和转发电子邮件的应用层协议。&lt;/p&gt;&#xA;&lt;p&gt;邮件客户端/邮件服务器把邮件交给下一台邮件服务器，直到送到收件人的邮箱服务器。&lt;/p&gt;&#xA;&lt;p&gt;基本工作流程如下：&lt;/p&gt;&#xA;&lt;p&gt;Enil 给 Malus 发邮件&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Enil 的邮件客户端把邮件提交给自己的邮件服务器&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Enil 的邮件服务器查询 Malus 邮箱域名的 MX 记录，找到负责接收该域邮件的服务器&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Enil 的服务器通过 SMTP 与 Malus 的邮件服务器建立连接&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;发送方依次告诉对方：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;发件人是谁 ：&lt;code&gt;MAIL FROM&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;收件人是谁：&lt;code&gt;RCPT TO&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;邮件内容开始：&lt;code&gt;DATA&lt;/code&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;收件服务器接受邮件后，将其存入 Malus 的邮箱&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Malus 再通过 IMAP 或 POP3 读取邮件&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;smtp-常见命令&#34;&gt;SMTP 常见命令&lt;/h2&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-SMTP&#34; data-lang=&#34;SMTP&#34;&gt;HELO / EHLO&#xA;MAIL FROM:&amp;lt;enil12408@gmail.com&amp;gt;&#xA;RCPT TO:&amp;lt;malus12408@gmail.com&amp;gt;&#xA;DATA&#xA;Subject: TEST&#xA;&#xA;Hello Malus&#xA;.&#xA;QUIT&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中 &lt;code&gt;HELO / EHLO&lt;/code&gt; 表示客户端发送的自我介绍命令；单独一行的 &lt;code&gt;.&lt;/code&gt; 表示邮件正文结束。&lt;/p&gt;&#xA;&lt;h2 id=&#34;实例&#34;&gt;实例&lt;/h2&gt;&#xA;&lt;p&gt;在一次 Nmap 的扫描结果如下：&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-Nmap&#34; data-lang=&#34;Nmap&#34;&gt;25/tcp    open  smtp?&#xA;| smtp-commands: REEL, SIZE 20480000, AUTH LOGIN PLAIN, HELP&#xA;|_ 211 DATA HELO EHLO MAIL NOOP QUIT RCPT RSET SAML TURN VRFY&#xA;| fingerprint-strings: &#xA;|   DNSStatusRequestTCP, DNSVersionBindReqTCP, Kerberos, LDAPBindReq, LDAPSearchReq, LPDString, NULL, RPCCheck, SMBProgNeg, SSLSessionReq, TLSSessionReq, X11Probe: &#xA;|     220 Mail Service ready&#xA;|   FourOhFourRequest, GenericLines, GetRequest, HTTPOptions, RTSPRequest: &#xA;|     220 Mail Service ready&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|   Hello: &#xA;|     220 Mail Service ready&#xA;|     EHLO Invalid domain address.&#xA;|   Help: &#xA;|     220 Mail Service ready&#xA;|     DATA HELO EHLO MAIL NOOP QUIT RCPT RSET SAML TURN VRFY&#xA;|   SIPOptions: &#xA;|     220 Mail Service ready&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|     sequence of commands&#xA;|   TerminalServerCookie: &#xA;|     220 Mail Service ready&#xA;|_    sequence of commands&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;存在 SMTP 服务，可以进行基础通讯。&lt;/p&gt;</description>
-    </item>
+    <lastBuildDate>Mon, 01 Jun 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/applocker/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HTB-Reel Writeup</title>
       <link>http://localhost:1313/posts/htb-reel-writeup/</link>
