@@ -8,6 +8,8 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - Windows
+  - SMB
 ---
 ## 初始侦察
 

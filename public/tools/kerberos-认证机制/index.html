@@ -14,7 +14,7 @@ TGS TGS（Ticket Granting Service Ticket）为特殊服务发放票根。
 SPN SPN（Service Principal Name）用于识别在主机上运行的服务的身份（唯一）
 认证过程 AS-REQ（Authentication Service Request）用户客户端发送请求给 KDC “我是 Hernandez ，我想登入。” 这包含了用户密码哈希加密的时间戳，称为预认证。 AS-REP（Authentication Service Replay）KDC 用用户储存的哈希解密时间戳，如果匹配则 KDC 传回带账号加密的 TGT。 TGS-REQ（Ticket Granting Service Request）当用户想访问某个服务时客户端发送 TGT 到 KDC 请求获取这个服务的票根。 TGS-REP（Ticket Granting Service Replay）KDC 验证 TGT，如何发布目标服务账户密码哈希加密的服务票根。 AP-REQ（Application Request）客户端向目标服务展示服务票根，该服务用自己的哈希解密并授予访问权限。 AS-REP Roasting AS-REP Roasting 利用的就是 Kerberos 预身份验证的机制缺陷。正常情况下用户向 KDC 申请 TGT 时（AS-REQ），必须先用自己的密码派生出的密钥加密一个时间戳发送，KDC 解密成功才证明你确实知道这个密码，这就是预认证。但如果某个账户设置了 DONT_REQ_PREAUTH 这个 UCA 标志位，KDC 就会跳过这一步验证，直接返回 AS-REP 响应。这个响应有一段是用密码派生的密钥加密的，相当于 KDC 主动把一段用目标密码加密的密文发给了我。只要将其拿到本地离线爆破，就能还原出明文密码。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/kerberos-%E8%AE%A4%E8%AF%81%E6%9C%BA%E5%88%B6/" />
@@ -57,7 +57,7 @@ SPN SPN（Service Principal Name）用于识别在主机上运行的服务的身
   <meta itemprop="datePublished" content="2026-04-07T21:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-07T21:00:00+08:00">
   <meta itemprop="wordCount" content="259">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Kerberos 认证机制">
@@ -235,6 +235,7 @@ SPN SPN（Service Principal Name）用于识别在主机上运行的服务的身
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
         
     </p>
 

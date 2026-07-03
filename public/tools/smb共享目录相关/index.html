@@ -12,7 +12,7 @@ sudo mount -t nfs 10.10.10.13:/home/karl attact Smbclient 交互式访问、文�
 Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资源。
 列出 SMB 共享 sudo smbclient -N -L \\\\10.10.10.10 连接到 SMB 共享 sudo smbclient \\\\10.10.10.10\\enil 列出目标所有共享（匿名） ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ smbclient -L //10.129.6.162 -N session setup failed: NT_STATUS_ACCESS_DENIED session setup failed: NT_STATUS_ACCESS_DENIED：匿名访问被拒绝 批量下载 ┌──(kali㉿kali)-[~/Work/Kali/Support] └─$ smbclient //10.129.230.181/support-tools -N Try &#34;help&#34; to get a list of possible commands. smb: \&gt; ls . D 0 Wed Jul 20 13:01:06 2022 .. D 0 Sat May 28 07:18:25 2022 7-ZipPortable_21.07.paf.exe A 2880728 Sat May 28 07:19:19 2022 npp.8.4.1.portable.x64.zip A 5439245 Sat May 28 07:19:55 2022 putty.exe A 1273576 Sat May 28 07:20:06 2022 SysinternalsSuite.zip A 48102161 Sat May 28 07:19:31 2022 UserInfo.exe.zip A 277499 Wed Jul 20 13:01:07 2022 windirstat1_1_2_setup.exe A 79171 Sat May 28 07:20:17 2022 WiresharkPortable64_3.6.5.paf.exe A 44398000 Sat May 28 07:19:43 2022 4026367 blocks of size 4096. 970776 blocks available smb: \&gt; prompt smb: \&gt; mget * getting file \7-ZipPortable_21.07.paf.exe of size 2880728 as 7-ZipPortable_21.07.paf.exe (1004.4 KiloBytes/sec) (average 1004.4 KiloBytes/sec) getting file \npp.8.4.1.portable.x64.zip of size 5439245 as npp.8.4.1.portable.x64.zip (468.0 KiloBytes/sec) (average 574.2 KiloBytes/sec) getting file \putty.exe of size 1273576 as putty.exe (509.5 KiloBytes/sec) (average 564.7 KiloBytes/sec) parallel_read returned NT_STATUS_IO_TIMEOUT NT_STATUS_CONNECTION_DISCONNECTED opening remote file \UserInfo.exe.zip NT_STATUS_CONNECTION_DISCONNECTED opening remote file \windirstat1_1_2_setup.exe NT_STATUS_CONNECTION_DISCONNECTED opening remote file \WiresharkPortable64_3.6.5.paf.exe NT_STATUS_CONNECTION_DISCONNECTED listing \* smb: \&gt; getting file \SysinternalsSuite.zip of size 48102161 as SysinternalsSuite.zip The connection is disconnected now: NT_STATUS_CONNECTION_DISCONNECTED Smbmap 用于批量枚举、权限扫描，快速摸清权限全貌。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术, SMB" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/smb%E5%85%B1%E4%BA%AB%E7%9B%AE%E5%BD%95%E7%9B%B8%E5%85%B3/" />
@@ -53,7 +53,7 @@ Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资�
   <meta itemprop="datePublished" content="2026-02-23T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-23T17:00:00+08:00">
   <meta itemprop="wordCount" content="1049">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术,SMB">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SMB、共享目录相关">
@@ -402,6 +402,8 @@ Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资�
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
         
     </p>
 

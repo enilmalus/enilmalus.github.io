@@ -6,6 +6,7 @@ toc: true
 images:
 tags:
   - Hack
+  - 技术
 ---
 ## IDOR 不安全直接对象引用
 

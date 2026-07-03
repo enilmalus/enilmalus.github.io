@@ -6,6 +6,7 @@ toc: true
 images:
 tags:
   - Hack
+  - 技术
 ---
 ## 一个 Bash 例子
 

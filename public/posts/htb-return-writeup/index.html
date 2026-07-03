@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Return] └─$ sudo nmap --min-rate 10000 -p- 10.129.95.241 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-20 02:48 -0400 Warning: 10.129.95.241 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.95.241 Host is up (0.14s latency). Not shown: 65494 closed tcp ports (reset) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1026/tcp filtered LSA-or-nterm 3023/tcp filtered magicnotes 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 6323/tcp filtered unknown 9389/tcp open adws 15041/tcp filtered unknown 16451/tcp filtered unknown 22252/tcp filtered unknown 23102/tcp filtered unknown 27459/tcp filtered unknown 38214/tcp filtered unknown 43356/tcp filtered unknown 46789/tcp filtered unknown 47001/tcp open winrm 49664/tcp open unknown 49665/tcp open unknown 49666/tcp open unknown 49667/tcp open unknown 49671/tcp open unknown 49674/tcp open unknown 49675/tcp open unknown 49677/tcp open unknown 49680/tcp open unknown 49688/tcp open unknown 49699/tcp open unknown 52171/tcp filtered unknown 56654/tcp filtered unknown 57578/tcp filtered unknown 58075/tcp filtered unknown Nmap done: 1 IP address (1 host up) scanned in 18.45 seconds 提取端口做备用。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Writeup, HTB, Windows, SMB" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-return-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-04-20T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-20T14:00:00+08:00">
   <meta itemprop="wordCount" content="1918">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,Windows,SMB">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Return Writeup">
@@ -596,6 +596,8 @@
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
         
     </p>
 

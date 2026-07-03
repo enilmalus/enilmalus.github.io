@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SSRF on Welcome My Hack&#39;s Blog</title>
+    <link>http://localhost:1313/tags/ssrf/</link>
+    <description>Recent content in SSRF on Welcome My Hack&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 23 Jun 2026 17:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/ssrf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SSRF</title>
+      <link>http://localhost:1313/tools/ssrf/</link>
+      <pubDate>Tue, 23 Jun 2026 17:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tools/ssrf/</guid>
+      <description>&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;&#xA;&lt;p&gt;SSRF 的本质是服务端请求伪造，攻击者能控制服务端去发起一个请求，让服务器去访问指定的目标，它的危害根源不在于 “发请求” 这个动作本身，而在于服务器所处的网络位置和信任关系。服务器往往能访问从外部碰不到的内网资源，所以等于是借服务器这个跳板，把攻击面从公网延伸到了内网。&lt;/p&gt;&#xA;&lt;p&gt;这通常出现在那些服务端需要根据用户输入去拉取远程资源的功能里。比如通过 URL 加载图片/头像、URL 预览生成分享卡片、Webhook、远程翻译、PDF/截图生成、从 URL 导入数据这些场景。参数上经常 &lt;code&gt;url&lt;/code&gt; 、&lt;code&gt;image&lt;/code&gt;、&lt;code&gt;src&lt;/code&gt;、&lt;code&gt;target&lt;/code&gt;、&lt;code&gt;path&lt;/code&gt; 这类。&lt;/p&gt;&#xA;&lt;p&gt;危害分为几个层级：轻则探测内网存活主机和端口、访问只对外网开放的服务（Redis、Elasticsearch、内部管理后台）；重则读取元主机的元数据接口拿到临时凭证，或者配合 gopher 协议直接打 Redis、FastCGI 实现 RCE。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -6,8 +6,15 @@
     <description>Recent content in XSS on Welcome My Hack&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Feb 2026 16:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 21 Jun 2026 20:00:00 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/xss/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>XSS</title>
+      <link>http://localhost:1313/tools/xss/</link>
+      <pubDate>Sun, 21 Jun 2026 20:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tools/xss/</guid>
+      <description>&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;&#xA;&lt;p&gt;XSS 是用户输入混进了 HTML 页面，被浏览器当作 JavaScript/HTML 代码执行。&lt;/p&gt;&#xA;&lt;p&gt;具体来说就是网站把用户输入（评论、昵称、搜索词等）未经处理就拼进了返回给浏览器的页面里。如果输入的是 &lt;code&gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&lt;/code&gt;，浏览器分不清这是该显示的文本还是该执行的脚本，就把它当脚本跑了。于是攻击者的 JS 就在受害者的浏览器、目标网站的上下文里执行了。脚本一旦在目标站的上下文运行就能读到该站的 Cookie，发送站请求、该页面，权限等同与受害人。&lt;/p&gt;&#xA;&lt;h2 id=&#34;xss-的三种类型&#34;&gt;XSS 的三种类型&lt;/h2&gt;&#xA;&lt;h3 id=&#34;反射型&#34;&gt;反射型&lt;/h3&gt;&#xA;&lt;p&gt;输入从请求里来，立刻被反射回当前响应的页面，不存数据库。典型的是搜索框、报错回显，payload 藏在 URL 参数里。利用方式是构造一个带恶意参数的链接诱导受害人点击，需要社工投递、一次性、只影响点链接的人。&lt;/p&gt;&#xA;&lt;h3 id=&#34;存储型&#34;&gt;存储型&lt;/h3&gt;&#xA;&lt;p&gt;payload 被存进了数据库（评论、留言、个人资料），之后浏览该内容的用户都会中招，危害最大。&lt;/p&gt;&#xA;&lt;h3 id=&#34;dom-型&#34;&gt;DOM 型&lt;/h3&gt;&#xA;&lt;p&gt;漏洞完全发生在前端，服务器返回的页面本身没有问题，是页面里的 JS 把用户可控数据直接写进了危险的 DOM 操作（&lt;code&gt;innerHTML&lt;/code&gt;、&lt;code&gt;document.write&lt;/code&gt;、&lt;code&gt;eval&lt;/code&gt;）。payload 甚至可能不发到服务器，所以服务端的 WAF 和过滤完全可能看不到它。&lt;/p&gt;&#xA;&lt;h2 id=&#34;防御&#34;&gt;防御&lt;/h2&gt;&#xA;&lt;p&gt;重点在输出而非输入，同一份数据输出到不同位置（HTML 标签内、属性里、JS 里、URL 里）需要的编码方式不同，所以该在输出到页面的那一刻按上下文做对应编码。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>HTB-Challenge-OnlyHacks</title>
       <link>http://localhost:1313/posts/htb-challenge-onlyhacks/</link>

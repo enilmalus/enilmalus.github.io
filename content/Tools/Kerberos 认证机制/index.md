@@ -6,6 +6,7 @@ toc: true
 images:
 tags:
   - Hack
+  - 技术
 ---
 ## Kerberos 认证机制
 

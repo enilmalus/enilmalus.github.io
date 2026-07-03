@@ -10,7 +10,7 @@
 初始侦察 nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.228.213 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-01-20 04:39 EST Nmap scan report for 10.129.228.213 Host is up (0.10s latency). Not shown: 65533 closed tcp ports (reset) PORT STATE SERVICE 22/tcp open ssh 8080/tcp open http-proxy Nmap done: 1 IP address (1 host up) scanned in 13.52 seconds 开放了两个 TCP 端口 22 和 8080。
 nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sT -sC -sV -O -p22,8080 10.129.228.213 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-01-20 04:40 EST Nmap scan report for 10.129.228.213 Host is up (0.086s latency). PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0) | ssh-hostkey: | 3072 ca:f1:0c:51:5a:59:62:77:f0:a8:0c:5c:7c:8d:da:f8 (RSA) | 256 d5:1c:81:c9:7b:07:6b:1c:c1:b4:29:25:4b:52:21:9f (ECDSA) |_ 256 db:1d:8c:eb:94:72:b0:d3:ed:44:b9:6c:93:a7:f9:1d (ED25519) 8080/tcp open nagios-nsca Nagios NSCA |_http-title: Home Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port Device type: general purpose Running: Linux 4.X|5.X OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5 OS details: Linux 4.15 - 5.19 Network Distance: 2 hops Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ . Nmap done: 1 IP address (1 host up) scanned in 14.08 seconds nmap 漏洞脚本扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --script=vuln -p22,8080 10.129.228.213 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-01-20 04:40 EST Nmap scan report for 10.129.228.213 Host is up (0.087s latency). PORT STATE SERVICE 22/tcp open ssh 8080/tcp open http-proxy | http-slowloris-check: | VULNERABLE: | Slowloris DOS attack | State: LIKELY VULNERABLE | IDs: CVE:CVE-2007-6750 | Slowloris tries to keep many connections to the target web server open and hold | them open as long as possible. It accomplishes this by opening connections to | the target web server and sending a partial request. By doing so, it starves | the http server&#39;s resources causing Denial Of Service. | | Disclosure date: 2009-09-17 | References: | http://ha.ckers.org/slowloris/ |_ https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750 | http-enum: | /register/: Potentially interesting folder |_ /upload/: Potentially interesting folder Nmap done: 1 IP address (1 host up) scanned in 591.03 seconds 8080 端口可能存在一个 DOS 漏洞，但是在靶机渗透中一般把 DOS 漏洞优先级往后放。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Writeup, HTB, Linux, 文件包含, Spring4Shell" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-inject-writeup/" />
@@ -49,7 +49,7 @@ nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -
   <meta itemprop="datePublished" content="2026-01-20T19:40:00+08:00">
   <meta itemprop="dateModified" content="2026-01-20T19:40:00+08:00">
   <meta itemprop="wordCount" content="1541">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,Linux,文件包含,Spring4Shell">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Inject Writeup">
@@ -603,6 +603,9 @@ class.module.classLoader.resources.context.parent.pipeline.first.fileDateFormat=
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/linux/">Linux</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">文件包含</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/spring4shell/">Spring4Shell</a></span>
         
     </p>
 

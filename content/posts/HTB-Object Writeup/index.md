@@ -8,6 +8,9 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - Windows
+  - Jenkins
+  - BloodHound
 ---
 ## 初始侦察
 

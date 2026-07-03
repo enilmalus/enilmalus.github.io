@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.227.191 -oA port [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-01 01:13 EST Nmap scan report for 10.129.227.191 Host is up (0.10s latency). Not shown: 65521 closed tcp ports (reset) PORT STATE SERVICE 21/tcp open ftp 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 445/tcp open microsoft-ds 5985/tcp open wsman 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49156/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 11.14 seconds 提取端口做备用。
 " />
-<meta name="keywords" content=", Hack, Windows, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Windows, Writeup, HTB, FTP, SMB, 混淆, 反序列化, PrintSpoofer, JuicyPotato" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-json-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-03-01T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-01T14:00:00+08:00">
   <meta itemprop="wordCount" content="2317">
-  <meta itemprop="keywords" content="Hack,Windows,Writeup,HTB">
+  <meta itemprop="keywords" content="Hack,Windows,Writeup,HTB,FTP,SMB,混淆,反序列化,PrintSpoofer,JuicyPotato">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Json Writeup">
@@ -738,6 +738,12 @@
         <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/ftp/">FTP</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%B7%B7%E6%B7%86/">混淆</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">反序列化</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/printspoofer/">PrintSpoofer</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/juicypotato/">JuicyPotato</a></span>
         
     </p>
 

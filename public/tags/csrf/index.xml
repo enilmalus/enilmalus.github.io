@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CSRF on Welcome My Hack&#39;s Blog</title>
+    <link>http://localhost:1313/tags/csrf/</link>
+    <description>Recent content in CSRF on Welcome My Hack&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 21 Jun 2026 20:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/csrf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSRF</title>
+      <link>http://localhost:1313/tools/csrf/</link>
+      <pubDate>Sun, 21 Jun 2026 20:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tools/csrf/</guid>
+      <description>&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;&#xA;&lt;p&gt;CSRF（跨站请求伪造）利用的是浏览器会自动为某个域名携带它的 Cookie 这一机制，只要登录过某网站、Cookie 还在，那么无论这个请求是从哪个页面发出的，浏览器都会把该站的 Cookie 附上，于是服务器收到请求时，光看 Cookie 没法分辨这到底是用户本人再网站上点的还是攻击者诱导发出的伪造请求。&lt;/p&gt;&#xA;&lt;p&gt;XSS 是利用用户对网站的信任，CSRF 是利用网站对用户浏览器的信任。&lt;/p&gt;&#xA;&lt;p&gt;例如某个银行的转账接口是 &lt;code&gt;bank.com/transfer?to=enil&amp;amp;amount=10000&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;p&gt;那么我们可以做一个恶意页面，里面放上：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;img src&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://bank.com/transfer?to=enil&amp;amp;amount=10000&amp;#34;&lt;/span&gt;&amp;gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;受害者再登录银行的情况下访问了这个页面，浏览器加载这张 “图片” 的时候就向银行发了转账请求，并自动带上了银行的 Cookie，钱就转走了。&lt;/p&gt;&#xA;&lt;p&gt;利用的三个前提是：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;受害者当前处于登录态（Cookie 有效）；&lt;/li&gt;&#xA;&lt;li&gt;目标接口只靠 Cookie 鉴权；&lt;/li&gt;&#xA;&lt;li&gt;请求里没有不可预测的值（比如没有 CSRF token）；&lt;/li&gt;&#xA;&lt;li&gt;攻击者能诱导受害者再登录状态下访问页面&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;防御&#34;&gt;防御&lt;/h2&gt;&#xA;&lt;h3 id=&#34;csrf-token&#34;&gt;CSRF Token&lt;/h3&gt;&#xA;&lt;p&gt;服务器给每个会话生成一个不可预测的 token，藏在表单里，提交时校验。&lt;/p&gt;&#xA;&lt;h3 id=&#34;samesite-cookie&#34;&gt;SameSite Cookie&lt;/h3&gt;&#xA;&lt;p&gt;给 Cookie 设 &lt;code&gt;SameSite=Lax/Strict&lt;/code&gt;，浏览器在跨站请求时就不带这个 Cookie 了。现代浏览器默认 &lt;code&gt;SameSite=Lax&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;h3 id=&#34;校验-origin--referer-头&#34;&gt;校验 Origin / Referer 头&lt;/h3&gt;&#xA;&lt;p&gt;判断请求来源是不是本站，跨站来的拒掉。&lt;/p&gt;&#xA;&lt;h3 id=&#34;敏感操作二次校验&#34;&gt;敏感操作二次校验&lt;/h3&gt;&#xA;&lt;p&gt;转账、改密码这些高危操作的时候要求重新输入密码或验证码。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

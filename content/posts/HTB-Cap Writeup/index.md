@@ -8,7 +8,7 @@ tags:
   - Hack
   - Writeup
   - HTB
-  - XSLT
+  - Linux
 ---
 > 本文章以 kali 地址为 10.10.17.128 做演示
 

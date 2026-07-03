@@ -8,6 +8,8 @@ tags:
   - Hack
   - HTB
   - Writeup
+  - Windows
+  - FTP
 ---
 ## 初始侦察
 

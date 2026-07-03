@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Support] └─$ sudo nmap --min-rate 10000 -p- 10.129.230.181 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-22 09:39 -0400 Nmap scan report for 10.129.230.181 Host is up (0.18s latency). Not shown: 65516 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 9389/tcp open adws 49664/tcp open unknown 49668/tcp open unknown 49678/tcp open unknown 49684/tcp open unknown 49703/tcp open unknown 49741/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 20.89 seconds 提取端口做备用。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, HTB, Writeup, SMB, 逆向, LDAP, BloodHound, Windows, Addcomputer, RBCD, getST, Wmiexec" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-support-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-04-23T20:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-23T20:00:00+08:00">
   <meta itemprop="wordCount" content="2166">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,HTB,Writeup,SMB,逆向,LDAP,BloodHound,Windows,Addcomputer,RBCD,GetST,Wmiexec">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Support Writeup">
@@ -852,6 +852,17 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E9%80%86%E5%90%91/">逆向</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/ldap/">LDAP</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/bloodhound/">BloodHound</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/addcomputer/">Addcomputer</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/rbcd/">RBCD</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/getst/">getST</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/wmiexec/">Wmiexec</a></span>
         
     </p>
 

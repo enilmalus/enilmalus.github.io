@@ -12,7 +12,7 @@ ssh2john 提取私钥 ┌──(kali㉿kali)-[~/Work/Kali] └─$ ssh2john id_r
 John 设计的初衷在于专注于高效破解，而不是兼顾解析和转换各种格式文件。各种密钥文件和加密数据都有自己独特的储存格式、加密参数和版本演变，内置所有解析逻辑会使得核心代码变得臃肿，增加维护难度和安全风险，同时也会分散团队在算法优化和并行处理上的精力。事实上，文件格式转换本身是一项非常复杂且不断演进的工作，许多转换工具最初由社区不同专家针对各自领域开发出来，这种分工使得每个工具都可以专注于特定格式的深度解析和不断更新，而 John 的核心开发者可以集中精力提升密码破解的速度和准确性。再者，不同格式的解析逻辑通常需要对各种加密协议和密钥派生函数有精确而细致的处理，若将这些所有细节内知道主程序中，不仅会增加软件整体的复杂度，还会使得未来支持新格式的工作变得更为繁琐和风险巨大。通过采用独立的 ssh2john 攻击，整个破解流程得以模块化：用户首先通过专门的转换工具提取破解所需的关键信息，再交由 John 进行针对性暴力破解或字典攻击，这样的架构既提高了灵活性，也确保了每个环节都能在各自领域达到最佳效果。
 John 破解提取的私钥 ┌──(kali㉿kali)-[~/Work/Kali] └─$ john key_hash John the Ripper 默认会按照一套预设的攻击策略以此尝试不同的破解模式。当不指定特定模式时，John 首先启动单一模式（Single crack mode），利用哈希文件中的信息（例如用户名、文件名等）生成候选密码并进行尝试；这就是输出模式中显示 “Proceeding with single,rule:Single” 所表达的含义。单一模式通常能在很短的时间内尝试一些最可能的密码组合，当 John 发现还有缓冲的候选密码没有处理完时，它会尽快完成这部分工作。接下来，John 会自动进入下一阶段，也就是使用默认字典进行攻击。如果前面两种都没有破解成功，John 就会启动最全面但是效率较低的增量模式（Incrementak mode），即基于 ASCII 字符的穷举攻击。整个流程的设计逻辑在于先用最后可能的密码组合进行快速尝试，再逐步扩大候选密码空间，再有限的时间内尽可能高效地覆盖大部分实际使用的密码组合。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/%E5%85%AC%E7%A7%81%E9%92%A5/" />
@@ -53,7 +53,7 @@ John 破解提取的私钥 ┌──(kali㉿kali)-[~/Work/Kali] └─$ john key
   <meta itemprop="datePublished" content="2026-01-01T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-01-01T17:00:00+08:00">
   <meta itemprop="wordCount" content="84">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="公私钥">
@@ -186,6 +186,7 @@ ElX+bGho7xDsCOubcJxarL+rGEZ5DQTxpAjGk=
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
         
     </p>
 

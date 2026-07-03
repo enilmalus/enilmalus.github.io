@@ -10,7 +10,7 @@
 这通常出现在那些服务端需要根据用户输入去拉取远程资源的功能里。比如通过 URL 加载图片/头像、URL 预览生成分享卡片、Webhook、远程翻译、PDF/截图生成、从 URL 导入数据这些场景。参数上经常 url 、image、src、target、path 这类。
 危害分为几个层级：轻则探测内网存活主机和端口、访问只对外网开放的服务（Redis、Elasticsearch、内部管理后台）；重则读取元主机的元数据接口拿到临时凭证，或者配合 gopher 协议直接打 Redis、FastCGI 实现 RCE。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术, SSRF" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/ssrf/" />
@@ -49,7 +49,7 @@
   <meta itemprop="datePublished" content="2026-06-23T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-06-23T17:00:00+08:00">
   <meta itemprop="wordCount" content="20">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术,SSRF">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SSRF">
@@ -162,6 +162,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/ssrf/">SSRF</a></span>
         
     </p>
 

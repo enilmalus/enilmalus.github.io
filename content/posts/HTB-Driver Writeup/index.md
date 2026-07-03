@@ -9,6 +9,7 @@ tags:
   - HTB
   - Writeup
   - Windows
+  - SMB
 ---
 ## 初始侦察
 ### Nmap 端口扫描

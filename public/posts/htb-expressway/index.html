@@ -10,7 +10,7 @@
 初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.1.84 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-12 00:24 EST Nmap scan report for 10.129.1.84 Host is up (0.12s latency). Not shown: 65534 closed tcp ports (reset) PORT STATE SERVICE 22/tcp open ssh Nmap done: 1 IP address (1 host up) scanned in 16.20 seconds Nmap 扫描发现靶机的 TCP 服务仅开放 22 端口，进一步进行 UDP 端口扫描。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sU --min-rate 10000 -p- 10.129.1.84 Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-12 00:29 EST Warning: 10.129.1.84 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.1.84 Host is up (0.19s latency). Not shown: 65448 open|filtered udp ports (no-response), 86 closed udp ports (port-unreach) PORT STATE SERVICE 500/udp open isakmp Nmap done: 1 IP address (1 host up) scanned in 85.54 seconds\ UDP 扫描出靶机开放了 500 端口，运行的是 isakmp 服务。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Writeup, HTB, ISAKMP, Linux" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-expressway/" />
@@ -18,7 +18,7 @@
 
     <title>
         
-            HTB-Expressway :: Welcome My Hack&#39;s Blog 
+            HTB-Expressway Writeup :: Welcome My Hack&#39;s Blog 
         
     </title>
 
@@ -42,17 +42,17 @@
 
 
 
-  <meta itemprop="name" content="HTB-Expressway">
+  <meta itemprop="name" content="HTB-Expressway Writeup">
   <meta itemprop="description" content="本文章以 kali 地址为 10.10.16.41 做演示
 初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.1.84 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-12 00:24 EST Nmap scan report for 10.129.1.84 Host is up (0.12s latency). Not shown: 65534 closed tcp ports (reset) PORT STATE SERVICE 22/tcp open ssh Nmap done: 1 IP address (1 host up) scanned in 16.20 seconds Nmap 扫描发现靶机的 TCP 服务仅开放 22 端口，进一步进行 UDP 端口扫描。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sU --min-rate 10000 -p- 10.129.1.84 Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-12 00:29 EST Warning: 10.129.1.84 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.1.84 Host is up (0.19s latency). Not shown: 65448 open|filtered udp ports (no-response), 86 closed udp ports (port-unreach) PORT STATE SERVICE 500/udp open isakmp Nmap done: 1 IP address (1 host up) scanned in 85.54 seconds\ UDP 扫描出靶机开放了 500 端口，运行的是 isakmp 服务。">
   <meta itemprop="datePublished" content="2026-02-12T16:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-12T16:00:00+08:00">
   <meta itemprop="wordCount" content="611">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,ISAKMP,Linux">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="HTB-Expressway">
+  <meta name="twitter:title" content="HTB-Expressway Writeup">
   <meta name="twitter:description" content="本文章以 kali 地址为 10.10.16.41 做演示
 初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.1.84 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-12 00:24 EST Nmap scan report for 10.129.1.84 Host is up (0.12s latency). Not shown: 65534 closed tcp ports (reset) PORT STATE SERVICE 22/tcp open ssh Nmap done: 1 IP address (1 host up) scanned in 16.20 seconds Nmap 扫描发现靶机的 TCP 服务仅开放 22 端口，进一步进行 UDP 端口扫描。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sU --min-rate 10000 -p- 10.129.1.84 Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-12 00:29 EST Warning: 10.129.1.84 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.1.84 Host is up (0.19s latency). Not shown: 65448 open|filtered udp ports (no-response), 86 closed udp ports (port-unreach) PORT STATE SERVICE 500/udp open isakmp Nmap done: 1 IP address (1 host up) scanned in 85.54 seconds\ UDP 扫描出靶机开放了 500 端口，运行的是 isakmp 服务。">
@@ -136,7 +136,7 @@
 
     <article>
       <h1 class="post-title">
-        <a href="http://localhost:1313/posts/htb-expressway/">HTB-Expressway</a>
+        <a href="http://localhost:1313/posts/htb-expressway/">HTB-Expressway Writeup</a>
       </h1>
 
       
@@ -301,6 +301,8 @@
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/isakmp/">ISAKMP</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/linux/">Linux</a></span>
         
     </p>
 

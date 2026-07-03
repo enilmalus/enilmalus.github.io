@@ -9,6 +9,12 @@ tags:
   - Windows
   - Writeup
   - HTB
+  - FTP
+  - SMB
+  - 混淆
+  - 反序列化
+  - PrintSpoofer
+  - JuicyPotato
 ---
 ## 初始侦察
 

@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Active] └─$ sudo nmap --min-rate 10000 -p- 10.129.18.244 -oA ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-13 20:56 -0400 Warning: 10.129.18.244 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.18.244 Host is up (0.12s latency). Not shown: 65506 closed tcp ports (reset) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1139/tcp filtered cce3x 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 9389/tcp open adws 10489/tcp filtered unknown 28021/tcp filtered unknown 32539/tcp filtered unknown 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49165/tcp open unknown 49170/tcp open unknown 49173/tcp open unknown 56367/tcp filtered unknown 57964/tcp filtered unknown Nmap done: 1 IP address (1 host up) scanned in 17.63 seconds 提取端口做备用。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Writeup, HTB, Windows, SMB, GetUserSPNs" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-active-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-04-14T08:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-14T08:00:00+08:00">
   <meta itemprop="wordCount" content="2487">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,Windows,SMB,GetUserSPNs">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Active Writeup">
@@ -687,6 +687,9 @@
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/getuserspns/">GetUserSPNs</a></span>
         
     </p>
 

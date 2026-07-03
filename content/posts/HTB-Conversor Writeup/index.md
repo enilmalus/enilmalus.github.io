@@ -8,7 +8,10 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - Linux
+  - 文件上传
   - XSLT
+  - XML
 ---
 > 本文章以 kali 地址为 10.10.16.35 做演示
 

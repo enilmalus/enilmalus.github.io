@@ -8,6 +8,13 @@ tags:
   - Hack
   - HTB
   - Writeup
+  - Windows
+  - SMB
+  - MSSQL
+  - SQL注入
+  - 文件包含
+  - WinPEAS
+  - BloodHound
 ---
 ## 初始侦察
 
@@ -1273,7 +1280,7 @@ Info: Download successful!
 2765013 -rw-rw-r-- 1 kali kali 134K Mar 31 03:58 out.txt
 ```
 
-在 linpeas 的扫描结果中发现 Firefox 可能可以被利用。
+在 winpeas 的扫描结果中发现 Firefox 可能可以被利用。
 
 ```bash
 ╔══════════╣ Looking for Firefox DBs

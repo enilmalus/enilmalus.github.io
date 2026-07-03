@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="信息收集 ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ bloodhound-python -c All -u jdgodd -p &#39;JDg0dd1s@d0p3cr3@t0r&#39; -ns 10.129.12.116 -d streamio.htb -dc streamio.htb --zip INFO: BloodHound.py for BloodHound LEGACY (BloodHound 4.2 and 4.3) INFO: Found AD domain: streamio.htb INFO: Getting TGT for user WARNING: Failed to get Kerberos TGT. Falling back to NTLM authentication. Error: Kerberos SessionError: KRB_AP_ERR_SKEW(Clock skew too great) INFO: Connecting to LDAP server: streamio.htb INFO: Testing resolved hostname connectivity dead:beef::1a9 INFO: Trying LDAP connection to dead:beef::1a9 INFO: Testing resolved hostname connectivity dead:beef::88b9:720e:3fbe:abf7 INFO: Trying LDAP connection to dead:beef::88b9:720e:3fbe:abf7 INFO: Found 1 domains INFO: Found 1 domains in the forest INFO: Found 1 computers INFO: Connecting to LDAP server: streamio.htb INFO: Testing resolved hostname connectivity dead:beef::1a9 INFO: Trying LDAP connection to dead:beef::1a9 INFO: Testing resolved hostname connectivity dead:beef::88b9:720e:3fbe:abf7 INFO: Trying LDAP connection to dead:beef::88b9:720e:3fbe:abf7 INFO: Found 8 users INFO: Found 54 groups INFO: Found 4 gpos INFO: Found 1 ous INFO: Found 19 containers INFO: Found 0 trusts INFO: Starting computer enumeration with 10 workers INFO: Querying computer: DC.streamIO.htb INFO: Done in 00M 31S INFO: Compressing output into 20260401025555_bloodhound.zip ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ ls -liah 20260401025555_bloodhound.zip 2784945 -rw-rw-r-- 1 kali kali 141K Apr 1 02:56 20260401025555_bloodhound.zip ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ unzip -l 20260401025555_bloodhound.zip Archive: 20260401025555_bloodhound.zip Length Date Time Name --------- ---------- ----- ---- 82882 2026-04-01 02:56 20260401025555_groups.json 7863 2026-04-01 02:56 20260401025555_gpos.json 1986 2026-04-01 02:56 20260401025555_ous.json 18581 2026-04-01 02:56 20260401025555_users.json 4106 2026-04-01 02:56 20260401025555_computers.json 3100 2026-04-01 02:56 20260401025555_domains.json 24816 2026-04-01 02:56 20260401025555_containers.json --------- ------- 143334 7 files 分析 初始化 neo4j。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术, BloodHound" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/bloodhound/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-04-01T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-01T14:00:00+08:00">
   <meta itemprop="wordCount" content="313">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术,BloodHound">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="BloodHound">
@@ -234,6 +234,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/bloodhound/">BloodHound</a></span>
         
     </p>
 

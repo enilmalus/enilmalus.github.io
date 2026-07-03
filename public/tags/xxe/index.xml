@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>XXE on Welcome My Hack&#39;s Blog</title>
+    <link>http://localhost:1313/tags/xxe/</link>
+    <description>Recent content in XXE on Welcome My Hack&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 23 Jun 2026 16:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/xxe/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>XXE</title>
+      <link>http://localhost:1313/tools/xxe/</link>
+      <pubDate>Tue, 23 Jun 2026 16:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tools/xxe/</guid>
+      <description>&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;&#xA;&lt;p&gt;XXE 全称为 XML External Entity（XML 外部实体注入）。XML 里可以用 DTD（文档类型定义）来声明 “实体” ，实体相当于一个变量/宏。普通实体就是文本替换，比如声明 &lt;code&gt;&amp;lt;!ENTITY name &amp;quot;Enil&amp;quot;&amp;gt;&lt;/code&gt;，后面写 &lt;code&gt;&amp;amp;name;&lt;/code&gt; 就会被替换为 &lt;code&gt;Enil&lt;/code&gt;。问题出在外部实体，它允许实体的内容不是写死的文本，而是一个外部来源加载。&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;!DOCTYPE foo [ &amp;lt;!ENTITY xxe SYSTEM &amp;#34;file:///etc/passwd&amp;#34;&amp;gt;&lt;/span&gt; ]&amp;gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;foo&amp;gt;&lt;/span&gt;&amp;amp;xxe;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/foo&amp;gt;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里 &lt;code&gt;SYSTEM &amp;quot;file:///etc/passwd&amp;quot;&lt;/code&gt; 告诉解析器：“&lt;code&gt;&amp;amp;xxe;&lt;/code&gt; 这个实体的内容，去读 &lt;code&gt;/etc/passwd&lt;/code&gt; 这个文件”。如果应用拿用户提交的 XML 直接丢给解析器、且解析器允许加载外部实体，那么 &lt;code&gt;&amp;amp;xxe;&lt;/code&gt; 就会被替换成服务器上那个文件的内容，再回显出来，攻击者就读到了本不该读的文件。&lt;/p&gt;&#xA;&lt;h2 id=&#34;攻击面&#34;&gt;攻击面&lt;/h2&gt;&#xA;&lt;p&gt;任何接收并解析 XML 的入口都可能成为攻击面。&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;上传 XML 文件&lt;/li&gt;&#xA;&lt;li&gt;SOAP/WebService 接口&lt;/li&gt;&#xA;&lt;li&gt;解析 SVG（SVG 本质是 XML）&lt;/li&gt;&#xA;&lt;li&gt;解析 DOCX/XLSX（Office 文档是打包的 XML）&lt;/li&gt;&#xA;&lt;li&gt;REST 接口允许把 Content-Type 改成 application/xml 提交&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;类型与利用方式&#34;&gt;类型与利用方式&lt;/h2&gt;&#xA;&lt;h3 id=&#34;回显型基础-xxe&#34;&gt;回显型（基础 XXE）&lt;/h3&gt;&#xA;&lt;p&gt;文件直接回显再响应里。&lt;/p&gt;&#xA;&lt;h3 id=&#34;报错型&#34;&gt;报错型&lt;/h3&gt;&#xA;&lt;p&gt;内容不直接回显，但能想办法让它进入报错信息里带出来。&lt;/p&gt;&#xA;&lt;h3 id=&#34;盲打带外oob-xxe&#34;&gt;盲打/带外（OOB XXE）&lt;/h3&gt;&#xA;&lt;p&gt;当没有任何回显时，让服务器主动外连到攻击者服务器把数据带出去。实体里先 &lt;code&gt;file://&lt;/code&gt; 读到本地文件，把读到的内容拼进一个指向攻击者服务器的 URL 发出去，攻击者在自己服务器日志里收数据。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

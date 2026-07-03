@@ -12023,7 +12023,7 @@ Nmap done: 1 IP address (1 host up) scanned in 17.79 seconds
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah out.txt 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2765013</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 134K Mar <span style="color:#ae81ff">31</span> 03:58 out.txt
-</span></span></code></pre></div><p>在 linpeas 的扫描结果中发现 Firefox 可能可以被利用。</p>
+</span></span></code></pre></div><p>在 winpeas 的扫描结果中发现 Firefox 可能可以被利用。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>╔══════════╣ Looking <span style="color:#66d9ef">for</span> Firefox DBs
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1801</span>   │ ╚  https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#browsers-history
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1802</span>   │     Firefox credentials file exists at C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release<span style="color:#ae81ff">\k</span>ey4.db
@@ -17241,7 +17241,7 @@ Nmap done: 1 IP address (1 host up) scanned in 17.79 seconds
         </item>
         
         <item>
-            <title>HTB-Expressway</title>
+            <title>HTB-Expressway Writeup</title>
             <link>http://localhost:1313/posts/htb-expressway/</link>
             <pubDate>Thu, 12 Feb 2026 16:00:00 +0800</pubDate>
             

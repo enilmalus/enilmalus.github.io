@@ -13,7 +13,7 @@ XSS 的三种类型 反射型 输入从请求里来，立刻被反射回当前�
 DOM 型 漏洞完全发生在前端，服务器返回的页面本身没有问题，是页面里的 JS 把用户可控数据直接写进了危险的 DOM 操作（innerHTML、document.write、eval）。payload 甚至可能不发到服务器，所以服务端的 WAF 和过滤完全可能看不到它。
 防御 重点在输出而非输入，同一份数据输出到不同位置（HTML 标签内、属性里、JS 里、URL 里）需要的编码方式不同，所以该在输出到页面的那一刻按上下文做对应编码。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术, XSS" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/xss/" />
@@ -55,7 +55,7 @@ DOM 型 漏洞完全发生在前端，服务器返回的页面本身没有问题
   <meta itemprop="datePublished" content="2026-06-21T20:00:00+08:00">
   <meta itemprop="dateModified" content="2026-06-21T20:00:00+08:00">
   <meta itemprop="wordCount" content="37">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术,XSS">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="XSS">
@@ -187,6 +187,8 @@ DOM 型 漏洞完全发生在前端，服务器返回的页面本身没有问题
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/xss/">XSS</a></span>
         
     </p>
 

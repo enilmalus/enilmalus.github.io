@@ -12,7 +12,7 @@ LFI（本地文件包含）：包含的是服务器本地已有的文件，攻�
 PHP 伪协议 php://filter：读源码。因为直接 include 一个 php 文件会被执行而看不见源码，用 php://filter/convertbase-encode/resource=config.php 把源码 base64 编码后返回，就能审计源码、找数据库密码。 php://input：把 POST body 当作代码执行（需要 allow_url_include），可以直接 RCE data://：data://text/plain,&lt;?php phpinfo();?&gt; 直接传入代码（需要 allow_url_include） 日志投毒 想办法把 PHP 代码写进一个能控制、且服务器会记录的文件，再用 LFI 去包含它执行。最常见的是污染 access.log，把恶意 PHP 代码塞进 User-Agent 头，服务器把这个 UA 原样记录进日志，然后 ?page=../../../var/log/apache2/access.log，日志里的 &lt;?php ?&gt; 就被当代码执行了。SSH 的 authlog（把代码塞进用户名同理）。
 Session 文件包含 如果能控制写入 session 的值（比如某个参数会存进 $_SESSION），就包含 /var/lib/php/sessions/sess_&lt;PHP SESSID&gt; 来执行。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术, 文件包含" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/%E6%96%87%E4%BB%B6%E8%BF%9C%E7%A8%8B%E5%8C%85%E5%90%AB/" />
@@ -53,7 +53,7 @@ Session 文件包含 如果能控制写入 session 的值（比如某个参数�
   <meta itemprop="datePublished" content="2026-03-30T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-30T14:00:00+08:00">
   <meta itemprop="wordCount" content="281">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术,文件包含">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="文件、远程包含">
@@ -360,6 +360,8 @@ Session 文件包含 如果能控制写入 session 的值（比如某个参数�
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">文件包含</a></span>
         
     </p>
 

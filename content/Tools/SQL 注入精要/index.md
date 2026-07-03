@@ -9,6 +9,7 @@ tags:
   - SQL注入
   - MYSQL
   - MSSQL
+  - 技术
 ---
 ## SQL 注入原理
 

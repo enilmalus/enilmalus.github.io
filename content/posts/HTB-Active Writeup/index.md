@@ -8,6 +8,9 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - Windows
+  - SMB
+  - GetUserSPNs
 ---
 ## 初始侦察
 

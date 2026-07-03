@@ -6,6 +6,7 @@ toc: true
 images:
 tags:
   - Hack
+  - 技术
 ---
 ## 添加 hosts 记录
 

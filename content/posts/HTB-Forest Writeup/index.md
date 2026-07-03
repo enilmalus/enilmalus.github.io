@@ -8,6 +8,11 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - Windows
+  - LDAP
+  - SMB
+  - GetNPUsers
+  - BloodHound
 ---
 ## 初始侦察
 

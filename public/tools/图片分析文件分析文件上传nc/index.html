@@ -14,7 +14,7 @@ file 命令是识别文件类型和格式，通过分析文件头信息等数据
 ELF -64-bit LSB 表明该文件是 Linux 上常见的 ELF 格式可执行程序，架构为 64 位的 x86-64（也称 AMD64）。对反编译而言，这意味着再选职责反编译或调试工具时需要考虑 64 位指令集。pie executable 表明程序启用了位置无关可执行（Position Independent Executable，PIE）技术。这意味着程序每次加载到i内存中时，代码段的位置都是随机的，增加了逆向和漏洞利用的难度。反编译或漏洞的分析时必须考虑地址随机化因素。dynamically linked 表明程序采用动态链接，运行时依赖外部库（如标准 C 库 libc.so）。反编译过程中需要考虑并分析外部库函数的调用情况，可能需要加载外部符号或调试符号以便准确还原函数调用。interpreter /lib64/ld-linux-x86-64.so.2 提供了动态链接器路径，它指定程序执行时所使用的动态链接器的位置和名称。反编译和调试时，如出现共享库缺失问题或分析动态过程中的异常行为，可以通过这个链接器路径进行排查。BuildID\[sha1\]=xxxxx 时程序编译时生成的唯一构建标识（Build ID），可以用于明确程序版本、溯源编译信息或追踪程序来源。在逆向和取证中，可以通过此标志确定二进制文件是否发生过篡改、修改或重新编译。for GNU/Linux 3.2.0 指定了程序编译时所期待的 Linux 内核版本。在反编译和漏洞分析时，这有助于确定目标程序的运行环境，尤其当你考虑内核漏洞、兼容性或系统调用（syscall）行为时非常关键。
 最后的 not stripped 表明程序未进行符号剥离。这是对反编译而言非常利好的信息。因为这意味着程序的符号表、函数名、变量名、调试信息都被保留了下来，极大简化了反编译和逆向分析的难度，更容易直接恢复接近源代码的形式。、7
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, 技术, 文件上传" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/%E5%9B%BE%E7%89%87%E5%88%86%E6%9E%90%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0nc/" />
@@ -57,7 +57,7 @@ ELF -64-bit LSB 表明该文件是 Linux 上常见的 ELF 格式可执行程序�
   <meta itemprop="datePublished" content="2026-02-14T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-14T17:00:00+08:00">
   <meta itemprop="wordCount" content="155">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="keywords" content="Hack,技术,文件上传">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="图片分析、文件分析、文件上传、Nc">
@@ -209,6 +209,8 @@ ELF -64-bit LSB 表明该文件是 Linux 上常见的 ELF 格式可执行程序�
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">文件上传</a></span>
         
     </p>
 

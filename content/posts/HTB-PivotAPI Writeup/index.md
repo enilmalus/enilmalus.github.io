@@ -6,6 +6,16 @@ toc: true
 images:
 tags:
   - Hack
+  - HTB
+  - Writeup
+  - Windows
+  - FTP
+  - SMB
+  - RPC
+  - GetNPUsers
+  - BloodHound
+  - 逆向
+  - MSSQL
 ---
 ## 初始侦察
 

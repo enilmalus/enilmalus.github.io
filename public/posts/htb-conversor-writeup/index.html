@@ -10,7 +10,7 @@
 初始侦察 nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.187.74 Starting Nmap 7.95 ( https://nmap.org ) at 2026-01-22 08:17 EST Nmap scan report for 10.129.187.74 Host is up (0.079s latency). Not shown: 65533 closed tcp ports (reset) PORT STATE SERVICE 22/tcp open ssh 80/tcp open http Nmap done: 1 IP address (1 host up) scanned in 9.24 seconds 开放了两个 TCP 端口 22 和 80。
 nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -sT -sC -sV -O -p22,80 10.129.187.74 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-01-22 08:17 EST Nmap scan report for 10.129.187.74 Host is up (0.076s latency). PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 8.9p1 Ubuntu 3ubuntu0.13 (Ubuntu Linux; protocol 2.0) | ssh-hostkey: | 256 01:74:26:39:47:bc:6a:e2:cb:12:8b:71:84:9c:f8:5a (ECDSA) |_ 256 3a:16:90:dc:74:d8:e3:c4:51:36:e2:08:06:26:17:ee (ED25519) 80/tcp open http Apache httpd 2.4.52 |_http-title: Did not follow redirect to http://conversor.htb/ |_http-server-header: Apache/2.4.52 (Ubuntu) Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port Device type: general purpose Running: Linux 4.X|5.X OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5 OS details: Linux 4.15 - 5.19 Network Distance: 2 hops Service Info: Host: conversor.htb; OS: Linux; CPE: cpe:/o:linux:linux_kernel OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ . Nmap done: 1 IP address (1 host up) scanned in 11.33 seconds 发现可能存在的域名 conversor.htb，加入 /etc/hosts。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB, XSLT" />
+<meta name="keywords" content=", Hack, Writeup, HTB, Linux, 文件上传, XSLT, XML" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-conversor-writeup/" />
@@ -49,7 +49,7 @@ nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -
   <meta itemprop="datePublished" content="2026-01-22T22:00:00+08:00">
   <meta itemprop="dateModified" content="2026-01-22T22:00:00+08:00">
   <meta itemprop="wordCount" content="1211">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB,XSLT">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,Linux,文件上传,XSLT,XML">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Conversor Writeup">
@@ -573,7 +573,10 @@ nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/linux/">Linux</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">文件上传</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/xslt/">XSLT</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/xml/">XML</a></span>
         
     </p>
 

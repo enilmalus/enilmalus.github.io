@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Timelapse] └─$ sudo nmap --min-rate 10000 -p- 10.129.227.113 -oA ports Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-18 05:06 EDT Nmap scan report for 10.129.227.113 Host is up (0.17s latency). Not shown: 65517 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5986/tcp open wsmans 9389/tcp open adws 49667/tcp open unknown 49673/tcp open unknown 49674/tcp open unknown 49692/tcp open unknown 49724/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 20.58 seconds 将扫描出的 tcp 端口提取做备用。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Writeup, HTB, Windows, SMB, ZIP, PFX" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-timelapse-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-03-18T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-18T17:00:00+08:00">
   <meta itemprop="wordCount" content="2341">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,Windows,SMB,ZIP,PFX">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Timelapse Writeup">
@@ -674,6 +674,10 @@
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/zip/">ZIP</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/pfx/">PFX</a></span>
         
     </p>
 

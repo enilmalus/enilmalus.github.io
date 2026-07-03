@@ -6,8 +6,8 @@ toc: true
 images:
 tags:
   - Hack
-  - 工具
   - 缓冲区溢出
+  - 技术
 ---
 ## 相关命令速查
 

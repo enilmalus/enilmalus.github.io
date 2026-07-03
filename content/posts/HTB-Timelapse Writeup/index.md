@@ -8,6 +8,10 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - Windows
+  - SMB
+  - ZIP
+  - PFX
 ---
 ## 初始侦察
 

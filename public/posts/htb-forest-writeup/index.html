@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Forest] └─$ cat Nmap/port.nmap # Nmap 7.98 scan initiated Tue Apr 14 20:37:17 2026 as: /usr/lib/nmap/nmap --min-rate 10000 -p- -oA Nmap/port 10.129.95.210 Nmap scan report for 10.129.95.210 Host is up (0.16s latency). Not shown: 65511 closed tcp ports (reset) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 9389/tcp open adws 47001/tcp open winrm 49664/tcp open unknown 49665/tcp open unknown 49666/tcp open unknown 49667/tcp open unknown 49671/tcp open unknown 49680/tcp open unknown 49681/tcp open unknown 49685/tcp open unknown 49700/tcp open unknown 49858/tcp open unknown # Nmap done at Tue Apr 14 20:37:30 2026 -- 1 IP address (1 host up) scanned in 12.69 seconds 看 Nmap 的端口扫描结果，大概率为 Windows 域服务机器。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Writeup, HTB, Windows, LDAP, SMB, GetNPUsers, BloodHound" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-forest-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-04-18T16:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-18T16:00:00+08:00">
   <meta itemprop="wordCount" content="4186">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,Windows,LDAP,SMB,GetNPUsers,BloodHound">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Forest Writeup">
@@ -1464,6 +1464,11 @@
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/ldap/">LDAP</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/getnpusers/">GetNPUsers</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/bloodhound/">BloodHound</a></span>
         
     </p>
 

@@ -10,7 +10,7 @@
 Nmap 扫描原理解析 Nmap 的操作系统识别依赖于比较目标主机与关闭端口探测包的不同回应模式：开放端口会返回正常的握手或服务应答，而关闭端口则常见 RST 或 ICMP 拒绝，不同操作系统内核再这些细节（如 TCP、标志位、TTL、窗口大小、ICMP 码值）上存在差异，nmap 需要同时采集 “接受” 和 “拒绝” 两类样本，才能与指纹库准确比对。如果缺少关闭端口的反馈，就丢失了一半的特征维度，指纹信息不足，结果往往只能模糊匹配甚至误判，因此 nmap 会提示 “OSScan results may be unreliable”。
 不同操作系统的响应差异 操作系统/内核 TCP 关闭端口响应 ICMP 关闭端口响应 特征差异点 Linux 2.6 / 3.x / 4.x / 5.x 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 窗口大小为 0，ICMP 报文长度与 Padding 一致 Windows XP / 2003 返回 RST，TTL 128 UDP 端口不可达：Type 3，Code 3 常常带有 ACK 标志，ICMP 报文长度较短 Windows 7 / 10 / Server 返回 RST，ATK，TTL 128 UDP 端口不可达：Type 3，Code 3 窗口大小与 XP 不同，ICMP 检验与算法不同 FreeBSD / OpenBSD 返回 RST，TTL 常见 64 UDP 端口不可达：Type 3，Code 3 ICMP 报文填充方式与 Linux 不同 Solaris 返回 RST，TTL 常见 255 UDP 端口不可达：Type 3，Code 3 高 TTL，RST 包含独特的窗口值 Cisco ISO / 路由器类设备 有时直接丢弃，无 RST UDP 常返回 ICMP Type 3，Code 13（Admin Prohibited） 偏向过滤回应，不遵循主机栈常见模式 MikroTik RouterOPS RST 响应 TTL -64 UDP 端口不可达：Type 3，Code 3 TCP 选项顺序与 Linux 内核不同，较易区分 Linux 通常是干净的 RST &#43; TTL 64，Windows 多带 RST、ACK、TTL 12，BSD/Solaris 类似 Linux，但 TTL 、窗口值、ICMP 填充略有不同，网络设备、防火墙常返回 “禁止访问”（Code 13）或直接丢弃，不像常用 OS 。这些细微的差别叠加起来组成了 nmap 指纹库，使得 nmap 可以精确区分系统。
 " />
-<meta name="keywords" content=", Hack, 工具" />
+<meta name="keywords" content=", Hack, 技术" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/nmap-%E6%89%AB%E6%8F%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/" />
@@ -49,7 +49,7 @@ Nmap 扫描原理解析 Nmap 的操作系统识别依赖于比较目标主机与
   <meta itemprop="datePublished" content="2025-09-24T21:00:00+08:00">
   <meta itemprop="dateModified" content="2025-09-24T21:00:00+08:00">
   <meta itemprop="wordCount" content="414">
-  <meta itemprop="keywords" content="Hack,工具">
+  <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Nmap 扫描原理与使用心得">
@@ -298,7 +298,7 @@ FIN：finish，结束标志</p></blockquote>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
-        <span class="tag"><a href="http://localhost:1313/tags/%E5%B7%A5%E5%85%B7/">工具</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></span>
         
     </p>
 

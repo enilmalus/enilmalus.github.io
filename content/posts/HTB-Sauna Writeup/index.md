@@ -8,6 +8,8 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - Windows
+  - WinPEAS
 ---
 ## 初始侦察
 
