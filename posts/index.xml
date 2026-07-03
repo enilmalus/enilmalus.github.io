@@ -9319,7 +9319,7 @@ AutoType Fastjson 最大的特色也是其最大的安全隐患 &amp;ndash; Auto
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/StreamIO<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah out.txt 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2765013</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 134K Mar <span style="color:#ae81ff">31</span> 03:58 out.txt
-</span></span></code></pre></div><p>在 linpeas 的扫描结果中发现 Firefox 可能可以被利用。</p>
+</span></span></code></pre></div><p>在 winpeas 的扫描结果中发现 Firefox 可能可以被利用。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>╔══════════╣ Looking <span style="color:#66d9ef">for</span> Firefox DBs
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1801</span>   │ ╚  https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/index.html#browsers-history
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">1802</span>   │     Firefox credentials file exists at C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\n</span>ikk37<span style="color:#ae81ff">\A</span>ppData<span style="color:#ae81ff">\R</span>oaming<span style="color:#ae81ff">\M</span>ozilla<span style="color:#ae81ff">\F</span>irefox<span style="color:#ae81ff">\P</span>rofiles<span style="color:#ae81ff">\b</span>r53rxeg.default-release<span style="color:#ae81ff">\k</span>ey4.db
@@ -13681,7 +13681,7 @@ Nmap 详细信息扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap -
 <p><img src="Pasted%20image%2020260214162029.png" alt=""></p>
 <p>修改 <code>f12</code> 中 <code>Storge</code> 中的 <code>Cookie</code> 值，<code>f5</code> 刷新后获得聊天对象的界面。切换至 <code>Dimitris</code> 的聊天界面，获得 <code>flag</code>。</p>
 <p><img src="Pasted%20image%2020260214162245.png" alt=""></p>
-]]></content></item><item><title>HTB-Expressway</title><link>https://enilmalus.github.io/posts/htb-expressway/</link><pubDate>Thu, 12 Feb 2026 16:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-expressway/</guid><description>本文章以 kali 地址为 10.10.16.41 做演示
+]]></content></item><item><title>HTB-Expressway Writeup</title><link>https://enilmalus.github.io/posts/htb-expressway/</link><pubDate>Thu, 12 Feb 2026 16:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-expressway/</guid><description>本文章以 kali 地址为 10.10.16.41 做演示
 初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali] └─$ sudo nmap --min-rate 10000 -p- 10.129.1.84 [sudo] password for kali: Starting Nmap 7.95 ( https://nmap.org ) at 2026-02-12 00:24 EST Nmap scan report for 10.129.1.84 Host is up (0.12s latency). Not shown: 65534 closed tcp ports (reset) PORT STATE SERVICE 22/tcp open ssh Nmap done: 1 IP address (1 host up) scanned in 16.20 seconds Nmap 扫描发现靶机的 TCP 服务仅开放 22 端口，进一步进行 UDP 端口扫描。</description><content type="html"><![CDATA[<blockquote>
 <p>本文章以 kali 地址为 10.10.16.41 做演示</p>
 </blockquote>

@@ -7,7 +7,7 @@ SELECT * FROM users WHERE name = &amp;#39;$input&amp;#39; 正常情况下 $input
 最小限原则，只给业务必须的权限，不给 DROP、不给跨库读、关闭文件的读写权限
 手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
 &amp;#39; or 1=1 -- - 探测 Columns 确认有 sql 注入漏洞后可使用 order by 或 group by 探测 Columns。 `
-&amp;#39; order by 3 -- - 联合查询 使用 union 进一步探测信息。"><meta name=keywords content=",Hack,SQL注入,MYSQL,MSSQL"><meta name=robots content="noodp"><meta name=theme-color content><link rel=canonical href=https://enilmalus.github.io/tools/sql-%E6%B3%A8%E5%85%A5%E7%B2%BE%E8%A6%81/><title>SQL 注入精要 :: Welcome My Hack's Blog
+&amp;#39; order by 3 -- - 联合查询 使用 union 进一步探测信息。"><meta name=keywords content=",Hack,SQL注入,MYSQL,MSSQL,技术"><meta name=robots content="noodp"><meta name=theme-color content><link rel=canonical href=https://enilmalus.github.io/tools/sql-%E6%B3%A8%E5%85%A5%E7%B2%BE%E8%A6%81/><title>SQL 注入精要 :: Welcome My Hack's Blog
 </title><link rel=stylesheet href=/main.min.ab5336003ba331300318b49292c672210905baf1ef5410a739f647e70c8808fa.css integrity="sha256-q1M2ADujMTADGLSSksZyIQkFuvHvVBCnOfZH5wyICPo=" crossorigin=anonymous><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/safari-pinned-tab.svg color><link rel="shortcut icon" href=/favicon.ico><meta name=msapplication-TileColor content><meta itemprop=name content="SQL 注入精要"><meta itemprop=description content="SQL 注入原理 SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。
 例如：
 SELECT * FROM users WHERE name = '$input' 正常情况下 $input 是一个用户名。如果传入 OR 1=1，拼出来就变成 WHERE name = '' OR 1=1 恒为真，整张表都被返回。这里的用户输入的单引号逃逸了数据的范围，闭合掉前面的引号，后面的内容就被当成了 SQL 逻辑。
@@ -17,7 +17,7 @@ SELECT * FROM users WHERE name = '$input' 正常情况下 $input 是一个用户
 最小限原则，只给业务必须的权限，不给 DROP、不给跨库读、关闭文件的读写权限
 手工注入 简单的注入 当获得一个登入框时可以尝试使用最简单的语句尝试是否存在 sql 注入漏洞。
 ' or 1=1 -- - 探测 Columns 确认有 sql 注入漏洞后可使用 order by 或 group by 探测 Columns。 `
-' order by 3 -- - 联合查询 使用 union 进一步探测信息。"><meta itemprop=datePublished content="2026-03-21T15:00:00+08:00"><meta itemprop=dateModified content="2026-03-21T15:00:00+08:00"><meta itemprop=wordCount content="1620"><meta itemprop=keywords content="Hack,SQL注入,MYSQL,MSSQL,"><meta name=twitter:card content="summary"><meta name=twitter:title content="SQL 注入精要"><meta name=twitter:description content="SQL 注入原理 SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。
+' order by 3 -- - 联合查询 使用 union 进一步探测信息。"><meta itemprop=datePublished content="2026-03-21T15:00:00+08:00"><meta itemprop=dateModified content="2026-03-21T15:00:00+08:00"><meta itemprop=wordCount content="1620"><meta itemprop=keywords content="Hack,SQL注入,MYSQL,MSSQL,技术,"><meta name=twitter:card content="summary"><meta name=twitter:title content="SQL 注入精要"><meta name=twitter:description content="SQL 注入原理 SQL 注入的根本原因是代码与数据的混淆：应用程序把用户输入直接拼接进了 SQL 语句，而数据库无法区分 “哪些是开发者写好的指令、哪些是用户传进来的数据”，于是把用户输入也当成 SQL 代码的一部分解析执行。
 例如：
 SELECT * FROM users WHERE name = '$input' 正常情况下 $input 是一个用户名。如果传入 OR 1=1，拼出来就变成 WHERE name = '' OR 1=1 恒为真，整张表都被返回。这里的用户输入的单引号逃逸了数据的范围，闭合掉前面的引号，后面的内容就被当成了 SQL 逻辑。
 按是否回显能分为回显注入（union 联合查询、报错注入）和盲注（页面不回显数据，靠布尔真假或时间延迟一位一位地猜，还有带外/DNS注入）；按注入点位置可以分为 GET/POST/Cookie/Header 等参数。
@@ -168,4 +168,5 @@ SELECT * FROM users WHERE name = '$input' 正常情况下 $input 是一个用户
 <span class=tag><a href=https://enilmalus.github.io/tags/hack/>Hack</a></span>
 <span class=tag><a href=https://enilmalus.github.io/tags/sql%E6%B3%A8%E5%85%A5/>SQL注入</a></span>
 <span class=tag><a href=https://enilmalus.github.io/tags/mysql/>MYSQL</a></span>
-<span class=tag><a href=https://enilmalus.github.io/tags/mssql/>MSSQL</a></span></p></div></main></div><footer class=footer></footer></div><script type=text/javascript src=/bundle.min.ac2a4bcaed631ec2dc154407be7f09fc28da37de71fae6dee6711b2a3d1622770f87d3cda22c460e9a68ff619bdb1dd75cb7a5d33f159a54e419736cc4541087.js integrity="sha512-rCpLyu1jHsLcFUQHvn8J/CjaN95x+ube5nEbKj0WIncPh9PNoixGDppo/2Gb2x3XXLel0z8VmlTkGXNsxFQQhw=="></script></body></html>
+<span class=tag><a href=https://enilmalus.github.io/tags/mssql/>MSSQL</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/%E6%8A%80%E6%9C%AF/>技术</a></span></p></div></main></div><footer class=footer></footer></div><script type=text/javascript src=/bundle.min.ac2a4bcaed631ec2dc154407be7f09fc28da37de71fae6dee6711b2a3d1622770f87d3cda22c460e9a68ff619bdb1dd75cb7a5d33f159a54e419736cc4541087.js integrity="sha512-rCpLyu1jHsLcFUQHvn8J/CjaN95x+ube5nEbKj0WIncPh9PNoixGDppo/2Gb2x3XXLel0z8VmlTkGXNsxFQQhw=="></script></body></html>
