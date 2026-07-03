@@ -1,4 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tools on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tools/</link><description>Recent content in Tools on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 25 Jun 2026 17:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tools/index.xml" rel="self" type="application/rss+xml"/><item><title>代码、命令执行</title><link>https://enilmalus.github.io/tools/%E4%BB%A3%E7%A0%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</link><pubDate>Thu, 25 Jun 2026 17:00:00 +0800</pubDate><guid>https://enilmalus.github.io/tools/%E4%BB%A3%E7%A0%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</guid><description>原理 代码执行：执行的是编程语言层面的代码，比如 PHP 的 eval()、Python 的 eval/exec、Java 的表达式注入。攻击者注入的是该语言的语句，运行在语言解释器的上下文里。 命令执行：执行的是操作系统的 shell 命令，比如 PHP 的 system()、exec()，或者程序把用户输入拼进了一条系统命令。攻击者注入的是 whoami、cat /etc/passwd 这种 OS 命令，运行在系统 shell 的上下文里。 二者的根源是同一类问题，用户可控的输入流入了会执行的危险函数。区别在于流入的是代码解析函数还是命令执行函数。代码执行往往能进一步调用命令执行（比如 PHP eval 里写 system()），所以代码执行通常被认为危害更全能，但二者拿到的最终都是服务器上的执行能力。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tools on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/tools/</link><description>Recent content in Tools on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 02 Jul 2026 09:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/tools/index.xml" rel="self" type="application/rss+xml"/><item><title>SMTP</title><link>https://enilmalus.github.io/tools/smtp/</link><pubDate>Thu, 02 Jul 2026 09:00:00 +0800</pubDate><guid>https://enilmalus.github.io/tools/smtp/</guid><description>简介 SMTP（Simple Mail Transfer Protocol）简单邮件传输协议，是互联网中用于发送和转发电子邮件的应用层协议。
+邮件客户端/邮件服务器把邮件交给下一台邮件服务器，直到送到收件人的邮箱服务器。
+基本工作流程如下：
+Enil 给 Malus 发邮件
+Enil 的邮件客户端把邮件提交给自己的邮件服务器
+Enil 的邮件服务器查询 Malus 邮箱域名的 MX 记录，找到负责接收该域邮件的服务器
+Enil 的服务器通过 SMTP 与 Malus 的邮件服务器建立连接
+发送方依次告诉对方：
+发件人是谁 ：MAIL FROM 收件人是谁：RCPT TO 邮件内容开始：DATA 收件服务器接受邮件后，将其存入 Malus 的邮箱
+Malus 再通过 IMAP 或 POP3 读取邮件
+SMTP 常见命令 HELO / EHLO MAIL FROM:&amp;lt;enil12408@gmail.com&amp;gt; RCPT TO:&amp;lt;malus12408@gmail.com&amp;gt; DATA Subject: TEST Hello Malus . QUIT 其中 HELO / EHLO 表示客户端发送的自我介绍命令；单独一行的 . 表示邮件正文结束。
+实例 在一次 Nmap 的扫描结果如下：
+25/tcp open smtp?</description></item><item><title>代码、命令执行</title><link>https://enilmalus.github.io/tools/%E4%BB%A3%E7%A0%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</link><pubDate>Thu, 25 Jun 2026 17:00:00 +0800</pubDate><guid>https://enilmalus.github.io/tools/%E4%BB%A3%E7%A0%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</guid><description>原理 代码执行：执行的是编程语言层面的代码，比如 PHP 的 eval()、Python 的 eval/exec、Java 的表达式注入。攻击者注入的是该语言的语句，运行在语言解释器的上下文里。 命令执行：执行的是操作系统的 shell 命令，比如 PHP 的 system()、exec()，或者程序把用户输入拼进了一条系统命令。攻击者注入的是 whoami、cat /etc/passwd 这种 OS 命令，运行在系统 shell 的上下文里。 二者的根源是同一类问题，用户可控的输入流入了会执行的危险函数。区别在于流入的是代码解析函数还是命令执行函数。代码执行往往能进一步调用命令执行（比如 PHP eval 里写 system()），所以代码执行通常被认为危害更全能，但二者拿到的最终都是服务器上的执行能力。
 命令执行 直接执行：程序直接把用户输入交给 system($_GET['cmd'])，本身就是设计缺陷。
 命令拼接注入：更常见、更隐蔽。程序本意只想执行一条固定命令（比如 ping 一个用户输入的 IP：system(&amp;quot;ping&amp;quot;.$ip)），但没过滤，攻击者用命令连接符把自己的命令拼进去。
 ;：顺序执行，前面跑完跑下一条。
