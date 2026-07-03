@@ -18,7 +18,7 @@ SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一�
 &#39; order by 3 -- - 联合查询 使用 union 进一步探测信息。
 探测显示数据的位置，这里假设为 3。
 " />
-<meta name="keywords" content=", Hack" />
+<meta name="keywords" content=", Hack, SQL注入, MYSQL, MSSQL" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/sql-%E6%B3%A8%E5%85%A5%E7%B2%BE%E8%A6%81/" />
@@ -64,8 +64,8 @@ SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一�
 探测显示数据的位置，这里假设为 3。">
   <meta itemprop="datePublished" content="2026-03-21T15:00:00+08:00">
   <meta itemprop="dateModified" content="2026-03-21T15:00:00+08:00">
-  <meta itemprop="wordCount" content="1608">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="wordCount" content="1620">
+  <meta itemprop="keywords" content="Hack,SQL注入,MYSQL,MSSQL">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SQL 注入精要">
@@ -297,7 +297,13 @@ SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一�
 </span></span><span style="display:flex;"><span>        Feb <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">2014</span> 20:04:26 
 </span></span><span style="display:flex;"><span>        Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation
 </span></span><span style="display:flex;"><span>        Express Edition <span style="color:#f92672">(</span>64-bit<span style="color:#f92672">)</span> on Windows NT 6.1 &lt;X64&gt; <span style="color:#f92672">(</span>Build 7601: Service Pack 1<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Hypervisor<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>爆破 tables。</p>
+</span></span></code></pre></div><ul>
+<li>SYSTEM_USER：当前连接 SQL Server 时使用的服务器级登录名（Login）</li>
+<li>SUSER_NAME：当前服务器安全上下文对应的登录名，用于确认当前实际生效的 Login</li>
+<li>CURRENT_USER：当前数据库中的数据用户（User）身份</li>
+<li>sysadmin 是 MSSQL 最强的服务器级角色，1 代表属于，0代表不属于</li>
+</ul>
+<p>爆破 tables。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>admin  admin@orcharddb<span style="color:#f92672">)</span>&gt; SELECT table_schema,table_name FROM information_schema.tables ORDER BY table_name;                                                                                                  
 </span></span><span style="display:flex;"><span>table_schema   table_name                                             
 </span></span><span style="display:flex;"><span>------------   ----------------------------------------------------   
@@ -1104,6 +1110,9 @@ SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一�
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/sql%E6%B3%A8%E5%85%A5/">SQL注入</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/mysql/">MYSQL</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/mssql/">MSSQL</a></span>
         
     </p>
 

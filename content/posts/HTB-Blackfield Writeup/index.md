@@ -8,6 +8,11 @@ tags:
   - Hack
   - Writeup
   - HTB
+  - SMB
+  - RPC
+  - Impacket
+  - lookupsids
+  - GetNPUsers
 ---
 ## 初始侦察
 

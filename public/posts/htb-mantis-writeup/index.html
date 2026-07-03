@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Mantis] └─$ sudo nmap --min-rate 10000 -p- 10.129.26.82 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-29 02:37 -0400 Warning: 10.129.26.82 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.26.82 Host is up (0.15s latency). Not shown: 65118 closed tcp ports (reset), 390 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1337/tcp open waste 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 8080/tcp open http-proxy 9389/tcp open adws 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49167/tcp open unknown 49170/tcp open unknown 49179/tcp open unknown 50255/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 24.87 seconds 提取端口做备用。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB" />
+<meta name="keywords" content=", Hack, Writeup, HTB, 目录爆破, MSSQL, Impacket, goldenPac" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-mantis-writeup/" />
@@ -44,8 +44,8 @@
   <meta itemprop="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Mantis] └─$ sudo nmap --min-rate 10000 -p- 10.129.26.82 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-29 02:37 -0400 Warning: 10.129.26.82 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.26.82 Host is up (0.15s latency). Not shown: 65118 closed tcp ports (reset), 390 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1337/tcp open waste 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 8080/tcp open http-proxy 9389/tcp open adws 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49167/tcp open unknown 49170/tcp open unknown 49179/tcp open unknown 50255/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 24.87 seconds 提取端口做备用。">
   <meta itemprop="datePublished" content="2026-04-29T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-29T14:00:00+08:00">
-  <meta itemprop="wordCount" content="1599">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB">
+  <meta itemprop="wordCount" content="1611">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,目录爆破,MSSQL,Impacket,GoldenPac">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Mantis Writeup">
@@ -432,7 +432,13 @@
 </span></span><span style="display:flex;"><span>        Feb <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">2014</span> 20:04:26 
 </span></span><span style="display:flex;"><span>        Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation
 </span></span><span style="display:flex;"><span>        Express Edition <span style="color:#f92672">(</span>64-bit<span style="color:#f92672">)</span> on Windows NT 6.1 &lt;X64&gt; <span style="color:#f92672">(</span>Build 7601: Service Pack 1<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Hypervisor<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p>爆破 tables。</p>
+</span></span></code></pre></div><ul>
+<li>SYSTEM_USER：当前连接 SQL Server 时使用的服务器级登录名（Login）</li>
+<li>SUSER_NAME：当前服务器安全上下文对应的登录名，用于确认当前实际生效的 Login</li>
+<li>CURRENT_USER：当前数据库中的数据用户（User）身份</li>
+<li>sysadmin 是 MSSQL 最强的服务器级角色，1 代表属于，0代表不属于</li>
+</ul>
+<p>爆破 tables。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>admin  admin@orcharddb<span style="color:#f92672">)</span>&gt; SELECT table_schema,table_name FROM information_schema.tables ORDER BY table_name;                                                                                                  
 </span></span><span style="display:flex;"><span>table_schema   table_name                                             
 </span></span><span style="display:flex;"><span>------------   ----------------------------------------------------   
@@ -562,6 +568,10 @@
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4/">目录爆破</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/mssql/">MSSQL</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/impacket/">Impacket</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/goldenpac/">goldenPac</a></span>
         
     </p>
 
@@ -575,7 +585,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        1599 Words
+        1611 Words
       </p>
 
       <p>

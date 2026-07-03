@@ -6,10 +6,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="Enil ">
-<meta name="description" content="Rpcclient 连接 135 rcp 端口。
+<meta name="description" content="概念 RPC 是 Remote Procedure Call，远程过程调用。
+核心的意思是让一台机器上的程序像调用本地函数一样调用另一台机器上的功能或服务，在 Windows 域环境中 RPC 被大量用于管理和查询服务。
+Rpcclient 连接 135 rcp 端口。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证 标准枚举。
-┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290 " />
-<meta name="keywords" content=", Hack" />
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290 看下面这个例子
+" />
+<meta name="keywords" content=", Hack, RPC" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/tools/rpc/" />
@@ -42,19 +45,23 @@
 
 
   <meta itemprop="name" content="RPC">
-  <meta itemprop="description" content="Rpcclient 连接 135 rcp 端口。
+  <meta itemprop="description" content="概念 RPC 是 Remote Procedure Call，远程过程调用。
+核心的意思是让一台机器上的程序像调用本地函数一样调用另一台机器上的功能或服务，在 Windows 域环境中 RPC 被大量用于管理和查询服务。
+Rpcclient 连接 135 rcp 端口。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证 标准枚举。
-┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290">
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290 看下面这个例子">
   <meta itemprop="datePublished" content="2026-02-15T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-15T17:00:00+08:00">
-  <meta itemprop="wordCount" content="69">
-  <meta itemprop="keywords" content="Hack">
+  <meta itemprop="wordCount" content="145">
+  <meta itemprop="keywords" content="Hack,RPC">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="RPC">
-  <meta name="twitter:description" content="Rpcclient 连接 135 rcp 端口。
+  <meta name="twitter:description" content="概念 RPC 是 Remote Procedure Call，远程过程调用。
+核心的意思是让一台机器上的程序像调用本地函数一样调用另一台机器上的功能或服务，在 Windows 域环境中 RPC 被大量用于管理和查询服务。
+Rpcclient 连接 135 rcp 端口。
 ┌──(kali㉿kali)-[~/Work/Kali] └─$ rpcclient -U &#39;&#39; -N 10.129.5.91 Cannot connect to server. Error was NT_STATUS_ACCESS_DENIED -U 指定用户名参数，使用空字符串表示匿名用户 -N 表示不使用密码进行认证 标准枚举。
-┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290">
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ rpcclient -U &#39;&#39; -N 10.129.229.17 rpcclient $&gt; srvinfo do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED rpcclient $&gt; enumdomusers result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; querydispinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; getdompwinfo result was NT_STATUS_ACCESS_DENIED rpcclient $&gt; lsaquery Domain Name: BLACKFIELD Domain Sid: S-1-5-21-4194615774-2175524697-3563712290 看下面这个例子">
 
 
 
@@ -137,6 +144,7 @@
                 <div class="toc-title">Table of Contents</div>
                     <nav id="TableOfContents">
   <ul>
+    <li><a href="#概念">概念</a></li>
     <li><a href="#rpcclient">Rpcclient</a></li>
   </ul>
 </nav>
@@ -145,7 +153,10 @@
             
 
             <div class="post-content">
-                <h2 id="rpcclient">Rpcclient</h2>
+                <h2 id="概念">概念</h2>
+<p>RPC 是 Remote Procedure Call，远程过程调用。</p>
+<p>核心的意思是让一台机器上的程序像调用本地函数一样调用另一台机器上的功能或服务，在 Windows 域环境中 RPC 被大量用于管理和查询服务。</p>
+<h2 id="rpcclient">Rpcclient</h2>
 <p>连接 135 rcp 端口。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ rpcclient -U <span style="color:#e6db74">&#39;&#39;</span> -N 10.129.5.91
@@ -168,7 +179,29 @@
 </span></span><span style="display:flex;"><span>rpcclient $&gt; lsaquery
 </span></span><span style="display:flex;"><span>Domain Name: BLACKFIELD
 </span></span><span style="display:flex;"><span>Domain Sid: S-1-5-21-4194615774-2175524697-3563712290
-</span></span></code></pre></div>
+</span></span></code></pre></div><p>看下面这个例子</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ rpcclient -U <span style="color:#e6db74">&#39;&#39;</span> -N 10.129.229.17 
+</span></span><span style="display:flex;"><span>rpcclient $&gt; srvinfo
+</span></span><span style="display:flex;"><span>do_cmd: Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; enumdomusers
+</span></span><span style="display:flex;"><span>result was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; querydispinfo
+</span></span><span style="display:flex;"><span>result was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; getdompwinfo
+</span></span><span style="display:flex;"><span>result was NT_STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>rpcclient $&gt; lsaquery
+</span></span><span style="display:flex;"><span>Domain Name: BLACKFIELD
+</span></span><span style="display:flex;"><span>Domain Sid: S-1-5-21-4194615774-2175524697-3563712290
+</span></span></code></pre></div><p>建立匿名的 RPC 会话，但目标只允许匿名用户查询少量 LSA 域信息，不允许枚举用户、共享或密码策略。</p>
+<ul>
+<li>srvinfo：访问 SRVSVC RPC 接口，通常用于查询服务器信息，如服务器版本、注释、角色</li>
+<li>enumdomusers：通过 SAMR 结果枚举域内用户</li>
+<li>querydispinfo：枚举 用户/组 信息</li>
+<li>getdompwinfo：读取域密码策略</li>
+<li>lsaquery：访问 LSARPC/LSA 接口，用于查询安全策略和域标识信息</li>
+</ul>
+
             </div>
         </article>
 
@@ -180,6 +213,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
 
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/rpc/">RPC</a></span>
         
     </p>
 

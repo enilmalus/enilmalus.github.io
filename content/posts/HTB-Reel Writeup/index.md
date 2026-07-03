@@ -11,6 +11,8 @@ tags:
   - AppLocker
   - SMTP
   - FTP
+  - WriteOwner
+  - WriteDacl
 ---
 ## 初始侦察
 

@@ -6,6 +6,9 @@ toc: true
 images:
 tags:
   - Hack
+  - SQL注入
+  - MYSQL
+  - MSSQL
 ---
 ## SQL 注入原理
 
@@ -232,6 +235,11 @@ Microsoft SQL Server 2014 - 12.0.2000.8 (X64)
         Express Edition (64-bit) on Windows NT 6.1 <X64> (Build 7601: Service Pack 1) (Hypervisor)
 
 ```
+
+- SYSTEM_USER：当前连接 SQL Server 时使用的服务器级登录名（Login）
+- SUSER_NAME：当前服务器安全上下文对应的登录名，用于确认当前实际生效的 Login
+- CURRENT_USER：当前数据库中的数据用户（User）身份
+- sysadmin 是 MSSQL 最强的服务器级角色，1 代表属于，0代表不属于
 
 爆破 tables。
 
