@@ -13,6 +13,7 @@ tags:
   - FTP
   - WriteOwner
   - WriteDacl
+  - Windows
 ---
 ## 初始侦察
 

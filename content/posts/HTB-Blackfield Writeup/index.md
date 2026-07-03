@@ -13,6 +13,12 @@ tags:
   - Impacket
   - lookupsids
   - GetNPUsers
+  - BloodHound
+  - ForceChangePassword
+  - Windows
+  - DMP
+  - SeBackupPrivilege
+  - Securetsdump
 ---
 ## 初始侦察
 
@@ -615,8 +621,7 @@ ebcc43b322f95f2f01911ba1f5d732595cb41b8c38be1c78ad720b2e748eea49adf93956cc08a7e9
 执行 hashcat 爆破。
 
 ```bash
-
-```┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
+┌──(kali㉿kali)-[~/Work/Kali/Blackfield]
 └─$ hashcat -m 18200 Directory/support_hash.txt /usr/share/wordlists/rockyou.txt
 hashcat (v7.1.2) starting
 
@@ -1085,7 +1090,7 @@ Archive:  lsass.zip
 2781568 -rw-rw-r-- 1 kali kali 137M Feb 23  2020 lsass.DMP
 ```
 
-用 pypykata dump lsass，并将结果保存下来。
+用 pypykatz dump lsass，并将结果保存下来。
 
 ```bash
 ┌──(kali㉿kali)-[~/Work/Kali/Blackfield]

