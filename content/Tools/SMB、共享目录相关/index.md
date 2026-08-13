@@ -276,3 +276,7 @@ Completed after 11.72 seconds
 `json.htb` 属于 `WORKGROUP` 工作组，`NetBIOS` 的名称为 `JSON`，在 445/tcp 和 139/tcp 端口上分别开启了 SMB 和 NetBIOS 服务，主机支持多种 SMB 协议，首选协议为 SMB 3.0，未禁用 SMB 1.0，可能可以利用旧版 SMB 漏洞，确认目标操作系统为 `Windows Server 2012 R2 Datacenter`。
 
 在连接 LDAP 和 LDAPS 端口时，389/tcp、636/tcp 端口均拒绝服务，这表明这些服务未开启或被防火墙阻止，Nmap 也没法发现开放。在尝试通过会话或随即用户进行访问 RPC 连接时，均因为权限不足而失败，目标主机对未认证用户的访问控制较为严格。
+
+## 空用户名与密码
+
+当明确用 `-u 'enil' -p ''` 去连接域主机时，服务器通常会将这个用户名 + 空密码直接当成来宾（Guest）登录来处理，当不带任何登录信息去连的时候，SMB 会尝试走匿名会话或本地缓存的凭据，但匿名访问策略设置得并不允许或会话出现异常，就会在查询共享列表时抛出 `STATUS_USER_SESSION_DELETED` 或 `Index_Error: list index out of range` 一类错误。

@@ -52,7 +52,7 @@ Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资�
 列出 SMB 共享 sudo smbclient -N -L \\\\10.10.10.10 连接到 SMB 共享 sudo smbclient \\\\10.10.10.10\\enil 列出目标所有共享（匿名） ┌──(kali㉿kali)-[~/Work/Kali/StreamIO] └─$ smbclient -L //10.129.6.162 -N session setup failed: NT_STATUS_ACCESS_DENIED session setup failed: NT_STATUS_ACCESS_DENIED：匿名访问被拒绝 批量下载 ┌──(kali㉿kali)-[~/Work/Kali/Support] └─$ smbclient //10.129.230.181/support-tools -N Try &#34;help&#34; to get a list of possible commands. smb: \&gt; ls . D 0 Wed Jul 20 13:01:06 2022 .. D 0 Sat May 28 07:18:25 2022 7-ZipPortable_21.07.paf.exe A 2880728 Sat May 28 07:19:19 2022 npp.8.4.1.portable.x64.zip A 5439245 Sat May 28 07:19:55 2022 putty.exe A 1273576 Sat May 28 07:20:06 2022 SysinternalsSuite.zip A 48102161 Sat May 28 07:19:31 2022 UserInfo.exe.zip A 277499 Wed Jul 20 13:01:07 2022 windirstat1_1_2_setup.exe A 79171 Sat May 28 07:20:17 2022 WiresharkPortable64_3.6.5.paf.exe A 44398000 Sat May 28 07:19:43 2022 4026367 blocks of size 4096. 970776 blocks available smb: \&gt; prompt smb: \&gt; mget * getting file \7-ZipPortable_21.07.paf.exe of size 2880728 as 7-ZipPortable_21.07.paf.exe (1004.4 KiloBytes/sec) (average 1004.4 KiloBytes/sec) getting file \npp.8.4.1.portable.x64.zip of size 5439245 as npp.8.4.1.portable.x64.zip (468.0 KiloBytes/sec) (average 574.2 KiloBytes/sec) getting file \putty.exe of size 1273576 as putty.exe (509.5 KiloBytes/sec) (average 564.7 KiloBytes/sec) parallel_read returned NT_STATUS_IO_TIMEOUT NT_STATUS_CONNECTION_DISCONNECTED opening remote file \UserInfo.exe.zip NT_STATUS_CONNECTION_DISCONNECTED opening remote file \windirstat1_1_2_setup.exe NT_STATUS_CONNECTION_DISCONNECTED opening remote file \WiresharkPortable64_3.6.5.paf.exe NT_STATUS_CONNECTION_DISCONNECTED listing \* smb: \&gt; getting file \SysinternalsSuite.zip of size 48102161 as SysinternalsSuite.zip The connection is disconnected now: NT_STATUS_CONNECTION_DISCONNECTED Smbmap 用于批量枚举、权限扫描，快速摸清权限全貌。">
   <meta itemprop="datePublished" content="2026-02-23T17:00:00+08:00">
   <meta itemprop="dateModified" content="2026-02-23T17:00:00+08:00">
-  <meta itemprop="wordCount" content="1049">
+  <meta itemprop="wordCount" content="1068">
   <meta itemprop="keywords" content="Hack,技术,SMB">
 
   <meta name="twitter:card" content="summary">
@@ -163,6 +163,7 @@ Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资�
       </ul>
     </li>
     <li><a href="#enum4linux">Enum4linux</a></li>
+    <li><a href="#空用户名与密码">空用户名与密码</a></li>
   </ul>
 </nav>
                 </aside>
@@ -390,6 +391,8 @@ Smbclient 是类似 FTP 的客户端，用于访问服务器上的 SMB/CIFS 资�
 </span></span><span style="display:flex;"><span>Completed after 11.72 seconds
 </span></span></code></pre></div><p><code>json.htb</code> 属于 <code>WORKGROUP</code> 工作组，<code>NetBIOS</code> 的名称为 <code>JSON</code>，在 445/tcp 和 139/tcp 端口上分别开启了 SMB 和 NetBIOS 服务，主机支持多种 SMB 协议，首选协议为 SMB 3.0，未禁用 SMB 1.0，可能可以利用旧版 SMB 漏洞，确认目标操作系统为 <code>Windows Server 2012 R2 Datacenter</code>。</p>
 <p>在连接 LDAP 和 LDAPS 端口时，389/tcp、636/tcp 端口均拒绝服务，这表明这些服务未开启或被防火墙阻止，Nmap 也没法发现开放。在尝试通过会话或随即用户进行访问 RPC 连接时，均因为权限不足而失败，目标主机对未认证用户的访问控制较为严格。</p>
+<h2 id="空用户名与密码">空用户名与密码</h2>
+<p>当明确用 <code>-u 'enil' -p ''</code> 去连接域主机时，服务器通常会将这个用户名 + 空密码直接当成来宾（Guest）登录来处理，当不带任何登录信息去连的时候，SMB 会尝试走匿名会话或本地缓存的凭据，但匿名访问策略设置得并不允许或会话出现异常，就会在查询共享列表时抛出 <code>STATUS_USER_SESSION_DELETED</code> 或 <code>Index_Error: list index out of range</code> 一类错误。</p>
 
             </div>
         </article>

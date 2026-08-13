@@ -6,7 +6,7 @@ toc: true
 images:
 tags:
   - Hack
-is_long: true
+is_long: false
 ---
 ## Fastjson
 
