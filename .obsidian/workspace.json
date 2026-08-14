@@ -25,12 +25,14 @@
             "id": "a91e063e6b97ae4b",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
+              "type": "markdown",
               "state": {
-                "currentVersion": "1.13.6"
+                "file": "content/posts/HTB-Search Writeup/index.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-book-up",
-              "title": "版本说明 1.13.6"
+              "icon": "lucide-file",
+              "title": "index"
             }
           }
         ],
@@ -186,12 +188,21 @@
   },
   "active": "a91e063e6b97ae4b",
   "lastOpenFiles": [
-    "content/Tools/SMB、共享目录相关/index.md",
+    "content/posts/HTB-Search Writeup/Pasted image 20260814165159.png",
+    "content/posts/HTB-Search Writeup/Pasted image 20260814161437.png",
+    "content/posts/HTB-Search Writeup/Pasted image 20260814151125.png",
+    "content/posts/HTB-Search Writeup/Pasted image 20260814151057.png",
+    "content/posts/HTB-Search Writeup/Pasted image 20260814144514.png",
+    "content/posts/HTB-Search Writeup/Pasted image 20260814141150.png",
+    "content/posts/HTB-Search Writeup/Pasted image 20260814103047.png",
     "content/posts/HTB-Rebound Writeup/index.md",
-    "content/posts/时钟偏差/index.md",
-    "content/posts/时钟偏差",
+    "content/posts/HTB-Search Writeup/index.md",
+    "content/posts/HTB-Search Writeup",
     "content/posts/articles/index.md",
     "content/posts/articles",
+    "content/Tools/SMB、共享目录相关/index.md",
+    "content/posts/时钟偏差/index.md",
+    "content/posts/时钟偏差",
     "content/posts/基线规则编写/index.md",
     "content/posts/HTB-Rebound Writeup",
     "content/posts/中间件及其漏洞/index.md",
@@ -204,7 +215,6 @@
     "public/tags/ssrf/index.html",
     "public/tags/ssrf/page",
     "public/tags/ssrf/index.xml",
-    "public/tags/ssrf",
     "content/Tools/XSS/index.md",
     "content/Tools/SSRF/index.md",
     "content/Tools/SMTP/index.md",
@@ -221,16 +231,8 @@
     "content/Tools/Bash 逃逸及反弹 Shell 合集/index.md",
     "content/Tools/越权/index.md",
     "content/Tools/嗅探/index.md",
-    "content/Tools/文件、远程包含/index.md",
-    "content/Tools/图片分析、文件分析、文件上传、Nc/index.md",
     "content/posts/Bastard Writeup/反弹shell.png",
     "content/posts/HTB-Reel Writeup/Pasted image 20260507105135.png",
-    "public/tools/文件远程包含/Pasted image 20260516161254.png",
-    "public/tools/文件远程包含/Pasted image 20260516204100.png",
-    "public/tools/文件远程包含/Pasted image 20260516161003.png",
-    "public/tools/文件远程包含/Pasted image 20260516160725.png",
-    "public/tools/文件远程包含/Pasted image 20260516160706.png",
-    "public/tools/文件远程包含/Pasted image 20260516160524.png",
-    "public/tools/文件远程包含/Pasted image 20260516160430.png"
+    "public/tools/文件远程包含/Pasted image 20260516161254.png"
   ]
 }

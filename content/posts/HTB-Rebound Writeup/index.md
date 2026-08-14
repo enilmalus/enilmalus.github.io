@@ -1613,27 +1613,3 @@ Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies
 [*] Kerberos keys grabbed Administrator:aes256-cts-hmac-sha1 96:32fd2c37d71def86d7687c95c62395ffcbeaf13045d1779d6c0b95b056d5adb1 Administrator:aes128-cts-hmac-sha1-96:efc20229b67e032cba60e05a6c21431f Administrator:des-cbc-md5:ad8ac2a825fe1080 
 [*] Cleaning up...
 ```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
