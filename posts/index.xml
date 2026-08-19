@@ -1,4 +1,39 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 14 Aug 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Search Writeup</title><link>https://enilmalus.github.io/posts/htb-search-writeup/</link><pubDate>Fri, 14 Aug 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-search-writeup/</guid><description>Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Search] └─$ sudo nmap --min-rate 10000 -p- 10.129.229.57 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-13 02:57 -0400 Nmap scan report for 10.129.229.57 Host is up (0.57s latency). Not shown: 65521 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 443/tcp open https 445/tcp open microsoft-ds 636/tcp open ldapssl 3268/tcp open globalcatLDAP 9389/tcp open adws 49691/tcp open unknown 49708/tcp open unknown 49717/tcp open unknown 49746/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 27.</description><content type="html"><![CDATA[<h2 id="nmap-端口扫描">Nmap 端口扫描</h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 18 Aug 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>网络安全 Skill---Enil-ling-pesing</title><link>https://enilmalus.github.io/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-skill---enil-ling-pesing/</link><pubDate>Tue, 18 Aug 2026 10:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-skill---enil-ling-pesing/</guid><description>仅限授权测试使用：本 skill 用于内部渗透项目、SRC/众测平台、CTF、自建靶场，或书面授权的第三方资产。使用者须对目标拥有合法测试授权，并遵守当地法律与平台规则。作者不对任何滥用行为承担责任。
+skill 开源地址：enilmalus/Enil-ling-pesing
+Skill 特点 每阶段有 MUST 输出，未通过不得进入下一段 24 类漏洞 playbook 反幻觉硬约束 精心设计的提示词，用户权限高，便于使用 安装 git clone https://github.com/enilmalus/Enil-ling-pesing.git ln -s &amp;#34;$(pwd)/Enil-ling-pesing&amp;#34; ~/.claude/skills/enil-ling-pesing 重启 Claude Code 会话后生效。Codex 与 dsh 的配置可自行研究。
+使用 命中任一即触发：
+&amp;ldquo;渗透测试 / 红队 / 攻防演练 / 安全评估 / 漏洞挖掘 / 靶场&amp;rdquo; &amp;ldquo;SRC 挖洞 / 漏洞赏金 / bug bounty / 众测&amp;rdquo; &amp;ldquo;安全研究 / 漏洞复现 / CVE 分析&amp;rdquo; 直接给出目标域名 / IP / API / APP 要求测试 取材来源 playbook 内容改编参考（详见 THIRD_PARTY_NOTICES.</description><content type="html"><![CDATA[<blockquote>
+<p><strong>仅限授权测试使用</strong>：本 skill 用于内部渗透项目、SRC/众测平台、CTF、自建靶场，或书面授权的第三方资产。使用者须对目标拥有合法测试授权，并遵守当地法律与平台规则。作者不对任何滥用行为承担责任。</p>
+</blockquote>
+<p>skill 开源地址：<a href="https://github.com/enilmalus/Enil-ling-pesing">enilmalus/Enil-ling-pesing</a></p>
+<h2 id="skill-特点">Skill 特点</h2>
+<ul>
+<li>每阶段有 MUST 输出，未通过不得进入下一段</li>
+<li>24 类漏洞 playbook</li>
+<li>反幻觉硬约束</li>
+<li>精心设计的提示词，用户权限高，便于使用</li>
+</ul>
+<h2 id="安装">安装</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/enilmalus/Enil-ling-pesing.git
+</span></span><span style="display:flex;"><span>ln -s <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span><span style="color:#e6db74">/Enil-ling-pesing&#34;</span> ~/.claude/skills/enil-ling-pesing
+</span></span></code></pre></div><p>重启 Claude Code 会话后生效。Codex 与 dsh 的配置可自行研究。</p>
+<h2 id="使用">使用</h2>
+<p>命中任一即触发：</p>
+<ul>
+<li>&ldquo;渗透测试 / 红队 / 攻防演练 / 安全评估 / 漏洞挖掘 / 靶场&rdquo;</li>
+<li>&ldquo;SRC 挖洞 / 漏洞赏金 / bug bounty / 众测&rdquo;</li>
+<li>&ldquo;安全研究 / 漏洞复现 / CVE 分析&rdquo;</li>
+<li>直接给出目标域名 / IP / API / APP 要求测试</li>
+</ul>
+<h2 id="取材来源">取材来源</h2>
+<p>playbook 内容改编参考（详见 <a href="THIRD_PARTY_NOTICES.md">THIRD_PARTY_NOTICES.md</a>）：</p>
+<ul>
+<li><a href="https://github.com/MyuriKanao/src-hunter-skill">MyuriKanao/src-hunter-skill</a></li>
+<li><a href="https://github.com/elementalsouls/Claude-BugHunter">elementalsouls/Claude-BugHunter</a></li>
+<li><a href="https://github.com/SnailSploit/Claude-Red">SnailSploit/Claude-Red</a></li>
+<li>以及 PayloadsAllTheThings / SecLists / PortSwigger / HackTricks 等权威公开源</li>
+</ul>
+]]></content></item><item><title>HTB-Search Writeup</title><link>https://enilmalus.github.io/posts/htb-search-writeup/</link><pubDate>Fri, 14 Aug 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-search-writeup/</guid><description>Nmap 端口扫描 ┌──(kali㉿kali)-[~/Work/Kali/Search] └─$ sudo nmap --min-rate 10000 -p- 10.129.229.57 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-13 02:57 -0400 Nmap scan report for 10.129.229.57 Host is up (0.57s latency). Not shown: 65521 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 443/tcp open https 445/tcp open microsoft-ds 636/tcp open ldapssl 3268/tcp open globalcatLDAP 9389/tcp open adws 49691/tcp open unknown 49708/tcp open unknown 49717/tcp open unknown 49746/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 27.</description><content type="html"><![CDATA[<h2 id="nmap-端口扫描">Nmap 端口扫描</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Search<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.229.57 -oA Nmap/ports
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
