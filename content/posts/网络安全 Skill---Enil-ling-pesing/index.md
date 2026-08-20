@@ -11,7 +11,7 @@ tags:
 ---
 > **仅限授权测试使用**：本 skill 用于内部渗透项目、SRC/众测平台、CTF、自建靶场，或书面授权的第三方资产。使用者须对目标拥有合法测试授权，并遵守当地法律与平台规则。作者不对任何滥用行为承担责任。
 
-skill 开源地址：[enilmalus/Enil-ling-pesing](https://github.com/enilmalus/Enil-ling-pesing)
+skill 开源地址：[Enil-ling-pesing](https://github.com/enilmalus/Enil-ling-pesing)
 
 ## Skill 特点
 
