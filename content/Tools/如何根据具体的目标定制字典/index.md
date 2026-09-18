@@ -60,3 +60,40 @@ sudo hydra -L users.txt -P wordlist.txt 10.10.10.48 http-get /nagios
 ```
 
 ![结果](result.png)
+
+## 拓展域字典
+
+```bash
+┌──(kali㉿kali)-[~/Work/Kali/Absoult/Users]
+└─$ awk '{f=tolower($1); l=tolower($2); print f"."l; print substr(f,1,1)"."l; print f l; print substr(f,1,1) l; print f"_"l}' Users
+james.roberts
+j.roberts
+jamesroberts
+jroberts
+james_roberts
+michael.chaffrey
+m.chaffrey
+michaelchaffrey
+mchaffrey
+michael_chaffrey
+donald.klay
+d.klay
+donaldklay
+dklay
+donald_klay
+sarah.osvald
+s.osvald
+sarahosvald
+sosvald
+sarah_osvald
+jeffer.robinson
+j.robinson
+jefferrobinson
+jrobinson
+jeffer_robinson
+nicole.smith
+n.smith
+nicolesmith
+nsmith
+nicole_smith
+```
