@@ -1,6 +1,6 @@
 ---
 title: HTB-Absolute Writeup
-date: 2026-08-05T14:00:00+08:00
+date: 2026-09-19T14:00:00+08:00
 draft: false
 toc: true
 images:
