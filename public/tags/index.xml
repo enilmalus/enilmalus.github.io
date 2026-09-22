@@ -6,20 +6,132 @@
     <description>Recent content in Tags on Welcome My Hack&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Sep 2026 14:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 22 Sep 2026 15:00:00 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AppLocker</title>
+      <link>http://localhost:1313/tags/applocker/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/applocker/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DLL劫持</title>
+      <link>http://localhost:1313/tags/dll%E5%8A%AB%E6%8C%81/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/dll%E5%8A%AB%E6%8C%81/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Hack</title>
       <link>http://localhost:1313/tags/hack/</link>
-      <pubDate>Tue, 01 Sep 2026 14:00:00 +0800</pubDate>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/hack/</guid>
       <description></description>
     </item>
     <item>
       <title>HTB</title>
       <link>http://localhost:1313/tags/htb/</link>
-      <pubDate>Wed, 26 Aug 2026 14:00:00 +0800</pubDate>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/htb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LDAP</title>
+      <link>http://localhost:1313/tags/ldap/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/ldap/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>SMB</title>
+      <link>http://localhost:1313/tags/smb/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/smb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>http://localhost:1313/tags/windows/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/windows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Writeup</title>
+      <link>http://localhost:1313/tags/writeup/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/writeup/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>文件上传</title>
+      <link>http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>目录穿越</title>
+      <link>http://localhost:1313/tags/%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A/</link>
+      <pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AS-REP-Roasting</title>
+      <link>http://localhost:1313/tags/as-rep-roasting/</link>
+      <pubDate>Sat, 19 Sep 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/as-rep-roasting/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Dacledit</title>
+      <link>http://localhost:1313/tags/dacledit/</link>
+      <pubDate>Sat, 19 Sep 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/dacledit/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GetNPUsers</title>
+      <link>http://localhost:1313/tags/getnpusers/</link>
+      <pubDate>Sat, 19 Sep 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/getnpusers/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GetTGT</title>
+      <link>http://localhost:1313/tags/gettgt/</link>
+      <pubDate>Sat, 19 Sep 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/gettgt/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Shadow_Credentials</title>
+      <link>http://localhost:1313/tags/shadow_credentials/</link>
+      <pubDate>Sat, 19 Sep 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/shadow_credentials/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>TGT</title>
+      <link>http://localhost:1313/tags/tgt/</link>
+      <pubDate>Thu, 10 Sep 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/tgt/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>反序列化</title>
+      <link>http://localhost:1313/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</link>
+      <pubDate>Thu, 10 Sep 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>SMTP</title>
+      <link>http://localhost:1313/tags/smtp/</link>
+      <pubDate>Fri, 28 Aug 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/smtp/</guid>
       <description></description>
     </item>
     <item>
@@ -27,20 +139,6 @@
       <link>http://localhost:1313/tags/rpc/</link>
       <pubDate>Wed, 26 Aug 2026 14:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/rpc/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>SMB</title>
-      <link>http://localhost:1313/tags/smb/</link>
-      <pubDate>Wed, 26 Aug 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/smb/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Writeup</title>
-      <link>http://localhost:1313/tags/writeup/</link>
-      <pubDate>Wed, 26 Aug 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/writeup/</guid>
       <description></description>
     </item>
     <item>
@@ -55,13 +153,6 @@
       <link>http://localhost:1313/tags/certify/</link>
       <pubDate>Mon, 24 Aug 2026 14:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/certify/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LDAP</title>
-      <link>http://localhost:1313/tags/ldap/</link>
-      <pubDate>Mon, 24 Aug 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/ldap/</guid>
       <description></description>
     </item>
     <item>
@@ -93,13 +184,6 @@
       <description></description>
     </item>
     <item>
-      <title>GetNPUsers</title>
-      <link>http://localhost:1313/tags/getnpusers/</link>
-      <pubDate>Fri, 14 Aug 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/getnpusers/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>GMSA</title>
       <link>http://localhost:1313/tags/gmsa/</link>
       <pubDate>Fri, 14 Aug 2026 14:00:00 +0800</pubDate>
@@ -114,13 +198,6 @@
       <description></description>
     </item>
     <item>
-      <title>AS-REP-Roasting</title>
-      <link>http://localhost:1313/tags/as-rep-roasting/</link>
-      <pubDate>Thu, 06 Aug 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/as-rep-roasting/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Kerberoasting</title>
       <link>http://localhost:1313/tags/kerberoasting/</link>
       <pubDate>Thu, 06 Aug 2026 14:00:00 +0800</pubDate>
@@ -132,6 +209,20 @@
       <link>http://localhost:1313/tags/%E6%97%B6%E9%92%9F%E5%81%8F%E5%B7%AE/</link>
       <pubDate>Thu, 06 Aug 2026 14:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/%E6%97%B6%E9%92%9F%E5%81%8F%E5%B7%AE/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>基线规则</title>
+      <link>http://localhost:1313/tags/%E5%9F%BA%E7%BA%BF%E8%A7%84%E5%88%99/</link>
+      <pubDate>Mon, 03 Aug 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/%E5%9F%BA%E7%BA%BF%E8%A7%84%E5%88%99/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>等保</title>
+      <link>http://localhost:1313/tags/%E7%AD%89%E4%BF%9D/</link>
+      <pubDate>Mon, 03 Aug 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/%E7%AD%89%E4%BF%9D/</guid>
       <description></description>
     </item>
     <item>
@@ -198,13 +289,6 @@
       <description></description>
     </item>
     <item>
-      <title>SMTP</title>
-      <link>http://localhost:1313/tags/smtp/</link>
-      <pubDate>Thu, 02 Jul 2026 09:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/smtp/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>代码执行</title>
       <link>http://localhost:1313/tags/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/</link>
       <pubDate>Thu, 25 Jun 2026 17:00:00 +0800</pubDate>
@@ -247,24 +331,10 @@
       <description></description>
     </item>
     <item>
-      <title>AppLocker</title>
-      <link>http://localhost:1313/tags/applocker/</link>
-      <pubDate>Mon, 01 Jun 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/applocker/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>FTP</title>
       <link>http://localhost:1313/tags/ftp/</link>
       <pubDate>Mon, 01 Jun 2026 10:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/ftp/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Windows</title>
-      <link>http://localhost:1313/tags/windows/</link>
-      <pubDate>Mon, 01 Jun 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/windows/</guid>
       <description></description>
     </item>
     <item>
@@ -373,13 +443,6 @@
       <description></description>
     </item>
     <item>
-      <title>反序列化</title>
-      <link>http://localhost:1313/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</link>
-      <pubDate>Sat, 07 Mar 2026 15:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>JuciePotato</title>
       <link>http://localhost:1313/tags/juciepotato/</link>
       <pubDate>Mon, 02 Mar 2026 14:00:00 +0800</pubDate>
@@ -426,13 +489,6 @@
       <link>http://localhost:1313/tags/%E6%B7%B7%E6%B7%86/</link>
       <pubDate>Sun, 01 Mar 2026 14:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/%E6%B7%B7%E6%B7%86/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>文件上传</title>
-      <link>http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</link>
-      <pubDate>Sat, 14 Feb 2026 17:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</guid>
       <description></description>
     </item>
     <item>

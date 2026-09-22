@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Absolute Writeup/index.md",
+                "file": "content/posts/HTB-Hathor Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -80,7 +80,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -171,35 +172,36 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "47af2e2a6a6e6bb5",
+  "active": "d6981c4a764cd894",
   "lastOpenFiles": [
+    "public/tags/目录穿越/page/1/index.html",
+    "public/tags/目录穿越/page/1",
+    "public/tags/目录穿越/page",
+    "public/tags/目录穿越/index.xml",
+    "public/tags/目录穿越/index.html",
+    "public/tags/目录穿越",
+    "public/tags/dll劫持/page/1/index.html",
+    "public/tags/dll劫持/page/1",
+    "public/tags/dll劫持/index.html",
+    "public/tags/dll劫持/page",
+    "public/tags/dll劫持/index.xml",
+    "public/posts/htb-outdated-writeup/Pasted image 20260828153728.png",
+    "public/posts/htb-outdated-writeup/Pasted image 20260828103231.png",
+    "public/posts/htb-absolute-writeup/Pasted image 20260917144651.png",
+    "public/posts/htb-absolute-writeup/Pasted image 20260916160644.png",
+    "public/posts/htb-absolute-writeup/Pasted image 20260916160642.png",
+    "public/posts/htb-absolute-writeup/Pasted image 20260916145741.png",
+    "public/posts/htb-absolute-writeup/Pasted image 20260915113718.png",
+    "public/posts/htb-hathor-writeup/Pasted image 20260921143844.png",
+    "public/posts/htb-hathor-writeup/Pasted image 20260921143428.png",
+    "public/posts/htb-hathor-writeup/Pasted image 20260921143323.png",
+    "content/posts/HTB-Absolute Writeup/index.md",
     "content/posts/HTB-Hathor Writeup/index.md",
-    "content/posts/HTB-Hathor Writeup",
-    "content/posts/HTB-Absolute Writeup/Pasted image 20260917144651.png",
-    "content/posts/HTB-Absolute Writeup/Pasted image 20260916160644.png",
-    "content/posts/HTB-Absolute Writeup/Pasted image 20260916160642.png",
-    "content/posts/HTB-Absolute Writeup/Pasted image 20260916145741.png",
-    "content/posts/HTB-Absolute Writeup/Pasted image 20260915113718.png",
     "content/posts/HTB-Rebound Writeup/index.md",
     "content/Tools/如何根据具体的目标定制字典/index.md",
-    "content/posts/HTB-Absolute Writeup/index.md",
     "content/posts/HTB-Scrambled Writeup/index.md",
-    "content/posts/HTB-Absolute Writeup",
     "content/posts/HTB-/index.md",
-    "content/posts/HTB-",
     "content/posts/articles/index.md",
-    "content/posts/articles",
-    "public/tags/tgt/index.xml",
-    "public/tags/tgt/page/1/index.html",
-    "public/tags/tgt/page/1",
-    "public/tags/tgt/page",
-    "public/tags/tgt/index.html",
-    "public/tags/tgt",
-    "public/posts/htb-scrambled-writeup/Pasted image 20260909140555.png",
-    "public/posts/htb-scrambled-writeup/Pasted image 20260909140538.png",
-    "public/posts/htb-scrambled-writeup/Pasted image 20260907171126.png",
-    "public/posts/htb-scrambled-writeup/Pasted image 20260901101336.png",
-    "public/posts/htb-scrambled-writeup/Pasted image 20260901101047.png",
     "content/posts/HTB-Outdated Writeup/index.md",
     "content/posts/HTB-Reel Writeup/index.md",
     "content/posts/HTB-Monteverde Wirteup/index.md",
@@ -217,7 +219,6 @@
     "content/posts/基线规则编写/index.md",
     "content/posts/中间件及其漏洞/index.md",
     "content/Tools/SQL 注入精要/index.md",
-    "content/Tools/信息收集/index.md",
-    "content/Tools/XXE/index.md"
+    "content/Tools/信息收集/index.md"
   ]
 }
