@@ -12,6 +12,7 @@ tags:
   - SMB
   - 文件包含
   - PrintSpoofer
+  - BurpSuite
 ---
 ## Nmap 扫描
 

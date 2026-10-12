@@ -3,22 +3,43 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/tags/hack/</loc>
-    <lastmod>2026-10-01T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/htb-sniper-writeup/</loc>
-    <lastmod>2026-10-01T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2026-10-01T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2026-10-01T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2026-10-01T14:00:00+08:00</lastmod>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/htb/</loc>
-    <lastmod>2026-09-30T14:00:00+08:00</lastmod>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/htb-breadcrumbs-writeup/</loc>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/windows/</loc>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/writeup/</loc>
+    <lastmod>2026-10-12T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/burpsuite/</loc>
+    <lastmod>2026-10-08T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/htb-sniper-writeup/</loc>
+    <lastmod>2026-10-08T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/printspoofer/</loc>
+    <lastmod>2026-10-08T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/smb/</loc>
+    <lastmod>2026-10-08T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/</loc>
+    <lastmod>2026-10-08T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/htb-querier-writeup/</loc>
     <lastmod>2026-09-30T14:00:00+08:00</lastmod>
@@ -30,15 +51,6 @@
     <lastmod>2026-09-30T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/ntlm/</loc>
-    <lastmod>2026-09-30T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/smb/</loc>
-    <lastmod>2026-09-30T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/windows/</loc>
-    <lastmod>2026-09-30T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/writeup/</loc>
     <lastmod>2026-09-30T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/htb-atom-writeup/</loc>
@@ -332,9 +344,6 @@
     <loc>http://localhost:1313/tags/sql%E6%B3%A8%E5%85%A5/</loc>
     <lastmod>2026-04-05T12:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/</loc>
-    <lastmod>2026-04-05T12:00:00+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tools/bloodhound/</loc>
     <lastmod>2026-04-01T14:00:00+08:00</lastmod>
   </url><url>
@@ -368,16 +377,10 @@
     <loc>http://localhost:1313/posts/htb-servmon-writeup/</loc>
     <lastmod>2026-03-12T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/burpsuite/</loc>
-    <lastmod>2026-03-07T15:00:00+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/posts/htb-pov-writeup/</loc>
     <lastmod>2026-03-07T15:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/juciepotato/</loc>
-    <lastmod>2026-03-02T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/printspoofer/</loc>
     <lastmod>2026-03-02T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/windows-%E6%8F%90%E6%9D%83%E4%B8%93%E5%8C%BA/</loc>
