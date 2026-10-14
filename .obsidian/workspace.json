@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Breadcrumbs Writeup/index.md",
+                "file": "content/posts/HTB-Sniper Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -55,7 +55,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:ForceChangePasswo",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -173,23 +173,25 @@
   },
   "active": "d6981c4a764cd894",
   "lastOpenFiles": [
-    "public/posts/htb-breadcrumbs-writeup/index.html",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009173921.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261010143019.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009171537.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009173952.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009171504.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009165843.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009144156.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009165810.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009171443.png",
-    "public/posts/htb-breadcrumbs-writeup/Pasted image 20261009165808.png",
-    "public/posts/htb-breadcrumbs-writeup",
-    "content/posts/HTB-Sniper Writeup/index.md",
+    "content/posts/HTB-Control Writeup/index.md",
     "content/posts/HTB-Breadcrumbs Writeup/index.md",
-    "content/posts/HTB-Breadcrumbs Writeup",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012174010.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012173752.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012173727.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012173438.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012172519.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012172517.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012163149.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012162005.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012161822.png",
+    "content/posts/HTB-Control Writeup/Pasted image 20261012161037.png",
+    "content/posts/HTB-Control Writeup",
     "content/posts/articles/index.md",
     "content/posts/articles",
+    "public/posts/htb-breadcrumbs-writeup/index.html",
+    "public/posts/htb-breadcrumbs-writeup",
+    "content/posts/HTB-Sniper Writeup/index.md",
+    "content/posts/HTB-Breadcrumbs Writeup",
     "content/posts/HTB-Querier Writeup/index.md",
     "content/posts/HTB-Sniper Writeup",
     "content/posts/HTB-/index.md",
@@ -199,8 +201,6 @@
     "content/posts/HTB-Atom Writeup/index.md",
     "content/posts/HTB-Aero Writeup/index.md",
     "public/tags/windows/page/3/index.html",
-    "public/tags/windows/page/3",
-    "public/posts/htb-atom-writeup/index.html",
     "content/posts/HTB-Multimaster Writeup/index.md",
     "content/posts/HTB-Hathor Writeup/index.md",
     "content/posts/HTB-Absolute Writeup/index.md",
@@ -217,7 +217,6 @@
     "content/posts/articles 1/index.md",
     "scripts/Moudles/articles 1/index.md",
     "content/posts/HTB-Cascade Writeup/index.md",
-    "content/posts/网络安全 Skill---Enil-ling-pesing/index.md",
-    "content/posts/HTB-Search Writeup/index.md"
+    "content/posts/网络安全 Skill---Enil-ling-pesing/index.md"
   ]
 }

@@ -9,6 +9,12 @@ tags:
   - HTB
   - Writeup
   - Windows
+  - JWT
+  - 文件包含
+  - 文件上传
+  - 代码执行
+  - SQL注入
+  - MYSQL
 ---
 ## Nmap 探索
 
