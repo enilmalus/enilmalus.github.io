@@ -2,11 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/tags/certipy/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/esc7/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/getnpusers/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/tags/hack/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/htb/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/htb-manager-writeup/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/ldap/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/mssql/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/ntlm/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/shadow_credentials/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/smb/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/windows/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/writeup/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E5%AF%86%E7%A0%81%E5%96%B7%E5%B0%84/</loc>
+    <lastmod>2026-10-20T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/htb-jeeves-writeup/</loc>
     <lastmod>2026-10-14T14:00:00+08:00</lastmod>
@@ -18,27 +63,6 @@
     <lastmod>2026-10-14T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/keepass/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/ntlm/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/smb/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/windows/</loc>
-    <lastmod>2026-10-14T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/writeup/</loc>
     <lastmod>2026-10-14T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/burpsuite/</loc>
@@ -80,13 +104,7 @@
     <loc>http://localhost:1313/posts/htb-querier-writeup/</loc>
     <lastmod>2026-09-30T14:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/mssql/</loc>
-    <lastmod>2026-09-30T14:00:00+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/posts/htb-atom-writeup/</loc>
-    <lastmod>2026-09-29T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/shadow_credentials/</loc>
     <lastmod>2026-09-29T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/clfs/</loc>
@@ -119,9 +137,6 @@
     <loc>http://localhost:1313/posts/htb-hathor-writeup/</loc>
     <lastmod>2026-09-22T15:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ldap/</loc>
-    <lastmod>2026-09-22T15:00:00+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A/</loc>
     <lastmod>2026-09-22T15:00:00+08:00</lastmod>
   </url><url>
@@ -129,9 +144,6 @@
     <lastmod>2026-09-19T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/dacledit/</loc>
-    <lastmod>2026-09-19T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/getnpusers/</loc>
     <lastmod>2026-09-19T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/gettgt/</loc>
@@ -159,9 +171,6 @@
     <lastmod>2026-08-26T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/rpc/</loc>
-    <lastmod>2026-08-26T14:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/%E5%AF%86%E7%A0%81%E5%96%B7%E5%B0%84/</loc>
     <lastmod>2026-08-26T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/htb-intelligence-writeup/</loc>
