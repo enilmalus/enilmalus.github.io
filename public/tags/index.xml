@@ -6,8 +6,43 @@
     <description>Recent content in Tags on Welcome My Hack&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Oct 2026 14:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 14:00:00 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hack</title>
+      <link>http://localhost:1313/tags/hack/</link>
+      <pubDate>Fri, 23 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/hack/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>HTB</title>
+      <link>http://localhost:1313/tags/htb/</link>
+      <pubDate>Fri, 23 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/htb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>RunAs</title>
+      <link>http://localhost:1313/tags/runas/</link>
+      <pubDate>Fri, 23 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/runas/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>http://localhost:1313/tags/windows/</link>
+      <pubDate>Fri, 23 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/windows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Writeup</title>
+      <link>http://localhost:1313/tags/writeup/</link>
+      <pubDate>Fri, 23 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/writeup/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Certipy</title>
       <link>http://localhost:1313/tags/certipy/</link>
@@ -27,20 +62,6 @@
       <link>http://localhost:1313/tags/getnpusers/</link>
       <pubDate>Tue, 20 Oct 2026 14:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/getnpusers/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Hack</title>
-      <link>http://localhost:1313/tags/hack/</link>
-      <pubDate>Tue, 20 Oct 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/hack/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>HTB</title>
-      <link>http://localhost:1313/tags/htb/</link>
-      <pubDate>Tue, 20 Oct 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/htb/</guid>
       <description></description>
     </item>
     <item>
@@ -76,20 +97,6 @@
       <link>http://localhost:1313/tags/smb/</link>
       <pubDate>Tue, 20 Oct 2026 14:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/smb/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Windows</title>
-      <link>http://localhost:1313/tags/windows/</link>
-      <pubDate>Tue, 20 Oct 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/windows/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Writeup</title>
-      <link>http://localhost:1313/tags/writeup/</link>
-      <pubDate>Tue, 20 Oct 2026 14:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/writeup/</guid>
       <description></description>
     </item>
     <item>

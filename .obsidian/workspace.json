@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/posts/HTB-Manager Writeup/index.md",
+                "file": "content/posts/HTB-Access Writeup/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -80,8 +80,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "2f34889c7e269ddb",
@@ -174,6 +173,7 @@
   },
   "active": "d6981c4a764cd894",
   "lastOpenFiles": [
+    "content/posts/HTB-Manager Writeup/index.md",
     "public/tags/certipy/page/1/index.html",
     "public/tags/certipy/page/1",
     "public/tags/certipy/page",
@@ -184,7 +184,6 @@
     "public/tags/esc7/page/1",
     "public/tags/esc7/page",
     "public/tags/esc7/index.xml",
-    "public/tags/esc7/index.html",
     "public/posts/htb-manager-writeup/Pasted image 20261016143912.png",
     "public/posts/htb-manager-writeup/Pasted image 20261016143739.png",
     "content/posts/HTB-Manager Writeup/Pasted image 20261016143912.png",
