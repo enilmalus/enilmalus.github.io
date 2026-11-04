@@ -121,6 +121,34 @@
       <description></description>
     </item>
     <item>
+      <title>Firejail</title>
+      <link>http://localhost:1313/tags/firejail/</link>
+      <pubDate>Fri, 16 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/firejail/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Icinga</title>
+      <link>http://localhost:1313/tags/icinga/</link>
+      <pubDate>Fri, 16 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/icinga/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>http://localhost:1313/tags/linux/</link>
+      <pubDate>Fri, 16 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Metasploit</title>
+      <link>http://localhost:1313/tags/metasploit/</link>
+      <pubDate>Fri, 16 Oct 2026 14:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/tags/metasploit/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Impacket</title>
       <link>http://localhost:1313/tags/impacket/</link>
       <pubDate>Wed, 14 Oct 2026 14:00:00 +0800</pubDate>
@@ -545,13 +573,6 @@
       <link>http://localhost:1313/tags/%E6%9E%9A%E4%B8%BE/</link>
       <pubDate>Mon, 02 Mar 2026 14:00:00 +0800</pubDate>
       <guid>http://localhost:1313/tags/%E6%9E%9A%E4%B8%BE/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Linux</title>
-      <link>http://localhost:1313/tags/linux/</link>
-      <pubDate>Sun, 01 Mar 2026 21:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/linux/</guid>
       <description></description>
     </item>
     <item>
